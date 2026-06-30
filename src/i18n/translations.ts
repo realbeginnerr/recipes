@@ -2,7 +2,7 @@ export type Language = 'en' | 'ko'
 
 export const translations = {
   en: {
-    appTitle: 'Recipe Nutrition Calculator',
+    appTitle: 'Nutrition Calculator',
     searchLabel: 'Search ingredients',
     searchPlaceholder: 'Ingredient name…',
     searchButton: 'Search',
@@ -35,7 +35,7 @@ export const translations = {
     },
   },
   ko: {
-    appTitle: '레시피 영양 계산기',
+    appTitle: '영양 계산기',
     searchLabel: '식재료 검색',
     searchPlaceholder: '식재료 이름…',
     searchButton: '검색',
