@@ -120,6 +120,16 @@ export function RecipeTable({
     setEditItems((prev) => prev.filter((_, i) => i !== index))
   }
 
+  function handleMoveItem(index: number, direction: -1 | 1) {
+    const target = index + direction
+    setEditItems((prev) => {
+      if (target < 0 || target >= prev.length) return prev
+      const next = [...prev]
+      ;[next[index], next[target]] = [next[target], next[index]]
+      return next
+    })
+  }
+
   function handleAddIngredient(ingredientId: string) {
     if (editItems.some((item) => item.ingredientId === ingredientId)) return
     const ing = ingredientById.get(ingredientId)
@@ -233,6 +243,7 @@ export function RecipeTable({
               <th>{t.colProtein}</th>
               <th>{t.colFat}</th>
               {isEditing && <th></th>}
+              {isEditing && <th></th>}
             </tr>
           </thead>
           <tbody>
@@ -264,9 +275,35 @@ export function RecipeTable({
                         ))}
                       </select>
                     </td>
-                    <td>-</td>
-                    <td>-</td>
-                    <td>-</td>
+                    {(() => {
+                      const grams = amountToGrams(item.defaultAmount, item.defaultUnit, ingredient.conversions)
+                      const macros = calculateMacros(grams, ingredient)
+                      return (
+                        <>
+                          <td>{formatMacro(macros.carbs)}</td>
+                          <td>{formatMacro(macros.protein)}</td>
+                          <td>{formatMacro(macros.fat)}</td>
+                        </>
+                      )
+                    })()}
+                    <td>
+                      <div className="edit-inline__order-btns">
+                        <button
+                          type="button"
+                          className="edit-inline__order-btn"
+                          onClick={() => handleMoveItem(index, -1)}
+                          disabled={index === 0}
+                          aria-label="Move up"
+                        >▲</button>
+                        <button
+                          type="button"
+                          className="edit-inline__order-btn"
+                          onClick={() => handleMoveItem(index, 1)}
+                          disabled={index === editItems.length - 1}
+                          aria-label="Move down"
+                        >▼</button>
+                      </div>
+                    </td>
                     <td>
                       <button
                         type="button"

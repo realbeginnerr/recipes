@@ -475,6 +475,33 @@ body {
   outline-offset: 1px;
 }
 
+.edit-inline__order-btns {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.edit-inline__order-btn {
+  border: none;
+  background: none;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 0.65rem;
+  padding: 1px 4px;
+  border-radius: 3px;
+  line-height: 1;
+}
+
+.edit-inline__order-btn:hover:not(:disabled) {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.edit-inline__order-btn:disabled {
+  opacity: 0.25;
+  cursor: default;
+}
+
 .edit-inline__delete-btn {
   border: none;
   background: none;
@@ -725,6 +752,12 @@ body {
 
 .edit-modal__save-btn:hover {
   filter: brightness(1.05);
+}
+
+.ing-page__toolbar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 0.75rem;
 }
 
 .recipe-memo {
