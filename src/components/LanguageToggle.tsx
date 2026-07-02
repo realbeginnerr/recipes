@@ -1,9 +1,9 @@
 import { useLanguage } from '../context/LanguageContext'
 import type { Language } from '../i18n/translations'
 
-const options: { value: Language; label: string }[] = [
-  { value: 'en', label: 'ENG' },
-  { value: 'ko', label: '한글' },
+const options: { value: Language; label: string; icon: string }[] = [
+  { value: 'en', label: 'English', icon: '/icons/us.svg' },
+  { value: 'ko', label: 'Korean', icon: '/icons/kr.svg' },
 ]
 
 export function LanguageToggle() {
@@ -19,7 +19,7 @@ export function LanguageToggle() {
           onClick={() => setLanguage(option.value)}
           aria-pressed={language === option.value}
         >
-          {option.label}
+          <img src={option.icon} alt={option.label} width="22" height="16" />
         </button>
       ))}
     </div>
