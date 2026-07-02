@@ -842,6 +842,10 @@ body {
   background: #fafaf9 !important;
 }
 
+.recipe-table__recommended td strong {
+  font-weight: normal;
+}
+
 .recipe-table__division-row td {
   background: #fafaf9 !important;
 }
@@ -949,12 +953,33 @@ body {
     display: none;
   }
 
+  .hamburger__menu .lang-toggle {
+    display: flex;
+  }
+
   .hamburger {
     display: block;
     margin-left: 0.5rem;
   }
 
+  .header-search {
+    flex: 1;
+  }
+
   .header-search__input {
-    width: min(160px, 45vw);
+    flex: 1;
+    width: 0;
+  }
+
+  .recipe-block__heading-row {
+    flex-wrap: wrap;
+  }
+
+  .recipe-block__heading-row .recipe-block__heading {
+    width: 100%;
+  }
+
+  .recipe-block__ratings {
+    flex: 1;
   }
 }
