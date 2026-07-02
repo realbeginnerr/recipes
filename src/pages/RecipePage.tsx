@@ -2,8 +2,9 @@ import { useEffect, useMemo, useState } from 'react'
 import { useLanguage } from '../context/LanguageContext'
 import { useSearch } from '../context/SearchContext'
 import { RecipeTable } from '../components/RecipeTable'
+import { RecipeEditModal } from '../components/RecipeEditModal'
 import { IngredientSearchModal } from '../components/IngredientSearchModal'
-import { recipes } from '../data/recipe'
+import { recipes as staticRecipes } from '../data/recipe'
 import {
   applyLanguageToRecipeStates,
   buildInitialRecipeStates,
@@ -12,10 +13,12 @@ import {
 import { convertUnit, roundToOne } from '../utils/nutrition'
 import { ingredientById } from '../data/ingredients'
 import { recipeContainsIngredient } from '../utils/search'
+import type { Recipe } from '../types'
 
 export function RecipePage() {
   const { appliedSearch, homeVersion } = useSearch()
   const { language, t } = useLanguage()
+  const [recipes, setRecipes] = useState<Recipe[]>(staticRecipes)
   const [recipeStates, setRecipeStates] = useState<RecipeStates>(() =>
     buildInitialRecipeStates(language),
   )
@@ -23,6 +26,7 @@ export function RecipePage() {
   const [multigrainRiceAmount, setMultigrainRiceAmount] = useState(130)
   const [multigrainRiceUnit, setMultigrainRiceUnit] = useState('g')
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false)
+  const [editingRecipeId, setEditingRecipeId] = useState<string | null>(null)
 
   useEffect(() => {
     setRecipeStates(buildInitialRecipeStates(language))
@@ -37,13 +41,9 @@ export function RecipePage() {
     return recipes.filter((recipe) =>
       recipeContainsIngredient(recipe, appliedSearch),
     )
-  }, [appliedSearch])
+  }, [appliedSearch, recipes])
 
-  function updateAmount(
-    recipeId: string,
-    ingredientId: string,
-    raw: string,
-  ) {
+  function updateAmount(recipeId: string, ingredientId: string, raw: string) {
     const parsed = raw === '' ? 0 : Number.parseFloat(raw)
     if (Number.isNaN(parsed) || parsed < 0) return
 
@@ -82,6 +82,23 @@ export function RecipePage() {
     }))
   }
 
+  function handleSaveRecipe(updated: Recipe) {
+    setRecipes((prev) => prev.map((r) => (r.id === updated.id ? updated : r)))
+    setRecipeStates((current) => ({
+      ...current,
+      [updated.id]: updated.items.map((item) => ({
+        ingredientId: item.ingredientId,
+        amount: item.defaultAmount,
+        unit: item.defaultUnit,
+      })),
+    }))
+    setEditingRecipeId(null)
+  }
+
+  const editingRecipe = editingRecipeId
+    ? recipes.find((r) => r.id === editingRecipeId) ?? null
+    : null
+
   const recipeCountLabel =
     visibleRecipes.length === 1
       ? t.recipeFoundOne
@@ -100,6 +117,7 @@ export function RecipePage() {
       multigrainRiceUnit={multigrainRiceUnit}
       onMultigrainRiceUnitChange={setMultigrainRiceUnit}
       onAddFoodClick={() => setIsSearchModalOpen(true)}
+      onEditClick={() => setEditingRecipeId(recipe.id)}
       onAmountChange={(ingredientId, raw) =>
         updateAmount(recipe.id, ingredientId, raw)
       }
@@ -128,6 +146,14 @@ export function RecipePage() {
         </div>
       ) : (
         recipeList
+      )}
+
+      {editingRecipe && (
+        <RecipeEditModal
+          recipe={editingRecipe}
+          onSave={handleSaveRecipe}
+          onClose={() => setEditingRecipeId(null)}
+        />
       )}
 
       <IngredientSearchModal

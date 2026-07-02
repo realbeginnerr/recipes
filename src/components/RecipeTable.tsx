@@ -24,6 +24,7 @@ type RecipeTableProps = {
   multigrainRiceUnit: string
   onMultigrainRiceUnitChange: (value: string) => void
   onAddFoodClick: () => void
+  onEditClick: () => void
 }
 
 type UnitKey = keyof (typeof import('../i18n/translations').translations)['en']['units']
@@ -41,6 +42,7 @@ export function RecipeTable({
   multigrainRiceUnit,
   onMultigrainRiceUnitChange,
   onAddFoodClick,
+  onEditClick,
 }: RecipeTableProps) {
   const { language, t } = useLanguage()
 
@@ -69,9 +71,17 @@ export function RecipeTable({
 
   return (
     <section className="recipe-block">
-      <h2 className="recipe-block__heading">
-        {getRecipeDisplayName(recipe, language)}
-      </h2>
+      <div className="recipe-block__heading-row">
+        <h2 className="recipe-block__heading">
+          {getRecipeDisplayName(recipe, language)}
+        </h2>
+        <button type="button" className="recipe-block__edit-btn" onClick={onEditClick} aria-label="Edit recipe">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+          </svg>
+        </button>
+      </div>
       <div className="recipe-block__image-wrap">
         <img
           className="recipe-block__image"
@@ -163,11 +173,25 @@ export function RecipeTable({
                 <strong>{formatMacro(totals.fat)}</strong>
               </td>
             </tr>
+            <tr className="recipe-table__total">
+              <td colSpan={3}>
+                <strong>{t.recommendedPerMeal}</strong>
+              </td>
+              <td>
+                <strong>77</strong>
+              </td>
+              <td>
+                <strong>33</strong>
+              </td>
+              <td>
+                <strong>22</strong>
+              </td>
+            </tr>
           </tfoot>
         </table>
       </TableContainer>
 
-      <TableContainer>
+      <TableContainer style={{ marginTop: '16px' }}>
         <table className="data-table recipe-table">
           <thead>
             <tr>
@@ -299,20 +323,6 @@ export function RecipeTable({
               </td>
               <td>
                 <strong>{formatMacro(totals.fat / divisionCount + (multigrainRiceAmount * 0.8) / 100)}</strong>
-              </td>
-            </tr>
-            <tr className="recipe-table__total">
-              <td colSpan={3}>
-                <strong>{t.recommendedPerMeal}</strong>
-              </td>
-              <td>
-                <strong>77</strong>
-              </td>
-              <td>
-                <strong>33</strong>
-              </td>
-              <td>
-                <strong>22</strong>
               </td>
             </tr>
           </tbody>
