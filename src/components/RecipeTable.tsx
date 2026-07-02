@@ -173,37 +173,6 @@ export function RecipeTable({
                 <strong>{formatMacro(totals.fat)}</strong>
               </td>
             </tr>
-            <tr className="recipe-table__total">
-              <td colSpan={3}>
-                <strong>{t.recommendedPerMeal}</strong>
-              </td>
-              <td>
-                <strong>77</strong>
-              </td>
-              <td>
-                <strong>33</strong>
-              </td>
-              <td>
-                <strong>22</strong>
-              </td>
-            </tr>
-          </tfoot>
-        </table>
-      </TableContainer>
-
-      <TableContainer style={{ marginTop: '16px' }}>
-        <table className="data-table recipe-table">
-          <thead>
-            <tr>
-              <th>{t.colIngredient}</th>
-              <th>{t.colAmount}</th>
-              <th>{t.colUnit}</th>
-              <th>{t.colCarbs}</th>
-              <th>{t.colProtein}</th>
-              <th>{t.colFat}</th>
-            </tr>
-          </thead>
-          <tbody>
             <tr className="recipe-table__division-row">
               <td colSpan={3}>
                 <strong>
@@ -257,6 +226,23 @@ export function RecipeTable({
                 <strong>{formatMacro(totals.fat / divisionCount)}</strong>
               </td>
             </tr>
+          </tfoot>
+        </table>
+      </TableContainer>
+
+      <TableContainer style={{ marginTop: '16px' }}>
+        <table className="data-table recipe-table">
+          <thead>
+            <tr>
+              <th>{t.colIngredient}</th>
+              <th>{t.colAmount}</th>
+              <th>{t.colUnit}</th>
+              <th>{t.colCarbs}</th>
+              <th>{t.colProtein}</th>
+              <th>{t.colFat}</th>
+            </tr>
+          </thead>
+          <tbody>
             <tr className="recipe-table__multigrain-row">
               <td>{language === 'ko' ? '잡곡밥 (쌀:잡곡=2:1)' : 'Multigrain rice (rice:grains=2:1)'}</td>
               <td>

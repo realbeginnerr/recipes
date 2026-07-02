@@ -129,6 +129,13 @@ export function RecipePage() {
 
   return (
     <section className="page">
+      <div className="recommended-banner">
+        <span className="recommended-banner__label">{t.recommendedPerMeal}</span>
+        <span className="recommended-banner__values">
+          {t.colCarbs} 77g &nbsp;·&nbsp; {t.colProtein} 33g &nbsp;·&nbsp; {t.colFat} 22g
+        </span>
+      </div>
+
       {appliedSearch ? (
         <header className="search-results">
           <h2 className="page__heading">{t.searchResults}</h2>
