@@ -81,9 +81,6 @@ export function RecipeTable({
         />
       </div>
 
-      <h3 style={{ margin: '1.5rem 0 1rem 0', fontSize: '1.25rem' }}>
-        {t.mainIngredients}
-      </h3>
       <TableContainer>
         <table className="data-table recipe-table">
           <thead>
@@ -170,9 +167,6 @@ export function RecipeTable({
         </table>
       </TableContainer>
 
-      <h3 style={{ margin: '1.5rem 0 1rem 0', fontSize: '1.25rem' }}>
-        {t.otherIngredients}
-      </h3>
       <TableContainer>
         <table className="data-table recipe-table">
           <thead>
