@@ -560,7 +560,7 @@ body {
 
 .recipe-table tfoot td {
   border-top: 2px solid var(--border);
-  background: #ffffff;
+  background: #fafaf9;
 }
 
 .recipe-table__total td {
@@ -572,7 +572,7 @@ body {
 }
 
 .recipe-table__division-row td {
-  background: #ffffff !important;
+  background: #fafaf9 !important;
 }
 
 .recipe-table__division-row td strong {
