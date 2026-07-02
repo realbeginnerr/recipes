@@ -311,6 +311,20 @@ export function RecipeTable({
                 <strong>{formatMacro(totals.fat / divisionCount + (multigrainRiceAmount * 0.8) / 100)}</strong>
               </td>
             </tr>
+            <tr className="recipe-table__total">
+              <td colSpan={3}>
+                <strong>{t.recommendedPerMeal}</strong>
+              </td>
+              <td>
+                <strong>77</strong>
+              </td>
+              <td>
+                <strong>33</strong>
+              </td>
+              <td>
+                <strong>22</strong>
+              </td>
+            </tr>
           </tbody>
         </table>
       </TableContainer>
