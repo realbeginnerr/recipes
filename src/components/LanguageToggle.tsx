@@ -21,7 +21,13 @@ export function LanguageToggle() {
           onClick={() => setLanguage(option.value)}
           aria-pressed={language === option.value}
         >
-          <img src={option.icon} alt={option.label} width="22" height="16" />
+          <img
+            src={option.icon}
+            alt={option.label}
+            width="22"
+            height="16"
+            style={{ opacity: language === option.value ? 1 : 0.5 }}
+          />
         </button>
       ))}
     </div>

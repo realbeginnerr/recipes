@@ -49,5 +49,5 @@ export function formatAmount(value: number): string {
 }
 
 export function formatMacro(value: number): string {
-  return roundToTwo(value).toFixed(2)
+  return (Math.round(value * 10) / 10).toFixed(1)
 }

@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState } from 'react'
 import { useLanguage } from '../context/LanguageContext'
 import { useSearch } from '../context/SearchContext'
 import { RecipeTable } from '../components/RecipeTable'
-import { RecipeEditModal } from '../components/RecipeEditModal'
 import { IngredientSearchModal } from '../components/IngredientSearchModal'
 import { recipes as staticRecipes } from '../data/recipe'
 import {
@@ -26,7 +25,6 @@ export function RecipePage() {
   const [multigrainRiceAmount, setMultigrainRiceAmount] = useState(130)
   const [multigrainRiceUnit, setMultigrainRiceUnit] = useState('g')
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false)
-  const [editingRecipeId, setEditingRecipeId] = useState<string | null>(null)
 
   useEffect(() => {
     setRecipeStates(buildInitialRecipeStates(language))
@@ -73,11 +71,7 @@ export function RecipePage() {
           ingredient.conversions,
         )
 
-        return {
-          ...row,
-          unit: newUnit,
-          amount: roundToOne(converted),
-        }
+        return { ...row, unit: newUnit, amount: roundToOne(converted) }
       }),
     }))
   }
@@ -92,12 +86,7 @@ export function RecipePage() {
         unit: item.defaultUnit,
       })),
     }))
-    setEditingRecipeId(null)
   }
-
-  const editingRecipe = editingRecipeId
-    ? recipes.find((r) => r.id === editingRecipeId) ?? null
-    : null
 
   const recipeCountLabel =
     visibleRecipes.length === 1
@@ -117,7 +106,7 @@ export function RecipePage() {
       multigrainRiceUnit={multigrainRiceUnit}
       onMultigrainRiceUnitChange={setMultigrainRiceUnit}
       onAddFoodClick={() => setIsSearchModalOpen(true)}
-      onEditClick={() => setEditingRecipeId(recipe.id)}
+      onSaveRecipe={handleSaveRecipe}
       onAmountChange={(ingredientId, raw) =>
         updateAmount(recipe.id, ingredientId, raw)
       }
@@ -146,14 +135,6 @@ export function RecipePage() {
         </div>
       ) : (
         recipeList
-      )}
-
-      {editingRecipe && (
-        <RecipeEditModal
-          recipe={editingRecipe}
-          onSave={handleSaveRecipe}
-          onClose={() => setEditingRecipeId(null)}
-        />
       )}
 
       <IngredientSearchModal
