@@ -44,7 +44,6 @@ type RecipeTableProps = {
   onMultigrainRiceAmountChange: (value: number) => void
   multigrainRiceUnit: string
   onMultigrainRiceUnitChange: (value: string) => void
-  onAddFoodClick: () => void
   onSaveRecipe: (updated: Recipe) => void
 }
 
@@ -62,7 +61,6 @@ export function RecipeTable({
   onMultigrainRiceAmountChange,
   multigrainRiceUnit,
   onMultigrainRiceUnitChange,
-  onAddFoodClick,
   onSaveRecipe,
 }: RecipeTableProps) {
   const { language, t } = useLanguage()
@@ -368,10 +366,10 @@ export function RecipeTable({
               })
             )}
           </tbody>
-          {isEditing ? (
-            <tfoot>
+          <tfoot>
+            {isEditing && (
               <tr className="recipe-table__division-row">
-                <td colSpan={7}>
+                <td colSpan={8}>
                   <div className="edit-inline__add">
                     <button type="button" className="add-food-btn" onClick={() => document.getElementById(`add-search-1-${recipe.id}`)?.focus()}>
                       + {t.addFood}
@@ -402,94 +400,78 @@ export function RecipeTable({
                   </div>
                 </td>
               </tr>
-            </tfoot>
-          ) : (
-            <tfoot>
-              <tr className="recipe-table__total">
-                <td colSpan={3}>
-                  <strong>{t.total}</strong>
-                </td>
-                <td>
-                  <strong>{formatMacro(totals.carbs)}</strong>
-                </td>
-                <td>
-                  <strong>{formatMacro(totals.protein)}</strong>
-                </td>
-                <td>
-                  <strong>{formatMacro(totals.fat)}</strong>
-                </td>
-              </tr>
-              <tr className="recipe-table__division-row">
-                <td colSpan={3}>
-                  <strong>
-                    {language === 'en' ? (
-                      <>
-                        {t.divideByMeals}{' '}
-                        <input
-                          type="number"
-                          className="amount-input"
-                          min={1}
-                          step="1"
-                          value={divisionCount}
-                          onChange={(event) => {
-                            const value = Number.parseInt(event.target.value, 10)
-                            if (!Number.isNaN(value) && value > 0) {
-                              onDivisionCountChange(value)
-                            }
-                          }}
-                          style={{ width: '60px', display: 'inline-block' }}
-                        />{' '}
-                        {t.meals}
-                      </>
-                    ) : (
-                      <>
-                        <input
-                          type="number"
-                          className="amount-input"
-                          min={1}
-                          step="1"
-                          value={divisionCount}
-                          onChange={(event) => {
-                            const value = Number.parseInt(event.target.value, 10)
-                            if (!Number.isNaN(value) && value > 0) {
-                              onDivisionCountChange(value)
-                            }
-                          }}
-                          style={{ width: '60px', display: 'inline-block' }}
-                        />{' '}
-                        {t.divideByMeals}
-                      </>
-                    )}
-                  </strong>
-                </td>
-                <td>
-                  <strong>{formatMacro(totals.carbs / divisionCount)}</strong>
-                </td>
-                <td>
-                  <strong>{formatMacro(totals.protein / divisionCount)}</strong>
-                </td>
-                <td>
-                  <strong>{formatMacro(totals.fat / divisionCount)}</strong>
-                </td>
-              </tr>
-            </tfoot>
-          )}
-        </table>
-      </TableContainer>
-
-      <TableContainer style={{ marginTop: '16px' }}>
-        <table className="data-table recipe-table">
-          <thead>
-            <tr>
-              <th>{t.colIngredient}</th>
-              <th>{t.colAmount}</th>
-              <th>{t.colUnit}</th>
-              <th>{t.colCarbs}</th>
-              <th>{t.colProtein}</th>
-              <th>{t.colFat}</th>
-            </tr>
-          </thead>
-          <tbody>
+            )}
+            {!isEditing && (
+              <>
+                <tr className="recipe-table__total">
+                  <td colSpan={3}>
+                    <strong>{t.total}</strong>
+                  </td>
+                  <td>
+                    <strong>{formatMacro(totals.carbs)}</strong>
+                  </td>
+                  <td>
+                    <strong>{formatMacro(totals.protein)}</strong>
+                  </td>
+                  <td>
+                    <strong>{formatMacro(totals.fat)}</strong>
+                  </td>
+                </tr>
+                <tr className="recipe-table__division-row">
+                  <td colSpan={3}>
+                    <strong>
+                      {language === 'en' ? (
+                        <>
+                          {t.divideByMeals}{' '}
+                          <input
+                            type="number"
+                            className="amount-input"
+                            min={1}
+                            step="1"
+                            value={divisionCount}
+                            onChange={(event) => {
+                              const value = Number.parseInt(event.target.value, 10)
+                              if (!Number.isNaN(value) && value > 0) {
+                                onDivisionCountChange(value)
+                              }
+                            }}
+                            style={{ width: '60px', display: 'inline-block' }}
+                          />{' '}
+                          {t.meals}
+                        </>
+                      ) : (
+                        <>
+                          <input
+                            type="number"
+                            className="amount-input"
+                            min={1}
+                            step="1"
+                            value={divisionCount}
+                            onChange={(event) => {
+                              const value = Number.parseInt(event.target.value, 10)
+                              if (!Number.isNaN(value) && value > 0) {
+                                onDivisionCountChange(value)
+                              }
+                            }}
+                            style={{ width: '60px', display: 'inline-block' }}
+                          />{' '}
+                          {t.divideByMeals}
+                        </>
+                      )}
+                    </strong>
+                  </td>
+                  <td>
+                    <strong>{formatMacro(totals.carbs / divisionCount)}</strong>
+                  </td>
+                  <td>
+                    <strong>{formatMacro(totals.protein / divisionCount)}</strong>
+                  </td>
+                  <td>
+                    <strong>{formatMacro(totals.fat / divisionCount)}</strong>
+                  </td>
+                </tr>
+              </>
+            )}
             <tr className="recipe-table__multigrain-row">
               <td>{language === 'ko' ? '잡곡밥 (쌀:잡곡=2:1)' : 'Multigrain rice (rice:grains=2:1)'}</td>
               <td>
@@ -522,16 +504,8 @@ export function RecipeTable({
               <td>{formatMacro((multigrainRiceAmount * 28.5) / 100)}</td>
               <td>{formatMacro((multigrainRiceAmount * 3.1) / 100)}</td>
               <td>{formatMacro((multigrainRiceAmount * 0.8) / 100)}</td>
+              {isEditing && <td colSpan={2}></td>}
             </tr>
-            {isEditing && (
-              <tr className="recipe-table__multigrain-row">
-                <td colSpan={6}>
-                  <button type="button" className="add-food-btn" onClick={onAddFoodClick}>
-                    + {t.addFood}
-                  </button>
-                </td>
-              </tr>
-            )}
             <tr className="recipe-table__total">
               <td colSpan={3}>
                 <strong>{t.combinedTotal}</strong>
@@ -545,6 +519,7 @@ export function RecipeTable({
                     <td><strong style={{ color: macroColor(carbs, recommended.carbs) }}>{formatMacro(carbs)}</strong></td>
                     <td><strong style={{ color: macroColor(protein, recommended.protein) }}>{formatMacro(protein)}</strong></td>
                     <td><strong style={{ color: macroColor(fat, recommended.fat) }}>{formatMacro(fat)}</strong></td>
+                    {isEditing && <td colSpan={2}></td>}
                   </>
                 )
               })()}
@@ -562,8 +537,9 @@ export function RecipeTable({
               <td>
                 <strong>22.0</strong>
               </td>
+              {isEditing && <td colSpan={2}></td>}
             </tr>
-          </tbody>
+          </tfoot>
         </table>
       </TableContainer>
 

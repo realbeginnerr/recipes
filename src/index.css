@@ -846,9 +846,6 @@ body {
   background: #fafaf9 !important;
 }
 
-.recipe-table__division-row td strong {
-  font-weight: normal;
-}
 
 .amount-input,
 .unit-select {

@@ -105,7 +105,6 @@ export function RecipePage() {
       onMultigrainRiceAmountChange={setMultigrainRiceAmount}
       multigrainRiceUnit={multigrainRiceUnit}
       onMultigrainRiceUnitChange={setMultigrainRiceUnit}
-      onAddFoodClick={() => setIsSearchModalOpen(true)}
       onSaveRecipe={handleSaveRecipe}
       onAmountChange={(ingredientId, raw) =>
         updateAmount(recipe.id, ingredientId, raw)
