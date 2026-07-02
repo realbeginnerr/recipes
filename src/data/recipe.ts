@@ -5,8 +5,7 @@ export const recipes: Recipe[] = [
     id: 'chili-con-carne',
     name: 'Chili Con Carne',
     nameKo: '칠리 콘 카네',
-    imageUrl:
-      'https://images.unsplash.com/photo-1599974179268-309c3ef1c467?w=800&auto=format&fit=crop',
+    imageUrl: '/recipes/Chili-Con-Carne.jpg',
     items: [
       { ingredientId: 'ground-beef', defaultAmount: 500, defaultUnit: 'g' },
       { ingredientId: 'onion', defaultAmount: 1, defaultUnit: 'piece' },
