@@ -6,6 +6,8 @@ export const recipes: Recipe[] = [
     name: 'Chili Con Carne',
     nameKo: '칠리 콘 카네',
     imageUrl: '/recipes/Chili-Con-Carne.jpg',
+    tasteRating: 4,
+    timeRating: 4,
     items: [
       { ingredientId: 'ground-beef', defaultAmount: 500, defaultUnit: 'g' },
       { ingredientId: 'onion', defaultAmount: 1, defaultUnit: 'piece' },
@@ -27,6 +29,8 @@ export const recipes: Recipe[] = [
     nameKo: '마늘 빵',
     imageUrl:
       'https://images.unsplash.com/photo-1573140248131-840b1a03b81d?w=800&auto=format&fit=crop',
+    tasteRating: 4,
+    timeRating: 4,
     items: [
       { ingredientId: 'olive-oil', defaultAmount: 20, defaultUnit: 'ml' },
       { ingredientId: 'garlic', defaultAmount: 3, defaultUnit: 'piece' },

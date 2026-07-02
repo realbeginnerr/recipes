@@ -1,4 +1,24 @@
 import { useState } from 'react'
+
+function StarRating({ label, value, onChange }: { label: string; value: number; onChange?: (v: number) => void }) {
+  return (
+    <div className="star-rating">
+      <span className="star-rating__label">{label}</span>
+      {[1, 2, 3, 4, 5].map((star) => (
+        <button
+          key={star}
+          type="button"
+          className={`star-rating__star${star <= value ? ' star-rating__star--filled' : ''}`}
+          onClick={onChange ? () => onChange(star) : undefined}
+          style={{ cursor: onChange ? 'pointer' : 'default' }}
+          tabIndex={onChange ? 0 : -1}
+        >
+          ★
+        </button>
+      ))}
+    </div>
+  )
+}
 import { useLanguage } from '../context/LanguageContext'
 import { ingredientById, ingredients } from '../data/ingredients'
 import { TableContainer } from './TableContainer'
@@ -49,6 +69,9 @@ export function RecipeTable({
   const [isEditing, setIsEditing] = useState(false)
   const [editImageUrl, setEditImageUrl] = useState(recipe.imageUrl)
   const [editItems, setEditItems] = useState<RecipeItem[]>(recipe.items)
+  const [editMemo, setEditMemo] = useState(recipe.memo ?? '')
+  const [editTasteRating, setEditTasteRating] = useState(recipe.tasteRating ?? 4)
+  const [editTimeRating, setEditTimeRating] = useState(recipe.timeRating ?? 4)
   const [addSearch, setAddSearch] = useState('')
 
   const filteredIngredients = addSearch.trim()
@@ -61,6 +84,9 @@ export function RecipeTable({
   function startEditing() {
     setEditImageUrl(recipe.imageUrl)
     setEditItems(recipe.items)
+    setEditMemo(recipe.memo ?? '')
+    setEditTasteRating(recipe.tasteRating ?? 4)
+    setEditTimeRating(recipe.timeRating ?? 4)
     setAddSearch('')
     setIsEditing(true)
   }
@@ -71,7 +97,7 @@ export function RecipeTable({
   }
 
   function handleSave() {
-    onSaveRecipe({ ...recipe, imageUrl: editImageUrl, items: editItems })
+    onSaveRecipe({ ...recipe, imageUrl: editImageUrl, items: editItems, memo: editMemo, tasteRating: editTasteRating, timeRating: editTimeRating })
     setIsEditing(false)
     setAddSearch('')
   }
@@ -105,6 +131,15 @@ export function RecipeTable({
     setAddSearch('')
   }
 
+  const recommended = { carbs: 77, protein: 33, fat: 22 }
+
+  function macroColor(value: number, target: number): string {
+    const diff = Math.abs(value - target)
+    if (diff >= 10) return '#dc2626'
+    if (diff >= 5) return '#ea580c'
+    return '#16a34a'
+  }
+
   const totals = rows.reduce(
     (acc, row) => {
       const ingredient = ingredientById.get(row.ingredientId)
@@ -134,6 +169,18 @@ export function RecipeTable({
         <h2 className="recipe-block__heading">
           {getRecipeDisplayName(recipe, language)}
         </h2>
+        <div className="recipe-block__ratings">
+          <StarRating
+            label={language === 'ko' ? '맛' : 'Taste'}
+            value={isEditing ? editTasteRating : (recipe.tasteRating ?? 4)}
+            onChange={isEditing ? setEditTasteRating : undefined}
+          />
+          <StarRating
+            label={language === 'ko' ? '시간' : 'Time'}
+            value={isEditing ? editTimeRating : (recipe.timeRating ?? 4)}
+            onChange={isEditing ? setEditTimeRating : undefined}
+          />
+        </div>
         {isEditing ? (
           <div className="recipe-block__edit-actions">
             <button type="button" className="edit-inline__cancel-btn" onClick={handleCancel}>
@@ -289,7 +336,11 @@ export function RecipeTable({
               <tr className="recipe-table__division-row">
                 <td colSpan={7}>
                   <div className="edit-inline__add">
+                    <button type="button" className="add-food-btn" onClick={() => document.getElementById(`add-search-1-${recipe.id}`)?.focus()}>
+                      + {t.addFood}
+                    </button>
                     <input
+                      id={`add-search-1-${recipe.id}`}
                       type="search"
                       className="edit-inline__input"
                       placeholder="재료 검색해서 추가..."
@@ -389,106 +440,111 @@ export function RecipeTable({
         </table>
       </TableContainer>
 
-      {!isEditing && (
-        <TableContainer style={{ marginTop: '16px' }}>
-          <table className="data-table recipe-table">
-            <thead>
-              <tr>
-                <th>{t.colIngredient}</th>
-                <th>{t.colAmount}</th>
-                <th>{t.colUnit}</th>
-                <th>{t.colCarbs}</th>
-                <th>{t.colProtein}</th>
-                <th>{t.colFat}</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr className="recipe-table__multigrain-row">
-                <td>{language === 'ko' ? '잡곡밥 (쌀:잡곡=2:1)' : 'Multigrain rice (rice:grains=2:1)'}</td>
-                <td>
-                  <input
-                    type="number"
-                    className="amount-input"
-                    min={0}
-                    step="0.1"
-                    value={formatAmount(multigrainRiceAmount)}
-                    onChange={(event) => {
-                      const parsed = event.target.value === '' ? 0 : Number.parseFloat(event.target.value)
-                      if (!Number.isNaN(parsed) && parsed >= 0) {
-                        onMultigrainRiceAmountChange(parsed)
-                      }
-                    }}
-                  />
-                </td>
-                <td>
-                  <select
-                    className="unit-select"
-                    value={multigrainRiceUnit}
-                    onChange={(event) => {
-                      onMultigrainRiceUnitChange(event.target.value)
-                    }}
-                  >
-                    <option value="g">g</option>
-                    <option value="oz">oz</option>
-                  </select>
-                </td>
-                <td>{formatMacro((multigrainRiceAmount * 28.5) / 100)}</td>
-                <td>{formatMacro((multigrainRiceAmount * 3.1) / 100)}</td>
-                <td>{formatMacro((multigrainRiceAmount * 0.8) / 100)}</td>
-              </tr>
+      <TableContainer style={{ marginTop: '16px' }}>
+        <table className="data-table recipe-table">
+          <thead>
+            <tr>
+              <th>{t.colIngredient}</th>
+              <th>{t.colAmount}</th>
+              <th>{t.colUnit}</th>
+              <th>{t.colCarbs}</th>
+              <th>{t.colProtein}</th>
+              <th>{t.colFat}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr className="recipe-table__multigrain-row">
+              <td>{language === 'ko' ? '잡곡밥 (쌀:잡곡=2:1)' : 'Multigrain rice (rice:grains=2:1)'}</td>
+              <td>
+                <input
+                  type="number"
+                  className="amount-input"
+                  min={0}
+                  step="0.1"
+                  value={formatAmount(multigrainRiceAmount)}
+                  onChange={(event) => {
+                    const parsed = event.target.value === '' ? 0 : Number.parseFloat(event.target.value)
+                    if (!Number.isNaN(parsed) && parsed >= 0) {
+                      onMultigrainRiceAmountChange(parsed)
+                    }
+                  }}
+                />
+              </td>
+              <td>
+                <select
+                  className="unit-select"
+                  value={multigrainRiceUnit}
+                  onChange={(event) => {
+                    onMultigrainRiceUnitChange(event.target.value)
+                  }}
+                >
+                  <option value="g">g</option>
+                  <option value="oz">oz</option>
+                </select>
+              </td>
+              <td>{formatMacro((multigrainRiceAmount * 28.5) / 100)}</td>
+              <td>{formatMacro((multigrainRiceAmount * 3.1) / 100)}</td>
+              <td>{formatMacro((multigrainRiceAmount * 0.8) / 100)}</td>
+            </tr>
+            {isEditing && (
               <tr className="recipe-table__multigrain-row">
                 <td colSpan={6}>
-                  <button
-                    type="button"
-                    onClick={onAddFoodClick}
-                    style={{
-                      padding: '0.5rem 1rem',
-                      border: '1px solid var(--accent)',
-                      borderRadius: '6px',
-                      background: 'var(--accent)',
-                      color: '#fff',
-                      font: 'inherit',
-                      fontSize: '0.9rem',
-                      fontWeight: '600',
-                      cursor: 'pointer',
-                    }}
-                  >
-                    {t.addFood}
+                  <button type="button" className="add-food-btn" onClick={onAddFoodClick}>
+                    + {t.addFood}
                   </button>
                 </td>
               </tr>
-              <tr className="recipe-table__total">
-                <td colSpan={3}>
-                  <strong>{t.combinedTotal}</strong>
-                </td>
-                <td>
-                  <strong>{formatMacro(totals.carbs / divisionCount + (multigrainRiceAmount * 28.5) / 100)}</strong>
-                </td>
-                <td>
-                  <strong>{formatMacro(totals.protein / divisionCount + (multigrainRiceAmount * 3.1) / 100)}</strong>
-                </td>
-                <td>
-                  <strong>{formatMacro(totals.fat / divisionCount + (multigrainRiceAmount * 0.8) / 100)}</strong>
-                </td>
-              </tr>
-              <tr className="recipe-table__total">
-                <td colSpan={3}>
-                  <strong>{t.recommendedPerMeal}</strong>
-                </td>
-                <td>
-                  <strong>77</strong>
-                </td>
-                <td>
-                  <strong>33</strong>
-                </td>
-                <td>
-                  <strong>22</strong>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </TableContainer>
-      )}
+            )}
+            <tr className="recipe-table__total">
+              <td colSpan={3}>
+                <strong>{t.combinedTotal}</strong>
+              </td>
+              {(() => {
+                const carbs = totals.carbs / divisionCount + (multigrainRiceAmount * 28.5) / 100
+                const protein = totals.protein / divisionCount + (multigrainRiceAmount * 3.1) / 100
+                const fat = totals.fat / divisionCount + (multigrainRiceAmount * 0.8) / 100
+                return (
+                  <>
+                    <td><strong style={{ color: macroColor(carbs, recommended.carbs) }}>{formatMacro(carbs)}</strong></td>
+                    <td><strong style={{ color: macroColor(protein, recommended.protein) }}>{formatMacro(protein)}</strong></td>
+                    <td><strong style={{ color: macroColor(fat, recommended.fat) }}>{formatMacro(fat)}</strong></td>
+                  </>
+                )
+              })()}
+            </tr>
+            <tr className="recipe-table__recommended">
+              <td colSpan={3}>
+                <strong>{t.recommendedPerMeal}</strong>
+              </td>
+              <td>
+                <strong>77.0</strong>
+              </td>
+              <td>
+                <strong>33.0</strong>
+              </td>
+              <td>
+                <strong>22.0</strong>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </TableContainer>
+
+      <div className="recipe-memo">
+        {isEditing ? (
+          <textarea
+            className="recipe-memo__textarea"
+            value={editMemo}
+            onChange={(e) => setEditMemo(e.target.value)}
+            placeholder="메모를 입력하세요..."
+            rows={3}
+          />
+        ) : (
+          <p className="recipe-memo__text">
+            {recipe.memo || <span className="recipe-memo__empty">메모 없음</span>}
+          </p>
+        )}
+      </div>
     </section>
   )
 }

@@ -23,6 +23,9 @@ export type Recipe = {
   nameKo: string
   imageUrl: string
   items: RecipeItem[]
+  memo?: string
+  tasteRating?: number
+  timeRating?: number
 }
 
 export type RecipeRowState = {
