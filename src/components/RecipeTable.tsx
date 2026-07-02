@@ -543,6 +543,7 @@ export function RecipeTable({
         </table>
       </TableContainer>
 
+      {(isEditing || recipe.memo) && (
       <div className="recipe-memo">
         {isEditing ? (
           <textarea
@@ -553,11 +554,10 @@ export function RecipeTable({
             rows={3}
           />
         ) : (
-          <p className="recipe-memo__text">
-            {recipe.memo || <span className="recipe-memo__empty">메모 없음</span>}
-          </p>
+          <p className="recipe-memo__text">{recipe.memo}</p>
         )}
       </div>
+      )}
     </section>
   )
 }

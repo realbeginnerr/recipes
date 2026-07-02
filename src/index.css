@@ -287,6 +287,11 @@ body {
   border-bottom: 1px solid var(--border);
 }
 
+.data-table th:nth-child(1),
+.data-table td:nth-child(1) {
+  min-width: 230px;
+}
+
 .data-table th:nth-child(2),
 .data-table th:nth-child(3),
 .data-table th:nth-child(4),
@@ -955,6 +960,12 @@ body {
 
   .hamburger__menu .lang-toggle {
     display: flex;
+  }
+
+  .table-container,
+  .recipe-block__image-wrap {
+    margin-left: -1.25rem;
+    margin-right: -1.25rem;
   }
 
   .hamburger {
