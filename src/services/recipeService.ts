@@ -24,6 +24,7 @@ export type FirestoreRecipe = {
   name: string
   nameKo: string
   imageUrl: string
+  link?: string
   memo: string
   tasteRating: number
   timeRating: number
@@ -82,6 +83,8 @@ export function convertToRecipe(fs: FirestoreRecipe): Recipe {
     memo: fs.memo,
     tasteRating: fs.tasteRating,
     timeRating: fs.timeRating,
+    createdAt: fs.createdAt,
+    link: fs.link,
     items,
   }
 }

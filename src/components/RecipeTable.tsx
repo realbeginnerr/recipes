@@ -48,7 +48,6 @@ type RecipeTableProps = {
   onSaveRecipe: (updated: Recipe) => void
 }
 
-type UnitKey = keyof (typeof import('../i18n/translations').translations)['en']['units']
 
 export function RecipeTable({
   recipe,
@@ -75,7 +74,10 @@ export function RecipeTable({
 
   function startEditing() {
     setEditImageUrl(recipe.imageUrl)
-    setEditItems(recipe.items)
+    setEditItems(recipe.items.map((item) => {
+      const row = rows?.find((r) => r.ingredientId === item.ingredientId)
+      return row ? { ...item, defaultAmount: row.amount, defaultUnit: row.unit } : item
+    }))
     setEditMemo(recipe.memo ?? '')
     setEditTasteRating(recipe.tasteRating ?? 4)
     setEditTimeRating(recipe.timeRating ?? 4)
@@ -154,12 +156,7 @@ export function RecipeTable({
     { carbs: 0, protein: 0, fat: 0 },
   )
 
-  function unitLabel(unit: string): string {
-    if (unit in t.units) {
-      return t.units[unit as UnitKey]
-    }
-    return unit
-  }
+
 
   return (
     <section className="recipe-block">
@@ -179,6 +176,11 @@ export function RecipeTable({
             value={isEditing ? editTimeRating : (recipe.timeRating ?? 4)}
             onChange={isEditing ? setEditTimeRating : undefined}
           />
+          {recipe.link && (
+            <a className="recipe-block__link-icon" href={recipe.link} target="_blank" rel="noopener noreferrer" aria-label="Recipe link">
+              🔗
+            </a>
+          )}
           </div>
         </div>
         {isEditing && (
@@ -193,14 +195,7 @@ export function RecipeTable({
         )}
       </div>
 
-      <div className="recipe-block__image-wrap">
-        <img
-          className="recipe-block__image"
-          src={isEditing ? editImageUrl : recipe.imageUrl}
-          alt=""
-          loading="lazy"
-        />
-      </div>
+
 
 
       <TableContainer>
@@ -214,6 +209,7 @@ export function RecipeTable({
               <th>{t.colProtein}</th>
               <th>{t.colFat}</th>
               {isEditing && <th></th>}
+              {isEditing && <th></th>}
             </tr>
           </thead>
           <tbody>
@@ -224,25 +220,7 @@ export function RecipeTable({
                 return (
                   <tr key={item.ingredientId}>
                     <td>
-                      <div className="edit-inline__name-cell">
-                        <div className="edit-inline__order-btns">
-                          <button
-                            type="button"
-                            className="edit-inline__order-btn"
-                            onClick={() => handleMoveItem(index, -1)}
-                            disabled={index === 0}
-                            aria-label="Move up"
-                          >◀</button>
-                          <button
-                            type="button"
-                            className="edit-inline__order-btn"
-                            onClick={() => handleMoveItem(index, 1)}
-                            disabled={index === editItems.length - 1}
-                            aria-label="Move down"
-                          >▶</button>
-                        </div>
-                        {getIngredientDisplayName(ingredient, language)}
-                      </div>
+                      {getIngredientDisplayName(ingredient, language)}
                     </td>
                     <td>
                       <input
@@ -260,9 +238,31 @@ export function RecipeTable({
                         value={item.defaultUnit}
                         onChange={(e) => handleEditUnitChange(index, e.target.value)}
                       >
-                        {ingredient.allowedUnits.map((unit) => (
-                          <option key={unit} value={unit}>{unitLabel(unit)}</option>
-                        ))}
+                        {language === 'ko' ? (
+                          <>
+                            <option value="g">g</option>
+                            <option value="ml">ml</option>
+                            <option value="T">T</option>
+                            <option value="t">t</option>
+                            <option value="컵">컵</option>
+                            <option value="개">개</option>
+                            <option value="꼬집">꼬집</option>
+                            <option value="oz">oz</option>
+                            <option value="lbs">lbs</option>
+                            <option value="">선택안함</option>
+                          </>
+                        ) : (
+                          <>
+                            <option value="oz">oz</option>
+                            <option value="lbs">lbs</option>
+                            <option value="T">T</option>
+                            <option value="t">t</option>
+                            <option value="cup">cup</option>
+                            <option value="ea">ea</option>
+                            <option value="pinch">pinch</option>
+                            <option value="">N/A</option>
+                          </>
+                        )}
                       </select>
                     </td>
                     {(() => {
@@ -276,7 +276,25 @@ export function RecipeTable({
                         </>
                       )
                     })()}
-                    <td>
+                    <td className="edit-inline__order-cell">
+                      <div className="edit-inline__order-btns">
+                        <button
+                          type="button"
+                          className="edit-inline__order-btn"
+                          onClick={() => handleMoveItem(index, -1)}
+                          disabled={index === 0}
+                          aria-label="Move up"
+                        >▲</button>
+                        <button
+                          type="button"
+                          className="edit-inline__order-btn"
+                          onClick={() => handleMoveItem(index, 1)}
+                          disabled={index === editItems.length - 1}
+                          aria-label="Move down"
+                        >▼</button>
+                      </div>
+                    </td>
+                    <td className="edit-inline__delete-cell">
                       <button
                         type="button"
                         className="edit-inline__delete-btn"
@@ -326,11 +344,31 @@ export function RecipeTable({
                           onUnitChange(row.ingredientId, event.target.value)
                         }
                       >
-                        {ingredient.allowedUnits.map((unit) => (
-                          <option key={unit} value={unit}>
-                            {unitLabel(unit)}
-                          </option>
-                        ))}
+                        {language === 'ko' ? (
+                          <>
+                            <option value="g">g</option>
+                            <option value="ml">ml</option>
+                            <option value="T">T</option>
+                            <option value="t">t</option>
+                            <option value="컵">컵</option>
+                            <option value="개">개</option>
+                            <option value="꼬집">꼬집</option>
+                            <option value="oz">oz</option>
+                            <option value="lbs">lbs</option>
+                            <option value="">선택안함</option>
+                          </>
+                        ) : (
+                          <>
+                            <option value="oz">oz</option>
+                            <option value="lbs">lbs</option>
+                            <option value="T">T</option>
+                            <option value="t">t</option>
+                            <option value="cup">cup</option>
+                            <option value="ea">ea</option>
+                            <option value="pinch">pinch</option>
+                            <option value="">N/A</option>
+                          </>
+                        )}
                       </select>
                     </td>
                     <td>{formatMacro(macros.carbs)}</td>
@@ -348,15 +386,9 @@ export function RecipeTable({
                   <td colSpan={3}>
                     {t.total}
                   </td>
-                  <td>
-                    {formatMacro(totals.carbs)}
-                  </td>
-                  <td>
-                    {formatMacro(totals.protein)}
-                  </td>
-                  <td>
-                    {formatMacro(totals.fat)}
-                  </td>
+                  <td className="macro">{formatMacro(totals.carbs)}</td>
+                  <td className="macro">{formatMacro(totals.protein)}</td>
+                  <td className="macro">{formatMacro(totals.fat)}</td>
                 </tr>
                 <tr className="recipe-table__division-row recipe-table__muted">
                   <td colSpan={3}>
@@ -399,15 +431,9 @@ export function RecipeTable({
                         </>
                       )}
                   </td>
-                  <td>
-                    {formatMacro(totals.carbs / divisionCount)}
-                  </td>
-                  <td>
-                    {formatMacro(totals.protein / divisionCount)}
-                  </td>
-                  <td>
-                    {formatMacro(totals.fat / divisionCount)}
-                  </td>
+                  <td className="macro">{formatMacro(totals.carbs / divisionCount)}</td>
+                  <td className="macro">{formatMacro(totals.protein / divisionCount)}</td>
+                  <td className="macro">{formatMacro(totals.fat / divisionCount)}</td>
                 </tr>
               </>
             )}
@@ -440,14 +466,14 @@ export function RecipeTable({
                   <option value="oz">oz</option>
                 </select>
               </td>
-              <td>{formatMacro((multigrainRiceAmount * 28.5) / 100)}</td>
-              <td>{formatMacro((multigrainRiceAmount * 3.1) / 100)}</td>
-              <td>{formatMacro((multigrainRiceAmount * 0.8) / 100)}</td>
-              {isEditing && <td></td>}
+              <td className="macro">{formatMacro((multigrainRiceAmount * 28.5) / 100)}</td>
+              <td className="macro">{formatMacro((multigrainRiceAmount * 3.1) / 100)}</td>
+              <td className="macro">{formatMacro((multigrainRiceAmount * 0.8) / 100)}</td>
+              {isEditing && <td className="edit-inline__order-cell edit-inline__delete-cell"></td>}
             </tr>
             {isEditing && (
               <tr className="recipe-table__division-row">
-                <td colSpan={7}>
+                <td colSpan={8}>
                   <button type="button" className="add-food-btn" onClick={() => setIsAddModalOpen(true)}>
                     + {t.addFood}
                   </button>
@@ -464,10 +490,10 @@ export function RecipeTable({
                 const fat = totals.fat / divisionCount + (multigrainRiceAmount * 0.8) / 100
                 return (
                   <>
-                    <td><strong style={{ color: macroColor(carbs, recommended.carbs) }}>{formatMacro(carbs)}</strong></td>
-                    <td><strong style={{ color: macroColor(protein, recommended.protein) }}>{formatMacro(protein)}</strong></td>
-                    <td><strong style={{ color: macroColor(fat, recommended.fat) }}>{formatMacro(fat)}</strong></td>
-                    {isEditing && <td></td>}
+                    <td className="macro"><strong style={{ color: macroColor(carbs, recommended.carbs) }}>{formatMacro(carbs)}</strong></td>
+                    <td className="macro"><strong style={{ color: macroColor(protein, recommended.protein) }}>{formatMacro(protein)}</strong></td>
+                    <td className="macro"><strong style={{ color: macroColor(fat, recommended.fat) }}>{formatMacro(fat)}</strong></td>
+                    {isEditing && <td className="edit-inline__order-cell edit-inline__delete-cell"></td>}
                   </>
                 )
               })()}
@@ -476,16 +502,10 @@ export function RecipeTable({
               <td colSpan={3}>
                 <strong>{t.recommendedPerMeal}</strong>
               </td>
-              <td>
-                <strong>77.0</strong>
-              </td>
-              <td>
-                <strong>33.0</strong>
-              </td>
-              <td>
-                <strong>22.0</strong>
-              </td>
-              {isEditing && <td></td>}
+              <td className="macro"><strong>77.0</strong></td>
+              <td className="macro"><strong>33.0</strong></td>
+              <td className="macro"><strong>22.0</strong></td>
+              {isEditing && <td className="edit-inline__order-cell edit-inline__delete-cell"></td>}
             </tr>
           </tfoot>
         </table>

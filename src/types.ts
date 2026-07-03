@@ -26,6 +26,8 @@ export type Recipe = {
   memo?: string
   tasteRating?: number
   timeRating?: number
+  createdAt?: number
+  link?: string
 }
 
 export type RecipeRowState = {

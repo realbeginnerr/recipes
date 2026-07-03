@@ -28,6 +28,7 @@ export function RecipePage() {
     language === 'en' ? 'oz' : 'g',
   )
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false)
+  const [sortOrder, setSortOrder] = useState<'alpha-asc' | 'alpha-desc' | 'date-desc' | 'date-asc'>('date-asc')
 
   useEffect(() => {
     loadRecipesFromFirestore().then((fsDocs) => {
@@ -60,11 +61,27 @@ export function RecipePage() {
   }, [language])
 
   const visibleRecipes = useMemo(() => {
-    if (!appliedSearch) return recipes
-    return recipes.filter((recipe) =>
-      recipeContainsIngredient(recipe, appliedSearch),
-    )
-  }, [appliedSearch, recipes])
+    const filtered = appliedSearch
+      ? recipes.filter((recipe) => recipeContainsIngredient(recipe, appliedSearch))
+      : [...recipes]
+
+    return filtered.sort((a, b) => {
+      if (sortOrder === 'alpha-asc') {
+        const nameA = language === 'ko' ? a.nameKo : a.name
+        const nameB = language === 'ko' ? b.nameKo : b.name
+        return nameA.localeCompare(nameB, language === 'ko' ? 'ko' : 'en')
+      }
+      if (sortOrder === 'alpha-desc') {
+        const nameA = language === 'ko' ? a.nameKo : a.name
+        const nameB = language === 'ko' ? b.nameKo : b.name
+        return nameB.localeCompare(nameA, language === 'ko' ? 'ko' : 'en')
+      }
+      if (sortOrder === 'date-desc') {
+        return (b.createdAt ?? 0) - (a.createdAt ?? 0)
+      }
+      return (a.createdAt ?? 0) - (b.createdAt ?? 0)
+    })
+  }, [appliedSearch, recipes, sortOrder, language])
 
   function updateAmount(recipeId: string, ingredientId: string, raw: string) {
     const parsed = raw === '' ? 0 : Number.parseFloat(raw)
@@ -142,6 +159,19 @@ export function RecipePage() {
 
   return (
     <section className="page">
+      <div className="recipe-sort">
+        <select
+          className="recipe-sort__select"
+          value={sortOrder}
+          onChange={(e) => setSortOrder(e.target.value as typeof sortOrder)}
+        >
+          <option value="alpha-asc">{language === 'ko' ? '이름순 (ㄱ→ㅎ)' : 'Name (A→Z)'}</option>
+          <option value="alpha-desc">{language === 'ko' ? '이름순 (ㅎ→ㄱ)' : 'Name (Z→A)'}</option>
+          <option value="date-desc">{language === 'ko' ? '최신 등록순' : 'Newest first'}</option>
+          <option value="date-asc">{language === 'ko' ? '오래된 등록순' : 'Oldest first'}</option>
+        </select>
+      </div>
+
       {appliedSearch ? (
         <header className="search-results">
           <h2 className="page__heading">{t.searchResults}</h2>

@@ -23,19 +23,4 @@ export const recipes: Recipe[] = [
       { ingredientId: 'black-pepper', defaultAmount: 2, defaultUnit: 'g' },
     ],
   },
-  {
-    id: 'garlic-bread',
-    name: 'Garlic Bread',
-    nameKo: '마늘 빵',
-    imageUrl:
-      'https://images.unsplash.com/photo-1573140248131-840b1a03b81d?w=800&auto=format&fit=crop',
-    tasteRating: 4,
-    timeRating: 4,
-    items: [
-      { ingredientId: 'olive-oil', defaultAmount: 20, defaultUnit: 'ml' },
-      { ingredientId: 'garlic', defaultAmount: 3, defaultUnit: 'piece' },
-      { ingredientId: 'salt', defaultAmount: 3, defaultUnit: 'g' },
-      { ingredientId: 'black-pepper', defaultAmount: 1, defaultUnit: 'g' },
-    ],
-  },
 ]
