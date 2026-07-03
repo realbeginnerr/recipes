@@ -57,7 +57,7 @@ export const translations = {
     divideByMeals: '끼로 나누기',
     meals: '끼',
     combinedTotal: '합계',
-    addFood: '음식 추가하기',
+    addFood: '재료 추가하기',
     mainIngredients: '주재료',
     otherIngredients: '기타 재료',
     units: {

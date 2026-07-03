@@ -20,7 +20,8 @@ function StarRating({ label, value, onChange }: { label: string; value: number; 
   )
 }
 import { useLanguage } from '../context/LanguageContext'
-import { ingredientById, ingredients } from '../data/ingredients'
+import { ingredientById } from '../data/ingredients'
+import { IngredientSearchModal } from './IngredientSearchModal'
 import { TableContainer } from './TableContainer'
 import type { Recipe, RecipeItem, RecipeRowState } from '../types'
 import {
@@ -70,14 +71,7 @@ export function RecipeTable({
   const [editMemo, setEditMemo] = useState(recipe.memo ?? '')
   const [editTasteRating, setEditTasteRating] = useState(recipe.tasteRating ?? 4)
   const [editTimeRating, setEditTimeRating] = useState(recipe.timeRating ?? 4)
-  const [addSearch, setAddSearch] = useState('')
-
-  const filteredIngredients = addSearch.trim()
-    ? ingredients.filter((ing) =>
-        ing.name.toLowerCase().includes(addSearch.toLowerCase()) ||
-        (ing.nameKo ?? '').includes(addSearch),
-      )
-    : []
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false)
 
   function startEditing() {
     setEditImageUrl(recipe.imageUrl)
@@ -85,19 +79,16 @@ export function RecipeTable({
     setEditMemo(recipe.memo ?? '')
     setEditTasteRating(recipe.tasteRating ?? 4)
     setEditTimeRating(recipe.timeRating ?? 4)
-    setAddSearch('')
     setIsEditing(true)
   }
 
   function handleCancel() {
     setIsEditing(false)
-    setAddSearch('')
   }
 
   function handleSave() {
     onSaveRecipe({ ...recipe, imageUrl: editImageUrl, items: editItems, memo: editMemo, tasteRating: editTasteRating, timeRating: editTimeRating })
     setIsEditing(false)
-    setAddSearch('')
   }
 
   function handleEditAmountChange(index: number, value: string) {
@@ -136,7 +127,6 @@ export function RecipeTable({
       ...prev,
       { ingredientId, defaultAmount: 100, defaultUnit: ing.allowedUnits[0] },
     ])
-    setAddSearch('')
   }
 
   const recommended = { carbs: 77, protein: 33, fat: 22 }
@@ -174,10 +164,11 @@ export function RecipeTable({
   return (
     <section className="recipe-block">
       <div className="recipe-block__heading-row">
-        <h2 className="recipe-block__heading">
-          {getRecipeDisplayName(recipe, language)}
-        </h2>
-        <div className="recipe-block__ratings">
+        <div className="recipe-block__title-group">
+          <h2 className="recipe-block__heading">
+            {getRecipeDisplayName(recipe, language)}
+          </h2>
+          <div className="recipe-block__ratings">
           <StarRating
             label={language === 'ko' ? '맛' : 'Taste'}
             value={isEditing ? editTasteRating : (recipe.tasteRating ?? 4)}
@@ -188,8 +179,9 @@ export function RecipeTable({
             value={isEditing ? editTimeRating : (recipe.timeRating ?? 4)}
             onChange={isEditing ? setEditTimeRating : undefined}
           />
+          </div>
         </div>
-        {isEditing ? (
+        {isEditing && (
           <div className="recipe-block__edit-actions">
             <button type="button" className="edit-inline__cancel-btn" onClick={handleCancel}>
               취소
@@ -198,13 +190,6 @@ export function RecipeTable({
               저장
             </button>
           </div>
-        ) : (
-          <button type="button" className="recipe-block__edit-btn" onClick={startEditing} aria-label="Edit recipe">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
-            </svg>
-          </button>
         )}
       </div>
 
@@ -217,18 +202,6 @@ export function RecipeTable({
         />
       </div>
 
-      {isEditing && (
-        <div className="edit-inline__image-section">
-          <label className="edit-inline__label">이미지 URL</label>
-          <input
-            type="text"
-            className="edit-inline__input"
-            value={editImageUrl}
-            onChange={(e) => setEditImageUrl(e.target.value)}
-            placeholder="https://..."
-          />
-        </div>
-      )}
 
       <TableContainer>
         <table className="data-table recipe-table">
@@ -241,7 +214,6 @@ export function RecipeTable({
               <th>{t.colProtein}</th>
               <th>{t.colFat}</th>
               {isEditing && <th></th>}
-              {isEditing && <th></th>}
             </tr>
           </thead>
           <tbody>
@@ -251,7 +223,27 @@ export function RecipeTable({
                 if (!ingredient) return null
                 return (
                   <tr key={item.ingredientId}>
-                    <td>{getIngredientDisplayName(ingredient, language)}</td>
+                    <td>
+                      <div className="edit-inline__name-cell">
+                        <div className="edit-inline__order-btns">
+                          <button
+                            type="button"
+                            className="edit-inline__order-btn"
+                            onClick={() => handleMoveItem(index, -1)}
+                            disabled={index === 0}
+                            aria-label="Move up"
+                          >◀</button>
+                          <button
+                            type="button"
+                            className="edit-inline__order-btn"
+                            onClick={() => handleMoveItem(index, 1)}
+                            disabled={index === editItems.length - 1}
+                            aria-label="Move down"
+                          >▶</button>
+                        </div>
+                        {getIngredientDisplayName(ingredient, language)}
+                      </div>
+                    </td>
                     <td>
                       <input
                         type="number"
@@ -284,24 +276,6 @@ export function RecipeTable({
                         </>
                       )
                     })()}
-                    <td>
-                      <div className="edit-inline__order-btns">
-                        <button
-                          type="button"
-                          className="edit-inline__order-btn"
-                          onClick={() => handleMoveItem(index, -1)}
-                          disabled={index === 0}
-                          aria-label="Move up"
-                        >▲</button>
-                        <button
-                          type="button"
-                          className="edit-inline__order-btn"
-                          onClick={() => handleMoveItem(index, 1)}
-                          disabled={index === editItems.length - 1}
-                          aria-label="Move down"
-                        >▼</button>
-                      </div>
-                    </td>
                     <td>
                       <button
                         type="button"
@@ -338,6 +312,7 @@ export function RecipeTable({
                         min={0}
                         step="0.1"
                         value={formatAmount(row.amount)}
+                        onFocus={startEditing}
                         onChange={(event) =>
                           onAmountChange(row.ingredientId, event.target.value)
                         }
@@ -367,59 +342,24 @@ export function RecipeTable({
             )}
           </tbody>
           <tfoot>
-            {isEditing && (
-              <tr className="recipe-table__division-row">
-                <td colSpan={8}>
-                  <div className="edit-inline__add">
-                    <button type="button" className="add-food-btn" onClick={() => document.getElementById(`add-search-1-${recipe.id}`)?.focus()}>
-                      + {t.addFood}
-                    </button>
-                    <input
-                      id={`add-search-1-${recipe.id}`}
-                      type="search"
-                      className="edit-inline__input"
-                      placeholder="재료 검색해서 추가..."
-                      value={addSearch}
-                      onChange={(e) => setAddSearch(e.target.value)}
-                    />
-                    {filteredIngredients.length > 0 && (
-                      <ul className="edit-inline__suggestions">
-                        {filteredIngredients.slice(0, 8).map((ing) => (
-                          <li key={ing.id}>
-                            <button
-                              type="button"
-                              className="edit-inline__suggestion-btn"
-                              onClick={() => handleAddIngredient(ing.id)}
-                            >
-                              {getIngredientDisplayName(ing, language)}
-                            </button>
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                  </div>
-                </td>
-              </tr>
-            )}
             {!isEditing && (
               <>
-                <tr className="recipe-table__total">
+                <tr className="recipe-table__total recipe-table__muted">
                   <td colSpan={3}>
-                    <strong>{t.total}</strong>
+                    {t.total}
                   </td>
                   <td>
-                    <strong>{formatMacro(totals.carbs)}</strong>
+                    {formatMacro(totals.carbs)}
                   </td>
                   <td>
-                    <strong>{formatMacro(totals.protein)}</strong>
+                    {formatMacro(totals.protein)}
                   </td>
                   <td>
-                    <strong>{formatMacro(totals.fat)}</strong>
+                    {formatMacro(totals.fat)}
                   </td>
                 </tr>
-                <tr className="recipe-table__division-row">
+                <tr className="recipe-table__division-row recipe-table__muted">
                   <td colSpan={3}>
-                    <strong>
                       {language === 'en' ? (
                         <>
                           {t.divideByMeals}{' '}
@@ -458,16 +398,15 @@ export function RecipeTable({
                           {t.divideByMeals}
                         </>
                       )}
-                    </strong>
                   </td>
                   <td>
-                    <strong>{formatMacro(totals.carbs / divisionCount)}</strong>
+                    {formatMacro(totals.carbs / divisionCount)}
                   </td>
                   <td>
-                    <strong>{formatMacro(totals.protein / divisionCount)}</strong>
+                    {formatMacro(totals.protein / divisionCount)}
                   </td>
                   <td>
-                    <strong>{formatMacro(totals.fat / divisionCount)}</strong>
+                    {formatMacro(totals.fat / divisionCount)}
                   </td>
                 </tr>
               </>
@@ -504,8 +443,17 @@ export function RecipeTable({
               <td>{formatMacro((multigrainRiceAmount * 28.5) / 100)}</td>
               <td>{formatMacro((multigrainRiceAmount * 3.1) / 100)}</td>
               <td>{formatMacro((multigrainRiceAmount * 0.8) / 100)}</td>
-              {isEditing && <td colSpan={2}></td>}
+              {isEditing && <td></td>}
             </tr>
+            {isEditing && (
+              <tr className="recipe-table__division-row">
+                <td colSpan={7}>
+                  <button type="button" className="add-food-btn" onClick={() => setIsAddModalOpen(true)}>
+                    + {t.addFood}
+                  </button>
+                </td>
+              </tr>
+            )}
             <tr className="recipe-table__total">
               <td colSpan={3}>
                 <strong>{t.combinedTotal}</strong>
@@ -519,7 +467,7 @@ export function RecipeTable({
                     <td><strong style={{ color: macroColor(carbs, recommended.carbs) }}>{formatMacro(carbs)}</strong></td>
                     <td><strong style={{ color: macroColor(protein, recommended.protein) }}>{formatMacro(protein)}</strong></td>
                     <td><strong style={{ color: macroColor(fat, recommended.fat) }}>{formatMacro(fat)}</strong></td>
-                    {isEditing && <td colSpan={2}></td>}
+                    {isEditing && <td></td>}
                   </>
                 )
               })()}
@@ -537,11 +485,17 @@ export function RecipeTable({
               <td>
                 <strong>22.0</strong>
               </td>
-              {isEditing && <td colSpan={2}></td>}
+              {isEditing && <td></td>}
             </tr>
           </tfoot>
         </table>
       </TableContainer>
+
+      <IngredientSearchModal
+        isOpen={isAddModalOpen}
+        onClose={() => setIsAddModalOpen(false)}
+        onIngredientSelect={(ingredient) => handleAddIngredient(ingredient.id)}
+      />
 
       {(isEditing || recipe.memo) && (
       <div className="recipe-memo">

@@ -12,6 +12,7 @@ import {
 import { convertUnit, roundToOne } from '../utils/nutrition'
 import { ingredientById } from '../data/ingredients'
 import { recipeContainsIngredient } from '../utils/search'
+import { loadRecipesFromFirestore, convertToRecipe } from '../services/recipeService'
 import type { Recipe } from '../types'
 
 export function RecipePage() {
@@ -23,8 +24,31 @@ export function RecipePage() {
   )
   const [divisionCount, setDivisionCount] = useState(4)
   const [multigrainRiceAmount, setMultigrainRiceAmount] = useState(130)
-  const [multigrainRiceUnit, setMultigrainRiceUnit] = useState('g')
+  const [multigrainRiceUnit, setMultigrainRiceUnit] = useState(() =>
+    language === 'en' ? 'oz' : 'g',
+  )
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false)
+
+  useEffect(() => {
+    loadRecipesFromFirestore().then((fsDocs) => {
+      if (fsDocs.length === 0) return
+      const converted = fsDocs.map(convertToRecipe)
+      setRecipes([...staticRecipes, ...converted])
+      setRecipeStates((current) => {
+        const extra: RecipeStates = {}
+        for (const r of converted) {
+          if (!current[r.id]) {
+            extra[r.id] = r.items.map((item) => ({
+              ingredientId: item.ingredientId,
+              amount: item.defaultAmount,
+              unit: item.defaultUnit,
+            }))
+          }
+        }
+        return { ...current, ...extra }
+      })
+    }).catch(console.error)
+  }, [])
 
   useEffect(() => {
     setRecipeStates(buildInitialRecipeStates(language))
@@ -32,6 +56,7 @@ export function RecipePage() {
 
   useEffect(() => {
     setRecipeStates((current) => applyLanguageToRecipeStates(current, language))
+    setMultigrainRiceUnit(language === 'en' ? 'oz' : 'g')
   }, [language])
 
   const visibleRecipes = useMemo(() => {

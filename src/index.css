@@ -42,7 +42,9 @@ body {
   align-items: center;
   flex-wrap: nowrap;
   gap: 0.75rem 1rem;
-  background: var(--surface);
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   border-bottom: 1px solid var(--border);
   box-shadow: var(--shadow);
   padding: 0.65rem 1.25rem;
@@ -362,6 +364,14 @@ body {
   color: #f59e0b;
 }
 
+.recipe-block__title-group {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: 1;
+  min-width: 0;
+}
+
 .recipe-block__ratings {
   display: flex;
   gap: 0.75rem;
@@ -374,7 +384,7 @@ body {
   align-items: center;
   justify-content: space-between;
   gap: 0.75rem;
-  margin-bottom: 0;
+  margin-bottom: 16px;
 }
 
 .recipe-block__heading-row .recipe-block__heading {
@@ -480,10 +490,17 @@ body {
   outline-offset: 1px;
 }
 
+.edit-inline__name-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .edit-inline__order-btns {
   display: flex;
-  flex-direction: column;
-  gap: 2px;
+  flex-direction: row;
+  gap: 8px;
+  flex-shrink: 0;
 }
 
 .edit-inline__order-btn {
@@ -491,10 +508,12 @@ body {
   background: none;
   color: var(--muted);
   cursor: pointer;
-  font-size: 0.65rem;
-  padding: 1px 4px;
+  font-size: 0.85rem;
+  padding: 4px 6px;
   border-radius: 3px;
   line-height: 1;
+  min-width: 28px;
+  min-height: 28px;
 }
 
 .edit-inline__order-btn:hover:not(:disabled) {
@@ -803,7 +822,7 @@ body {
 }
 
 .recipe-block__image-wrap {
-  margin-bottom: 1rem;
+  margin-bottom: 0;
   border-radius: 0;
   overflow: hidden;
   background: var(--surface);
@@ -836,7 +855,13 @@ body {
 }
 
 .recipe-table__total td {
-  background: var(--accent-soft);
+  background: var(--accent-soft) !important;
+  height: 62px;
+}
+
+.recipe-table__muted td {
+  opacity: 0.5;
+  background: #fafaf9 !important;
 }
 
 .recipe-table__multigrain-row td {
@@ -845,6 +870,7 @@ body {
 
 .recipe-table__recommended td {
   background: #fafaf9 !important;
+  height: 62px;
 }
 
 .recipe-table__recommended td strong {
@@ -993,4 +1019,119 @@ body {
   .recipe-block__ratings {
     flex: 1;
   }
+}
+
+/* Add Recipe Page */
+.add-recipe__form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  max-width: 640px;
+  margin: 0 auto 2rem;
+}
+
+.add-recipe__field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.add-recipe__label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.add-recipe__hint {
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin: 0;
+}
+
+.add-recipe__input {
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 0.95rem;
+  background: var(--surface);
+  color: var(--text);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.add-recipe__input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.add-recipe__textarea {
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-family: monospace;
+  background: var(--surface);
+  color: var(--text);
+  width: 100%;
+  box-sizing: border-box;
+  resize: vertical;
+}
+
+.add-recipe__textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.add-recipe__confirm-btn {
+  align-self: flex-start;
+  padding: 0.6rem 1.5rem;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.add-recipe__confirm-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.add-recipe__preview {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.add-recipe__preview-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.add-recipe__preview-title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.add-recipe__save-btn {
+  align-self: flex-start;
+  padding: 0.6rem 1.5rem;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.add-recipe__error {
+  color: #dc2626;
+  font-size: 0.9rem;
 }
