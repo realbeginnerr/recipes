@@ -12,7 +12,8 @@ import {
 import { convertUnit, roundToOne } from '../utils/nutrition'
 import { ingredientById } from '../data/ingredients'
 import { recipeContainsIngredient } from '../utils/search'
-import { loadRecipesFromFirestore, convertToRecipe } from '../services/recipeService'
+import { loadRecipesFromFirestore, convertToRecipe, deleteRecipeFromFirestore } from '../services/recipeService'
+import { loadIngredientsFromFirestore } from '../services/ingredientService'
 import type { Recipe } from '../types'
 
 export function RecipePage() {
@@ -31,7 +32,9 @@ export function RecipePage() {
   const [sortOrder, setSortOrder] = useState<'alpha-asc' | 'alpha-desc' | 'date-desc' | 'date-asc'>('date-asc')
 
   useEffect(() => {
-    loadRecipesFromFirestore().then((fsDocs) => {
+    async function load() {
+      await loadIngredientsFromFirestore()
+      const fsDocs = await loadRecipesFromFirestore()
       if (fsDocs.length === 0) return
       const converted = fsDocs.map(convertToRecipe)
       setRecipes([...staticRecipes, ...converted])
@@ -48,7 +51,8 @@ export function RecipePage() {
         }
         return { ...current, ...extra }
       })
-    }).catch(console.error)
+    }
+    load().catch(console.error)
   }, [])
 
   useEffect(() => {
@@ -118,6 +122,16 @@ export function RecipePage() {
     }))
   }
 
+  async function handleDeleteRecipe(id: string) {
+    await deleteRecipeFromFirestore(id)
+    setRecipes((prev) => prev.filter((r) => r.id !== id))
+    setRecipeStates((prev) => {
+      const next = { ...prev }
+      delete next[id]
+      return next
+    })
+  }
+
   function handleSaveRecipe(updated: Recipe) {
     setRecipes((prev) => prev.map((r) => (r.id === updated.id ? updated : r)))
     setRecipeStates((current) => ({
@@ -148,6 +162,7 @@ export function RecipePage() {
       multigrainRiceUnit={multigrainRiceUnit}
       onMultigrainRiceUnitChange={setMultigrainRiceUnit}
       onSaveRecipe={handleSaveRecipe}
+      onDeleteRecipe={handleDeleteRecipe}
       onAmountChange={(ingredientId, raw) =>
         updateAmount(recipe.id, ingredientId, raw)
       }

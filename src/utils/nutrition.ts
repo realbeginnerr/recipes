@@ -15,7 +15,9 @@ export function amountToGrams(
   unit: string,
   conversions: Record<string, number>,
 ): number {
-  return amount * conversions[unit]
+  const factor = conversions[unit]
+  if (factor === undefined || Number.isNaN(factor)) return 0
+  return amount * factor
 }
 
 export function baseReferenceGrams(ingredient: Ingredient): number {
@@ -27,12 +29,13 @@ export function calculateMacros(
   ingredient: Ingredient,
 ): { carbs: number; protein: number; fat: number } {
   const baseGrams = baseReferenceGrams(ingredient)
+  if (!baseGrams || Number.isNaN(baseGrams)) return { carbs: 0, protein: 0, fat: 0 }
   const factor = grams / baseGrams
 
   return {
-    carbs: factor * ingredient.carbs,
-    protein: factor * ingredient.protein,
-    fat: factor * ingredient.fat,
+    carbs: Number.isFinite(factor * ingredient.carbs) ? factor * ingredient.carbs : 0,
+    protein: Number.isFinite(factor * ingredient.protein) ? factor * ingredient.protein : 0,
+    fat: Number.isFinite(factor * ingredient.fat) ? factor * ingredient.fat : 0,
   }
 }
 
@@ -49,5 +52,6 @@ export function formatAmount(value: number): string {
 }
 
 export function formatMacro(value: number): string {
+  if (Number.isNaN(value) || !Number.isFinite(value)) return '0.0'
   return (Math.round(value * 10) / 10).toFixed(1)
 }

@@ -24,7 +24,7 @@ export const translations = {
     divideByMeals: 'Divide into',
     meals: 'meals',
     combinedTotal: 'Total',
-    addFood: 'Add food',
+    addFood: 'Add ingredient',
     mainIngredients: 'Main Ingredients',
     otherIngredients: 'Other Ingredients',
     units: {
@@ -57,9 +57,9 @@ export const translations = {
     divideByMeals: '끼로 나누기',
     meals: '끼',
     combinedTotal: '합계',
-    addFood: '재료 추가하기',
-    mainIngredients: '주재료',
-    otherIngredients: '기타 재료',
+    addFood: '식재료 추가하기',
+    mainIngredients: '주식재료',
+    otherIngredients: '기타 식재료',
     units: {
       g: 'g',
       oz: 'oz',

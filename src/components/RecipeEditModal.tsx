@@ -94,7 +94,7 @@ export function RecipeEditModal({ recipe, onSave, onClose }: Props) {
             <table className="edit-modal__table">
               <thead>
                 <tr>
-                  <th>재료</th>
+                  <th>식재료</th>
                   <th>양</th>
                   <th>단위</th>
                   <th></th>
@@ -147,7 +147,7 @@ export function RecipeEditModal({ recipe, onSave, onClose }: Props) {
               <input
                 type="search"
                 className="edit-modal__input"
-                placeholder="재료 검색해서 추가..."
+                placeholder="식재료 검색해서 추가..."
                 value={addSearch}
                 onChange={(e) => setAddSearch(e.target.value)}
               />

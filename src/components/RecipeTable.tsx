@@ -47,6 +47,7 @@ type RecipeTableProps = {
   multigrainRiceUnit: string
   onMultigrainRiceUnitChange: (value: string) => void
   onSaveRecipe: (updated: Recipe) => void
+  onDeleteRecipe?: (id: string) => void
 }
 
 
@@ -63,6 +64,7 @@ export function RecipeTable({
   multigrainRiceUnit,
   onMultigrainRiceUnitChange,
   onSaveRecipe,
+  onDeleteRecipe,
 }: RecipeTableProps) {
   const { language, t } = useLanguage()
   const { isAdmin } = useAdmin()
@@ -74,7 +76,6 @@ export function RecipeTable({
   const [editItems, setEditItems] = useState<RecipeItem[]>(activeRecipe.items)
   const [editMemo, setEditMemo] = useState(activeRecipe.memo ?? '')
   const [editTasteRating, setEditTasteRating] = useState(activeRecipe.tasteRating ?? 4)
-  const [editTimeRating, setEditTimeRating] = useState(activeRecipe.timeRating ?? 4)
   const [isAddModalOpen, setIsAddModalOpen] = useState(false)
   const [newlyAddedIds, setNewlyAddedIds] = useState<Set<string>>(new Set())
   const sectionRef = useRef<HTMLElement>(null)
@@ -99,7 +100,6 @@ export function RecipeTable({
     }))
     setEditMemo(activeRecipe.memo ?? '')
     setEditTasteRating(activeRecipe.tasteRating ?? 4)
-    setEditTimeRating(activeRecipe.timeRating ?? 4)
     setNewlyAddedIds(new Set())
     setIsEditing(true)
   }
@@ -110,7 +110,7 @@ export function RecipeTable({
   }
 
   function handleSave() {
-    const updated = { ...activeRecipe, imageUrl: editImageUrl, link: editLink, items: editItems, memo: editMemo, tasteRating: editTasteRating, timeRating: editTimeRating }
+    const updated = { ...activeRecipe, imageUrl: editImageUrl, link: editLink, items: editItems, memo: editMemo, tasteRating: editTasteRating }
     if (isAdmin) {
       onSaveRecipe(updated)
     } else {
@@ -168,12 +168,13 @@ export function RecipeTable({
     return '#16a34a'
   }
 
-  const totals = rows.reduce(
-    (acc, row) => {
-      const ingredient = ingredientById.get(row.ingredientId)
+  const totals = (isEditing ? editItems : rows).reduce(
+    (acc, item) => {
+      const ingredient = ingredientById.get(item.ingredientId)
       if (!ingredient) return acc
-
-      const grams = amountToGrams(row.amount, row.unit, ingredient.conversions)
+      const amount = isEditing ? (item as typeof editItems[0]).defaultAmount : (item as typeof rows[0]).amount
+      const unit = isEditing ? (item as typeof editItems[0]).defaultUnit : (item as typeof rows[0]).unit
+      const grams = amountToGrams(amount, unit, ingredient.conversions)
       const macros = calculateMacros(grams, ingredient)
       return {
         carbs: acc.carbs + macros.carbs,
@@ -194,21 +195,30 @@ export function RecipeTable({
             {getRecipeDisplayName(activeRecipe, language)}
           </h2>
           <div className="recipe-block__ratings">
-          <StarRating
-            label={language === 'ko' ? '맛' : 'Taste'}
-            value={isEditing ? editTasteRating : (activeRecipe.tasteRating ?? 4)}
-            onChange={isEditing ? setEditTasteRating : undefined}
-          />
-          <StarRating
-            label={language === 'ko' ? '시간' : 'Time'}
-            value={isEditing ? editTimeRating : (activeRecipe.timeRating ?? 4)}
-            onChange={isEditing ? setEditTimeRating : undefined}
-          />
-          {activeRecipe.link && (
-            <a className="recipe-block__link-icon" href={activeRecipe.link} target="_blank" rel="noopener noreferrer" aria-label="Recipe link">
-              🔗
-            </a>
-          )}
+            <StarRating
+              label={language === 'ko' ? '맛' : 'Taste'}
+              value={isEditing ? editTasteRating : (activeRecipe.tasteRating ?? 4)}
+              onChange={isEditing ? setEditTasteRating : undefined}
+            />
+            {activeRecipe.link && (
+              <a className="recipe-block__link-icon" href={activeRecipe.link} target="_blank" rel="noopener noreferrer" aria-label="Recipe link">
+                🔗
+              </a>
+            )}
+            {isAdmin && onDeleteRecipe && !isEditing && (
+              <button
+                type="button"
+                className="recipe-block__delete-btn"
+                onClick={() => {
+                  const msg = language === 'ko'
+                    ? `'${getRecipeDisplayName(activeRecipe, language)}' 레시피를 삭제하시겠습니까?\n삭제된 레시피는 복구할 수 없습니다.`
+                    : `Delete '${getRecipeDisplayName(activeRecipe, language)}'?\nThis action cannot be undone.`
+                  if (window.confirm(msg)) onDeleteRecipe(activeRecipe.id)
+                }}
+              >
+                {language === 'ko' ? '삭제' : 'Delete'}
+              </button>
+            )}
           </div>
         </div>
         <div className="recipe-block__edit-actions">
@@ -427,63 +437,63 @@ export function RecipeTable({
             )}
           </tbody>
           <tfoot>
-            {!isEditing && (
-              <>
-                <tr className="recipe-table__total recipe-table__muted">
-                  <td colSpan={3}>
-                    {t.total}
-                  </td>
-                  <td className="macro">{formatMacro(totals.carbs)}</td>
-                  <td className="macro">{formatMacro(totals.protein)}</td>
-                  <td className="macro">{formatMacro(totals.fat)}</td>
-                </tr>
-                <tr className="recipe-table__division-row recipe-table__muted">
-                  <td colSpan={3}>
-                      {language === 'en' ? (
-                        <>
-                          {t.divideByMeals}{' '}
-                          <input
-                            type="number"
-                            className="amount-input"
-                            min={1}
-                            step="1"
-                            value={divisionCount}
-                            onChange={(event) => {
-                              const value = Number.parseInt(event.target.value, 10)
-                              if (!Number.isNaN(value) && value > 0) {
-                                onDivisionCountChange(value)
-                              }
-                            }}
-                            style={{ width: '60px', display: 'inline-block' }}
-                          />{' '}
-                          {t.meals}
-                        </>
-                      ) : (
-                        <>
-                          <input
-                            type="number"
-                            className="amount-input"
-                            min={1}
-                            step="1"
-                            value={divisionCount}
-                            onChange={(event) => {
-                              const value = Number.parseInt(event.target.value, 10)
-                              if (!Number.isNaN(value) && value > 0) {
-                                onDivisionCountChange(value)
-                              }
-                            }}
-                            style={{ width: '60px', display: 'inline-block' }}
-                          />{' '}
-                          {t.divideByMeals}
-                        </>
-                      )}
-                  </td>
-                  <td className="macro">{formatMacro(totals.carbs / divisionCount)}</td>
-                  <td className="macro">{formatMacro(totals.protein / divisionCount)}</td>
-                  <td className="macro">{formatMacro(totals.fat / divisionCount)}</td>
-                </tr>
-              </>
-            )}
+            <tr className="recipe-table__total recipe-table__muted">
+              <td colSpan={3}>
+                {t.total}
+              </td>
+              <td className="macro">{formatMacro(totals.carbs)}</td>
+              <td className="macro">{formatMacro(totals.protein)}</td>
+              <td className="macro">{formatMacro(totals.fat)}</td>
+              {isEditing && <td className="edit-inline__order-cell edit-inline__delete-cell"></td>}
+              {isEditing && <td className="edit-inline__order-cell edit-inline__delete-cell"></td>}
+            </tr>
+            <tr className="recipe-table__division-row recipe-table__muted">
+              <td colSpan={3}>
+                {language === 'en' ? (
+                  <>
+                    {t.divideByMeals}{' '}
+                    <input
+                      type="number"
+                      className="amount-input"
+                      min={1}
+                      step="1"
+                      value={divisionCount}
+                      onChange={(event) => {
+                        const value = Number.parseInt(event.target.value, 10)
+                        if (!Number.isNaN(value) && value > 0) {
+                          onDivisionCountChange(value)
+                        }
+                      }}
+                      style={{ width: '60px', display: 'inline-block' }}
+                    />{' '}
+                    {t.meals}
+                  </>
+                ) : (
+                  <>
+                    <input
+                      type="number"
+                      className="amount-input"
+                      min={1}
+                      step="1"
+                      value={divisionCount}
+                      onChange={(event) => {
+                        const value = Number.parseInt(event.target.value, 10)
+                        if (!Number.isNaN(value) && value > 0) {
+                          onDivisionCountChange(value)
+                        }
+                      }}
+                      style={{ width: '60px', display: 'inline-block' }}
+                    />{' '}
+                    {t.divideByMeals}
+                  </>
+                )}
+              </td>
+              <td className="macro">{formatMacro(totals.carbs / divisionCount)}</td>
+              <td className="macro">{formatMacro(totals.protein / divisionCount)}</td>
+              <td className="macro">{formatMacro(totals.fat / divisionCount)}</td>
+              {isEditing && <td className="edit-inline__order-cell edit-inline__delete-cell"></td>}
+              {isEditing && <td className="edit-inline__order-cell edit-inline__delete-cell"></td>}
+            </tr>
             <tr className="recipe-table__multigrain-row">
               <td>{language === 'ko' ? '잡곡밥 (쌀:잡곡=2:1)' : 'Multigrain rice (rice:grains=2:1)'}</td>
               <td>
@@ -518,15 +528,6 @@ export function RecipeTable({
               <td className="macro">{formatMacro((multigrainRiceAmount * 0.8) / 100)}</td>
               {isEditing && <td className="edit-inline__order-cell edit-inline__delete-cell"></td>}
             </tr>
-            {isEditing && (
-              <tr className="recipe-table__division-row">
-                <td colSpan={8} style={{ textAlign: 'center' }}>
-                  <button type="button" className="add-food-btn" onClick={() => setIsAddModalOpen(true)}>
-                    + {language === 'ko' ? '식재료 추가하기' : 'Add ingredient'}
-                  </button>
-                </td>
-              </tr>
-            )}
             <tr className="recipe-table__total">
               <td colSpan={3}>
                 <strong>{t.combinedTotal}</strong>
@@ -566,19 +567,26 @@ export function RecipeTable({
       />
 
       {(isEditing || activeRecipe.memo) && (
-      <div className="recipe-memo">
-        {isEditing ? (
-          <textarea
-            className="recipe-memo__textarea"
-            value={editMemo}
-            onChange={(e) => setEditMemo(e.target.value)}
-            placeholder="메모를 입력하세요..."
-            rows={3}
-          />
-        ) : (
-          <p className="recipe-memo__text">{activeRecipe.memo}</p>
-        )}
-      </div>
+        <div className="recipe-memo">
+          {isEditing ? (
+            <textarea
+              className="recipe-memo__textarea"
+              value={editMemo}
+              onChange={(e) => setEditMemo(e.target.value)}
+              placeholder="메모를 입력하세요..."
+              rows={3}
+            />
+          ) : (
+            <p className="recipe-memo__text">{activeRecipe.memo}</p>
+          )}
+        </div>
+      )}
+      {isEditing && (
+        <div className="add-food-cell" style={{ marginTop: '0.75rem' }}>
+          <button type="button" className="add-food-btn" onClick={() => setIsAddModalOpen(true)}>
+            + {language === 'ko' ? '식재료 추가하기' : 'Add ingredient'}
+          </button>
+        </div>
       )}
     </section>
   )

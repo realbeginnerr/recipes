@@ -8,15 +8,18 @@ type IngredientSearchModalProps = {
   isOpen: boolean
   onClose: () => void
   onIngredientSelect: (ingredient: Ingredient) => void
+  existingIngredientIds?: Set<string>
 }
 
 export function IngredientSearchModal({
   isOpen,
   onClose,
   onIngredientSelect,
+  existingIngredientIds = new Set(),
 }: IngredientSearchModalProps) {
   const { language, t } = useLanguage()
   const [searchQuery, setSearchQuery] = useState('')
+  const [duplicateError, setDuplicateError] = useState('')
 
   const filteredIngredients = Array.from(ingredientById.values()).filter(
     (ingredient) => {
@@ -86,7 +89,7 @@ export function IngredientSearchModal({
         <input
           type="text"
           value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
+          onChange={(e) => { setSearchQuery(e.target.value); setDuplicateError('') }}
           placeholder={language === 'ko' ? '식재료 검색...' : 'Search ingredients...'}
           style={{
             width: '100%',
@@ -94,11 +97,16 @@ export function IngredientSearchModal({
             border: '1px solid var(--border)',
             borderRadius: '6px',
             fontSize: '0.9rem',
-            marginBottom: '1rem',
+            marginBottom: duplicateError ? '0.4rem' : '1rem',
             boxSizing: 'border-box',
           }}
           autoFocus
         />
+        {duplicateError && (
+          <p style={{ color: '#dc2626', fontSize: '0.8rem', margin: '0 0 0.75rem 0' }}>
+            {duplicateError}
+          </p>
+        )}
         <div
           style={{
             maxHeight: '350px',
@@ -115,6 +123,14 @@ export function IngredientSearchModal({
                 key={ingredient.id}
                 type="button"
                 onClick={() => {
+                  if (existingIngredientIds.has(ingredient.id)) {
+                    setDuplicateError(
+                      language === 'ko'
+                        ? '이미 레시피에 추가된 식재료입니다.'
+                        : 'This ingredient is already in the recipe.'
+                    )
+                    return
+                  }
                   onIngredientSelect(ingredient)
                   onClose()
                   setSearchQuery('')
