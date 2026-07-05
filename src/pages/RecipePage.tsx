@@ -30,14 +30,15 @@ export function RecipePage() {
   )
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false)
   const [sortOrder, setSortOrder] = useState<'alpha-asc' | 'alpha-desc' | 'date-desc' | 'date-asc'>('date-asc')
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     async function load() {
-      await loadIngredientsFromFirestore()
-      const fsDocs = await loadRecipesFromFirestore()
-      if (fsDocs.length === 0) return
-      const converted = fsDocs.map(convertToRecipe)
-      setRecipes([...staticRecipes, ...converted])
+      try {
+        await loadIngredientsFromFirestore()
+        const fsDocs = await loadRecipesFromFirestore()
+        const converted = fsDocs.map(convertToRecipe)
+        setRecipes([...staticRecipes, ...converted])
       setRecipeStates((current) => {
         const extra: RecipeStates = {}
         for (const r of converted) {
@@ -51,6 +52,9 @@ export function RecipePage() {
         }
         return { ...current, ...extra }
       })
+      } finally {
+        setLoading(false)
+      }
     }
     load().catch(console.error)
   }, [])
@@ -201,6 +205,25 @@ export function RecipePage() {
           ) : (
             recipeList
           )}
+        </div>
+      ) : loading ? (
+        <div className="empty-state">
+          <svg className="empty-state__icon empty-state__icon--spin" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeDasharray="31.4 31.4" />
+          </svg>
+          <p className="empty-state__text">{language === 'ko' ? '불러오는 중...' : 'Loading...'}</p>
+        </div>
+      ) : visibleRecipes.length === 0 ? (
+        <div className="empty-state">
+          <svg className="empty-state__icon" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <ellipse cx="40" cy="58" rx="28" ry="6" fill="currentColor" opacity="0.08" />
+            <path d="M14 38 C14 24 26 14 40 14 C54 14 66 24 66 38" stroke="currentColor" strokeWidth="3" strokeLinecap="round" fill="none" />
+            <line x1="10" y1="38" x2="70" y2="38" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
+            <path d="M30 38 L30 50 Q30 54 34 54 L46 54 Q50 54 50 50 L50 38" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+            <line x1="56" y1="20" x2="56" y2="38" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+            <path d="M52 20 Q52 16 56 16 Q60 16 60 20 L60 28" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" fill="none" />
+          </svg>
+          <p className="empty-state__text">{language === 'ko' ? '등록된 레시피가 없습니다' : 'No recipes yet'}</p>
         </div>
       ) : (
         recipeList

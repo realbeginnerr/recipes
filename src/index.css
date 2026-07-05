@@ -1036,6 +1036,39 @@ body {
   color: var(--muted);
 }
 
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  padding: 5rem 1rem;
+  color: var(--muted);
+}
+
+.empty-state__icon {
+  width: 80px;
+  height: 80px;
+  opacity: 0.35;
+}
+
+.empty-state__icon--spin {
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.empty-state__text {
+  margin: 0;
+  font-size: 1rem;
+  color: var(--muted);
+}
+
 .recipe-table__row--match td {
   background: var(--accent-soft);
 }
