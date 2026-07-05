@@ -1,10 +1,11 @@
-import { type FormEvent, useState } from 'react'
+import { type FormEvent, useRef, useState } from 'react'
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import {
   LanguageProvider,
   useLanguage,
 } from '../context/LanguageContext'
 import { SearchProvider, useSearch } from '../context/SearchContext'
+import { AdminProvider, useAdmin } from '../context/AdminContext'
 import { LanguageToggle } from './LanguageToggle'
 
 function HeaderTitle() {
@@ -25,6 +26,72 @@ function HeaderTitle() {
     >
       {t.appTitle}
     </button>
+  )
+}
+
+function AdminButton() {
+  const { isAdmin, login, logout } = useAdmin()
+  const { language } = useLanguage()
+  const [showInput, setShowInput] = useState(false)
+  const [pin, setPin] = useState('')
+  const [error, setError] = useState(false)
+  const inputRef = useRef<HTMLInputElement>(null)
+
+  function handleClick() {
+    if (isAdmin) {
+      logout()
+      return
+    }
+    setShowInput((prev) => !prev)
+    setPin('')
+    setError(false)
+    setTimeout(() => inputRef.current?.focus(), 50)
+  }
+
+  function handleSubmit(e: FormEvent) {
+    e.preventDefault()
+    if (login(pin)) {
+      setShowInput(false)
+      setPin('')
+      setError(false)
+    } else {
+      setError(true)
+    }
+  }
+
+  return (
+    <div className="admin-btn-wrap">
+      <button
+        type="button"
+        className={`header-nav__link admin-nav-btn${isAdmin ? ' admin-nav-btn--active' : ''}`}
+        onClick={handleClick}
+      >
+        {isAdmin
+          ? (language === 'ko' ? '관리자 ✓' : 'Admin ✓')
+          : (language === 'ko' ? '관리자' : 'Admin')}
+      </button>
+      {showInput && !isAdmin && (
+        <form className="admin-pin-form" onSubmit={handleSubmit}>
+          <input
+            ref={inputRef}
+            type="password"
+            className="admin-pin-input"
+            value={pin}
+            onChange={(e) => { setPin(e.target.value); setError(false) }}
+            placeholder="PIN"
+            maxLength={20}
+          />
+          <button type="submit" className="admin-pin-submit">
+            {language === 'ko' ? '확인' : 'OK'}
+          </button>
+          {error && (
+            <span className="admin-pin-error">
+              {language === 'ko' ? '잘못된 PIN' : 'Wrong PIN'}
+            </span>
+          )}
+        </form>
+      )}
+    </div>
   )
 }
 
@@ -53,6 +120,7 @@ function NavMenu() {
           {link.label}
         </NavLink>
       ))}
+      <AdminButton />
     </nav>
   )
 }
@@ -135,6 +203,8 @@ function HamburgerMenu() {
             ))}
             <div className="hamburger__divider" />
             <LanguageToggle />
+            <div className="hamburger__divider" />
+            <AdminButton />
           </div>
         </>
       )}
@@ -166,10 +236,12 @@ function LayoutContent() {
 
 export function Layout() {
   return (
-    <LanguageProvider>
-      <SearchProvider>
-        <LayoutContent />
-      </SearchProvider>
-    </LanguageProvider>
+    <AdminProvider>
+      <LanguageProvider>
+        <SearchProvider>
+          <LayoutContent />
+        </SearchProvider>
+      </LanguageProvider>
+    </AdminProvider>
   )
 }

@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useLanguage } from '../context/LanguageContext'
+import { useAdmin } from '../context/AdminContext'
 import { saveRecipeToFirestore } from '../services/recipeService'
 import type { FirestoreRecipe } from '../services/recipeService'
 import { Toast, useToast } from '../components/Toast'
@@ -87,6 +89,12 @@ function macroColor(value: number, target: number): string {
 
 export function AddRecipePage() {
   const { language } = useLanguage()
+  const { isAdmin } = useAdmin()
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if (!isAdmin) navigate('/', { replace: true })
+  }, [isAdmin, navigate])
   const [recipeName, setRecipeName] = useState('')
   const [recipeNameKo, setRecipeNameKo] = useState('')
   const [divisionCount, setDivisionCount] = useState(4)
@@ -117,7 +125,7 @@ export function AddRecipePage() {
       setNameKoError('')
     }
     if (!pastedText.trim()) {
-      setDataError(isKo ? '재료 데이터를 입력해주세요.' : 'Please enter ingredient data.')
+      setDataError(isKo ? '식재료 데이터를 입력해주세요.' : 'Please enter ingredient data.')
       hasError = true
     } else {
       setDataError('')
@@ -256,12 +264,12 @@ export function AddRecipePage() {
         <div className="add-recipe__field">
           <label className="add-recipe__label">
             {isKo
-              ? '재료 데이터 입력 (/ 로 열 구분, 줄바꿈으로 행 구분)'
+              ? '식재료 데이터 입력 (/ 로 열 구분, 줄바꿈으로 행 구분)'
               : 'Enter ingredient data (/ between columns, newlines between rows)'}
           </label>
           <p className="add-recipe__hint">
             {isKo
-              ? '열 순서: 재료명 → 양 → 단위 → 탄수화물 → 단백질 → 지방'
+              ? '열 순서: 식재료명 → 양 → 단위 → 탄수화물 → 단백질 → 지방'
               : 'Column order: name → amount → unit → carbs → protein → fat'}
           </p>
           <textarea

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 
 function StarRating({ label, value, onChange }: { label: string; value: number; onChange?: (v: number) => void }) {
   return (
@@ -20,6 +20,7 @@ function StarRating({ label, value, onChange }: { label: string; value: number; 
   )
 }
 import { useLanguage } from '../context/LanguageContext'
+import { useAdmin } from '../context/AdminContext'
 import { ingredientById } from '../data/ingredients'
 import { IngredientSearchModal } from './IngredientSearchModal'
 import { TableContainer } from './TableContainer'
@@ -64,32 +65,58 @@ export function RecipeTable({
   onSaveRecipe,
 }: RecipeTableProps) {
   const { language, t } = useLanguage()
+  const { isAdmin } = useAdmin()
+  const [localRecipe, setLocalRecipe] = useState(recipe)
+  const activeRecipe = localRecipe
   const [isEditing, setIsEditing] = useState(false)
-  const [editImageUrl, setEditImageUrl] = useState(recipe.imageUrl)
-  const [editItems, setEditItems] = useState<RecipeItem[]>(recipe.items)
-  const [editMemo, setEditMemo] = useState(recipe.memo ?? '')
-  const [editTasteRating, setEditTasteRating] = useState(recipe.tasteRating ?? 4)
-  const [editTimeRating, setEditTimeRating] = useState(recipe.timeRating ?? 4)
+  const [editImageUrl, setEditImageUrl] = useState(activeRecipe.imageUrl)
+  const [editLink, setEditLink] = useState(activeRecipe.link ?? '')
+  const [editItems, setEditItems] = useState<RecipeItem[]>(activeRecipe.items)
+  const [editMemo, setEditMemo] = useState(activeRecipe.memo ?? '')
+  const [editTasteRating, setEditTasteRating] = useState(activeRecipe.tasteRating ?? 4)
+  const [editTimeRating, setEditTimeRating] = useState(activeRecipe.timeRating ?? 4)
   const [isAddModalOpen, setIsAddModalOpen] = useState(false)
+  const [newlyAddedIds, setNewlyAddedIds] = useState<Set<string>>(new Set())
+  const sectionRef = useRef<HTMLElement>(null)
+
+  useEffect(() => {
+    if (!isEditing) return
+    function handleMouseDown(e: MouseEvent) {
+      if (sectionRef.current && !sectionRef.current.contains(e.target as Node)) {
+        handleCancel()
+      }
+    }
+    document.addEventListener('mousedown', handleMouseDown)
+    return () => document.removeEventListener('mousedown', handleMouseDown)
+  }, [isEditing])
 
   function startEditing() {
-    setEditImageUrl(recipe.imageUrl)
-    setEditItems(recipe.items.map((item) => {
+    setEditImageUrl(activeRecipe.imageUrl)
+    setEditLink(activeRecipe.link ?? '')
+    setEditItems(activeRecipe.items.map((item) => {
       const row = rows?.find((r) => r.ingredientId === item.ingredientId)
       return row ? { ...item, defaultAmount: row.amount, defaultUnit: row.unit } : item
     }))
-    setEditMemo(recipe.memo ?? '')
-    setEditTasteRating(recipe.tasteRating ?? 4)
-    setEditTimeRating(recipe.timeRating ?? 4)
+    setEditMemo(activeRecipe.memo ?? '')
+    setEditTasteRating(activeRecipe.tasteRating ?? 4)
+    setEditTimeRating(activeRecipe.timeRating ?? 4)
+    setNewlyAddedIds(new Set())
     setIsEditing(true)
   }
 
   function handleCancel() {
+    setNewlyAddedIds(new Set())
     setIsEditing(false)
   }
 
   function handleSave() {
-    onSaveRecipe({ ...recipe, imageUrl: editImageUrl, items: editItems, memo: editMemo, tasteRating: editTasteRating, timeRating: editTimeRating })
+    const updated = { ...activeRecipe, imageUrl: editImageUrl, link: editLink, items: editItems, memo: editMemo, tasteRating: editTasteRating, timeRating: editTimeRating }
+    if (isAdmin) {
+      onSaveRecipe(updated)
+    } else {
+      setLocalRecipe(updated)
+    }
+    setNewlyAddedIds(new Set())
     setIsEditing(false)
   }
 
@@ -129,6 +156,7 @@ export function RecipeTable({
       ...prev,
       { ingredientId, defaultAmount: 100, defaultUnit: ing.allowedUnits[0] },
     ])
+    setNewlyAddedIds((prev) => new Set([...prev, ingredientId]))
   }
 
   const recommended = { carbs: 77, protein: 33, fat: 22 }
@@ -159,44 +187,62 @@ export function RecipeTable({
 
 
   return (
-    <section className="recipe-block">
+    <section className="recipe-block" ref={sectionRef}>
       <div className="recipe-block__heading-row">
         <div className="recipe-block__title-group">
           <h2 className="recipe-block__heading">
-            {getRecipeDisplayName(recipe, language)}
+            {getRecipeDisplayName(activeRecipe, language)}
           </h2>
           <div className="recipe-block__ratings">
           <StarRating
             label={language === 'ko' ? '맛' : 'Taste'}
-            value={isEditing ? editTasteRating : (recipe.tasteRating ?? 4)}
+            value={isEditing ? editTasteRating : (activeRecipe.tasteRating ?? 4)}
             onChange={isEditing ? setEditTasteRating : undefined}
           />
           <StarRating
             label={language === 'ko' ? '시간' : 'Time'}
-            value={isEditing ? editTimeRating : (recipe.timeRating ?? 4)}
+            value={isEditing ? editTimeRating : (activeRecipe.timeRating ?? 4)}
             onChange={isEditing ? setEditTimeRating : undefined}
           />
-          {recipe.link && (
-            <a className="recipe-block__link-icon" href={recipe.link} target="_blank" rel="noopener noreferrer" aria-label="Recipe link">
+          {activeRecipe.link && (
+            <a className="recipe-block__link-icon" href={activeRecipe.link} target="_blank" rel="noopener noreferrer" aria-label="Recipe link">
               🔗
             </a>
           )}
           </div>
         </div>
-        {isEditing && (
-          <div className="recipe-block__edit-actions">
-            <button type="button" className="edit-inline__cancel-btn" onClick={handleCancel}>
-              취소
+        <div className="recipe-block__edit-actions">
+          {isEditing ? (
+            <>
+              <button type="button" className="edit-inline__cancel-btn" onClick={handleCancel}>
+                {language === 'ko' ? '취소' : 'Cancel'}
+              </button>
+              <button type="button" className="edit-inline__save-btn" onClick={handleSave}>
+                {language === 'ko' ? '저장' : 'Save'}
+              </button>
+            </>
+          ) : (
+            <button type="button" className="edit-inline__edit-btn" onClick={startEditing}>
+              ✏️
             </button>
-            <button type="button" className="edit-inline__save-btn" onClick={handleSave}>
-              저장
-            </button>
-          </div>
-        )}
+          )}
+        </div>
       </div>
 
-
-
+      {isEditing && (
+        <div className="edit-inline__link-field">
+          <label className="edit-inline__link-label">
+            {language === 'ko' ? '링크' : 'Link'}
+          </label>
+          <input
+            type="url"
+            className="add-recipe__input"
+            value={editLink}
+            onChange={(e) => setEditLink(e.target.value)}
+            placeholder="https://..."
+          />
+        </div>
+      )}
 
       <TableContainer>
         <table className="data-table recipe-table">
@@ -217,9 +263,10 @@ export function RecipeTable({
               editItems.map((item, index) => {
                 const ingredient = ingredientById.get(item.ingredientId)
                 if (!ingredient) return null
+                const isNew = newlyAddedIds.has(item.ingredientId)
                 return (
-                  <tr key={item.ingredientId}>
-                    <td>
+                  <tr key={item.ingredientId} className={isNew ? 'edit-row--new' : ''}>
+                    <td style={{ fontWeight: isNew ? 700 : undefined }}>
                       {getIngredientDisplayName(ingredient, language)}
                     </td>
                     <td>
@@ -473,9 +520,9 @@ export function RecipeTable({
             </tr>
             {isEditing && (
               <tr className="recipe-table__division-row">
-                <td colSpan={8}>
+                <td colSpan={8} style={{ textAlign: 'center' }}>
                   <button type="button" className="add-food-btn" onClick={() => setIsAddModalOpen(true)}>
-                    + {t.addFood}
+                    + {language === 'ko' ? '식재료 추가하기' : 'Add ingredient'}
                   </button>
                 </td>
               </tr>
@@ -515,9 +562,10 @@ export function RecipeTable({
         isOpen={isAddModalOpen}
         onClose={() => setIsAddModalOpen(false)}
         onIngredientSelect={(ingredient) => handleAddIngredient(ingredient.id)}
+        existingIngredientIds={new Set(editItems.map((i) => i.ingredientId))}
       />
 
-      {(isEditing || recipe.memo) && (
+      {(isEditing || activeRecipe.memo) && (
       <div className="recipe-memo">
         {isEditing ? (
           <textarea
@@ -528,7 +576,7 @@ export function RecipeTable({
             rows={3}
           />
         ) : (
-          <p className="recipe-memo__text">{recipe.memo}</p>
+          <p className="recipe-memo__text">{activeRecipe.memo}</p>
         )}
       </div>
       )}
