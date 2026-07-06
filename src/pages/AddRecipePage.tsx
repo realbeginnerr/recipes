@@ -2,11 +2,12 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useLanguage } from '../context/LanguageContext'
 import { useAdmin } from '../context/AdminContext'
-import { saveRecipeToFirestore } from '../services/recipeService'
+import { saveRecipeToFirestore, loadRecipesFromFirestore, type FirestoreRecipe } from '../services/recipeService'
 import {
   loadIngredientsFromFirestore,
   saveIngredientToFirestore,
   findIngredientByName,
+  ingredientByName,
   type FirestoreIngredient,
 } from '../services/ingredientService'
 import { Toast, useToast } from '../components/Toast'
@@ -151,6 +152,10 @@ export function AddRecipePage() {
   const [nameError, setNameError] = useState('')
   const [nameKoError, setNameKoError] = useState('')
   const [dataError, setDataError] = useState('')
+  const [loadingRecipes, setLoadingRecipes] = useState(false)
+  const [savedRecipes, setSavedRecipes] = useState<FirestoreRecipe[]>([])
+  const [showRecipeList, setShowRecipeList] = useState(false)
+  const [selectedRecipeIds, setSelectedRecipeIds] = useState<Set<string>>(new Set())
   const { toast, showToast, closeToast } = useToast()
 
   async function handleConfirm() {
@@ -281,6 +286,55 @@ export function AddRecipePage() {
     setResolvedRows((prev) => prev.map((row, i) => i === index ? { ...row, name: value } : row))
     const nameEn = await translateKoToEn(value)
     setEnRows((prev) => prev.map((row, i) => i === index ? { ...row, nameEn } : row))
+  }
+
+  async function handleOpenRecipeList() {
+    setLoadingRecipes(true)
+    try {
+      await loadIngredientsFromFirestore()
+      const recipes = await loadRecipesFromFirestore()
+      setSavedRecipes(recipes)
+      setShowRecipeList(true)
+      setSelectedRecipeIds(new Set())
+    } finally {
+      setLoadingRecipes(false)
+    }
+  }
+
+  function handleToggleRecipe(id: string) {
+    setSelectedRecipeIds((prev) => {
+      const next = new Set(prev)
+      if (next.has(id)) next.delete(id)
+      else next.add(id)
+      return next
+    })
+  }
+
+  function handleMergeRecipes() {
+    const selected = savedRecipes.filter((r) => selectedRecipeIds.has(r.id))
+    const lineMap = new Map<string, { name: string; amount: number; unit: string }>()
+    for (const recipe of selected) {
+      for (const item of recipe.items) {
+        const ing = [...ingredientByName.values()].find((v) => v.id === item.ingredientId)
+        const name = ing ? ing.nameKo || ing.name : item.ingredientId
+        const existing = lineMap.get(name)
+        if (existing && existing.unit === item.unit) {
+          existing.amount += item.amount
+        } else {
+          lineMap.set(name, { name, amount: item.amount, unit: item.unit })
+        }
+      }
+    }
+    const lines = [...lineMap.values()].map((r) => `${r.name}/${r.amount}/${r.unit}`)
+    setPastedText(lines.join('\n'))
+    setResolved(false)
+    setResolvedRows([])
+    setEnRows([])
+    setDataError('')
+    setNameError('')
+    setNameKoError('')
+    setShowRecipeList(false)
+    setSelectedRecipeIds(new Set())
   }
 
   function handleReset() {
@@ -462,6 +516,43 @@ export function AddRecipePage() {
               : 'Chicken breast/200/g/0/46/4\nBroccoli/100/g/7/3/0'} />
           {dataError && <p className="add-recipe__field-error">{dataError}</p>}
         </div>
+        <div className="add-recipe__load-section">
+          <p className="add-recipe__load-title">
+            {isKo ? '기존 레시피 불러오기' : 'Load from existing recipes'}
+          </p>
+          <button type="button" className="add-recipe__load-btn" onClick={handleOpenRecipeList} disabled={loadingRecipes}>
+            {loadingRecipes ? (isKo ? '불러오는 중...' : 'Loading...') : (isKo ? '레시피 선택' : 'Select recipes')}
+          </button>
+          {showRecipeList && savedRecipes.length > 0 && (
+            <>
+              <ul className="add-recipe__recipe-list">
+                {savedRecipes.map((r) => (
+                  <li key={r.id}>
+                    <label className="add-recipe__recipe-list-item">
+                      <input
+                        type="checkbox"
+                        checked={selectedRecipeIds.has(r.id)}
+                        onChange={() => handleToggleRecipe(r.id)}
+                      />
+                      {r.nameKo || r.name}
+                    </label>
+                  </li>
+                ))}
+              </ul>
+              <button
+                type="button"
+                className="add-recipe__merge-btn"
+                onClick={handleMergeRecipes}
+                disabled={selectedRecipeIds.size === 0}
+              >
+                {isKo
+                  ? `선택한 ${selectedRecipeIds.size}개 레시피 합치기`
+                  : `Merge ${selectedRecipeIds.size} selected recipe${selectedRecipeIds.size !== 1 ? 's' : ''}`}
+              </button>
+            </>
+          )}
+        </div>
+
         <button type="button" className="add-recipe__confirm-btn" onClick={handleConfirm} disabled={confirming}>
           {confirming ? (isKo ? '조회 중...' : 'Checking...') : (isKo ? '확인' : 'Confirm')}
         </button>

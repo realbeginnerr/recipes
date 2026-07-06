@@ -59,9 +59,29 @@ export function SignupPage() {
       </div>
 
       <div className="signup-page__goal">
-        {isKo
-          ? '신청자가 1,000명을 넘으면 회원가입 서비스를 만들겠습니다.'
-          : 'Once 1,000 people sign up, we will build a full membership service.'}
+        {isKo ? (
+          <>
+            <p>아직 회원가입 기능은 없습니다. 만들기 어렵거든요.</p>
+            <p>신청자가 1,000명을 넘으면 그때 만들겠습니다.</p>
+            <p>회원이 되면 이런 기능들을 쓸 수 있어요. 지금은 저만 이 기능들을 쓰고 있어요.</p>
+            <ul>
+              <li>✏️ 나만의 레시피 추가 · 수정 · 저장</li>
+              <li>🥦 식재료 직접 추가 · 수정 · 관리</li>
+              <li>📊 대시보드 — 내 식습관 패턴을 한눈에</li>
+            </ul>
+          </>
+        ) : (
+          <>
+            <p>There's no membership system yet — it's not easy to build.</p>
+            <p>Once 1,000 people sign up, we'll make it happen.</p>
+            <p>Here's what you'll be able to do as a member. For now, it's just me using these features.</p>
+            <ul>
+              <li>✏️ Add, edit, and save your own recipes</li>
+              <li>🥦 Add and manage your own ingredients</li>
+              <li>📊 Dashboard — see your eating habits at a glance</li>
+            </ul>
+          </>
+        )}
       </div>
 
       <form className="signup-page__form" onSubmit={handleSubmit}>
