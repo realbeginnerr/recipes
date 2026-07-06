@@ -12,7 +12,7 @@ import {
 import { convertUnit, roundToOne } from '../utils/nutrition'
 import { ingredientById } from '../data/ingredients'
 import { recipeContainsIngredient } from '../utils/search'
-import { loadRecipesFromFirestore, convertToRecipe, deleteRecipeFromFirestore } from '../services/recipeService'
+import { loadRecipesFromFirestore, convertToRecipe, deleteRecipeFromFirestore, updateRecipeInFirestore } from '../services/recipeService'
 import { loadIngredientsFromFirestore } from '../services/ingredientService'
 import type { Recipe } from '../types'
 
@@ -29,7 +29,7 @@ export function RecipePage() {
     language === 'en' ? 'oz' : 'g',
   )
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false)
-  const [sortOrder, setSortOrder] = useState<'alpha-asc' | 'alpha-desc' | 'date-desc' | 'date-asc'>('date-asc')
+  const [sortOrder, setSortOrder] = useState<'alpha-asc' | 'alpha-desc' | 'date-desc' | 'date-asc'>('date-desc')
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -146,6 +146,7 @@ export function RecipePage() {
         unit: item.defaultUnit,
       })),
     }))
+    updateRecipeInFirestore(updated).catch(console.error)
   }
 
   const recipeCountLabel =
@@ -184,10 +185,10 @@ export function RecipePage() {
           value={sortOrder}
           onChange={(e) => setSortOrder(e.target.value as typeof sortOrder)}
         >
-          <option value="alpha-asc">{language === 'ko' ? '이름순 (ㄱ→ㅎ)' : 'Name (A→Z)'}</option>
-          <option value="alpha-desc">{language === 'ko' ? '이름순 (ㅎ→ㄱ)' : 'Name (Z→A)'}</option>
           <option value="date-desc">{language === 'ko' ? '최신 등록순' : 'Newest first'}</option>
           <option value="date-asc">{language === 'ko' ? '오래된 등록순' : 'Oldest first'}</option>
+          <option value="alpha-asc">{language === 'ko' ? '이름순 (ㄱ~ㅎ)' : 'Name (A→Z)'}</option>
+          <option value="alpha-desc">{language === 'ko' ? '이름순 (ㅎ~ㄱ)' : 'Name (Z→A)'}</option>
         </select>
       </div>
 

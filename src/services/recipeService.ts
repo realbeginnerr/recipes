@@ -6,6 +6,7 @@ import {
   getDocs,
   orderBy,
   query,
+  setDoc,
 } from 'firebase/firestore'
 import { db } from '../firebase'
 import type { Recipe } from '../types'
@@ -24,8 +25,10 @@ export type FirestoreRecipe = {
   link?: string
   memo: string
   tasteRating: number
+  divisionCount?: number
   createdAt: number
   items: FirestoreRecipeItem[]
+  sideItems?: FirestoreRecipeItem[]
 }
 
 const COLLECTION = 'recipes'
@@ -38,6 +41,27 @@ export async function saveRecipeToFirestore(
     createdAt: Date.now(),
   })
   return docRef.id
+}
+
+export async function updateRecipeInFirestore(recipe: Recipe): Promise<void> {
+  const { id, items, sideItems, ...rest } = recipe
+  const data: Record<string, unknown> = {
+    ...rest,
+    items: items.map((item) => ({
+      ingredientId: item.ingredientId,
+      amount: item.defaultAmount,
+      unit: item.defaultUnit,
+    })),
+    sideItems: (sideItems ?? []).map((item) => ({
+      ingredientId: item.ingredientId,
+      amount: item.defaultAmount,
+      unit: item.defaultUnit,
+    })),
+  }
+  for (const key of Object.keys(data)) {
+    if (data[key] === undefined) delete data[key]
+  }
+  await setDoc(doc(db, COLLECTION, id), data)
 }
 
 export async function deleteRecipeFromFirestore(id: string): Promise<void> {
@@ -61,9 +85,15 @@ export function convertToRecipe(fs: FirestoreRecipe): Recipe {
     imageUrl: fs.imageUrl || '',
     memo: fs.memo,
     tasteRating: fs.tasteRating,
+    divisionCount: fs.divisionCount,
     createdAt: fs.createdAt,
     link: fs.link,
     items: fs.items.map((item) => ({
+      ingredientId: item.ingredientId,
+      defaultAmount: item.amount,
+      defaultUnit: item.unit,
+    })),
+    sideItems: fs.sideItems?.map((item) => ({
       ingredientId: item.ingredientId,
       defaultAmount: item.amount,
       defaultUnit: item.unit,

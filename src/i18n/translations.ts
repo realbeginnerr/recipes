@@ -2,7 +2,7 @@ export type Language = 'en' | 'ko'
 
 export const translations = {
   en: {
-    appTitle: 'Do U Know God-Saeng?',
+    appTitle: "T's recipe",
     searchLabel: 'Search ingredients',
     searchPlaceholder: 'Ingredient name…',
     searchButton: 'Search',
@@ -35,7 +35,7 @@ export const translations = {
     },
   },
   ko: {
-    appTitle: '두유노 갓생?',
+    appTitle: 'T의 레시피',
     searchLabel: '식재료 검색',
     searchPlaceholder: '식재료 이름…',
     searchButton: '검색',

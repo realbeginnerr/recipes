@@ -23,9 +23,11 @@ export type Recipe = {
   nameKo: string
   imageUrl: string
   items: RecipeItem[]
+  sideItems?: RecipeItem[]
   memo?: string
   tasteRating?: number
   timeRating?: number
+  divisionCount?: number
   createdAt?: number
   link?: string
 }

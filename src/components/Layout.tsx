@@ -101,9 +101,10 @@ function NavMenu() {
   const { isAdmin } = useAdmin()
 
   const links = [
-    { to: '/', label: language === 'ko' ? '홈' : 'Home', end: true, onClick: resetHome },
+    { to: '/', label: language === 'ko' ? '레시피' : 'Recipes', end: true, onClick: resetHome },
     ...(isAdmin ? [{ to: '/add-recipe', label: language === 'ko' ? '레시피 추가' : 'Add Recipe', end: false }] : []),
     ...(isAdmin ? [{ to: '/ingredients', label: language === 'ko' ? '식재료' : 'Ingredients', end: false }] : []),
+    ...(isAdmin ? [{ to: '/add-ingredient', label: language === 'ko' ? '식재료 추가' : 'Add Ingredient', end: false }] : []),
   ]
 
   return (
@@ -163,9 +164,10 @@ function HamburgerMenu() {
   const { isAdmin } = useAdmin()
 
   const links = [
-    { to: '/', label: language === 'ko' ? '홈' : 'Home', onClick: () => { resetHome(); navigate('/'); setOpen(false) } },
+    { to: '/', label: language === 'ko' ? '레시피' : 'Recipes', onClick: () => { resetHome(); navigate('/'); setOpen(false) } },
     ...(isAdmin ? [{ to: '/add-recipe', label: language === 'ko' ? '레시피 추가' : 'Add Recipe', onClick: () => { navigate('/add-recipe'); setOpen(false) } }] : []),
     ...(isAdmin ? [{ to: '/ingredients', label: language === 'ko' ? '식재료' : 'Ingredients', onClick: () => { navigate('/ingredients'); setOpen(false) } }] : []),
+    ...(isAdmin ? [{ to: '/add-ingredient', label: language === 'ko' ? '식재료 추가' : 'Add Ingredient', onClick: () => { navigate('/add-ingredient'); setOpen(false) } }] : []),
   ]
 
   return (

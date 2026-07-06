@@ -1,14 +1,22 @@
 import type { Language } from '../i18n/translations'
 
-const US_UNIT_PRIORITY = ['oz', 'piece', 'ml', 'g'] as const
-const METRIC_UNIT_PRIORITY = ['g', 'ml', 'piece', 'oz'] as const
+// EN 모드에서 선호하는 단위 순서 (EN 단위 먼저, KO 단위는 fallback)
+const EN_UNIT_PRIORITY = [
+  'oz', 'lbs', 'each', 'pinch', 'cup', 'tbsp', 'tsp', 'ml', 'g',
+  '개', '꼬집', '컵', 'T', 't',
+]
+
+// KO 모드에서 선호하는 단위 순서 (KO 단위 먼저, EN 단위는 fallback)
+const KO_UNIT_PRIORITY = [
+  'g', 'ml', '개', '꼬집', '컵', 'T', 't', 'oz', 'lbs',
+  'each', 'pinch', 'cup', 'tbsp', 'tsp',
+]
 
 export function getPreferredUnit(
   allowedUnits: string[],
   language: Language,
 ): string {
-  const priority =
-    language === 'en' ? US_UNIT_PRIORITY : METRIC_UNIT_PRIORITY
+  const priority = language === 'en' ? EN_UNIT_PRIORITY : KO_UNIT_PRIORITY
 
   for (const unit of priority) {
     if (allowedUnits.includes(unit)) return unit

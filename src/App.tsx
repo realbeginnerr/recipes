@@ -3,6 +3,7 @@ import { Layout } from './components/Layout'
 import { RecipePage } from './pages/RecipePage'
 import { AddRecipePage } from './pages/AddRecipePage'
 import { IngredientsPage } from './pages/IngredientsPage'
+import { AddIngredientPage } from './pages/AddIngredientPage'
 
 export function App() {
   return (
@@ -11,6 +12,7 @@ export function App() {
         <Route index element={<RecipePage />} />
         <Route path="add-recipe" element={<AddRecipePage />} />
         <Route path="ingredients" element={<IngredientsPage />} />
+        <Route path="add-ingredient" element={<AddIngredientPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>
     </Routes>

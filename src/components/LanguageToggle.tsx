@@ -4,8 +4,8 @@ import type { Language } from '../i18n/translations'
 const base = import.meta.env.BASE_URL
 
 const options: { value: Language; label: string; icon: string }[] = [
-  { value: 'en', label: 'English', icon: `${base}icons/us.svg` },
   { value: 'ko', label: 'Korean', icon: `${base}icons/kr.svg` },
+  { value: 'en', label: 'English', icon: `${base}icons/us.svg` },
 ]
 
 export function LanguageToggle() {
