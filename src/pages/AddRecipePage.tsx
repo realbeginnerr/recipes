@@ -311,7 +311,7 @@ export function AddRecipePage() {
   }
 
   function handleMergeRecipes() {
-    const selected = savedRecipes.filter((r) => selectedRecipeIds.has(r.id))
+    const selected = savedRecipes.filter((r) => selectedRecipeIds.has(r.id ?? ''))
     const lineMap = new Map<string, { name: string; amount: number; unit: string }>()
     for (const recipe of selected) {
       for (const item of recipe.items) {
@@ -531,8 +531,8 @@ export function AddRecipePage() {
                     <label className="add-recipe__recipe-list-item">
                       <input
                         type="checkbox"
-                        checked={selectedRecipeIds.has(r.id)}
-                        onChange={() => handleToggleRecipe(r.id)}
+                        checked={selectedRecipeIds.has(r.id ?? '')}
+                        onChange={() => handleToggleRecipe(r.id ?? '')}
                       />
                       {r.nameKo || r.name}
                     </label>
