@@ -22,7 +22,7 @@ function dedupeIngredients(isKo: boolean, order: 'alpha-asc' | 'alpha-desc' = 'a
   return list
 }
 
-const UNITS = ['g', 'ml', 'oz', 'lbs', 'T', 't', '컵', '개', '꼬집']
+const UNITS = ['g', 'ml', 'oz', 'lbs', 'T', 't', '컵', '개', '캔', '팩', '꼬집']
 
 type EditRow = FirestoreIngredient & { _dirty?: boolean }
 
@@ -212,9 +212,18 @@ export function IngredientsPage() {
                       <input
                         className="edit-inline__input"
                         value={ing.nameKo || ing.name}
-                        onChange={(e) => updateEditRow(ing.id, isKo ? 'nameKo' : 'name', e.target.value)}
-                        placeholder={isKo ? '한글 이름' : 'Name'}
+                        onChange={(e) => updateEditRow(ing.id, 'nameKo', e.target.value)}
+                        placeholder="한글 이름"
                       />
+                      {isKo && (
+                        <input
+                          className="edit-inline__input"
+                          style={{ marginTop: '3px', opacity: 0.6, fontSize: '0.85rem' }}
+                          value={ing.name}
+                          onChange={(e) => updateEditRow(ing.id, 'name', e.target.value)}
+                          placeholder="English name"
+                        />
+                      )}
                     </td>
                     <td style={{ textAlign: 'right' }}>
                       <input
@@ -277,7 +286,12 @@ export function IngredientsPage() {
                   </tr>
                 ) : (
                   <tr key={ing.id}>
-                    <td>{isKo && ing.nameKo ? ing.nameKo : ing.name}</td>
+                    <td>
+                      {isKo && ing.nameKo ? ing.nameKo : ing.name}
+                      {isKo && ing.name && (
+                        <span style={{ display: 'block', fontSize: '0.78rem', opacity: 0.5 }}>{ing.name}</span>
+                      )}
+                    </td>
                     <td style={{ textAlign: 'right' }}>{ing.baseAmount}</td>
                     <td style={{ textAlign: 'right' }}>{ing.baseUnit}</td>
                     <td>{Number(ing.carbs).toFixed(1)}</td>
@@ -346,6 +360,19 @@ export function IngredientsPage() {
               )}
             </tbody>
           </table>
+        </div>
+      )}
+
+      {isEditing && (
+        <div className="ing-page__toolbar ing-page__toolbar--bottom">
+          <div className="recipe-block__edit-actions">
+            <button type="button" className="edit-inline__cancel-btn" onClick={handleCancel}>
+              {isKo ? '취소' : 'Cancel'}
+            </button>
+            <button type="button" className="edit-inline__save-btn" onClick={handleSave} disabled={saving}>
+              {saving ? '...' : (isKo ? '저장' : 'Save')}
+            </button>
+          </div>
         </div>
       )}
     </section>

@@ -97,6 +97,8 @@ const KO_TO_EN_UNIT: Record<string, string> = {
   ml: 'oz',
   '컵': 'cup',
   '개': 'each',
+  '캔': 'can',
+  '팩': 'pack',
   '꼬집': 'pinch',
   T: 'tbsp',
   t: 'tsp',
@@ -611,6 +613,8 @@ export function AddRecipePage() {
                         <option value="t">t</option>
                         <option value="컵">컵</option>
                         <option value="개">개</option>
+                        <option value="캔">캔</option>
+                        <option value="팩">팩</option>
                         <option value="꼬집">꼬집</option>
                         <option value="oz">oz</option>
                         <option value="lbs">lbs</option>
@@ -690,6 +694,8 @@ export function AddRecipePage() {
                           <option value="tsp">tsp</option>
                           <option value="cup">cup</option>
                           <option value="each">each</option>
+                          <option value="can">can</option>
+                          <option value="pack">pack</option>
                           <option value="pinch">pinch</option>
                           <option value="g">g</option>
                           <option value="ml">ml</option>

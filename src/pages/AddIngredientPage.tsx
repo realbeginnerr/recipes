@@ -54,11 +54,11 @@ function fmt(n: number): string {
   return (Math.round(n * 10) / 10).toFixed(1)
 }
 
-const KO_UNITS = ['g', 'ml', 'T', 't', '컵', '개', '꼬집', 'oz', 'lbs']
-const EN_UNITS = ['oz', 'lbs', 'tbsp', 'tsp', 'cup', 'each', 'pinch', 'g', 'ml']
+const KO_UNITS = ['g', 'ml', 'T', 't', '컵', '개', '캔', '팩', '꼬집', 'oz', 'lbs']
+const EN_UNITS = ['oz', 'lbs', 'tbsp', 'tsp', 'cup', 'each', 'can', 'pack', 'pinch', 'g', 'ml']
 
 const KO_TO_EN_UNIT: Record<string, string> = {
-  g: 'oz', ml: 'oz', '컵': 'cup', '개': 'each', '꼬집': 'pinch',
+  g: 'oz', ml: 'oz', '컵': 'cup', '개': 'each', '캔': 'can', '팩': 'pack', '꼬집': 'pinch',
   T: 'tbsp', t: 'tsp', oz: 'oz', lbs: 'lbs',
 }
 

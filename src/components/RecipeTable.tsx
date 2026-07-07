@@ -427,6 +427,8 @@ export function RecipeTable({
                             <option value="t">t</option>
                             <option value="컵">컵</option>
                             <option value="개">개</option>
+                            <option value="캔">캔</option>
+                            <option value="팩">팩</option>
                             <option value="꼬집">꼬집</option>
                             <option value="oz">oz</option>
                             <option value="lbs">lbs</option>
@@ -440,6 +442,8 @@ export function RecipeTable({
                             <option value="tsp">tsp</option>
                             <option value="cup">cup</option>
                             <option value="each">each</option>
+                            <option value="can">can</option>
+                            <option value="pack">pack</option>
                             <option value="pinch">pinch</option>
                             <option value="g">g</option>
                             <option value="ml">ml</option>
@@ -528,6 +532,8 @@ export function RecipeTable({
                             <option value="t">t</option>
                             <option value="컵">컵</option>
                             <option value="개">개</option>
+                            <option value="캔">캔</option>
+                            <option value="팩">팩</option>
                             <option value="꼬집">꼬집</option>
                             <option value="oz">oz</option>
                             <option value="lbs">lbs</option>
@@ -541,6 +547,8 @@ export function RecipeTable({
                             <option value="tsp">tsp</option>
                             <option value="cup">cup</option>
                             <option value="each">each</option>
+                            <option value="can">can</option>
+                            <option value="pack">pack</option>
                             <option value="pinch">pinch</option>
                             <option value="g">g</option>
                             <option value="ml">ml</option>
@@ -653,6 +661,8 @@ export function RecipeTable({
                   <option value="t">t</option>
                   <option value="컵">컵</option>
                   <option value="개">개</option>
+                  <option value="캔">캔</option>
+                  <option value="팩">팩</option>
                   <option value="꼬집">꼬집</option>
                   <option value="oz">oz</option>
                   <option value="lbs">lbs</option>
@@ -665,6 +675,8 @@ export function RecipeTable({
                   <option value="tsp">tsp</option>
                   <option value="cup">cup</option>
                   <option value="each">each</option>
+                  <option value="can">can</option>
+                  <option value="pack">pack</option>
                   <option value="pinch">pinch</option>
                   <option value="g">g</option>
                   <option value="ml">ml</option>
