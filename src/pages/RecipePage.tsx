@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useLanguage } from '../context/LanguageContext'
 import { useSearch } from '../context/SearchContext'
+import { useAdmin } from '../context/AdminContext'
 import { RecipeTable } from '../components/RecipeTable'
 import { IngredientSearchModal } from '../components/IngredientSearchModal'
 import { recipes as staticRecipes } from '../data/recipe'
@@ -19,6 +20,7 @@ import type { Recipe } from '../types'
 export function RecipePage() {
   const { appliedSearch, homeVersion } = useSearch()
   const { language, t } = useLanguage()
+  const { isAdmin } = useAdmin()
   const [recipes, setRecipes] = useState<Recipe[]>(staticRecipes)
   const [recipeStates, setRecipeStates] = useState<RecipeStates>(() =>
     buildInitialRecipeStates(language),
@@ -69,9 +71,9 @@ export function RecipePage() {
   }, [language])
 
   const visibleRecipes = useMemo(() => {
-    const filtered = appliedSearch
-      ? recipes.filter((recipe) => recipeContainsIngredient(recipe, appliedSearch))
-      : [...recipes]
+    const filtered = recipes
+      .filter((recipe) => isAdmin || !recipe.hidden)
+      .filter((recipe) => !appliedSearch || recipeContainsIngredient(recipe, appliedSearch))
 
     return filtered.sort((a, b) => {
       if (sortOrder === 'alpha-asc') {
@@ -89,7 +91,7 @@ export function RecipePage() {
       }
       return (a.createdAt ?? 0) - (b.createdAt ?? 0)
     })
-  }, [appliedSearch, recipes, sortOrder, language])
+  }, [appliedSearch, recipes, sortOrder, language, isAdmin])
 
   function updateAmount(recipeId: string, ingredientId: string, raw: string) {
     const parsed = raw === '' ? 0 : Number.parseFloat(raw)

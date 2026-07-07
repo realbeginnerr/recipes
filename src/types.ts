@@ -30,6 +30,7 @@ export type Recipe = {
   divisionCount?: number
   createdAt?: number
   link?: string
+  hidden?: boolean
 }
 
 export type RecipeRowState = {

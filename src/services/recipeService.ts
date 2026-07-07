@@ -29,6 +29,7 @@ export type FirestoreRecipe = {
   createdAt: number
   items: FirestoreRecipeItem[]
   sideItems?: FirestoreRecipeItem[]
+  hidden?: boolean
 }
 
 const COLLECTION = 'recipes'
@@ -88,6 +89,7 @@ export function convertToRecipe(fs: FirestoreRecipe): Recipe {
     divisionCount: fs.divisionCount,
     createdAt: fs.createdAt,
     link: fs.link,
+    hidden: fs.hidden,
     items: fs.items.map((item) => ({
       ingredientId: item.ingredientId,
       defaultAmount: item.amount,

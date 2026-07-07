@@ -481,10 +481,25 @@ body {
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 0.75rem;
-  color: var(--muted);
+  color: var(--text);
   padding: 2px 4px;
   line-height: 1;
+  display: flex;
+  align-items: center;
+  opacity: 0.6;
+  transition: opacity 0.15s;
+}
+
+.recipe-block__collapse-btn:hover {
+  opacity: 1;
+}
+
+.recipe-block__collapse-btn--hidden {
+  opacity: 0.3;
+}
+
+.recipe-block__collapse-btn--hidden:hover {
+  opacity: 0.7;
 }
 
 .recipe-block__ratings {
@@ -531,6 +546,23 @@ body {
 
 .recipe-block__heading-row .recipe-block__heading {
   margin: 0;
+}
+
+.recipe-block__title-edit {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.recipe-block__title-input {
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 3px 6px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--bg);
+  color: var(--text);
+  width: 220px;
 }
 
 .recipe-block__edit-btn {
