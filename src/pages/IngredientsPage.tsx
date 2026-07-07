@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useLanguage } from '../context/LanguageContext'
+import { toTitleCase } from '../utils/displayNames'
 import {
   loadIngredientsFromFirestore,
   saveIngredientToFirestore,
@@ -8,6 +9,7 @@ import {
   ingredientByName,
   type FirestoreIngredient,
 } from '../services/ingredientService'
+import { loadRecipesFromFirestore, type FirestoreRecipe } from '../services/recipeService'
 
 function dedupeIngredients(isKo: boolean, order: 'alpha-asc' | 'alpha-desc' = 'alpha-asc'): FirestoreIngredient[] {
   const seen = new Set<string>()
@@ -49,6 +51,7 @@ export function IngredientsPage() {
   const [editRows, setEditRows] = useState<EditRow[]>([])
   const [newRow, setNewRow] = useState<NewRow>(EMPTY_NEW)
   const [saving, setSaving] = useState(false)
+  const [deleteWarning, setDeleteWarning] = useState<{ id: string; usedIn: FirestoreRecipe[] } | null>(null)
   const sectionRef = useRef<HTMLElement>(null)
 
   useEffect(() => {
@@ -66,7 +69,10 @@ export function IngredientsPage() {
     if (!isEditing) return
     function onMouseDown(e: MouseEvent) {
       if (sectionRef.current && !sectionRef.current.contains(e.target as Node)) {
-        handleCancel()
+        const msg = isKo
+          ? '수정 중인 내용이 저장되지 않습니다.\n정말 취소하시겠습니까?'
+          : 'Your changes have not been saved.\nDiscard and cancel editing?'
+        if (window.confirm(msg)) handleCancel()
       }
     }
     document.addEventListener('mousedown', onMouseDown)
@@ -91,8 +97,23 @@ export function IngredientsPage() {
     )
   }
 
-  function handleDeleteRow(id: string) {
-    setEditRows((prev) => prev.filter((r) => r.id !== id))
+  async function handleDeleteRow(id: string) {
+    const recipes = await loadRecipesFromFirestore()
+    const usedIn = recipes.filter((r) =>
+      r.items.some((item) => item.ingredientId === id) ||
+      (r.sideItems ?? []).some((item) => item.ingredientId === id)
+    )
+    if (usedIn.length > 0) {
+      setDeleteWarning({ id, usedIn })
+    } else {
+      setEditRows((prev) => prev.filter((r) => r.id !== id))
+    }
+  }
+
+  function confirmDelete() {
+    if (!deleteWarning) return
+    setEditRows((prev) => prev.filter((r) => r.id !== deleteWarning.id))
+    setDeleteWarning(null)
   }
 
   async function handleSave() {
@@ -153,7 +174,7 @@ export function IngredientsPage() {
 
   return (
     <section className="page" ref={sectionRef}>
-      <div className="recipe-sort">
+      <div className="ing-page__toolbar">
         <select
           className="recipe-sort__select"
           value={sortOrder}
@@ -162,8 +183,6 @@ export function IngredientsPage() {
           <option value="alpha-asc">{isKo ? '이름순 (ㄱ→ㅎ)' : 'Name (A→Z)'}</option>
           <option value="alpha-desc">{isKo ? '이름순 (ㅎ→ㄱ)' : 'Name (Z→A)'}</option>
         </select>
-      </div>
-      <div className="ing-page__toolbar">
         {isEditing ? (
           <div className="recipe-block__edit-actions">
             <button type="button" className="edit-inline__cancel-btn" onClick={handleCancel}>
@@ -287,9 +306,9 @@ export function IngredientsPage() {
                 ) : (
                   <tr key={ing.id}>
                     <td>
-                      {isKo && ing.nameKo ? ing.nameKo : ing.name}
+                      {isKo && ing.nameKo ? ing.nameKo : toTitleCase(ing.name)}
                       {isKo && ing.name && (
-                        <span style={{ display: 'block', fontSize: '0.78rem', opacity: 0.5 }}>{ing.name}</span>
+                        <span style={{ display: 'block', fontSize: '0.78rem', opacity: 0.5 }}>{toTitleCase(ing.name)}</span>
                       )}
                     </td>
                     <td style={{ textAlign: 'right' }}>{ing.baseAmount}</td>
@@ -372,6 +391,41 @@ export function IngredientsPage() {
             <button type="button" className="edit-inline__save-btn" onClick={handleSave} disabled={saving}>
               {saving ? '...' : (isKo ? '저장' : 'Save')}
             </button>
+          </div>
+        </div>
+      )}
+
+      {deleteWarning && (
+        <div className="modal-overlay" onClick={() => setDeleteWarning(null)}>
+          <div className="modal" onClick={(e) => e.stopPropagation()}>
+            <p className="modal__body">
+              {isKo ? '이 식재료는 다음 레시피에서 사용 중입니다:' : 'This ingredient is used in the following recipes:'}
+            </p>
+            <ul className="ing-delete-modal__list">
+              {deleteWarning.usedIn.map((r) => (
+                <li key={r.id}>
+                  <a
+                    href={`/recipes/#${r.id}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="ing-delete-modal__link"
+                  >
+                    {isKo ? (r.nameKo || r.name) : r.name}
+                  </a>
+                </li>
+              ))}
+            </ul>
+            <p className="modal__body" style={{ marginTop: '0.75rem' }}>
+              {isKo ? '그래도 삭제하시겠습니까?' : 'Delete anyway?'}
+            </p>
+            <div className="modal__actions">
+              <button type="button" className="modal__cancel" onClick={() => setDeleteWarning(null)}>
+                {isKo ? '취소' : 'Cancel'}
+              </button>
+              <button type="button" className="modal__confirm modal__confirm--danger" onClick={confirmDelete}>
+                {isKo ? '삭제' : 'Delete'}
+              </button>
+            </div>
           </div>
         </div>
       )}

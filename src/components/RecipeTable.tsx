@@ -96,7 +96,10 @@ export function RecipeTable({
     if (!isEditing) return
     function handleMouseDown(e: MouseEvent) {
       if (sectionRef.current && !sectionRef.current.contains(e.target as Node)) {
-        handleCancel()
+        const msg = language === 'ko'
+          ? '수정 중인 내용이 저장되지 않습니다.\n정말 취소하시겠습니까?'
+          : 'Your changes have not been saved.\nDiscard and cancel editing?'
+        if (window.confirm(msg)) handleCancel()
       }
     }
     document.addEventListener('mousedown', handleMouseDown)
@@ -269,7 +272,7 @@ export function RecipeTable({
 
 
   return (
-    <section className="recipe-block" ref={sectionRef}>
+    <section className="recipe-block" ref={sectionRef} id={recipe.id}>
       <div className="recipe-block__heading-row">
         <div className="recipe-block__title-group">
           {isAdmin && <button
@@ -871,6 +874,39 @@ export function RecipeTable({
           )}
         </div>
       )}
+      {!isCollapsed && (() => {
+        const mealCarbs = totals.carbs / effectiveDivision + sideTotals.carbs
+        const mealProtein = totals.protein / effectiveDivision + sideTotals.protein
+        const mealFat = totals.fat / effectiveDivision + sideTotals.fat
+        const REC = { carbs: 77, protein: 33, fat: 22 }
+        const bars = [
+          { label: language === 'ko' ? '탄수화물' : 'Carbs', value: mealCarbs, rec: REC.carbs },
+          { label: language === 'ko' ? '단백질' : 'Protein', value: mealProtein, rec: REC.protein },
+          { label: language === 'ko' ? '지방' : 'Fat', value: mealFat, rec: REC.fat },
+        ]
+        return (
+          <div className="macro-chart">
+            {bars.map(({ label, value, rec }) => {
+              const pct = Math.min((value / rec) / 1.3 * 100, 100)
+              const diff = Math.abs(value - rec)
+              const color = diff >= 10 ? '#dc2626' : diff >= 5 ? '#ea580c' : '#16a34a'
+              return (
+                <div key={label} className="macro-chart__row">
+                  <span className="macro-chart__label">{label}</span>
+                  <div className="macro-chart__track">
+                    <div className="macro-chart__bar" style={{ width: `${pct}%`, background: color }} />
+                    <div className="macro-chart__rec-line" style={{ left: `${(100 / 130) * 100}%` }} />
+                  </div>
+                  <span className="macro-chart__value" style={{ color }}>
+                    {formatMacro(value)}g / {rec}g
+                  </span>
+                </div>
+              )
+            })}
+          </div>
+        )
+      })()}
+
       {!isCollapsed && isEditing && (
         <div className="edit-bottom-bar">
           <div className="edit-bottom-bar__add">

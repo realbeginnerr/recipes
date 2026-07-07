@@ -8,10 +8,10 @@ export function getIngredientDisplayName(
   if (language === 'ko' && ingredient.nameKo) {
     return ingredient.nameKo
   }
-  return ingredient.name
+  return toTitleCase(ingredient.name)
 }
 
-function toTitleCase(str: string): string {
+export function toTitleCase(str: string): string {
   return str.replace(/\b\w/g, (c) => c.toUpperCase())
 }
 

@@ -102,7 +102,6 @@ function NavMenu() {
 
   const links = [
     { to: '/', label: language === 'ko' ? '레시피' : 'Recipes', end: true, onClick: resetHome },
-    { to: '/signup', label: language === 'ko' ? '회원가입 신청' : 'Sign Up', end: false },
     ...(isAdmin ? [{ to: '/add-recipe', label: language === 'ko' ? '레시피 추가' : 'Add Recipe', end: false }] : []),
     ...(isAdmin ? [{ to: '/ingredients', label: language === 'ko' ? '식재료' : 'Ingredients', end: false }] : []),
     ...(isAdmin ? [{ to: '/add-ingredient', label: language === 'ko' ? '식재료 추가' : 'Add Ingredient', end: false }] : []),
@@ -128,6 +127,15 @@ function NavMenu() {
   )
 }
 
+function SignupLink() {
+  const { language } = useLanguage()
+  return (
+    <NavLink to="/signup" className="header-signup-btn">
+      {language === 'ko' ? '회원가입 신청' : 'Sign Up'}
+    </NavLink>
+  )
+}
+
 function HeaderSearch() {
   const { searchInput, setSearchInput, applySearch } = useSearch()
   const { t } = useLanguage()
@@ -142,17 +150,22 @@ function HeaderSearch() {
       <label className="header-search__label" htmlFor="ingredient-search">
         {t.searchLabel}
       </label>
-      <input
-        id="ingredient-search"
-        type="search"
-        className="header-search__input"
-        placeholder={t.searchPlaceholder}
-        value={searchInput}
-        onChange={(event) => setSearchInput(event.target.value)}
-      />
-      <button type="submit" className="header-search__button">
-        {t.searchButton}
-      </button>
+      <div className="header-search__input-wrap">
+        <input
+          id="ingredient-search"
+          type="search"
+          className="header-search__input"
+          placeholder={t.searchPlaceholder}
+          value={searchInput}
+          onChange={(event) => setSearchInput(event.target.value)}
+        />
+        <button type="submit" className="header-search__button" aria-label={t.searchButton}>
+          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="11" cy="11" r="8"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+        </button>
+      </div>
     </form>
   )
 }
@@ -227,6 +240,7 @@ function LayoutContent() {
         <HeaderTitle />
         <NavMenu />
         <HeaderSearch />
+        <SignupLink />
         <LanguageToggle />
         <HamburgerMenu />
       </header>
