@@ -87,6 +87,7 @@ export function RecipeTable({
   const effectiveDivision = !Number.isNaN(parsedDivisionInput) && parsedDivisionInput > 0 ? parsedDivisionInput : divisionCount
   const [isAddModalOpen, setIsAddModalOpen] = useState(false)
   const [isAddSideModalOpen, setIsAddSideModalOpen] = useState(false)
+  const [showCancelConfirm, setShowCancelConfirm] = useState(false)
   const [isGuestSaveModalOpen, setIsGuestSaveModalOpen] = useState(false)
   const [isRecommendedInfoOpen, setIsRecommendedInfoOpen] = useState(false)
   const [newlyAddedIds, setNewlyAddedIds] = useState<Set<string>>(new Set())
@@ -96,10 +97,7 @@ export function RecipeTable({
     if (!isEditing) return
     function handleMouseDown(e: MouseEvent) {
       if (sectionRef.current && !sectionRef.current.contains(e.target as Node)) {
-        const msg = language === 'ko'
-          ? '수정 중인 내용이 저장되지 않습니다.\n정말 취소하시겠습니까?'
-          : 'Your changes have not been saved.\nDiscard and cancel editing?'
-        if (window.confirm(msg)) handleCancel()
+        setShowCancelConfirm(true)
       }
     }
     document.addEventListener('mousedown', handleMouseDown)
@@ -832,6 +830,34 @@ export function RecipeTable({
                 onClick={() => setIsGuestSaveModalOpen(false)}
               >
                 {language === 'ko' ? '확인' : 'OK'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showCancelConfirm && (
+        <div className="modal-overlay">
+          <div className="modal" onClick={(e) => e.stopPropagation()}>
+            <p className="modal__message">
+              {language === 'ko'
+                ? '계속 수정하시겠습니까?'
+                : 'Do you want to continue editing?'}
+            </p>
+            <div className="modal__actions cancel-confirm-actions">
+              <button
+                type="button"
+                className="cancel-confirm__keep"
+                onClick={() => setShowCancelConfirm(false)}
+              >
+                {language === 'ko' ? '계속 수정' : 'Keep editing'}
+              </button>
+              <button
+                type="button"
+                className="modal__confirm-btn"
+                onClick={() => { setShowCancelConfirm(false); handleCancel() }}
+              >
+                {language === 'ko' ? '저장 안 하고 나가기' : 'Leave without saving'}
               </button>
             </div>
           </div>

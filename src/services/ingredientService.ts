@@ -11,6 +11,12 @@ export type FirestoreIngredient = {
   carbs: number
   protein: number
   fat: number
+  gramsPerTbsp?: number
+  gramsPerTsp?: number
+  gramsPerCup?: number
+  gramsPerEach?: number
+  gramsPerCan?: number
+  gramsPerPack?: number
 }
 
 const COLLECTION = 'ingredients'
@@ -34,7 +40,8 @@ export async function loadIngredientsFromFirestore(): Promise<void> {
 export async function saveIngredientToFirestore(
   ing: Omit<FirestoreIngredient, 'id'>
 ): Promise<string> {
-  const docRef = await addDoc(collection(db, COLLECTION), ing)
+  const clean = Object.fromEntries(Object.entries(ing).filter(([, v]) => v !== undefined))
+  const docRef = await addDoc(collection(db, COLLECTION), clean)
   const saved: FirestoreIngredient = { id: docRef.id, ...ing }
   registerIngredient(saved)
   return docRef.id
@@ -44,7 +51,8 @@ export async function updateIngredientInFirestore(
   id: string,
   data: Omit<FirestoreIngredient, 'id'>,
 ): Promise<void> {
-  await updateDoc(doc(db, COLLECTION, id), { ...data })
+  const clean = Object.fromEntries(Object.entries(data).filter(([, v]) => v !== undefined))
+  await updateDoc(doc(db, COLLECTION, id), clean)
   registerIngredient({ id, ...data })
 }
 
@@ -65,6 +73,9 @@ function registerIngredient(ing: FirestoreIngredient) {
     console.warn('Skipping ingredient with missing name:', ing.id)
     return
   }
+  for (const [key, val] of ingredientByName.entries()) {
+    if (val.id === ing.id) ingredientByName.delete(key)
+  }
   ingredientByName.set(ing.name.toLowerCase(), ing)
   if (ing.nameKo) ingredientByName.set(ing.nameKo, ing)
   ingredientById.set(ing.id, {
@@ -76,36 +87,74 @@ function registerIngredient(ing: FirestoreIngredient) {
     carbs: ing.carbs,
     protein: ing.protein,
     fat: ing.fat,
-    conversions: buildConversions(ing.baseUnit),
-    allowedUnits: buildAllowedUnits(ing.baseUnit),
+    conversions: buildConversions(ing),
+    allowedUnits: buildAllowedUnits(ing),
   })
 }
 
 const OZ_TO_G = 28.3495
 
-function buildConversions(baseUnit: string): Record<string, number> {
-  if (baseUnit === 'g' || baseUnit === 'ml') return { g: 1, ml: 1, oz: OZ_TO_G }
-  if (baseUnit === 'oz') return { g: 1, oz: OZ_TO_G }
-  if (baseUnit === '꼬집' || baseUnit === 'pinch') return { '꼬집': 1, pinch: 1 }
-  if (baseUnit === '개' || baseUnit === 'each') return { '개': 1, each: 1 }
-  if (baseUnit === '캔' || baseUnit === 'can') return { '캔': 1, can: 1 }
-  if (baseUnit === '팩' || baseUnit === 'pack') return { '팩': 1, pack: 1 }
-  if (baseUnit === '컵' || baseUnit === 'cup') return { '컵': 1, cup: 1 }
-  if (baseUnit === 'T' || baseUnit === 'tbsp') return { T: 1, tbsp: 1 }
-  if (baseUnit === 't' || baseUnit === 'tsp') return { t: 1, tsp: 1 }
-  return { [baseUnit]: 1 }
+function buildConversions(ing: Pick<FirestoreIngredient, 'baseUnit' | 'gramsPerTbsp' | 'gramsPerTsp' | 'gramsPerCup' | 'gramsPerEach' | 'gramsPerCan' | 'gramsPerPack'>): Record<string, number> {
+  const { baseUnit } = ing
+  let base: Record<string, number>
+  if (baseUnit === 'g' || baseUnit === 'ml') base = { g: 1, ml: 1, oz: OZ_TO_G }
+  else if (baseUnit === 'oz') base = { g: 1, oz: OZ_TO_G }
+  else if (baseUnit === '꼬집' || baseUnit === 'pinch') base = { '꼬집': 1, pinch: 1 }
+  else if (baseUnit === '개' || baseUnit === 'each') base = { '개': 1, each: 1 }
+  else if (baseUnit === '캔' || baseUnit === 'can') base = { '캔': 1, can: 1 }
+  else if (baseUnit === '팩' || baseUnit === 'pack') base = { '팩': 1, pack: 1 }
+  else if (baseUnit === '컵' || baseUnit === 'cup') base = { '컵': 1, cup: 1 }
+  else if (baseUnit === 'T' || baseUnit === 'tbsp') base = { T: 1, tbsp: 1 }
+  else if (baseUnit === 't' || baseUnit === 'tsp') base = { t: 1, tsp: 1 }
+  else base = { [baseUnit]: 1 }
+
+  if (ing.gramsPerTbsp) {
+    base['T'] = ing.gramsPerTbsp
+    base['tbsp'] = ing.gramsPerTbsp
+  }
+  if (ing.gramsPerTsp) {
+    base['t'] = ing.gramsPerTsp
+    base['tsp'] = ing.gramsPerTsp
+  }
+  if (ing.gramsPerCup) {
+    base['컵'] = ing.gramsPerCup
+    base['cup'] = ing.gramsPerCup
+  }
+  if (ing.gramsPerEach) {
+    base['개'] = ing.gramsPerEach
+    base['each'] = ing.gramsPerEach
+  }
+  if (ing.gramsPerCan) {
+    base['캔'] = ing.gramsPerCan
+    base['can'] = ing.gramsPerCan
+  }
+  if (ing.gramsPerPack) {
+    base['팩'] = ing.gramsPerPack
+    base['pack'] = ing.gramsPerPack
+  }
+  return base
 }
 
-function buildAllowedUnits(baseUnit: string): string[] {
-  if (baseUnit === 'g') return ['g', 'oz', 'ml']
-  if (baseUnit === 'oz') return ['oz', 'g']
-  if (baseUnit === 'ml') return ['ml', 'g', 'oz']
-  if (baseUnit === '꼬집' || baseUnit === 'pinch') return ['꼬집', 'pinch']
-  if (baseUnit === '개' || baseUnit === 'each') return ['개', 'each']
-  if (baseUnit === '캔' || baseUnit === 'can') return ['캔', 'can']
-  if (baseUnit === '팩' || baseUnit === 'pack') return ['팩', 'pack']
-  if (baseUnit === '컵' || baseUnit === 'cup') return ['컵', 'cup']
-  if (baseUnit === 'T' || baseUnit === 'tbsp') return ['T', 'tbsp']
-  if (baseUnit === 't' || baseUnit === 'tsp') return ['t', 'tsp']
-  return [baseUnit]
+function buildAllowedUnits(ing: Pick<FirestoreIngredient, 'baseUnit' | 'gramsPerTbsp' | 'gramsPerTsp' | 'gramsPerCup' | 'gramsPerEach' | 'gramsPerCan' | 'gramsPerPack'>): string[] {
+  const { baseUnit } = ing
+  let units: string[]
+  if (baseUnit === 'g') units = ['g', 'oz', 'ml']
+  else if (baseUnit === 'oz') units = ['oz', 'g']
+  else if (baseUnit === 'ml') units = ['ml', 'g', 'oz']
+  else if (baseUnit === '꼬집' || baseUnit === 'pinch') units = ['꼬집', 'pinch']
+  else if (baseUnit === '개' || baseUnit === 'each') units = ['개', 'each']
+  else if (baseUnit === '캔' || baseUnit === 'can') units = ['캔', 'can']
+  else if (baseUnit === '팩' || baseUnit === 'pack') units = ['팩', 'pack']
+  else if (baseUnit === '컵' || baseUnit === 'cup') units = ['컵', 'cup']
+  else if (baseUnit === 'T' || baseUnit === 'tbsp') units = ['T', 'tbsp']
+  else if (baseUnit === 't' || baseUnit === 'tsp') units = ['t', 'tsp']
+  else units = [baseUnit]
+
+  if (ing.gramsPerTbsp && !units.includes('T')) units.push('T')
+  if (ing.gramsPerTsp && !units.includes('t')) units.push('t')
+  if (ing.gramsPerCup && !units.includes('컵')) units.push('컵')
+  if (ing.gramsPerEach && !units.includes('개')) units.push('개')
+  if (ing.gramsPerCan && !units.includes('캔')) units.push('캔')
+  if (ing.gramsPerPack && !units.includes('팩')) units.push('팩')
+  return units
 }

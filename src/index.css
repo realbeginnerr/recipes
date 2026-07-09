@@ -391,6 +391,11 @@ body {
   border-radius: 0;
 }
 
+.table-container--sticky-header {
+  overflow: auto;
+  max-height: calc(100vh - 180px);
+}
+
 .data-table {
   width: 100%;
   min-width: 600px;
@@ -406,8 +411,18 @@ body {
 
 .data-table th:nth-child(1),
 .data-table td:nth-child(1) {
-  min-width: 180px;
+  min-width: 160px;
   width: 100%;
+  position: sticky;
+  left: 0;
+  background: var(--surface);
+  z-index: 1;
+}
+
+.data-table th:nth-child(1) {
+  background: #fafaf9;
+  top: 0;
+  z-index: 3;
 }
 
 .data-table th:nth-child(2),
@@ -433,6 +448,22 @@ body {
   text-align: right;
 }
 
+.data-table th:nth-child(7),
+.data-table th:nth-child(8),
+.data-table th:nth-child(9),
+.data-table th:nth-child(10),
+.data-table th:nth-child(11),
+.data-table th:nth-child(12),
+.data-table td:nth-child(7),
+.data-table td:nth-child(8),
+.data-table td:nth-child(9),
+.data-table td:nth-child(10),
+.data-table td:nth-child(11),
+.data-table td:nth-child(12) {
+  min-width: 100px;
+  text-align: center;
+}
+
 .data-table td.macro {
   text-align: right;
   min-width: 100px;
@@ -452,9 +483,11 @@ body {
 .data-table th {
   background: #fafaf9;
   font-size: 0.85rem;
-  text-transform: uppercase;
   letter-spacing: 0.03em;
   color: var(--muted);
+  position: sticky;
+  top: 0;
+  z-index: 2;
 }
 
 .data-table tbody tr:last-child td {
@@ -1326,9 +1359,14 @@ body {
     flex: 1;
   }
 
+  .header-search__input-wrap {
+    flex: 1;
+    width: 100%;
+  }
+
   .header-search__input {
     flex: 1;
-    width: 0;
+    width: 100%;
   }
 
   .recipe-block__heading-row {
@@ -1343,9 +1381,9 @@ body {
   }
 
   .recipe-block__ratings {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.4rem;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.75rem;
   }
 
   .add-food-cell {
@@ -1675,6 +1713,20 @@ body {
 .modal__actions {
   display: flex;
   justify-content: flex-end;
+}
+
+.cancel-confirm-actions {
+  align-items: center;
+  gap: 1rem;
+}
+
+.cancel-confirm__keep {
+  background: none;
+  border: none;
+  font-size: 0.85rem;
+  color: var(--text-muted, #888);
+  cursor: pointer;
+  padding: 0;
 }
 
 .modal__confirm-btn {

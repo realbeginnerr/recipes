@@ -36,9 +36,15 @@ type NewRow = {
   carbs: string
   protein: string
   fat: string
+  gramsPerTbsp: string
+  gramsPerTsp: string
+  gramsPerCup: string
+  gramsPerEach: string
+  gramsPerCan: string
+  gramsPerPack: string
 }
 
-const EMPTY_NEW: NewRow = { name: '', nameKo: '', baseAmount: '100', baseUnit: 'g', carbs: '', protein: '', fat: '' }
+const EMPTY_NEW: NewRow = { name: '', nameKo: '', baseAmount: '100', baseUnit: 'g', carbs: '', protein: '', fat: '', gramsPerTbsp: '', gramsPerTsp: '', gramsPerCup: '', gramsPerEach: '', gramsPerCan: '', gramsPerPack: '' }
 
 export function IngredientsPage() {
   const { language } = useLanguage()
@@ -52,6 +58,7 @@ export function IngredientsPage() {
   const [newRow, setNewRow] = useState<NewRow>(EMPTY_NEW)
   const [saving, setSaving] = useState(false)
   const [deleteWarning, setDeleteWarning] = useState<{ id: string; usedIn: FirestoreRecipe[] } | null>(null)
+  const [showCancelConfirm, setShowCancelConfirm] = useState(false)
   const sectionRef = useRef<HTMLElement>(null)
 
   useEffect(() => {
@@ -69,10 +76,7 @@ export function IngredientsPage() {
     if (!isEditing) return
     function onMouseDown(e: MouseEvent) {
       if (sectionRef.current && !sectionRef.current.contains(e.target as Node)) {
-        const msg = isKo
-          ? '수정 중인 내용이 저장되지 않습니다.\n정말 취소하시겠습니까?'
-          : 'Your changes have not been saved.\nDiscard and cancel editing?'
-        if (window.confirm(msg)) handleCancel()
+        setShowCancelConfirm(true)
       }
     }
     document.addEventListener('mousedown', onMouseDown)
@@ -91,7 +95,7 @@ export function IngredientsPage() {
     setNewRow(EMPTY_NEW)
   }
 
-  function updateEditRow(id: string, field: keyof FirestoreIngredient, value: string | number) {
+  function updateEditRow(id: string, field: keyof FirestoreIngredient, value: string | number | undefined) {
     setEditRows((prev) =>
       prev.map((row) => (row.id === id ? { ...row, [field]: value, _dirty: true } : row)),
     )
@@ -131,7 +135,13 @@ export function IngredientsPage() {
           orig.baseUnit !== row.baseUnit ||
           orig.carbs !== row.carbs ||
           orig.protein !== row.protein ||
-          orig.fat !== row.fat
+          orig.fat !== row.fat ||
+          orig.gramsPerTbsp !== row.gramsPerTbsp ||
+          orig.gramsPerTsp !== row.gramsPerTsp ||
+          orig.gramsPerCup !== row.gramsPerCup ||
+          orig.gramsPerEach !== row.gramsPerEach ||
+          orig.gramsPerCan !== row.gramsPerCan ||
+          orig.gramsPerPack !== row.gramsPerPack
         if (changed) {
           const { _dirty: _, ...data } = row
           await updateIngredientInFirestore(row.id, data)
@@ -156,6 +166,12 @@ export function IngredientsPage() {
           carbs: Number.parseFloat(newRow.carbs) || 0,
           protein: Number.parseFloat(newRow.protein) || 0,
           fat: Number.parseFloat(newRow.fat) || 0,
+          ...(newRow.gramsPerTbsp ? { gramsPerTbsp: Number.parseFloat(newRow.gramsPerTbsp) } : {}),
+          ...(newRow.gramsPerTsp ? { gramsPerTsp: Number.parseFloat(newRow.gramsPerTsp) } : {}),
+          ...(newRow.gramsPerCup ? { gramsPerCup: Number.parseFloat(newRow.gramsPerCup) } : {}),
+          ...(newRow.gramsPerEach ? { gramsPerEach: Number.parseFloat(newRow.gramsPerEach) } : {}),
+          ...(newRow.gramsPerCan ? { gramsPerCan: Number.parseFloat(newRow.gramsPerCan) } : {}),
+          ...(newRow.gramsPerPack ? { gramsPerPack: Number.parseFloat(newRow.gramsPerPack) } : {}),
         })
       }
 
@@ -210,7 +226,7 @@ export function IngredientsPage() {
           <p className="empty-state__text">{isKo ? '불러오는 중...' : 'Loading...'}</p>
         </div>
       ) : (
-        <div className="table-container">
+        <div className="table-container table-container--sticky-header">
           <table className="data-table">
             <thead>
               <tr>
@@ -220,6 +236,12 @@ export function IngredientsPage() {
                 <th>{isKo ? '탄수화물' : 'Carbs'}</th>
                 <th>{isKo ? '단백질' : 'Protein'}</th>
                 <th>{isKo ? '지방' : 'Fat'}</th>
+                <th style={{ textAlign: 'center' }}>1T=?g</th>
+                <th style={{ textAlign: 'center' }}>1t=?g</th>
+                <th style={{ textAlign: 'center' }}>1컵=?g</th>
+                <th style={{ textAlign: 'center' }}>1개=?g</th>
+                <th style={{ textAlign: 'center' }}>1캔=?g</th>
+                <th style={{ textAlign: 'center' }}>1팩=?g</th>
                 {isEditing && <th />}
               </tr>
             </thead>
@@ -293,6 +315,72 @@ export function IngredientsPage() {
                         onChange={(e) => updateEditRow(ing.id, 'fat', Number.parseFloat(e.target.value) || 0)}
                       />
                     </td>
+                    <td style={{ textAlign: 'center' }}>
+                      <input
+                        type="number"
+                        className="amount-input"
+                        min={0}
+                        step={0.1}
+                        placeholder="-"
+                        value={ing.gramsPerTbsp ?? ''}
+                        onChange={(e) => updateEditRow(ing.id, 'gramsPerTbsp', e.target.value === '' ? undefined : Number.parseFloat(e.target.value))}
+                      />
+                    </td>
+                    <td style={{ textAlign: 'center' }}>
+                      <input
+                        type="number"
+                        className="amount-input"
+                        min={0}
+                        step={0.1}
+                        placeholder="-"
+                        value={ing.gramsPerTsp ?? ''}
+                        onChange={(e) => updateEditRow(ing.id, 'gramsPerTsp', e.target.value === '' ? undefined : Number.parseFloat(e.target.value))}
+                      />
+                    </td>
+                    <td style={{ textAlign: 'center' }}>
+                      <input
+                        type="number"
+                        className="amount-input"
+                        min={0}
+                        step={0.1}
+                        placeholder="-"
+                        value={ing.gramsPerCup ?? ''}
+                        onChange={(e) => updateEditRow(ing.id, 'gramsPerCup', e.target.value === '' ? undefined : Number.parseFloat(e.target.value))}
+                      />
+                    </td>
+                    <td style={{ textAlign: 'center' }}>
+                      <input
+                        type="number"
+                        className="amount-input"
+                        min={0}
+                        step={0.1}
+                        placeholder="-"
+                        value={ing.gramsPerEach ?? ''}
+                        onChange={(e) => updateEditRow(ing.id, 'gramsPerEach', e.target.value === '' ? undefined : Number.parseFloat(e.target.value))}
+                      />
+                    </td>
+                    <td style={{ textAlign: 'center' }}>
+                      <input
+                        type="number"
+                        className="amount-input"
+                        min={0}
+                        step={0.1}
+                        placeholder="-"
+                        value={ing.gramsPerCan ?? ''}
+                        onChange={(e) => updateEditRow(ing.id, 'gramsPerCan', e.target.value === '' ? undefined : Number.parseFloat(e.target.value))}
+                      />
+                    </td>
+                    <td style={{ textAlign: 'center' }}>
+                      <input
+                        type="number"
+                        className="amount-input"
+                        min={0}
+                        step={0.1}
+                        placeholder="-"
+                        value={ing.gramsPerPack ?? ''}
+                        onChange={(e) => updateEditRow(ing.id, 'gramsPerPack', e.target.value === '' ? undefined : Number.parseFloat(e.target.value))}
+                      />
+                    </td>
                     <td>
                       <button
                         type="button"
@@ -316,6 +404,12 @@ export function IngredientsPage() {
                     <td>{Number(ing.carbs).toFixed(1)}</td>
                     <td>{Number(ing.protein).toFixed(1)}</td>
                     <td>{Number(ing.fat).toFixed(1)}</td>
+                    <td style={{ textAlign: 'center' }}>{ing.gramsPerTbsp ?? '-'}</td>
+                    <td style={{ textAlign: 'center' }}>{ing.gramsPerTsp ?? '-'}</td>
+                    <td style={{ textAlign: 'center' }}>{ing.gramsPerCup ?? '-'}</td>
+                    <td style={{ textAlign: 'center' }}>{ing.gramsPerEach ?? '-'}</td>
+                    <td style={{ textAlign: 'center' }}>{ing.gramsPerCan ?? '-'}</td>
+                    <td style={{ textAlign: 'center' }}>{ing.gramsPerPack ?? '-'}</td>
                   </tr>
                 ),
               )}
@@ -374,6 +468,60 @@ export function IngredientsPage() {
                       onChange={(e) => setNewRow((p) => ({ ...p, fat: e.target.value }))}
                     />
                   </td>
+                  <td>
+                    <input
+                      type="number"
+                      className="amount-input"
+                      placeholder="-"
+                      value={newRow.gramsPerTbsp}
+                      onChange={(e) => setNewRow((p) => ({ ...p, gramsPerTbsp: e.target.value }))}
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      className="amount-input"
+                      placeholder="-"
+                      value={newRow.gramsPerTsp}
+                      onChange={(e) => setNewRow((p) => ({ ...p, gramsPerTsp: e.target.value }))}
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      className="amount-input"
+                      placeholder="-"
+                      value={newRow.gramsPerCup}
+                      onChange={(e) => setNewRow((p) => ({ ...p, gramsPerCup: e.target.value }))}
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      className="amount-input"
+                      placeholder="-"
+                      value={newRow.gramsPerEach}
+                      onChange={(e) => setNewRow((p) => ({ ...p, gramsPerEach: e.target.value }))}
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      className="amount-input"
+                      placeholder="-"
+                      value={newRow.gramsPerCan}
+                      onChange={(e) => setNewRow((p) => ({ ...p, gramsPerCan: e.target.value }))}
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      className="amount-input"
+                      placeholder="-"
+                      value={newRow.gramsPerPack}
+                      onChange={(e) => setNewRow((p) => ({ ...p, gramsPerPack: e.target.value }))}
+                    />
+                  </td>
                   <td />
                 </tr>
               )}
@@ -391,6 +539,32 @@ export function IngredientsPage() {
             <button type="button" className="edit-inline__save-btn" onClick={handleSave} disabled={saving}>
               {saving ? '...' : (isKo ? '저장' : 'Save')}
             </button>
+          </div>
+        </div>
+      )}
+
+      {showCancelConfirm && (
+        <div className="modal-overlay">
+          <div className="modal" onClick={(e) => e.stopPropagation()}>
+            <p className="modal__message">
+              {isKo ? '계속 수정하시겠습니까?' : 'Do you want to continue editing?'}
+            </p>
+            <div className="modal__actions cancel-confirm-actions">
+              <button
+                type="button"
+                className="cancel-confirm__keep"
+                onClick={() => setShowCancelConfirm(false)}
+              >
+                {isKo ? '계속 수정' : 'Keep editing'}
+              </button>
+              <button
+                type="button"
+                className="modal__confirm-btn"
+                onClick={() => { setShowCancelConfirm(false); handleCancel() }}
+              >
+                {isKo ? '저장 안 하고 나가기' : 'Leave without saving'}
+              </button>
+            </div>
           </div>
         </div>
       )}

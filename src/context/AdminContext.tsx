@@ -1,6 +1,6 @@
 import { createContext, useContext, useState } from 'react'
 
-const ADMIN_PIN = 'hardworkinglife'
+const ADMIN_PIN = 'me_istj'
 const SESSION_KEY = 'admin_auth'
 
 type AdminContextType = {
