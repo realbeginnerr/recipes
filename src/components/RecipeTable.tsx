@@ -341,10 +341,15 @@ export function RecipeTable({
                 {language === 'ko' ? '삭제' : 'Delete'}
               </button>
             )}
+            {!isEditing && (
+              <button type="button" className="edit-inline__edit-btn recipe-block__edit-btn--inline" onClick={startEditing}>
+                ✏️
+              </button>
+            )}
           </div>
         </div>
         <div className="recipe-block__edit-actions">
-          {isEditing ? (
+          {isEditing && (
             <>
               <button type="button" className="edit-inline__cancel-btn" onClick={handleCancel}>
                 {language === 'ko' ? '취소' : 'Cancel'}
@@ -353,8 +358,9 @@ export function RecipeTable({
                 {language === 'ko' ? '저장' : 'Save'}
               </button>
             </>
-          ) : (
-            <button type="button" className="edit-inline__edit-btn" onClick={startEditing}>
+          )}
+          {!isEditing && (
+            <button type="button" className="edit-inline__edit-btn recipe-block__edit-btn--corner" onClick={startEditing}>
               ✏️
             </button>
           )}

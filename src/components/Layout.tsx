@@ -1,4 +1,4 @@
-import { type FormEvent, useRef, useState } from 'react'
+import { type FormEvent, useEffect, useRef, useState } from 'react'
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import {
   LanguageProvider,
@@ -101,10 +101,10 @@ function NavMenu() {
   const { isAdmin } = useAdmin()
 
   const links = [
-    { to: '/', label: language === 'ko' ? '레시피' : 'Recipes', end: true, onClick: resetHome },
-    ...(isAdmin ? [{ to: '/add-recipe', label: language === 'ko' ? '레시피 추가' : 'Add Recipe', end: false }] : []),
-    ...(isAdmin ? [{ to: '/ingredients', label: language === 'ko' ? '식재료' : 'Ingredients', end: false }] : []),
-    ...(isAdmin ? [{ to: '/add-ingredient', label: language === 'ko' ? '식재료 추가' : 'Add Ingredient', end: false }] : []),
+    { to: '/', label: language === 'ko' ? '레시피' : 'Recipes', end: true, onClick: resetHome, locked: false },
+    { to: '/add-recipe', label: language === 'ko' ? '레시피 추가' : 'Add Recipe', end: false, locked: !isAdmin },
+    { to: '/ingredients', label: language === 'ko' ? '식재료' : 'Ingredients', end: false, locked: !isAdmin },
+    { to: '/add-ingredient', label: language === 'ko' ? '식재료 추가' : 'Add Ingredient', end: false, locked: !isAdmin },
   ]
 
   return (
@@ -120,6 +120,7 @@ function NavMenu() {
           onClick={link.onClick}
         >
           {link.label}
+          {link.locked && <span className="nav-lock-icon">🔒</span>}
         </NavLink>
       ))}
       <AdminButton />
@@ -176,17 +177,28 @@ function HamburgerMenu() {
   const navigate = useNavigate()
   const { resetHome } = useSearch()
   const { isAdmin } = useAdmin()
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!open) return
+    function handleClick(e: MouseEvent) {
+      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+        setOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClick)
+    return () => document.removeEventListener('mousedown', handleClick)
+  }, [open])
 
   const links = [
-    { to: '/', label: language === 'ko' ? '레시피' : 'Recipes', onClick: () => { resetHome(); navigate('/'); setOpen(false) } },
-    { to: '/signup', label: language === 'ko' ? '회원가입 신청' : 'Sign Up', onClick: () => { navigate('/signup'); setOpen(false) } },
-    ...(isAdmin ? [{ to: '/add-recipe', label: language === 'ko' ? '레시피 추가' : 'Add Recipe', onClick: () => { navigate('/add-recipe'); setOpen(false) } }] : []),
-    ...(isAdmin ? [{ to: '/ingredients', label: language === 'ko' ? '식재료' : 'Ingredients', onClick: () => { navigate('/ingredients'); setOpen(false) } }] : []),
-    ...(isAdmin ? [{ to: '/add-ingredient', label: language === 'ko' ? '식재료 추가' : 'Add Ingredient', onClick: () => { navigate('/add-ingredient'); setOpen(false) } }] : []),
+    { to: '/', label: language === 'ko' ? '레시피' : 'Recipes', onClick: () => { resetHome(); navigate('/'); setOpen(false) }, locked: false },
+    { to: '/add-recipe', label: language === 'ko' ? '레시피 추가' : 'Add Recipe', onClick: () => { navigate('/add-recipe'); setOpen(false) }, locked: !isAdmin },
+    { to: '/ingredients', label: language === 'ko' ? '식재료' : 'Ingredients', onClick: () => { navigate('/ingredients'); setOpen(false) }, locked: !isAdmin },
+    { to: '/add-ingredient', label: language === 'ko' ? '식재료 추가' : 'Add Ingredient', onClick: () => { navigate('/add-ingredient'); setOpen(false) }, locked: !isAdmin },
   ]
 
   return (
-    <div className="hamburger">
+    <div className="hamburger" ref={containerRef}>
       <button
         type="button"
         className="hamburger__btn"
@@ -200,15 +212,7 @@ function HamburgerMenu() {
       </button>
       {open && (
         <>
-          <div className="hamburger__backdrop" onClick={() => setOpen(false)} />
           <div className="hamburger__menu">
-            <button
-              type="button"
-              className="hamburger__title-btn"
-              onClick={() => { resetHome(); navigate('/'); setOpen(false) }}
-            >
-              {t.appTitle}
-            </button>
             <div className="hamburger__divider" />
             {links.map((link) => (
               <button
@@ -218,6 +222,7 @@ function HamburgerMenu() {
                 onClick={link.onClick}
               >
                 {link.label}
+                {link.locked && <span className="nav-lock-icon">🔒</span>}
               </button>
             ))}
             <div className="hamburger__divider" />

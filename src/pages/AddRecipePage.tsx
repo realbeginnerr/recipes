@@ -162,10 +162,7 @@ export function AddRecipePage() {
 
   async function handleConfirm() {
     let hasError = false
-    if (!recipeName.trim()) { setNameError(isKo ? '레시피 이름(영문)을 입력해주세요.' : 'Please enter a recipe name (EN).'); hasError = true } else setNameError('')
-    if (!recipeNameKo.trim()) { setNameKoError(isKo ? '레시피 이름(한글)을 입력해주세요.' : 'Please enter a recipe name (KO).'); hasError = true } else setNameKoError('')
-    if (!pastedText.trim()) { setDataError(isKo ? '식재료 데이터를 입력해주세요.' : 'Please enter ingredient data.'); hasError = true } else setDataError('')
-    if (hasError) return
+    if (!pastedText.trim()) { setDataError(isKo ? '식재료 데이터를 입력해주세요.' : 'Please enter ingredient data.'); return }
 
     const parsed = parseIngredientText(pastedText)
     if (parsed.length === 0) { setDataError(isKo ? '파싱할 수 있는 데이터가 없습니다.' : 'No data could be parsed.'); return }
@@ -346,6 +343,10 @@ export function AddRecipePage() {
   }
 
   async function handleSave() {
+    let hasNameError = false
+    if (!recipeName.trim()) { setNameError(isKo ? '레시피 이름(영문)을 입력해주세요.' : 'Please enter a recipe name (EN).'); hasNameError = true } else setNameError('')
+    if (!recipeNameKo.trim()) { setNameKoError(isKo ? '레시피 이름(한글)을 입력해주세요.' : 'Please enter a recipe name (KO).'); hasNameError = true } else setNameKoError('')
+    if (hasNameError) return
     if (resolvedRows.some((r) => r.isNew && (!r.carbs || !r.protein || !r.fat))) {
       showToast(isKo ? '새 식재료의 영양소를 입력해주세요.' : 'Enter nutrition for new ingredients.', 'error')
       return
