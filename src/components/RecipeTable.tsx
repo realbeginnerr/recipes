@@ -760,31 +760,38 @@ export function RecipeTable({
                 </td>
               </tr>
             )}
-            <tr className="recipe-table__total">
-              <td colSpan={3}>
-                {(() => {
-                  const carbs = totals.carbs / effectiveDivision + sideTotals.carbs
-                  const protein = totals.protein / effectiveDivision + sideTotals.protein
-                  const fat = totals.fat / effectiveDivision + sideTotals.fat
-                  const kcal = Math.round(carbs * 4 + protein * 4 + fat * 9)
-                  return <strong>{t.combinedTotal} <span className="recipe-table__kcal">(kcal: {kcal})</span></strong>
-                })()}
-              </td>
-              {(() => {
-                const carbs = totals.carbs / effectiveDivision + sideTotals.carbs
-                const protein = totals.protein / effectiveDivision + sideTotals.protein
-                const fat = totals.fat / effectiveDivision + sideTotals.fat
+            {(() => {
+              const carbs = totals.carbs / effectiveDivision + sideTotals.carbs
+              const protein = totals.protein / effectiveDivision + sideTotals.protein
+              const fat = totals.fat / effectiveDivision + sideTotals.fat
+              const kcal = Math.round(carbs * 4 + protein * 4 + fat * 9)
+              const dc = recommended.carbs - carbs
+              const dp = recommended.protein - protein
+              const df = recommended.fat - fat
+              const fmt = (d: number) => d > 0 ? `(+${Math.round(d)})` : `(${Math.round(d)})`
+              const show = (d: number) => Math.abs(d) > 3
+              const renderCell = (value: number, target: number, delta: number) => {
+                const color = macroColor(value, target)
                 return (
-                  <>
-                    <td className="macro"><strong style={{ color: macroColor(carbs, recommended.carbs) }}>{formatMacro(carbs)}</strong></td>
-                    <td className="macro"><strong style={{ color: macroColor(protein, recommended.protein) }}>{formatMacro(protein)}</strong></td>
-                    <td className="macro"><strong style={{ color: macroColor(fat, recommended.fat) }}>{formatMacro(fat)}</strong></td>
-                    {isEditing && <td></td>}
-                    {isEditing && <td></td>}
-                  </>
+                  <td className="macro">
+                    <strong style={{ color }}>{formatMacro(value)}</strong>
+                    {show(delta) && <div style={{ color, fontSize: '0.75rem', lineHeight: 1.1 }}>{fmt(delta)}</div>}
+                  </td>
                 )
-              })()}
-            </tr>
+              }
+              return (
+                <tr className="recipe-table__total">
+                  <td colSpan={3}>
+                    <strong>{t.combinedTotal} <span className="recipe-table__kcal">(kcal: {kcal})</span></strong>
+                  </td>
+                  {renderCell(carbs, recommended.carbs, dc)}
+                  {renderCell(protein, recommended.protein, dp)}
+                  {renderCell(fat, recommended.fat, df)}
+                  {isEditing && <td></td>}
+                  {isEditing && <td></td>}
+                </tr>
+              )
+            })()}
             <tr className="recipe-table__recommended">
               <td colSpan={3}>
                 <strong>

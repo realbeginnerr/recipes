@@ -5,6 +5,7 @@ import { AddRecipePage } from './pages/AddRecipePage'
 import { IngredientsPage } from './pages/IngredientsPage'
 import { AddIngredientPage } from './pages/AddIngredientPage'
 import { SignupPage } from './pages/SignupPage'
+import { RecipeDetailPage } from './pages/RecipeDetailPage'
 
 export function App() {
   return (
@@ -14,6 +15,7 @@ export function App() {
         <Route path="add-recipe" element={<AddRecipePage />} />
         <Route path="ingredients" element={<IngredientsPage />} />
         <Route path="add-ingredient" element={<AddIngredientPage />} />
+        <Route path="recipe/:id" element={<RecipeDetailPage />} />
         <Route path="signup" element={<SignupPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>

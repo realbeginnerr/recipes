@@ -3,6 +3,7 @@ import { useLanguage } from '../context/LanguageContext'
 import { useSearch } from '../context/SearchContext'
 import { useAdmin } from '../context/AdminContext'
 import { RecipeTable } from '../components/RecipeTable'
+import { RecipeGrid } from '../components/RecipeGrid'
 import { IngredientSearchModal } from '../components/IngredientSearchModal'
 import { recipes as staticRecipes } from '../data/recipe'
 import {
@@ -229,7 +230,7 @@ export function RecipePage() {
           <p className="empty-state__text">{language === 'ko' ? '등록된 레시피가 없습니다' : 'No recipes yet'}</p>
         </div>
       ) : (
-        recipeList
+        <RecipeGrid recipes={visibleRecipes} />
       )}
 
       <IngredientSearchModal

@@ -130,6 +130,8 @@ function NavMenu() {
 
 function SignupLink() {
   const { language } = useLanguage()
+  const { isAdmin } = useAdmin()
+  if (isAdmin) return null
   return (
     <NavLink to="/signup" className="header-signup-btn">
       {language === 'ko' ? '회원가입 신청' : 'Sign Up'}
