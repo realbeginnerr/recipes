@@ -19,7 +19,7 @@ export function RecipeDetailPage() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const { language } = useLanguage()
-  const { isAdmin } = useAdmin()
+  useAdmin()
   const [recipes, setRecipes] = useState<Recipe[]>(staticRecipes)
   const [recipeStates, setRecipeStates] = useState<RecipeStates>(() =>
     buildInitialRecipeStates(language),

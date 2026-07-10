@@ -161,7 +161,6 @@ export function AddRecipePage() {
   const { toast, showToast, closeToast } = useToast()
 
   async function handleConfirm() {
-    let hasError = false
     if (!pastedText.trim()) { setDataError(isKo ? '식재료 데이터를 입력해주세요.' : 'Please enter ingredient data.'); return }
 
     const parsed = parseIngredientText(pastedText)

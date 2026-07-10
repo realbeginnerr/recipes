@@ -175,7 +175,7 @@ function HeaderSearch() {
 
 function HamburgerMenu() {
   const [open, setOpen] = useState(false)
-  const { t, language } = useLanguage()
+  const { language } = useLanguage()
   const navigate = useNavigate()
   const { resetHome } = useSearch()
   const { isAdmin } = useAdmin()
