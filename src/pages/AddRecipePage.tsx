@@ -11,6 +11,9 @@ import {
   type FirestoreIngredient,
 } from '../services/ingredientService'
 import { Toast, useToast } from '../components/Toast'
+import { IngredientSearchModal } from '../components/IngredientSearchModal'
+import { ingredientById } from '../data/ingredients'
+import type { Ingredient } from '../types'
 
 type ParsedRow = {
   name: string
@@ -149,8 +152,9 @@ export function AddRecipePage() {
   const [saving, setSaving] = useState(false)
   const [confirming, setConfirming] = useState(false)
   const [divisionCount, setDivisionCount] = useState(4)
-  const [multigrainRiceAmount, setMultigrainRiceAmount] = useState(130)
-  const [multigrainRiceUnit, setMultigrainRiceUnit] = useState('g')
+  const [sideRows, setSideRows] = useState<{ ingredientId: string; amount: number; unit: string }[]>([])
+  const [isAddMainModalOpen, setIsAddMainModalOpen] = useState(false)
+  const [isAddSideModalOpen, setIsAddSideModalOpen] = useState(false)
   const [nameError, setNameError] = useState('')
   const [nameKoError, setNameKoError] = useState('')
   const [dataError, setDataError] = useState('')
@@ -339,6 +343,30 @@ export function AddRecipePage() {
     setResolved(false)
     setResolvedRows([])
     setEnRows([])
+    setSideRows([])
+  }
+
+  function handleAddMainIngredient(ingredient: Ingredient) {
+    if (resolvedRows.some((r) => r.ingredientId === ingredient.id)) return
+    setResolvedRows((prev) => [...prev, {
+      name: ingredient.nameKo || ingredient.name,
+      amount: String(ingredient.baseAmount),
+      unit: ingredient.baseUnit,
+      carbs: '',
+      protein: '',
+      fat: '',
+      ingredientId: ingredient.id,
+      isNew: false,
+      displayCarbs: ingredient.carbs,
+      displayProtein: ingredient.protein,
+      displayFat: ingredient.fat,
+    }])
+    setEnRows((prev) => [...prev, { nameEn: ingredient.name, amount: ingredient.baseAmount, unit: ingredient.baseUnit }])
+  }
+
+  function handleAddSideIngredient(ingredient: Ingredient) {
+    if (sideRows.some((r) => r.ingredientId === ingredient.id)) return
+    setSideRows((prev) => [...prev, { ingredientId: ingredient.id, amount: ingredient.baseAmount, unit: ingredient.baseUnit }])
   }
 
   async function handleSave() {
@@ -384,6 +412,11 @@ export function AddRecipePage() {
           amount: Number.parseFloat(row.amount) || 0,
           unit: row.unit || 'g',
         })),
+        sideItems: sideRows.map((row) => ({
+          ingredientId: row.ingredientId,
+          amount: row.amount,
+          unit: row.unit,
+        })),
       })
 
       showToast(isKo ? '레시피가 저장되었습니다.' : 'Recipe saved!', 'success')
@@ -411,14 +444,10 @@ export function AddRecipePage() {
     { carbs: 0, protein: 0, fat: 0 },
   )
 
-  const riceAmountG = multigrainRiceUnit === 'oz' ? multigrainRiceAmount * 28.3495 : multigrainRiceAmount
-  const riceCarbs = (riceAmountG * 28.5) / 100
-  const riceProtein = (riceAmountG * 3.1) / 100
-  const riceFat = (riceAmountG * 0.8) / 100
-  const combined = {
-    carbs: totals.carbs / divisionCount + riceCarbs,
-    protein: totals.protein / divisionCount + riceProtein,
-    fat: totals.fat / divisionCount + riceFat,
+  const perMeal = {
+    carbs: totals.carbs / divisionCount,
+    protein: totals.protein / divisionCount,
+    fat: totals.fat / divisionCount,
   }
 
   function tfoot(lang: 'ko' | 'en') {
@@ -445,29 +474,59 @@ export function AddRecipePage() {
           <td className="macro">{fmt(totals.protein / divisionCount)}</td>
           <td className="macro">{fmt(totals.fat / divisionCount)}</td>
         </tr>
-        <tr className="recipe-table__multigrain-row">
-          <td>{isKoTable ? '잡곡밥 (쌀:잡곡=2:1)' : 'Multigrain rice (2:1)'}</td>
-          <td>
-            <input type="number" className="amount-input" min={0} step={1}
-              value={multigrainRiceAmount}
-              onChange={(e) => { const v = Number.parseFloat(e.target.value); if (!Number.isNaN(v) && v >= 0) setMultigrainRiceAmount(v) }} />
-          </td>
-          <td style={{ textAlign: 'right' }}>
-            <select className="unit-select" value={multigrainRiceUnit} onChange={(e) => setMultigrainRiceUnit(e.target.value)}>
-              <option value="g">g</option>
-              <option value="oz">oz</option>
-            </select>
-          </td>
-          <td className="macro">{fmt(riceCarbs)}</td>
-          <td className="macro">{fmt(riceProtein)}</td>
-          <td className="macro">{fmt(riceFat)}</td>
-        </tr>
-        <tr className="recipe-table__total">
-          <td colSpan={3}><strong>{isKoTable ? '합계' : 'Combined Total'}</strong></td>
-          <td className="macro"><strong style={{ color: macroColor(combined.carbs, RECOMMENDED.carbs) }}>{fmt(combined.carbs)}</strong></td>
-          <td className="macro"><strong style={{ color: macroColor(combined.protein, RECOMMENDED.protein) }}>{fmt(combined.protein)}</strong></td>
-          <td className="macro"><strong style={{ color: macroColor(combined.fat, RECOMMENDED.fat) }}>{fmt(combined.fat)}</strong></td>
-        </tr>
+        {sideRows.map((row) => {
+          const ing = ingredientById.get(row.ingredientId)
+          if (!ing) return null
+          const carbsPer100 = ing.carbs / ing.baseAmount * 100
+          const sideCarbs = (row.amount * carbsPer100) / 100
+          const sideProtein = (row.amount * ing.protein / ing.baseAmount * 100) / 100
+          const sideFat = (row.amount * ing.fat / ing.baseAmount * 100) / 100
+          return (
+            <tr key={row.ingredientId} className="recipe-table__multigrain-row">
+              <td>{isKoTable ? (ing.nameKo || ing.name) : ing.name}</td>
+              <td>
+                <input type="number" className="amount-input" min={0} step={1}
+                  value={row.amount}
+                  onChange={(e) => { const v = Number.parseFloat(e.target.value); if (!Number.isNaN(v) && v >= 0) setSideRows((prev) => prev.map((r) => r.ingredientId === row.ingredientId ? { ...r, amount: v } : r)) }} />
+              </td>
+              <td>
+                <select className="unit-select" value={row.unit} onChange={(e) => setSideRows((prev) => prev.map((r) => r.ingredientId === row.ingredientId ? { ...r, unit: e.target.value } : r))}>
+                  {ing.allowedUnits?.map((u) => <option key={u} value={u}>{u}</option>) ?? <option value={ing.baseUnit}>{ing.baseUnit}</option>}
+                </select>
+              </td>
+              <td className="macro">{fmt(sideCarbs)}</td>
+              <td className="macro">{fmt(sideProtein)}</td>
+              <td className="macro">{fmt(sideFat)}</td>
+              <td className="edit-inline__delete-cell">
+                <button type="button" className="edit-inline__delete-btn" onClick={() => setSideRows((prev) => prev.filter((r) => r.ingredientId !== row.ingredientId))}>✕</button>
+              </td>
+            </tr>
+          )
+        })}
+        {(() => {
+          const sideTotals = sideRows.reduce((acc, row) => {
+            const ing = ingredientById.get(row.ingredientId)
+            if (!ing) return acc
+            return {
+              carbs: acc.carbs + (row.amount * ing.carbs / ing.baseAmount),
+              protein: acc.protein + (row.amount * ing.protein / ing.baseAmount),
+              fat: acc.fat + (row.amount * ing.fat / ing.baseAmount),
+            }
+          }, { carbs: 0, protein: 0, fat: 0 })
+          const combined = {
+            carbs: perMeal.carbs + sideTotals.carbs,
+            protein: perMeal.protein + sideTotals.protein,
+            fat: perMeal.fat + sideTotals.fat,
+          }
+          return (
+            <tr className="recipe-table__total">
+              <td colSpan={3}><strong>{isKoTable ? '1끼 합계' : 'Per meal'}</strong></td>
+              <td className="macro"><strong style={{ color: macroColor(combined.carbs, RECOMMENDED.carbs) }}>{fmt(combined.carbs)}</strong></td>
+              <td className="macro"><strong style={{ color: macroColor(combined.protein, RECOMMENDED.protein) }}>{fmt(combined.protein)}</strong></td>
+              <td className="macro"><strong style={{ color: macroColor(combined.fat, RECOMMENDED.fat) }}>{fmt(combined.fat)}</strong></td>
+            </tr>
+          )
+        })()}
         <tr className="recipe-table__recommended">
           <td colSpan={3}><strong>{isKoTable ? '한끼 권장량' : 'Recommended per meal'}</strong></td>
           <td className="macro"><strong>77.0</strong></td>
@@ -478,9 +537,60 @@ export function AddRecipePage() {
     )
   }
 
+  const PROMPT_BEFORE = `내가 첨부한 이미지는 요리 레시피 영상의 식재료 목록이다.
+이미지에 있는 텍스트를 정확히 추출한 뒤, 아래 규칙에 맞게 재정리하라.
+
+`
+  const PROMPT_EDIT = `현재 가지고 있는 닭고기 양: 500g (메인 재료 중 주재료의 양. 재료명과 양은 본인이 사용하려고 하는 재료명, 양으로 수정해서 적으세요)`
+  const PROMPT_AFTER = `
+→ 내가 가지고 있는 닭고기 양을 기준으로, 모든 식재료의 양을 비율에 맞게 동일하게 스케일링하라.
+
+* 출력은 코드 블록으로 작성한다.
+* 각 행은 하나의 식재료를 의미한다.
+* 각 열은 슬래시(/)로 구분한다.
+* 열의 순서는 반드시 다음과 같다:
+  1. 재료명
+  2. 재료 양 (숫자만)
+  3. 재료 양의 단위 (예: 개, g, T 등)
+  4. 해당 식재료의 총 탄수화물 양 (g 기준, 단위 표기 제외)
+  5. 해당 식재료의 단백질 양 (g 기준, 단위 표기 제외)
+  6. 해당 식재료의 지방 양 (g 기준, 단위 표기 제외)
+* 첫 행에 제목(헤더)을 작성하지 않는다.
+* 모든 영양값은 스케일링된 최종 재료 양 기준으로 계산한다.
+* 이미지에서 일부 정보가 누락된 경우, 일반적인 평균값을 사용해 추정한다.
+* 단위가 불명확할 경우, 가장 일반적인 기준으로 해석한다. (예: 1컵, 1T 등)
+
+(예시 형식)
+가지/7/개/42.0/7.0/1.4
+대파/0.5/개/4/1/0`
+  const GPT_PROMPT = PROMPT_BEFORE + PROMPT_EDIT + PROMPT_AFTER
+
   return (
     <section className="page">
       <h2 className="page__heading">{isKo ? '레시피 추가' : 'Add Recipe'}</h2>
+
+      <div className="add-recipe__prompt-box">
+        <div className="add-recipe__prompt-header">
+          <span className="add-recipe__prompt-label">{isKo ? 'ChatGPT 프롬프트' : 'ChatGPT Prompt'}</span>
+          <button
+            type="button"
+            className="add-recipe__prompt-copy"
+            onClick={() => navigator.clipboard.writeText(GPT_PROMPT)}
+            title={isKo ? '프롬프트 복사' : 'Copy prompt'}
+          >
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+            </svg>
+            {isKo ? '복사' : 'Copy'}
+          </button>
+        </div>
+        <pre className="add-recipe__prompt-text">
+          {PROMPT_BEFORE}
+          <span style={{ color: '#dc2626', fontWeight: 600 }}>{PROMPT_EDIT}</span>
+          {PROMPT_AFTER}
+        </pre>
+      </div>
 
       <div className="add-recipe__form">
         <div className="add-recipe__field">
@@ -519,11 +629,8 @@ export function AddRecipePage() {
           {dataError && <p className="add-recipe__field-error">{dataError}</p>}
         </div>
         <div className="add-recipe__load-section">
-          <p className="add-recipe__load-title">
-            {isKo ? '기존 레시피 불러오기' : 'Load from existing recipes'}
-          </p>
           <button type="button" className="add-recipe__load-btn" onClick={handleOpenRecipeList} disabled={loadingRecipes}>
-            {loadingRecipes ? (isKo ? '불러오는 중...' : 'Loading...') : (isKo ? '레시피 선택' : 'Select recipes')}
+            {loadingRecipes ? (isKo ? '불러오는 중...' : 'Loading...') : (isKo ? '기존 레시피 불러오기' : 'Load from existing recipes')}
           </button>
           {showRecipeList && savedRecipes.length > 0 && (
             <>
@@ -639,6 +746,17 @@ export function AddRecipePage() {
             </p>
           )}
 
+          <div className="edit-bottom-bar">
+            <div className="edit-bottom-bar__add">
+              <button type="button" className="add-food-btn" style={{ background: 'none', color: 'var(--muted)', border: '1px solid var(--border)' }} onClick={() => setIsAddSideModalOpen(true)}>
+                + {isKo ? '부재료 추가' : 'Add side ingredient'}
+              </button>
+              <button type="button" className="add-food-btn" onClick={() => setIsAddMainModalOpen(true)}>
+                + {isKo ? '주재료 추가' : 'Add main ingredient'}
+              </button>
+            </div>
+          </div>
+
           {/* 영어 테이블 */}
           <p className="add-recipe__table-label" style={{ marginTop: '2rem' }}>🇺🇸 English</p>
           {translating ? (
@@ -720,6 +838,21 @@ export function AddRecipePage() {
           </button>
         </div>
       )}
+
+      <IngredientSearchModal
+        isOpen={isAddMainModalOpen}
+        onClose={() => setIsAddMainModalOpen(false)}
+        onIngredientSelect={handleAddMainIngredient}
+        existingIngredientIds={new Set(resolvedRows.map((r) => r.ingredientId).filter(Boolean) as string[])}
+        multiSelect
+      />
+      <IngredientSearchModal
+        isOpen={isAddSideModalOpen}
+        onClose={() => setIsAddSideModalOpen(false)}
+        onIngredientSelect={handleAddSideIngredient}
+        existingIngredientIds={new Set(sideRows.map((r) => r.ingredientId))}
+        multiSelect
+      />
 
       {toast && <Toast message={toast.message} type={toast.type} onClose={closeToast} />}
     </section>

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useLanguage } from '../context/LanguageContext'
+import { useAdmin } from '../context/AdminContext'
 import { toTitleCase } from '../utils/displayNames'
 import {
   loadIngredientsFromFirestore,
@@ -10,6 +11,8 @@ import {
   type FirestoreIngredient,
 } from '../services/ingredientService'
 import { loadRecipesFromFirestore, type FirestoreRecipe } from '../services/recipeService'
+import { saveReport, loadReports, deleteReport, type IngredientReport } from '../services/reportService'
+import { Modal } from '../components/Modal'
 
 function dedupeIngredients(isKo: boolean, order: 'alpha-asc' | 'alpha-desc' = 'alpha-asc'): FirestoreIngredient[] {
   const seen = new Set<string>()
@@ -48,6 +51,7 @@ const EMPTY_NEW: NewRow = { name: '', nameKo: '', baseAmount: '100', baseUnit: '
 
 export function IngredientsPage() {
   const { language } = useLanguage()
+  const { isAdmin } = useAdmin()
   const isKo = language === 'ko'
 
   const [ingredients, setIngredients] = useState<FirestoreIngredient[]>([])
@@ -59,6 +63,10 @@ export function IngredientsPage() {
   const [saving, setSaving] = useState(false)
   const [deleteWarning, setDeleteWarning] = useState<{ id: string; usedIn: FirestoreRecipe[] } | null>(null)
   const [showCancelConfirm, setShowCancelConfirm] = useState(false)
+  const [reports, setReports] = useState<IngredientReport[]>([])
+  const [reportedIds, setReportedIds] = useState<Set<string>>(new Set())
+  const [reportTarget, setReportTarget] = useState<FirestoreIngredient | null>(null)
+  const [reportNote, setReportNote] = useState('')
   const sectionRef = useRef<HTMLElement>(null)
 
   useEffect(() => {
@@ -67,6 +75,31 @@ export function IngredientsPage() {
       .catch(console.error)
       .finally(() => setLoading(false))
   }, [])
+
+  useEffect(() => {
+    if (!isAdmin) return
+    loadReports().then(setReports).catch(console.error)
+  }, [isAdmin])
+
+  async function handleReport(ing: FirestoreIngredient, note: string) {
+    if (reportedIds.has(ing.id)) return
+    try {
+      await saveReport(ing.id, ing.nameKo || ing.name, note)
+      setReportedIds((prev) => new Set([...prev, ing.id]))
+      if (isAdmin) setReports((prev) => [{ id: '', ingredientId: ing.id, ingredientName: ing.nameKo || ing.name, note, reportedAt: Date.now() }, ...prev])
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
+  async function handleDismissReport(report: IngredientReport) {
+    try {
+      if (report.id) await deleteReport(report.id)
+      setReports((prev) => prev.filter((r) => r !== report))
+    } catch (err) {
+      console.error(err)
+    }
+  }
 
   useEffect(() => {
     if (!loading) setIngredients(dedupeIngredients(isKo, sortOrder))
@@ -218,6 +251,24 @@ export function IngredientsPage() {
         )}
       </div>
 
+      {isAdmin && reports.length > 0 && (
+        <div className="ing-reports-panel">
+          <p className="ing-reports-panel__title">{isKo ? '신고된 식재료' : 'Reported Ingredients'} ({reports.length})</p>
+          <ul className="ing-reports-panel__list">
+            {reports.map((r, i) => (
+              <li key={r.id || i} className="ing-reports-panel__item">
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <span style={{ fontWeight: 600 }}>{r.ingredientName}</span>
+                  {r.note && <p style={{ margin: '2px 0 0', fontSize: '0.8rem', color: 'var(--muted)', whiteSpace: 'pre-wrap' }}>{r.note}</p>}
+                </div>
+                <span className="ing-reports-panel__date">{new Date(r.reportedAt).toLocaleDateString(isKo ? 'ko-KR' : 'en-US')}</span>
+                <button type="button" className="ing-reports-panel__dismiss" onClick={() => handleDismissReport(r)} title={isKo ? '해결됨' : 'Dismiss'}>✓</button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
       {loading ? (
         <div className="empty-state">
           <svg className="empty-state__icon empty-state__icon--spin" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -242,7 +293,7 @@ export function IngredientsPage() {
                 <th style={{ textAlign: 'center' }}>1개=?g</th>
                 <th style={{ textAlign: 'center' }}>1캔=?g</th>
                 <th style={{ textAlign: 'center' }}>1팩=?g</th>
-                {isEditing && <th />}
+                {isEditing ? <th /> : <th />}
               </tr>
             </thead>
             <tbody>
@@ -410,6 +461,21 @@ export function IngredientsPage() {
                     <td style={{ textAlign: 'center' }}>{ing.gramsPerEach ?? '-'}</td>
                     <td style={{ textAlign: 'center' }}>{ing.gramsPerCan ?? '-'}</td>
                     <td style={{ textAlign: 'center' }}>{ing.gramsPerPack ?? '-'}</td>
+                    <td style={{ textAlign: 'center' }}>
+                      <button
+                        type="button"
+                        className={`ing-report-btn${reportedIds.has(ing.id) ? ' ing-report-btn--reported' : ''}`}
+                        onClick={() => !reportedIds.has(ing.id) && setReportTarget(ing)}
+                        title={isKo ? '잘못된 정보 신고' : 'Report incorrect data'}
+                        disabled={reportedIds.has(ing.id)}
+                      >
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M4 3v18M4 3l16 6-16 6" strokeWidth="0"/>
+                          <path d="M4 21V3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" fill="none"/>
+                          <path d="M4 4l14 5-14 5V4z" fill="currentColor"/>
+                        </svg>
+                      </button>
+                    </td>
                   </tr>
                 ),
               )}
@@ -543,66 +609,59 @@ export function IngredientsPage() {
         </div>
       )}
 
-      {showCancelConfirm && (
-        <div className="modal-overlay">
-          <div className="modal" onClick={(e) => e.stopPropagation()}>
-            <p className="modal__message">
-              {isKo ? '계속 수정하시겠습니까?' : 'Do you want to continue editing?'}
-            </p>
-            <div className="modal__actions cancel-confirm-actions">
-              <button
-                type="button"
-                className="cancel-confirm__keep"
-                onClick={() => setShowCancelConfirm(false)}
-              >
-                {isKo ? '계속 수정' : 'Keep editing'}
-              </button>
-              <button
-                type="button"
-                className="modal__confirm-btn"
-                onClick={() => { setShowCancelConfirm(false); handleCancel() }}
-              >
-                {isKo ? '저장 안 하고 나가기' : 'Leave without saving'}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <Modal
+        isOpen={showCancelConfirm}
+        message={isKo ? '계속 수정하시겠습니까?' : 'Do you want to continue editing?'}
+        actions={[
+          { label: isKo ? '계속 수정' : 'Keep editing', variant: 'ghost', onClick: () => setShowCancelConfirm(false) },
+          { label: isKo ? '저장 안 하고 나가기' : 'Leave without saving', onClick: () => { setShowCancelConfirm(false); handleCancel() } },
+        ]}
+      />
 
-      {deleteWarning && (
-        <div className="modal-overlay" onClick={() => setDeleteWarning(null)}>
-          <div className="modal" onClick={(e) => e.stopPropagation()}>
-            <p className="modal__body">
-              {isKo ? '이 식재료는 다음 레시피에서 사용 중입니다:' : 'This ingredient is used in the following recipes:'}
-            </p>
-            <ul className="ing-delete-modal__list">
-              {deleteWarning.usedIn.map((r) => (
-                <li key={r.id}>
-                  <a
-                    href={`/recipes/#${r.id}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="ing-delete-modal__link"
-                  >
-                    {isKo ? (r.nameKo || r.name) : r.name}
-                  </a>
-                </li>
-              ))}
-            </ul>
-            <p className="modal__body" style={{ marginTop: '0.75rem' }}>
-              {isKo ? '그래도 삭제하시겠습니까?' : 'Delete anyway?'}
-            </p>
-            <div className="modal__actions">
-              <button type="button" className="modal__cancel" onClick={() => setDeleteWarning(null)}>
-                {isKo ? '취소' : 'Cancel'}
-              </button>
-              <button type="button" className="modal__confirm modal__confirm--danger" onClick={confirmDelete}>
-                {isKo ? '삭제' : 'Delete'}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <Modal
+        isOpen={!!deleteWarning}
+        onClose={() => setDeleteWarning(null)}
+        message={isKo ? '이 식재료는 다음 레시피에서 사용 중입니다:' : 'This ingredient is used in the following recipes:'}
+        actions={[
+          { label: isKo ? '취소' : 'Cancel', variant: 'ghost', onClick: () => setDeleteWarning(null) },
+          { label: isKo ? '삭제' : 'Delete', variant: 'danger', onClick: confirmDelete },
+        ]}
+      >
+        <ul className="ing-delete-modal__list">
+          {deleteWarning?.usedIn.map((r) => (
+            <li key={r.id}>
+              <a href={`/recipes/#${r.id}`} target="_blank" rel="noopener noreferrer" className="ing-delete-modal__link">
+                {isKo ? (r.nameKo || r.name) : r.name}
+              </a>
+            </li>
+          ))}
+        </ul>
+        <p className="modal__body" style={{ marginTop: '0.5rem' }}>
+          {isKo ? '그래도 삭제하시겠습니까?' : 'Delete anyway?'}
+        </p>
+      </Modal>
+
+      <Modal
+        isOpen={!!reportTarget}
+        onClose={() => { setReportTarget(null); setReportNote('') }}
+        title={isKo ? '식재료 정보 오류 신고' : 'Report Incorrect Data'}
+        message={isKo
+          ? `'${reportTarget?.nameKo || reportTarget?.name}'의 어떤 정보가 잘못되어 있나요?`
+          : `What's incorrect about '${reportTarget?.name}'?`}
+        actions={[
+          { label: isKo ? '취소' : 'Cancel', variant: 'ghost', onClick: () => { setReportTarget(null); setReportNote('') } },
+          { label: isKo ? '신고하기' : 'Report', onClick: () => { handleReport(reportTarget!, reportNote.trim()); setReportTarget(null); setReportNote('') }, disabled: !reportNote.trim() },
+        ]}
+      >
+        <textarea
+          className="add-recipe__textarea"
+          rows={3}
+          style={{ width: '100%', fontSize: '0.875rem' }}
+          placeholder={isKo ? '예) 탄수화물 수치가 실제와 다릅니다. 100g 기준 약 20g이어야 합니다.' : 'e.g. The carbs value seems wrong. It should be around 20g per 100g.'}
+          value={reportNote}
+          onChange={(e) => setReportNote(e.target.value)}
+        />
+      </Modal>
     </section>
   )
 }

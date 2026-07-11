@@ -23,6 +23,7 @@ import { useLanguage } from '../context/LanguageContext'
 import { useAdmin } from '../context/AdminContext'
 import { ingredientById } from '../data/ingredients'
 import { IngredientSearchModal } from './IngredientSearchModal'
+import { Modal } from './Modal'
 import { TableContainer } from './TableContainer'
 import type { Recipe, RecipeItem, RecipeRowState } from '../types'
 import {
@@ -88,6 +89,10 @@ export function RecipeTable({
   const [isAddModalOpen, setIsAddModalOpen] = useState(false)
   const [isAddSideModalOpen, setIsAddSideModalOpen] = useState(false)
   const [showCancelConfirm, setShowCancelConfirm] = useState(false)
+  const dragItemIndex = useRef<number | null>(null)
+  const dragSideItemIndex = useRef<number | null>(null)
+  const [dragOverIndex, setDragOverIndex] = useState<number | null>(null)
+  const [dragOverSideIndex, setDragOverSideIndex] = useState<number | null>(null)
   const [isGuestSaveModalOpen, setIsGuestSaveModalOpen] = useState(false)
   const [isRecommendedInfoOpen, setIsRecommendedInfoOpen] = useState(false)
   const [newlyAddedIds, setNewlyAddedIds] = useState<Set<string>>(new Set())
@@ -112,10 +117,7 @@ export function RecipeTable({
       return row ? { ...item, defaultAmount: row.amount, defaultUnit: row.unit } : item
     })
     setEditItems(regularItems)
-    setEditSideItems(
-      activeRecipe.sideItems ??
-      [{ ingredientId: MULTIGRAIN_ID, defaultAmount: multigrainRiceAmount, defaultUnit: multigrainRiceUnit }]
-    )
+    setEditSideItems(activeRecipe.sideItems ?? [])
     setEditMemo(activeRecipe.memo ?? '')
     setEditTasteRating(activeRecipe.tasteRating ?? 4)
     setDivisionInput(String(activeRecipe.divisionCount ?? divisionCount))
@@ -167,15 +169,6 @@ export function RecipeTable({
     setEditItems((prev) => prev.filter((_, i) => i !== index))
   }
 
-  function handleMoveItem(index: number, direction: -1 | 1) {
-    const target = index + direction
-    setEditItems((prev) => {
-      if (target < 0 || target >= prev.length) return prev
-      const next = [...prev]
-      ;[next[index], next[target]] = [next[target], next[index]]
-      return next
-    })
-  }
 
   function handleAddIngredient(ingredientId: string) {
     if (editItems.some((item) => item.ingredientId === ingredientId)) return
@@ -209,15 +202,6 @@ export function RecipeTable({
     setEditSideItems((prev) => prev.filter((_, i) => i !== index))
   }
 
-  function handleMoveSideItem(index: number, direction: -1 | 1) {
-    const target = index + direction
-    setEditSideItems((prev) => {
-      if (target < 0 || target >= prev.length) return prev
-      const next = [...prev]
-      ;[next[index], next[target]] = [next[target], next[index]]
-      return next
-    })
-  }
 
   const recommended = { carbs: 77, protein: 33, fat: 22 }
 
@@ -258,7 +242,7 @@ export function RecipeTable({
 
   const activeSideItems = isEditing
     ? editSideItems
-    : (activeRecipe.sideItems ?? [{ ingredientId: MULTIGRAIN_ID, defaultAmount: multigrainRiceAmount, defaultUnit: multigrainRiceUnit }])
+    : (activeRecipe.sideItems ?? [])
   const sideTotals = activeSideItems.reduce(
     (acc, item) => {
       const m = computeSideMacros(item)
@@ -392,8 +376,9 @@ export function RecipeTable({
               <th>{t.colCarbs}</th>
               <th>{t.colProtein}</th>
               <th>{t.colFat}</th>
-              {isEditing && <th></th>}
-              {isEditing && <th></th>}
+              {isEditing && <th className="edit-inline__order-cell"></th>}
+              {isEditing && <th className="edit-inline__delete-cell"></th>}
+              {isEditing && <th className="edit-inline__delete-cell"></th>}
             </tr>
           </thead>
           <tbody>
@@ -406,6 +391,26 @@ export function RecipeTable({
                 const macros = calculateMacros(grams, ingredient)
                 return (
                   <tr key={item.ingredientId} className={isNew ? 'edit-row--new' : ''}>
+                    <td
+                      className={`edit-inline__order-cell edit-inline__drag-handle${dragOverIndex === index ? ' edit-inline__drag-over' : ''}`}
+                      draggable
+                      onDragStart={() => { dragItemIndex.current = index }}
+                      onDragOver={(e) => { e.preventDefault(); setDragOverIndex(index) }}
+                      onDragLeave={() => setDragOverIndex(null)}
+                      onDrop={() => {
+                        if (dragItemIndex.current === null || dragItemIndex.current === index) { setDragOverIndex(null); return }
+                        setEditItems((prev) => {
+                          const next = [...prev]
+                          const [moved] = next.splice(dragItemIndex.current!, 1)
+                          next.splice(index, 0, moved)
+                          return next
+                        })
+                        dragItemIndex.current = null
+                        setDragOverIndex(null)
+                      }}
+                      onDragEnd={() => { dragItemIndex.current = null; setDragOverIndex(null) }}
+                      aria-label="Drag to reorder"
+                    >⠿</td>
                     <td style={{ fontWeight: isNew ? 700 : undefined }}>
                       {getIngredientDisplayName(ingredient, language)}
                     </td>
@@ -462,24 +467,6 @@ export function RecipeTable({
                     <td>{formatMacro(macros.carbs)}</td>
                     <td>{formatMacro(macros.protein)}</td>
                     <td>{formatMacro(macros.fat)}</td>
-                    <td className="edit-inline__order-cell">
-                      <div className="edit-inline__order-btns">
-                        <button
-                          type="button"
-                          className="edit-inline__order-btn"
-                          onClick={() => handleMoveItem(index, -1)}
-                          disabled={index === 0}
-                          aria-label="Move up"
-                        >▲</button>
-                        <button
-                          type="button"
-                          className="edit-inline__order-btn"
-                          onClick={() => handleMoveItem(index, 1)}
-                          disabled={index === editItems.length - 1}
-                          aria-label="Move down"
-                        >▼</button>
-                      </div>
-                    </td>
                     <td className="edit-inline__delete-cell">
                       <button
                         type="button"
@@ -691,6 +678,28 @@ export function RecipeTable({
               )
               return (
                 <tr key={item.ingredientId} className="recipe-table__multigrain-row">
+                  {isEditing && (
+                    <td
+                      className={`edit-inline__order-cell edit-inline__drag-handle${dragOverSideIndex === index ? ' edit-inline__drag-over' : ''}`}
+                      draggable
+                      onDragStart={() => { dragSideItemIndex.current = index }}
+                      onDragOver={(e) => { e.preventDefault(); setDragOverSideIndex(index) }}
+                      onDragLeave={() => setDragOverSideIndex(null)}
+                      onDrop={() => {
+                        if (dragSideItemIndex.current === null || dragSideItemIndex.current === index) { setDragOverSideIndex(null); return }
+                        setEditSideItems((prev) => {
+                          const next = [...prev]
+                          const [moved] = next.splice(dragSideItemIndex.current!, 1)
+                          next.splice(index, 0, moved)
+                          return next
+                        })
+                        dragSideItemIndex.current = null
+                        setDragOverSideIndex(null)
+                      }}
+                      onDragEnd={() => { dragSideItemIndex.current = null; setDragOverSideIndex(null) }}
+                      aria-label="Drag to reorder"
+                    >⠿</td>
+                  )}
                   <td>
                     {isRice
                       ? (language === 'ko' ? '잡곡밥 (쌀:잡곡=2:1)' : 'Multigrain rice (rice:grains=2:1)')
@@ -730,14 +739,6 @@ export function RecipeTable({
                   <td className="macro">{formatMacro(macros.carbs)}</td>
                   <td className="macro">{formatMacro(macros.protein)}</td>
                   <td className="macro">{formatMacro(macros.fat)}</td>
-                  {isEditing && (
-                    <td className="edit-inline__order-cell">
-                      <div className="edit-inline__order-btns">
-                        <button type="button" className="edit-inline__order-btn" onClick={() => handleMoveSideItem(index, -1)} disabled={index === 0} aria-label="Move up">▲</button>
-                        <button type="button" className="edit-inline__order-btn" onClick={() => handleMoveSideItem(index, 1)} disabled={index === activeSideItems.length - 1} aria-label="Move down">▼</button>
-                      </div>
-                    </td>
-                  )}
                   {isEditing && (
                     <td className="edit-inline__delete-cell">
                       <button type="button" className="edit-inline__delete-btn" onClick={() => handleDeleteSideItem(index)}>✕</button>
@@ -828,75 +829,30 @@ export function RecipeTable({
         existingIngredientIds={new Set(editSideItems.map((i) => i.ingredientId))}
       />
 
-      {isGuestSaveModalOpen && (
-        <div className="modal-overlay" onClick={() => setIsGuestSaveModalOpen(false)}>
-          <div className="modal" onClick={(e) => e.stopPropagation()}>
-            <p className="modal__message">
-              {language === 'ko'
-                ? '로그인하지 않은 상태에서는 변경 사항이 저장되지 않습니다. 새로고침하면 원래대로 돌아갑니다.'
-                : 'Changes are not saved unless you are logged in. Refreshing the page will revert them.'}
-            </p>
-            <div className="modal__actions">
-              <button
-                type="button"
-                className="modal__confirm-btn"
-                onClick={() => setIsGuestSaveModalOpen(false)}
-              >
-                {language === 'ko' ? '확인' : 'OK'}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <Modal
+        isOpen={isGuestSaveModalOpen}
+        onClose={() => setIsGuestSaveModalOpen(false)}
+        message={language === 'ko'
+          ? '로그인하지 않은 상태에서는 변경 사항이 저장되지 않습니다. 새로고침하면 원래대로 돌아갑니다.'
+          : 'Changes are not saved unless you are logged in. Refreshing the page will revert them.'}
+        actions={[{ label: language === 'ko' ? '확인' : 'OK', onClick: () => setIsGuestSaveModalOpen(false) }]}
+      />
 
-      {showCancelConfirm && (
-        <div className="modal-overlay">
-          <div className="modal" onClick={(e) => e.stopPropagation()}>
-            <p className="modal__message">
-              {language === 'ko'
-                ? '계속 수정하시겠습니까?'
-                : 'Do you want to continue editing?'}
-            </p>
-            <div className="modal__actions cancel-confirm-actions">
-              <button
-                type="button"
-                className="cancel-confirm__keep"
-                onClick={() => setShowCancelConfirm(false)}
-              >
-                {language === 'ko' ? '계속 수정' : 'Keep editing'}
-              </button>
-              <button
-                type="button"
-                className="modal__confirm-btn"
-                onClick={() => { setShowCancelConfirm(false); handleCancel() }}
-              >
-                {language === 'ko' ? '저장 안 하고 나가기' : 'Leave without saving'}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <Modal
+        isOpen={showCancelConfirm}
+        message={language === 'ko' ? '계속 수정하시겠습니까?' : 'Do you want to continue editing?'}
+        actions={[
+          { label: language === 'ko' ? '계속 수정' : 'Keep editing', variant: 'ghost', onClick: () => setShowCancelConfirm(false) },
+          { label: language === 'ko' ? '저장 안 하고 나가기' : 'Leave without saving', onClick: () => { setShowCancelConfirm(false); handleCancel() } },
+        ]}
+      />
 
-      {isRecommendedInfoOpen && (
-        <div className="modal-overlay" onClick={() => setIsRecommendedInfoOpen(false)}>
-          <div className="modal" onClick={(e) => e.stopPropagation()}>
-            <p className="modal__message">
-              {language === 'ko'
-                ? '30~40대 한국인 여성 기준입니다.'
-                : 'Based on Korean women in their 30s–40s.'}
-            </p>
-            <div className="modal__actions">
-              <button
-                type="button"
-                className="modal__confirm-btn"
-                onClick={() => setIsRecommendedInfoOpen(false)}
-              >
-                {language === 'ko' ? '닫기' : 'Close'}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <Modal
+        isOpen={isRecommendedInfoOpen}
+        onClose={() => setIsRecommendedInfoOpen(false)}
+        message={language === 'ko' ? '30~40대 한국인 여성 기준입니다.' : 'Based on Korean women in their 30s–40s.'}
+        actions={[{ label: language === 'ko' ? '닫기' : 'Close', onClick: () => setIsRecommendedInfoOpen(false) }]}
+      />
 
       {!isCollapsed && (isEditing || activeRecipe.memo) && (
         <div className="recipe-memo">

@@ -2,7 +2,6 @@ import { useNavigate } from 'react-router-dom'
 import type { Recipe } from '../types'
 
 const MULTIGRAIN_ID = '__multigrain_rice__'
-const DEFAULT_MULTIGRAIN_AMOUNT = 130
 
 const base = import.meta.env.BASE_URL
 
@@ -43,7 +42,7 @@ function calcMacros(recipe: Recipe): Macros {
     fat += m.fat
   }
   const division = recipe.divisionCount ?? 4
-  const sideItems = recipe.sideItems ?? [{ ingredientId: MULTIGRAIN_ID, defaultAmount: DEFAULT_MULTIGRAIN_AMOUNT, defaultUnit: 'g' }]
+  const sideItems = recipe.sideItems ?? []
   let sideCarbs = 0, sideProtein = 0, sideFat = 0
   for (const item of sideItems) {
     if (item.ingredientId === MULTIGRAIN_ID) {
