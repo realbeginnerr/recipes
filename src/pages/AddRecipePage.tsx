@@ -48,7 +48,7 @@ function parseIngredientText(text: string): ParsedRow[] {
   return text
     .split('\n')
     .map((line) => line.trim())
-    .filter((line) => line.length > 0)
+    .filter((line) => line.length > 0 && !line.includes(' / '))
     .map((line) => {
       const cols = line.split('/')
       return {
@@ -141,6 +141,7 @@ export function AddRecipePage() {
     if (!isAdmin) navigate('/', { replace: true })
   }, [isAdmin, navigate])
 
+  const [mode, setMode] = useState<'select' | 'sns' | 'manual'>('select')
   const [recipeName, setRecipeName] = useState('')
   const [recipeNameKo, setRecipeNameKo] = useState('')
   const [recipeLink, setRecipeLink] = useState('')
@@ -163,6 +164,10 @@ export function AddRecipePage() {
   const [showRecipeList, setShowRecipeList] = useState(false)
   const [selectedRecipeIds, setSelectedRecipeIds] = useState<Set<string>>(new Set())
   const { toast, showToast, closeToast } = useToast()
+
+  useEffect(() => {
+    if (mode === 'manual') setResolved(true)
+  }, [mode])
 
   async function handleConfirm() {
     if (!pastedText.trim()) { setDataError(isKo ? '식재료 데이터를 입력해주세요.' : 'Please enter ingredient data.'); return }
@@ -537,97 +542,143 @@ export function AddRecipePage() {
     )
   }
 
-  const PROMPT_BEFORE = `내가 첨부한 이미지는 요리 레시피 영상의 식재료 목록이다.
-이미지에 있는 텍스트를 정확히 추출한 뒤, 아래 규칙에 맞게 재정리하라.
+  const PROMPT_MID = `내가 첨부한 이미지는 요리 레시피 영상의 식재료 목록이다. 이미지에 있는 텍스트를 정확히 추출한 뒤, 아래 규칙에 따라 재정리하라.
 
 `
-  const PROMPT_EDIT = `현재 가지고 있는 닭고기 양: 500g (메인 재료 중 주재료의 양. 재료명과 양은 본인이 사용하려고 하는 재료명, 양으로 수정해서 적으세요)`
-  const PROMPT_AFTER = `
-→ 내가 가지고 있는 닭고기 양을 기준으로, 모든 식재료의 양을 비율에 맞게 동일하게 스케일링하라.
+  const PROMPT_EDIT_AMOUNT = `★ 현재 가지고 있는 주재료: 닭다리살 500g (※ '닭다리살'와 '500g'은 사용자가 원하는 재료명과 양으로 수정하기)`
+  const PROMPT_AFTER_1 = `
+→ 위 주재료의 양을 기준으로, 모든 식재료의 양을 동일한 비율로 스케일링하라.
 
-* 출력은 코드 블록으로 작성한다.
-* 각 행은 하나의 식재료를 의미한다.
-* 각 열은 슬래시(/)로 구분한다.
-* 열의 순서는 반드시 다음과 같다:
-  1. 재료명
-  2. 재료 양 (숫자만)
-  3. 재료 양의 단위 (예: 개, g, T 등)
-  4. 해당 식재료의 총 탄수화물 양 (g 기준, 단위 표기 제외)
-  5. 해당 식재료의 단백질 양 (g 기준, 단위 표기 제외)
-  6. 해당 식재료의 지방 양 (g 기준, 단위 표기 제외)
-* 첫 행에 제목(헤더)을 작성하지 않는다.
-* 모든 영양값은 스케일링된 최종 재료 양 기준으로 계산한다.
-* 이미지에서 일부 정보가 누락된 경우, 일반적인 평균값을 사용해 추정한다.
-* 단위가 불명확할 경우, 가장 일반적인 기준으로 해석한다. (예: 1컵, 1T 등)
+[출력 규칙]
+1. 레시피 제목을 가장 첫 줄에 출력한다. 형식: 한글 제목 / 영어 제목
+2. 이후 모든 식재료는 코드 블록으로 출력한다.
+3. 각 행은 하나의 식재료를 의미하며, 각 열은 슬래시(/)로 구분한다.
+4. 열의 순서는 반드시 다음을 따른다:
+   * 재료명`
+  const PROMPT_EDIT_NAMES = `
+★ 레시피 이름 (한글): (사용자가 직접 입력)
+★ 레시피 이름 (영어): (사용자가 직접 입력)`
+  const PROMPT_AFTER_2 = `
+   * 재료 양 (숫자만)
+   * 재료 양의 단위 (예: 개, g, T 등)
+   * 해당 식재료의 총 탄수화물 (g, 숫자만)
+   * 해당 식재료의 단백질 (g, 숫자만)
+   * 해당 식재료의 지방 (g, 숫자만)
+5. 첫 행에 제목(헤더)은 작성하지 않는다.
+6. 모든 영양값은 스케일링된 최종 재료 양 기준으로 계산한다.
+7. 이미지에서 일부 정보가 누락된 경우, 일반적인 평균값을 사용해 추정한다.
+8. 단위가 불명확할 경우, 가장 일반적인 기준으로 해석한다. (예: 1컵, 1T 등)
 
-(예시 형식)
-가지/7/개/42.0/7.0/1.4
-대파/0.5/개/4/1/0`
-  const GPT_PROMPT = PROMPT_BEFORE + PROMPT_EDIT + PROMPT_AFTER
+[출력 예시]
+닭갈비 / Dakgalbi
+\`\`\`
+닭다리살/600/g/0/156/36
+양파/0.5/개/9/1/0
+\`\`\``
+  const PROMPT_EDIT_LINK = `
+★ 레시피 영상 링크: (선택)`
+  const GPT_PROMPT = PROMPT_MID + PROMPT_EDIT_AMOUNT + PROMPT_AFTER_1 + PROMPT_EDIT_NAMES + PROMPT_AFTER_2 + PROMPT_EDIT_LINK
+
+  if (mode === 'select') {
+    return (
+      <section className="page">
+        <h2 className="page__heading">{isKo ? '레시피 추가' : 'Add Recipe'}</h2>
+        <p className="add-recipe__select-subtitle">
+          {isKo ? '어떤 방식으로 레시피를 추가하시겠어요?' : 'How would you like to add a recipe?'}
+        </p>
+        <div className="add-recipe__select-cards">
+          <button type="button" className="add-recipe__card add-recipe__card--primary" onClick={() => setMode('sns')}>
+            <span className="add-recipe__card-icon">📱</span>
+            <span className="add-recipe__card-title">{isKo ? 'SNS에서 레시피 추가하기' : 'Add from SNS'}</span>
+            <span className="add-recipe__card-desc">
+              {isKo ? 'AI 프롬프트로 영상 속 식재료를 자동 추출합니다' : 'Auto-extract ingredients from video with AI'}
+            </span>
+          </button>
+          <button type="button" className="add-recipe__card" onClick={() => setMode('manual')}>
+            <span className="add-recipe__card-icon">✏️</span>
+            <span className="add-recipe__card-title">{isKo ? '직접 레시피 작성하기' : 'Write manually'}</span>
+            <span className="add-recipe__card-desc">
+              {isKo ? '식재료와 영양 정보를 직접 입력합니다' : 'Enter ingredients and nutrition info manually'}
+            </span>
+          </button>
+        </div>
+      </section>
+    )
+  }
 
   return (
     <section className="page">
-      <h2 className="page__heading">{isKo ? '레시피 추가' : 'Add Recipe'}</h2>
-
-      <div className="add-recipe__prompt-box">
-        <div className="add-recipe__prompt-header">
-          <span className="add-recipe__prompt-label">{isKo ? 'ChatGPT 프롬프트' : 'ChatGPT Prompt'}</span>
-          <button
-            type="button"
-            className="add-recipe__prompt-copy"
-            onClick={() => navigator.clipboard.writeText(GPT_PROMPT)}
-            title={isKo ? '프롬프트 복사' : 'Copy prompt'}
-          >
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
-              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
-            </svg>
-            {isKo ? '복사' : 'Copy'}
-          </button>
-        </div>
-        <pre className="add-recipe__prompt-text">
-          {PROMPT_BEFORE}
-          <span style={{ color: '#dc2626', fontWeight: 600 }}>{PROMPT_EDIT}</span>
-          {PROMPT_AFTER}
-        </pre>
+      <div className="add-recipe__mode-header">
+        <button type="button" className="add-recipe__back-btn" onClick={() => setMode('select')}>
+          ← {isKo ? '돌아가기' : 'Back'}
+        </button>
+        <h2 className="page__heading" style={{ margin: 0 }}>
+          {isKo
+            ? (mode === 'sns' ? 'SNS에서 레시피 추가하기' : '직접 레시피 작성하기')
+            : (mode === 'sns' ? 'Add from SNS' : 'Write manually')}
+        </h2>
       </div>
 
+      {mode === 'sns' && (
+        <>
+          <div className="add-recipe__prompt-header">
+            <h3 className="add-recipe__prompt-title">{isKo ? 'AI용 프롬프트' : 'AI Prompt'}</h3>
+            <button
+              type="button"
+              className="add-recipe__prompt-copy"
+              onClick={() => navigator.clipboard.writeText(GPT_PROMPT)}
+              title={isKo ? '프롬프트 복사' : 'Copy prompt'}
+            >
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+              </svg>
+              {isKo ? '복사' : 'Copy'}
+            </button>
+          </div>
+          <div className="add-recipe__prompt-box">
+            <pre className="add-recipe__prompt-text">
+              {PROMPT_MID}
+              <span style={{ color: '#dc2626', fontWeight: 600 }}>{PROMPT_EDIT_AMOUNT}</span>
+              {PROMPT_AFTER_1}
+              <span style={{ color: '#dc2626', fontWeight: 600 }}>{PROMPT_EDIT_NAMES}</span>
+              {PROMPT_AFTER_2}
+              <span style={{ color: '#dc2626', fontWeight: 600 }}>{PROMPT_EDIT_LINK}</span>
+            </pre>
+          </div>
+        </>
+      )}
+
       <div className="add-recipe__form">
-        <div className="add-recipe__field">
-          <label className="add-recipe__label">{isKo ? '레시피 이름 (한글)' : 'Recipe name (KO)'}</label>
-          <input type="text" className="add-recipe__input" value={recipeNameKo}
-            onChange={(e) => { setRecipeNameKo(e.target.value); setNameKoError('') }}
-            placeholder="예) 감자탕" />
-          {nameKoError && <p className="add-recipe__field-error">{nameKoError}</p>}
-        </div>
-        <div className="add-recipe__field">
-          <label className="add-recipe__label">{isKo ? '레시피 이름 (영문)' : 'Recipe name (EN)'}</label>
-          <input type="text" className="add-recipe__input" value={recipeName}
-            onChange={(e) => { setRecipeName(e.target.value); setNameError('') }}
-            placeholder="e.g. Pork Bone Soup" />
-          {nameError && <p className="add-recipe__field-error">{nameError}</p>}
-        </div>
-        <div className="add-recipe__field">
-          <label className="add-recipe__label">{isKo ? '링크 (선택)' : 'Link (optional)'}</label>
-          <input type="url" className="add-recipe__input" value={recipeLink}
-            onChange={(e) => setRecipeLink(e.target.value)} placeholder="https://..." />
-        </div>
-        <div className="add-recipe__field">
-          <label className="add-recipe__label">
-            {isKo ? '식재료 데이터 (/ 로 열 구분, 줄바꿈으로 행 구분)' : 'Ingredient data (/ between columns, newlines between rows)'}
-          </label>
-          <p className="add-recipe__hint">
-            {isKo
-              ? '새 식재료: 식재료명/양/단위/탄수화물/단백질/지방 | 기존 식재료: 식재료명/양/단위'
-              : 'New ingredient: name/amount/unit/carbs/protein/fat | Existing: name/amount/unit'}
-          </p>
-          <textarea className="add-recipe__textarea" value={pastedText} rows={8}
-            onChange={(e) => { setPastedText(e.target.value); setResolved(false); setDataError('') }}
-            placeholder={isKo
-              ? '닭가슴살/200/g/0/46/4\n브로콜리/100/g/7/3/0'
-              : 'Chicken breast/200/g/0/46/4\nBroccoli/100/g/7/3/0'} />
-          {dataError && <p className="add-recipe__field-error">{dataError}</p>}
-        </div>
+        {mode === 'sns' && (
+          <div className="add-recipe__field">
+            <label className="add-recipe__label">
+              {isKo ? 'AI 응답 붙여넣기 (레시피 제목 + 식재료 데이터)' : 'Paste AI response (recipe title + ingredient data)'}
+            </label>
+            <p className="add-recipe__hint">
+              {isKo
+                ? '첫 줄: 레시피 제목 (한글 / English) | 이후: 식재료명/양/단위/탄수화물/단백질/지방'
+                : 'First line: recipe title (KO / EN) | Then: name/amount/unit/carbs/protein/fat'}
+            </p>
+            <textarea className="add-recipe__textarea" value={pastedText} rows={8}
+              onChange={(e) => {
+                const text = e.target.value
+                setPastedText(text)
+                setResolved(false)
+                setDataError('')
+                const firstLine = text.split('\n')[0]?.trim() ?? ''
+                if (firstLine.includes(' / ')) {
+                  const [ko, en] = firstLine.split(' / ')
+                  setRecipeNameKo(ko.trim())
+                  setRecipeName(en.trim())
+                }
+              }}
+              placeholder={isKo
+                ? '닭갈비 / Dakgalbi\n닭다리살/600/g/0/156/36\n양파/0.5/개/9/1/0'
+                : 'Dakgalbi / 닭갈비\nChicken thigh/600/g/0/156/36'} />
+            {dataError && <p className="add-recipe__field-error">{dataError}</p>}
+          </div>
+        )}
         <div className="add-recipe__load-section">
           <button type="button" className="add-recipe__load-btn" onClick={handleOpenRecipeList} disabled={loadingRecipes}>
             {loadingRecipes ? (isKo ? '불러오는 중...' : 'Loading...') : (isKo ? '기존 레시피 불러오기' : 'Load from existing recipes')}
@@ -662,18 +713,50 @@ export function AddRecipePage() {
           )}
         </div>
 
-        <button type="button" className="add-recipe__confirm-btn" onClick={handleConfirm} disabled={confirming}>
-          {confirming ? (isKo ? '조회 중...' : 'Checking...') : (isKo ? '확인' : 'Confirm')}
-        </button>
+        {mode === 'sns' && (
+          <button type="button" className="add-recipe__confirm-btn" onClick={handleConfirm} disabled={confirming}>
+            {confirming ? (isKo ? '조회 중...' : 'Loading...') : (isKo ? '미리보기' : 'Preview')}
+          </button>
+        )}
       </div>
 
-      {resolved && resolvedRows.length > 0 && (
+      {(mode === 'manual' || (resolved && resolvedRows.length > 0)) && (
         <div className="add-recipe__preview">
           <div className="add-recipe__preview-header">
             <h3 className="add-recipe__preview-title">{isKo ? '미리보기' : 'Preview'}</h3>
-            <button type="button" className="edit-inline__cancel-btn" onClick={handleReset}>
-              {isKo ? '다시 입력' : 'Reset'}
-            </button>
+            {mode === 'sns' && (
+              <button type="button" className="edit-inline__cancel-btn" onClick={handleReset}>
+                {isKo ? '다시 입력' : 'Reset'}
+              </button>
+            )}
+          </div>
+
+          <div className="recipe-block__title-edit" style={{ marginBottom: '1rem' }}>
+            <input
+              className="recipe-block__title-input"
+              value={recipeNameKo}
+              onChange={(e) => { setRecipeNameKo(e.target.value); setNameKoError('') }}
+              placeholder="한글 이름"
+            />
+            <input
+              className="recipe-block__title-input"
+              value={recipeName}
+              onChange={(e) => { setRecipeName(e.target.value); setNameError('') }}
+              placeholder="English name"
+            />
+            {nameKoError && <p className="add-recipe__field-error">{nameKoError}</p>}
+            {nameError && <p className="add-recipe__field-error">{nameError}</p>}
+          </div>
+
+          <div className="edit-inline__link-field">
+            <label className="edit-inline__link-label">{isKo ? '링크 (선택)' : 'Link (optional)'}</label>
+            <input
+              type="url"
+              className="add-recipe__input"
+              value={recipeLink}
+              onChange={(e) => setRecipeLink(e.target.value)}
+              placeholder="https://..."
+            />
           </div>
 
           {/* 한글 테이블 */}
@@ -834,7 +917,7 @@ export function AddRecipePage() {
           )}
 
           <button type="button" className="add-recipe__save-btn" onClick={handleSave} disabled={saving || translating}>
-            {saving ? (isKo ? '저장 중...' : 'Saving...') : (isKo ? '레시피 저장' : 'Save Recipe')}
+            {saving ? (isKo ? '저장 중...' : 'Saving...') : (isKo ? '레시피 추가' : 'Add Recipe')}
           </button>
         </div>
       )}

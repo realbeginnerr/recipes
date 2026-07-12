@@ -1,13 +1,29 @@
 :root {
-  --bg: #f6f4f1;
+  /* Claude Design System tokens */
+  --bg: #faf9f5;
   --surface: #ffffff;
-  --text: #1c1917;
-  --muted: #57534e;
-  --border: #e7e5e4;
-  --accent: #b45309;
-  --accent-soft: #fff7ed;
-  --shadow: 0 1px 3px rgb(28 25 23 / 8%);
-  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --surface-soft: #f5f0e8;
+  --surface-card: #efe9de;
+  --surface-cream-strong: #e8e0d2;
+  --text: #141413;
+  --text-body: #3d3d3a;
+  --text-strong: #252523;
+  --muted: #6c6a64;
+  --muted-soft: #8e8b82;
+  --border: #e6dfd8;
+  --border-soft: #ebe6df;
+  --accent: #cc785c;
+  --accent-active: #a9583e;
+  --accent-disabled: #e6dfd8;
+  --accent-soft: #f5f0e8;
+  --on-accent: #ffffff;
+  --success: #5db872;
+  --warning: #d4a017;
+  --error: #c64545;
+  --accent-teal: #5db8a6;
+  --accent-amber: #e8a55a;
+  --shadow: 0 1px 3px rgb(20 20 19 / 8%);
+  font-family: 'Wanted Sans', 'Segoe UI', system-ui, -apple-system, sans-serif;
   line-height: 1.5;
   color: var(--text);
   background: var(--bg);
@@ -42,7 +58,7 @@ body {
   align-items: center;
   flex-wrap: nowrap;
   gap: 0.75rem 1rem;
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(250, 249, 245, 0.92);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   border-bottom: 1px solid var(--border);
@@ -889,31 +905,37 @@ body {
 
 .edit-inline__cancel-btn {
   width: 100px;
-  padding: 0.35rem 0.85rem;
+  padding: 0.4rem 1rem;
   border: 1px solid var(--border);
-  border-radius: 6px;
-  background: none;
+  border-radius: 8px;
+  background: var(--bg);
   font: inherit;
   font-size: 0.875rem;
-  color: var(--muted);
+  color: var(--text);
   cursor: pointer;
+  transition: background 0.12s;
+}
+
+.edit-inline__cancel-btn:hover {
+  background: var(--surface-soft);
 }
 
 .edit-inline__save-btn {
   width: 100px;
-  padding: 0.35rem 0.85rem;
+  padding: 0.4rem 1rem;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   background: var(--accent);
-  color: #fff;
+  color: var(--on-accent);
   font: inherit;
   font-size: 0.875rem;
   font-weight: 600;
   cursor: pointer;
+  transition: background 0.12s;
 }
 
 .edit-inline__save-btn:hover {
-  filter: brightness(1.05);
+  background: var(--accent-active);
 }
 
 .edit-inline__image-section {
@@ -935,15 +957,18 @@ body {
   width: 100%;
   padding: 0.4rem 0.65rem;
   border: 1px solid var(--border);
-  border-radius: 6px;
+  border-radius: 8px;
   font: inherit;
   font-size: 0.9rem;
-  background: #fff;
+  background: var(--bg);
+  color: var(--text);
+  transition: border-color 0.12s;
 }
 
 .edit-inline__input:focus {
-  outline: 2px solid var(--accent);
-  outline-offset: 1px;
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 15%, transparent);
 }
 
 .edit-inline__name-cell {
@@ -1379,16 +1404,19 @@ body {
   font: inherit;
   padding: 0.35rem 0.5rem;
   border: 1px solid var(--border);
-  border-radius: 6px;
-  background: #fff;
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--text);
   width: 100%;
   text-align: right;
+  transition: border-color 0.12s;
 }
 
 .amount-input:focus,
 .unit-select:focus {
-  outline: 2px solid var(--accent);
-  outline-offset: 1px;
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 15%, transparent);
 }
 
 /* Hamburger */
@@ -1611,19 +1639,111 @@ body {
   margin-bottom: 1.5rem;
 }
 
+.add-recipe__select-subtitle {
+  color: var(--muted);
+  margin: 0 0 2rem 0;
+  font-size: 1rem;
+}
+
+.add-recipe__select-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  max-width: 680px;
+}
+
+.add-recipe__card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.6rem;
+  padding: 2rem;
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface-card);
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+}
+
+.add-recipe__card:hover {
+  border-color: var(--muted-soft);
+  box-shadow: 0 4px 16px rgba(20,20,19,0.08);
+}
+
+.add-recipe__card--primary {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 8%, var(--bg));
+}
+
+.add-recipe__card--primary:hover {
+  border-color: var(--accent-active);
+  box-shadow: 0 4px 20px color-mix(in srgb, var(--accent) 20%, transparent);
+}
+
+.add-recipe__card-icon {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.add-recipe__card-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-strong);
+}
+
+.add-recipe__card--primary .add-recipe__card-title {
+  color: var(--accent);
+}
+
+.add-recipe__card-desc {
+  font-size: 0.85rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.add-recipe__mode-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.add-recipe__back-btn {
+  background: none;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 0.9rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.add-recipe__back-btn:hover {
+  color: var(--text);
+  background: var(--border);
+}
+
+@media (max-width: 500px) {
+  .add-recipe__select-cards {
+    grid-template-columns: 1fr;
+  }
+}
+
 .add-recipe__prompt-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.5rem;
 }
 
-.add-recipe__prompt-label {
-  font-size: 0.85rem;
+.add-recipe__prompt-title {
+  margin: 0;
+  font-size: 1rem;
   font-weight: 600;
-  color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
+  color: var(--text);
 }
 
 .add-recipe__prompt-copy {
@@ -1683,53 +1803,70 @@ body {
 }
 
 .add-recipe__input {
-  padding: 0.6rem 0.75rem;
+  padding: 10px 14px;
   border: 1px solid var(--border);
-  border-radius: 6px;
-  font-size: 0.95rem;
-  background: var(--surface);
+  border-radius: 8px;
+  font: inherit;
+  font-size: 0.9rem;
+  background: var(--bg);
   color: var(--text);
   width: 100%;
   box-sizing: border-box;
+  height: 40px;
+  transition: border-color 0.12s;
 }
 
 .add-recipe__input:focus {
   outline: none;
   border-color: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 15%, transparent);
 }
 
 .add-recipe__textarea {
-  padding: 0.6rem 0.75rem;
+  padding: 10px 14px;
   border: 1px solid var(--border);
-  border-radius: 6px;
-  font-size: 0.85rem;
+  border-radius: 8px;
+  font: inherit;
+  font-size: 0.875rem;
   font-family: monospace;
-  background: var(--surface);
+  background: var(--bg);
   color: var(--text);
   width: 100%;
   box-sizing: border-box;
   resize: vertical;
+  transition: border-color 0.12s;
 }
 
 .add-recipe__textarea:focus {
   outline: none;
   border-color: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 15%, transparent);
 }
 
 .add-recipe__confirm-btn {
   align-self: flex-start;
-  padding: 0.6rem 1.5rem;
+  padding: 12px 20px;
+  height: 40px;
   background: var(--accent);
-  color: #fff;
+  color: var(--on-accent);
   border: none;
-  border-radius: 6px;
-  font-size: 0.95rem;
+  border-radius: 8px;
+  font: inherit;
+  font-size: 0.875rem;
   font-weight: 600;
   cursor: pointer;
+  transition: background 0.12s;
+  display: flex;
+  align-items: center;
+}
+
+.add-recipe__confirm-btn:hover:not(:disabled) {
+  background: var(--accent-active);
 }
 
 .add-recipe__confirm-btn:disabled {
-  opacity: 0.4;
+  background: var(--accent-disabled);
+  color: var(--muted);
   cursor: default;
 }
 
@@ -1749,17 +1886,24 @@ body {
 
 .add-recipe__load-btn {
   align-self: flex-start;
-  padding: 0.5rem 1.2rem;
-  background: #fff;
+  padding: 12px 20px;
+  height: 40px;
+  background: var(--bg);
   color: var(--text);
   border: 1px solid var(--border);
-  border-radius: 6px;
-  font-size: 0.9rem;
+  border-radius: 8px;
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 500;
   cursor: pointer;
+  transition: background 0.12s, border-color 0.12s;
+  display: flex;
+  align-items: center;
 }
 
 .add-recipe__load-btn:hover:not(:disabled) {
-  background: var(--bg-alt);
+  background: var(--surface-soft);
+  border-color: var(--accent);
 }
 
 .add-recipe__load-btn:disabled {
@@ -1802,17 +1946,28 @@ body {
 
 .add-recipe__merge-btn {
   align-self: flex-start;
-  padding: 0.55rem 1.2rem;
+  padding: 12px 20px;
+  height: 40px;
   background: var(--accent);
-  color: #fff;
+  color: var(--on-accent);
   border: none;
-  border-radius: 6px;
-  font-size: 0.9rem;
+  border-radius: 8px;
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
   cursor: pointer;
+  transition: background 0.12s;
+  display: flex;
+  align-items: center;
+}
+
+.add-recipe__merge-btn:hover:not(:disabled) {
+  background: var(--accent-active);
 }
 
 .add-recipe__merge-btn:disabled {
-  opacity: 0.4;
+  background: var(--accent-disabled);
+  color: var(--muted);
   cursor: default;
 }
 
@@ -1987,18 +2142,17 @@ body {
 }
 
 .modal__btn {
-  padding: 0.5rem 1.25rem;
+  padding: 10px 20px;
+  height: 40px;
   border-radius: 8px;
   border: none;
   font: inherit;
-  font-size: 0.9rem;
+  font-size: 0.875rem;
   font-weight: 600;
   cursor: pointer;
-  transition: opacity 0.15s;
-}
-
-.modal__btn:hover {
-  opacity: 0.85;
+  transition: background 0.12s;
+  display: flex;
+  align-items: center;
 }
 
 .modal__btn:disabled {
@@ -2008,20 +2162,32 @@ body {
 
 .modal__btn--primary {
   background: var(--accent);
-  color: #fff;
+  color: var(--on-accent);
+}
+
+.modal__btn--primary:hover:not(:disabled) {
+  background: var(--accent-active);
 }
 
 .modal__btn--danger {
-  background: #dc2626;
+  background: var(--error);
   color: #fff;
 }
 
+.modal__btn--danger:hover:not(:disabled) {
+  filter: brightness(0.9);
+}
+
 .modal__btn--ghost {
-  background: none;
-  color: var(--muted);
-  font-weight: 400;
-  font-size: 0.875rem;
-  padding: 0.5rem 0.5rem;
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  font-weight: 500;
+}
+
+.modal__btn--ghost:hover:not(:disabled) {
+  background: var(--surface-soft);
+  border-color: var(--muted-soft);
 }
 
 .ing-delete-modal__list {
