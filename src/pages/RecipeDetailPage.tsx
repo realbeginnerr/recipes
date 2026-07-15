@@ -14,6 +14,7 @@ import { ingredientById } from '../data/ingredients'
 import { loadRecipesFromFirestore, convertToRecipe, deleteRecipeFromFirestore, updateRecipeInFirestore } from '../services/recipeService'
 import { loadIngredientsFromFirestore } from '../services/ingredientService'
 import type { Recipe } from '../types'
+import { Button } from '@/components/ui/button'
 
 export function RecipeDetailPage() {
   const { id } = useParams<{ id: string }>()
@@ -128,18 +129,18 @@ export function RecipeDetailPage() {
     return (
       <section className="page">
         <p className="page__empty">{language === 'ko' ? '레시피를 찾을 수 없습니다' : 'Recipe not found'}</p>
-        <button type="button" className="recipe-detail__back" onClick={() => navigate(-1)}>
+        <Button type="button" variant="ghost" size="sm" onClick={() => navigate(-1)}>
           {language === 'ko' ? '← 뒤로' : '← Back'}
-        </button>
+        </Button>
       </section>
     )
   }
 
   return (
     <section className="page">
-      <button type="button" className="recipe-detail__back" onClick={() => navigate(-1)}>
+      <Button type="button" variant="ghost" size="sm" onClick={() => navigate(-1)}>
         {language === 'ko' ? '← 뒤로' : '← Back'}
-      </button>
+      </Button>
       <RecipeTable
         recipe={recipe}
         rows={recipeStates[recipe.id] ?? []}

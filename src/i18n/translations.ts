@@ -3,8 +3,8 @@ export type Language = 'en' | 'ko'
 export const translations = {
   en: {
     appTitle: "T's recipe",
-    searchLabel: 'Search ingredients',
-    searchPlaceholder: 'Ingredient name…',
+    searchLabel: 'Search',
+    searchPlaceholder: 'Recipe or ingredient name…',
     searchButton: 'Search',
     footerCopyright:
       'Copyright © 2026 Recipe Nutrition Calculator. All rights reserved.',
@@ -36,8 +36,8 @@ export const translations = {
   },
   ko: {
     appTitle: 'T의 레시피',
-    searchLabel: '식재료 검색',
-    searchPlaceholder: '식재료 이름…',
+    searchLabel: '검색',
+    searchPlaceholder: '레시피/식재료 이름…',
     searchButton: '검색',
     footerCopyright:
       'Copyright © 2026 Recipe Nutrition Calculator. All rights reserved.',

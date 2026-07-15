@@ -3,6 +3,16 @@ import { ingredientById, ingredients } from '../data/ingredients'
 import { useLanguage } from '../context/LanguageContext'
 import { getIngredientDisplayName } from '../utils/displayNames'
 import type { Recipe, RecipeItem } from '../types'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from '@/components/ui/dialog'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
+import { UnitSelect } from './UnitSelect'
 
 type Props = {
   recipe: Recipe
@@ -61,21 +71,19 @@ export function RecipeEditModal({ recipe, onSave, onClose }: Props) {
   }
 
   return (
-    <div className="edit-modal__backdrop" onClick={onClose}>
-      <div className="edit-modal" onClick={(e) => e.stopPropagation()}>
-        <div className="edit-modal__header">
-          <h2 className="edit-modal__title">
+    <Dialog open onOpenChange={(open) => { if (!open) onClose() }}>
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle>
             {language === 'ko' ? recipe.nameKo : recipe.name}
-          </h2>
-          <button type="button" className="edit-modal__close" onClick={onClose}>✕</button>
-        </div>
+          </DialogTitle>
+        </DialogHeader>
 
-        <div className="edit-modal__body">
-          <section className="edit-modal__section">
-            <label className="edit-modal__label">이미지 URL</label>
-            <input
+        <div className="space-y-6 py-2">
+          <section className="space-y-2">
+            <label className="text-sm font-medium">이미지 URL</label>
+            <Input
               type="text"
-              className="edit-modal__input"
               value={imageUrl}
               onChange={(e) => setImageUrl(e.target.value)}
               placeholder="https://..."
@@ -89,8 +97,8 @@ export function RecipeEditModal({ recipe, onSave, onClose }: Props) {
             )}
           </section>
 
-          <section className="edit-modal__section">
-            <label className="edit-modal__label">{t.colIngredient}</label>
+          <section className="space-y-2">
+            <label className="text-sm font-medium">{t.colIngredient}</label>
             <table className="edit-modal__table">
               <thead>
                 <tr>
@@ -108,9 +116,9 @@ export function RecipeEditModal({ recipe, onSave, onClose }: Props) {
                     <tr key={item.ingredientId}>
                       <td>{getIngredientDisplayName(ing, language)}</td>
                       <td>
-                        <input
+                        <Input
                           type="number"
-                          className="amount-input"
+                          className="w-20"
                           min={0}
                           step="0.1"
                           value={item.defaultAmount}
@@ -118,24 +126,22 @@ export function RecipeEditModal({ recipe, onSave, onClose }: Props) {
                         />
                       </td>
                       <td>
-                        <select
-                          className="unit-select"
+                        <UnitSelect
                           value={item.defaultUnit}
-                          onChange={(e) => handleUnitChange(index, e.target.value)}
-                        >
-                          {ing.allowedUnits.map((unit) => (
-                            <option key={unit} value={unit}>{unit}</option>
-                          ))}
-                        </select>
+                          onValueChange={(v) => handleUnitChange(index, v)}
+                          language={language}
+                          options={ing.allowedUnits}
+                        />
                       </td>
                       <td>
-                        <button
+                        <Button
                           type="button"
-                          className="edit-modal__delete-btn"
+                          variant="ghost"
+                          size="icon-sm"
                           onClick={() => handleDelete(index)}
                         >
                           ✕
-                        </button>
+                        </Button>
                       </td>
                     </tr>
                   )
@@ -143,10 +149,9 @@ export function RecipeEditModal({ recipe, onSave, onClose }: Props) {
               </tbody>
             </table>
 
-            <div className="edit-modal__add">
-              <input
+            <div className="relative mt-2">
+              <Input
                 type="search"
-                className="edit-modal__input"
                 placeholder="식재료 검색해서 추가..."
                 value={addSearch}
                 onChange={(e) => setAddSearch(e.target.value)}
@@ -170,15 +175,15 @@ export function RecipeEditModal({ recipe, onSave, onClose }: Props) {
           </section>
         </div>
 
-        <div className="edit-modal__footer">
-          <button type="button" className="edit-modal__cancel-btn" onClick={onClose}>
+        <DialogFooter>
+          <Button variant="outline" onClick={onClose}>
             취소
-          </button>
-          <button type="button" className="edit-modal__save-btn" onClick={handleSave}>
+          </Button>
+          <Button onClick={handleSave}>
             저장
-          </button>
-        </div>
-      </div>
-    </div>
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   )
 }

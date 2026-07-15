@@ -16,6 +16,7 @@ const localImageMap: Record<string, string> = {
   '감자탕': `${base}images/감자탕.jpg`,
   '고추바사삭': `${base}images/고추바사삭.jpg`,
   '칠리콘카르네': `${base}images/칠리콘카르네.jpg`,
+  '단팥빵': `${base}images/20260710_단팥빵.jpg`,
 }
 
 function resolveImage(recipe: Recipe): string {
@@ -25,10 +26,11 @@ function resolveImage(recipe: Recipe): string {
 import { useLanguage } from '../context/LanguageContext'
 import { ingredientById } from '../data/ingredients'
 import { amountToGrams, calculateMacros } from '../utils/nutrition'
+import { trackRecipeView } from '../utils/analytics'
 
 interface Macros { carbs: number; protein: number; fat: number }
 
-const REC = { carbs: 77, protein: 33, fat: 22 }
+const REC = { carbs: 75, protein: 33, fat: 22 }
 
 function calcMacros(recipe: Recipe): Macros {
   let carbs = 0, protein = 0, fat = 0
@@ -112,6 +114,7 @@ function RecipeCard({ recipe }: { recipe: Recipe }) {
   const imageUrl = resolveImage(recipe)
 
   function handleClick() {
+    trackRecipeView(recipe.nameKo, recipe.name)
     navigate(`/recipe/${recipe.id}`)
   }
 

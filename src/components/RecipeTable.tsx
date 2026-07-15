@@ -26,6 +26,9 @@ import { IngredientSearchModal } from './IngredientSearchModal'
 import { Modal } from './Modal'
 import { TableContainer } from './TableContainer'
 import type { Recipe, RecipeItem, RecipeRowState } from '../types'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
+import { UnitSelect } from './UnitSelect'
 import {
   amountToGrams,
   calculateMacros,
@@ -88,6 +91,8 @@ export function RecipeTable({
   const effectiveDivision = !Number.isNaN(parsedDivisionInput) && parsedDivisionInput > 0 ? parsedDivisionInput : divisionCount
   const [isAddModalOpen, setIsAddModalOpen] = useState(false)
   const [isAddSideModalOpen, setIsAddSideModalOpen] = useState(false)
+  const [replaceTargetIndex, setReplaceTargetIndex] = useState<number | null>(null)
+  const [replaceSide, setReplaceSide] = useState(false)
   const [showCancelConfirm, setShowCancelConfirm] = useState(false)
   const dragItemIndex = useRef<number | null>(null)
   const dragSideItemIndex = useRef<number | null>(null)
@@ -110,6 +115,7 @@ export function RecipeTable({
   }, [isEditing])
 
   function startEditing() {
+    if (isEditing) return
     setEditImageUrl(activeRecipe.imageUrl)
     setEditLink(activeRecipe.link ?? '')
     const regularItems = activeRecipe.items.map((item) => {
@@ -181,6 +187,25 @@ export function RecipeTable({
     setNewlyAddedIds((prev) => new Set([...prev, ingredientId]))
   }
 
+  function handleReplaceIngredient(ingredientId: string) {
+    const ing = ingredientById.get(ingredientId)
+    if (!ing) return
+    if (replaceSide) {
+      setEditSideItems((prev) => prev.map((item, i) => {
+        if (i !== replaceTargetIndex) return item
+        const unit = ing.allowedUnits.includes(item.defaultUnit) ? item.defaultUnit : ing.allowedUnits[0]
+        return { ...item, ingredientId, defaultUnit: unit }
+      }))
+    } else {
+      setEditItems((prev) => prev.map((item, i) => {
+        if (i !== replaceTargetIndex) return item
+        const unit = ing.allowedUnits.includes(item.defaultUnit) ? item.defaultUnit : ing.allowedUnits[0]
+        return { ...item, ingredientId, defaultUnit: unit }
+      }))
+    }
+    setReplaceTargetIndex(null)
+  }
+
   function handleAddSideIngredient(ingredientId: string) {
     if (editSideItems.some((item) => item.ingredientId === ingredientId)) return
     const ing = ingredientById.get(ingredientId)
@@ -203,7 +228,7 @@ export function RecipeTable({
   }
 
 
-  const recommended = { carbs: 77, protein: 33, fat: 22 }
+  const recommended = { carbs: 75, protein: 33, fat: 22 }
 
   function macroColor(value: number, target: number): string {
     const diff = Math.abs(value - target)
@@ -282,14 +307,12 @@ export function RecipeTable({
           </button>}
           {isEditing ? (
             <div className="recipe-block__title-edit">
-              <input
-                className="recipe-block__title-input"
+              <Input
                 value={editNameKo}
                 onChange={(e) => setEditNameKo(e.target.value)}
                 placeholder="한글 이름"
               />
-              <input
-                className="recipe-block__title-input"
+              <Input
                 value={editName}
                 onChange={(e) => setEditName(e.target.value)}
                 placeholder="English name"
@@ -326,27 +349,27 @@ export function RecipeTable({
               </button>
             )}
             {!isEditing && (
-              <button type="button" className="edit-inline__edit-btn recipe-block__edit-btn--inline" onClick={startEditing}>
+              <Button type="button" variant="ghost" size="icon-sm" className="recipe-block__edit-btn--inline" onClick={startEditing}>
                 ✏️
-              </button>
+              </Button>
             )}
           </div>
         </div>
         <div className="recipe-block__edit-actions">
           {isEditing && (
             <>
-              <button type="button" className="edit-inline__cancel-btn" onClick={handleCancel}>
+              <Button type="button" variant="outline" size="sm" onClick={handleCancel}>
                 {language === 'ko' ? '취소' : 'Cancel'}
-              </button>
-              <button type="button" className="edit-inline__save-btn" onClick={handleSave}>
+              </Button>
+              <Button type="button" size="sm" onClick={handleSave}>
                 {language === 'ko' ? '저장' : 'Save'}
-              </button>
+              </Button>
             </>
           )}
           {!isEditing && (
-            <button type="button" className="edit-inline__edit-btn recipe-block__edit-btn--corner" onClick={startEditing}>
+            <Button type="button" variant="ghost" size="icon-sm" className="recipe-block__edit-btn--corner" onClick={startEditing}>
               ✏️
-            </button>
+            </Button>
           )}
         </div>
       </div>
@@ -356,9 +379,8 @@ export function RecipeTable({
           <label className="edit-inline__link-label">
             {language === 'ko' ? '링크' : 'Link'}
           </label>
-          <input
+          <Input
             type="url"
-            className="add-recipe__input"
             value={editLink}
             onChange={(e) => setEditLink(e.target.value)}
             placeholder="https://..."
@@ -378,7 +400,18 @@ export function RecipeTable({
               <th>{t.colFat}</th>
               {isEditing && <th className="edit-inline__order-cell"></th>}
               {isEditing && <th className="edit-inline__delete-cell"></th>}
-              {isEditing && <th className="edit-inline__delete-cell"></th>}
+              {isEditing && (
+                <th className="edit-inline__delete-cell">
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon-sm"
+                    title={language === 'ko' ? '전체 삭제' : 'Delete all'}
+                    onClick={() => { setEditItems([]); setEditSideItems([]) }}
+                    className="text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+                  >✕</Button>
+                </th>
+              )}
             </tr>
           </thead>
           <tbody>
@@ -411,13 +444,18 @@ export function RecipeTable({
                       onDragEnd={() => { dragItemIndex.current = null; setDragOverIndex(null) }}
                       aria-label="Drag to reorder"
                     >⠿</td>
-                    <td style={{ fontWeight: isNew ? 700 : undefined }}>
+                    <td
+                      className="edit-inline__replace-cell"
+                      style={{ fontWeight: isNew ? 700 : undefined }}
+                      onClick={() => { setReplaceSide(false); setReplaceTargetIndex(index) }}
+                      title={language === 'ko' ? '클릭하여 식재료 교체' : 'Click to replace ingredient'}
+                    >
                       {getIngredientDisplayName(ingredient, language)}
                     </td>
                     <td>
-                      <input
+                      <Input
                         type="number"
-                        className="amount-input"
+                        className="h-7 w-20 text-sm"
                         min={0}
                         step="0.1"
                         value={item.defaultAmount}
@@ -425,56 +463,25 @@ export function RecipeTable({
                       />
                     </td>
                     <td>
-                      <select
-                        className="unit-select"
+                      <UnitSelect
                         value={item.defaultUnit}
-                        onFocus={startEditing}
-                        onChange={(e) => handleEditUnitChange(index, e.target.value)}
-                      >
-                        {language === 'ko' ? (
-                          <>
-                            <option value="g">g</option>
-                            <option value="ml">ml</option>
-                            <option value="T">T</option>
-                            <option value="t">t</option>
-                            <option value="컵">컵</option>
-                            <option value="개">개</option>
-                            <option value="캔">캔</option>
-                            <option value="팩">팩</option>
-                            <option value="꼬집">꼬집</option>
-                            <option value="oz">oz</option>
-                            <option value="lbs">lbs</option>
-                            <option value="">선택안함</option>
-                          </>
-                        ) : (
-                          <>
-                            <option value="oz">oz</option>
-                            <option value="lbs">lbs</option>
-                            <option value="tbsp">tbsp</option>
-                            <option value="tsp">tsp</option>
-                            <option value="cup">cup</option>
-                            <option value="each">each</option>
-                            <option value="can">can</option>
-                            <option value="pack">pack</option>
-                            <option value="pinch">pinch</option>
-                            <option value="g">g</option>
-                            <option value="ml">ml</option>
-                            <option value="">N/A</option>
-                          </>
-                        )}
-                      </select>
+                        onValueChange={(v) => handleEditUnitChange(index, v)}
+                        language={language}
+                      />
                     </td>
                     <td>{formatMacro(macros.carbs)}</td>
                     <td>{formatMacro(macros.protein)}</td>
                     <td>{formatMacro(macros.fat)}</td>
                     <td className="edit-inline__delete-cell">
-                      <button
+                      <Button
                         type="button"
-                        className="edit-inline__delete-btn"
+                        variant="ghost"
+                        size="icon-sm"
                         onClick={() => handleDeleteItem(index)}
+                        className="text-muted-foreground hover:text-destructive hover:bg-destructive/10"
                       >
                         ✕
-                      </button>
+                      </Button>
                     </td>
                   </tr>
                 )
@@ -497,9 +504,9 @@ export function RecipeTable({
                   >
                     <td>{getIngredientDisplayName(ingredient, language)}</td>
                     <td>
-                      <input
+                      <Input
                         type="number"
-                        className="amount-input"
+                        className="h-7 w-20 text-sm"
                         min={0}
                         step="0.1"
                         value={formatAmount(row.amount)}
@@ -510,46 +517,11 @@ export function RecipeTable({
                       />
                     </td>
                     <td>
-                      <select
-                        className="unit-select"
+                      <UnitSelect
                         value={row.unit}
-                        onFocus={startEditing}
-                        onChange={(event) =>
-                          onUnitChange(row.ingredientId, event.target.value)
-                        }
-                      >
-                        {language === 'ko' ? (
-                          <>
-                            <option value="g">g</option>
-                            <option value="ml">ml</option>
-                            <option value="T">T</option>
-                            <option value="t">t</option>
-                            <option value="컵">컵</option>
-                            <option value="개">개</option>
-                            <option value="캔">캔</option>
-                            <option value="팩">팩</option>
-                            <option value="꼬집">꼬집</option>
-                            <option value="oz">oz</option>
-                            <option value="lbs">lbs</option>
-                            <option value="">선택안함</option>
-                          </>
-                        ) : (
-                          <>
-                            <option value="oz">oz</option>
-                            <option value="lbs">lbs</option>
-                            <option value="tbsp">tbsp</option>
-                            <option value="tsp">tsp</option>
-                            <option value="cup">cup</option>
-                            <option value="each">each</option>
-                            <option value="can">can</option>
-                            <option value="pack">pack</option>
-                            <option value="pinch">pinch</option>
-                            <option value="g">g</option>
-                            <option value="ml">ml</option>
-                            <option value="">N/A</option>
-                          </>
-                        )}
-                      </select>
+                        onValueChange={(v) => { startEditing(); onUnitChange(row.ingredientId, v) }}
+                        language={language}
+                      />
                     </td>
                     <td>{formatMacro(macros.carbs)}</td>
                     <td>{formatMacro(macros.protein)}</td>
@@ -575,9 +547,9 @@ export function RecipeTable({
                 {language === 'en' ? (
                   <>
                     {t.divideByMeals}{' '}
-                    <input
+                    <Input
                       type="number"
-                      className="amount-input"
+                      className="h-7 w-16 text-sm inline-block"
                       min={1}
                       step="1"
                       value={divisionInput}
@@ -597,15 +569,14 @@ export function RecipeTable({
                           setDivisionInput(String(divisionCount))
                         }
                       }}
-                      style={{ width: '60px', display: 'inline-block' }}
                     />{' '}
                     {t.meals}
                   </>
                 ) : (
                   <>
-                    <input
+                    <Input
                       type="number"
-                      className="amount-input"
+                      className="h-7 w-16 text-sm inline-block"
                       min={1}
                       step="1"
                       value={divisionInput}
@@ -625,7 +596,6 @@ export function RecipeTable({
                           setDivisionInput(String(divisionCount))
                         }
                       }}
-                      style={{ width: '60px', display: 'inline-block' }}
                     />{' '}
                     {t.divideByMeals}
                   </>
@@ -642,40 +612,6 @@ export function RecipeTable({
               const ing = isRice ? null : ingredientById.get(item.ingredientId)
               if (!isRice && !ing) return null
               const macros = computeSideMacros(item)
-              const unitOptions = isRice ? (
-                <>
-                  <option value="g">g</option>
-                  <option value="oz">oz</option>
-                </>
-              ) : language === 'ko' ? (
-                <>
-                  <option value="g">g</option>
-                  <option value="ml">ml</option>
-                  <option value="T">T</option>
-                  <option value="t">t</option>
-                  <option value="컵">컵</option>
-                  <option value="개">개</option>
-                  <option value="캔">캔</option>
-                  <option value="팩">팩</option>
-                  <option value="꼬집">꼬집</option>
-                  <option value="oz">oz</option>
-                  <option value="lbs">lbs</option>
-                </>
-              ) : (
-                <>
-                  <option value="oz">oz</option>
-                  <option value="lbs">lbs</option>
-                  <option value="tbsp">tbsp</option>
-                  <option value="tsp">tsp</option>
-                  <option value="cup">cup</option>
-                  <option value="each">each</option>
-                  <option value="can">can</option>
-                  <option value="pack">pack</option>
-                  <option value="pinch">pinch</option>
-                  <option value="g">g</option>
-                  <option value="ml">ml</option>
-                </>
-              )
               return (
                 <tr key={item.ingredientId} className="recipe-table__multigrain-row">
                   {isEditing && (
@@ -700,48 +636,70 @@ export function RecipeTable({
                       aria-label="Drag to reorder"
                     >⠿</td>
                   )}
-                  <td>
+                  <td
+                    className={!isRice && isEditing ? 'edit-inline__replace-cell' : undefined}
+                    onClick={!isRice && isEditing ? () => { setReplaceSide(true); setReplaceTargetIndex(index) } : undefined}
+                    title={!isRice && isEditing ? (language === 'ko' ? '클릭하여 식재료 교체' : 'Click to replace ingredient') : undefined}
+                  >
                     {isRice
                       ? (language === 'ko' ? '잡곡밥 (쌀:잡곡=2:1)' : 'Multigrain rice (rice:grains=2:1)')
                       : getIngredientDisplayName(ing!, language)}
                   </td>
                   <td>
-                    <input
-                      type="number"
-                      className="amount-input"
-                      min={0}
-                      step="0.1"
-                      value={isEditing ? item.defaultAmount : formatAmount(item.defaultAmount)}
-                      onFocus={startEditing}
-                      onChange={(e) => {
-                        const parsed = e.target.value === '' ? 0 : Number.parseFloat(e.target.value)
-                        if (!Number.isNaN(parsed) && parsed >= 0) {
-                          if (isEditing) handleSideAmountChange(index, e.target.value)
-                          else if (isRice) onMultigrainRiceAmountChange(parsed)
-                        }
-                      }}
-                      readOnly={!isEditing && !isRice}
-                    />
+                    {isEditing ? (
+                      <Input
+                        type="number"
+                        className="h-7 w-20 text-sm"
+                        min={0}
+                        step="0.1"
+                        value={item.defaultAmount}
+                        onChange={(e) => handleSideAmountChange(index, e.target.value)}
+                      />
+                    ) : (
+                      <Input
+                        type="number"
+                        className="h-7 w-20 text-sm"
+                        min={0}
+                        step="0.1"
+                        value={formatAmount(item.defaultAmount)}
+                        onFocus={startEditing}
+                        onChange={(e) => {
+                          const parsed = e.target.value === '' ? 0 : Number.parseFloat(e.target.value)
+                          if (!Number.isNaN(parsed) && parsed >= 0 && isRice) onMultigrainRiceAmountChange(parsed)
+                        }}
+                        readOnly={!isRice}
+                      />
+                    )}
                   </td>
                   <td>
-                    <select
-                      className="unit-select"
-                      value={item.defaultUnit}
-                      onFocus={startEditing}
-                      onChange={(e) => {
-                        if (isEditing) handleSideUnitChange(index, e.target.value)
-                        else if (isRice) onMultigrainRiceUnitChange(e.target.value)
-                      }}
-                    >
-                      {unitOptions}
-                    </select>
+                    {isEditing ? (
+                      <UnitSelect
+                        value={item.defaultUnit}
+                        onValueChange={(v) => handleSideUnitChange(index, v)}
+                        language={language}
+                        riceOnly={isRice}
+                      />
+                    ) : (
+                      <UnitSelect
+                        value={item.defaultUnit}
+                        onValueChange={(v) => { startEditing(); if (isRice) onMultigrainRiceUnitChange(v) }}
+                        language={language}
+                        riceOnly={isRice}
+                      />
+                    )}
                   </td>
                   <td className="macro">{formatMacro(macros.carbs)}</td>
                   <td className="macro">{formatMacro(macros.protein)}</td>
                   <td className="macro">{formatMacro(macros.fat)}</td>
                   {isEditing && (
                     <td className="edit-inline__delete-cell">
-                      <button type="button" className="edit-inline__delete-btn" onClick={() => handleDeleteSideItem(index)}>✕</button>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon-sm"
+                        onClick={() => handleDeleteSideItem(index)}
+                        className="text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+                      >✕</Button>
                     </td>
                   )}
                 </tr>
@@ -750,14 +708,15 @@ export function RecipeTable({
             {isEditing && !editSideItems.some((i) => i.ingredientId === MULTIGRAIN_ID) && (
               <tr className="recipe-table__multigrain-row">
                 <td colSpan={8}>
-                  <button
+                  <Button
                     type="button"
-                    className="add-food-btn"
-                    style={{ fontSize: '0.8rem', padding: '0.3rem 0.75rem', background: 'none', color: 'var(--muted)', border: '1px solid var(--border)' }}
+                    variant="outline"
+                    size="sm"
+                    className="text-muted-foreground text-xs"
                     onClick={() => setEditSideItems((prev) => [...prev, { ingredientId: MULTIGRAIN_ID, defaultAmount: multigrainRiceAmount, defaultUnit: multigrainRiceUnit }])}
                   >
                     + {language === 'ko' ? '잡곡밥 추가' : 'Add multigrain rice'}
-                  </button>
+                  </Button>
                 </td>
               </tr>
             )}
@@ -797,7 +756,7 @@ export function RecipeTable({
               <td colSpan={3}>
                 <strong>
                   {t.recommendedPerMeal}{' '}
-                  <span className="recipe-table__kcal">(kcal: {Math.round(77 * 4 + 33 * 4 + 22 * 9)})</span>
+                  <span className="recipe-table__kcal">(kcal: {Math.round(75 * 4 + 33 * 4 + 22 * 9)})</span>
                   <button
                     type="button"
                     className="recipe-table__info-btn"
@@ -806,7 +765,7 @@ export function RecipeTable({
                   >ⓘ</button>
                 </strong>
               </td>
-              <td className="macro"><strong>77.0</strong></td>
+              <td className="macro"><strong>75.0</strong></td>
               <td className="macro"><strong>33.0</strong></td>
               <td className="macro"><strong>22.0</strong></td>
               {isEditing && <td></td>}
@@ -827,6 +786,17 @@ export function RecipeTable({
         onClose={() => setIsAddSideModalOpen(false)}
         onIngredientSelect={(ingredient) => handleAddSideIngredient(ingredient.id)}
         existingIngredientIds={new Set(editSideItems.map((i) => i.ingredientId))}
+      />
+      <IngredientSearchModal
+        isOpen={replaceTargetIndex !== null}
+        onClose={() => setReplaceTargetIndex(null)}
+        onIngredientSelect={(ingredient) => handleReplaceIngredient(ingredient.id)}
+        title={language === 'ko' ? '식재료 교체하기' : 'Replace Ingredient'}
+        existingIngredientIds={new Set(
+          (replaceSide ? editSideItems : editItems)
+            .filter((_, i) => i !== replaceTargetIndex)
+            .map((i) => i.ingredientId)
+        )}
       />
 
       <Modal
@@ -873,7 +843,7 @@ export function RecipeTable({
         const mealCarbs = totals.carbs / effectiveDivision + sideTotals.carbs
         const mealProtein = totals.protein / effectiveDivision + sideTotals.protein
         const mealFat = totals.fat / effectiveDivision + sideTotals.fat
-        const REC = { carbs: 77, protein: 33, fat: 22 }
+        const REC = { carbs: 75, protein: 33, fat: 22 }
         const bars = [
           { label: language === 'ko' ? '탄수화물' : 'Carbs', value: mealCarbs, rec: REC.carbs },
           { label: language === 'ko' ? '단백질' : 'Protein', value: mealProtein, rec: REC.protein },
@@ -905,20 +875,20 @@ export function RecipeTable({
       {!isCollapsed && isEditing && (
         <div className="edit-bottom-bar">
           <div className="edit-bottom-bar__add">
-            <button type="button" className="add-food-btn" style={{ background: 'none', color: 'var(--muted)', border: '1px solid var(--border)' }} onClick={() => setIsAddSideModalOpen(true)}>
+            <Button type="button" variant="outline" size="sm" onClick={() => setIsAddSideModalOpen(true)}>
               + {language === 'ko' ? '부재료 추가' : 'Add side ingredient'}
-            </button>
-            <button type="button" className="add-food-btn" onClick={() => setIsAddModalOpen(true)}>
+            </Button>
+            <Button type="button" size="sm" onClick={() => setIsAddModalOpen(true)}>
               + {language === 'ko' ? '주재료 추가' : 'Add main ingredient'}
-            </button>
+            </Button>
           </div>
           <div className="edit-bottom-bar__actions">
-            <button type="button" className="edit-inline__cancel-btn" onClick={handleCancel}>
+            <Button type="button" variant="outline" size="sm" onClick={handleCancel}>
               {language === 'ko' ? '취소' : 'Cancel'}
-            </button>
-            <button type="button" className="edit-inline__save-btn" onClick={handleSave}>
+            </Button>
+            <Button type="button" size="sm" onClick={handleSave}>
               {language === 'ko' ? '저장' : 'Save'}
-            </button>
+            </Button>
           </div>
         </div>
       )}

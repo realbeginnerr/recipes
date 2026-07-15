@@ -16,10 +16,13 @@ export function ingredientMatchesSearch(
   return names.some((name) => name.toLowerCase().includes(normalized))
 }
 
-export function recipeContainsIngredient(
+export function recipeMatchesSearch(
   recipe: Recipe,
   query: string,
 ): boolean {
+  const normalized = query.toLowerCase()
+  if (recipe.nameKo.toLowerCase().includes(normalized)) return true
+  if (recipe.name.toLowerCase().includes(normalized)) return true
   return recipe.items.some((item) => {
     const ingredient = ingredientById.get(item.ingredientId)
     return ingredient ? ingredientMatchesSearch(ingredient, query) : false

@@ -1,4 +1,12 @@
 import type { ReactNode } from 'react'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from '@/components/ui/dialog'
+import { Button } from '@/components/ui/button'
 
 type ModalAction = {
   label: string
@@ -16,30 +24,38 @@ type ModalProps = {
   actions?: ModalAction[]
 }
 
+function toButtonVariant(v?: 'primary' | 'danger' | 'ghost') {
+  if (v === 'danger') return 'destructive' as const
+  if (v === 'ghost') return 'outline' as const
+  return 'default' as const
+}
+
 export function Modal({ isOpen, onClose, title, message, children, actions }: ModalProps) {
-  if (!isOpen) return null
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal" onClick={(e) => e.stopPropagation()}>
-        {title && <p className="modal__title">{title}</p>}
-        {message && <p className="modal__message">{message}</p>}
+    <Dialog open={isOpen} onOpenChange={(open) => { if (!open && onClose) onClose() }}>
+      <DialogContent showCloseButton={!!onClose}>
+        {title && (
+          <DialogHeader>
+            <DialogTitle>{title}</DialogTitle>
+          </DialogHeader>
+        )}
+        {message && <p className="text-sm text-foreground">{message}</p>}
         {children}
         {actions && actions.length > 0 && (
-          <div className="modal__actions">
+          <DialogFooter>
             {actions.map((action) => (
-              <button
+              <Button
                 key={action.label}
-                type="button"
-                className={`modal__btn modal__btn--${action.variant ?? 'primary'}`}
+                variant={toButtonVariant(action.variant)}
                 onClick={action.onClick}
                 disabled={action.disabled}
               >
                 {action.label}
-              </button>
+              </Button>
             ))}
-          </div>
+          </DialogFooter>
         )}
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   )
 }

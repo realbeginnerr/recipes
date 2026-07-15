@@ -1,5 +1,6 @@
 import { type FormEvent, useEffect, useRef, useState } from 'react'
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
+import { trackSignupClick } from '../utils/analytics'
 import {
   LanguageProvider,
   useLanguage,
@@ -7,6 +8,8 @@ import {
 import { SearchProvider, useSearch } from '../context/SearchContext'
 import { AdminProvider, useAdmin } from '../context/AdminContext'
 import { LanguageToggle } from './LanguageToggle'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
 
 function HeaderTitle() {
   const navigate = useNavigate()
@@ -21,7 +24,7 @@ function HeaderTitle() {
   return (
     <button
       type="button"
-      className="header__title-btn"
+      className="m-0 p-0 border-none bg-transparent text-[1.05rem] font-bold text-foreground whitespace-nowrap flex-shrink-0 cursor-pointer text-left hover:text-primary transition-colors"
       onClick={handleClick}
     >
       {t.appTitle}
@@ -60,10 +63,14 @@ function AdminButton() {
   }
 
   return (
-    <div className="admin-btn-wrap">
+    <div className="relative">
       <button
         type="button"
-        className={`header-nav__link admin-nav-btn${isAdmin ? ' admin-nav-btn--active' : ''}`}
+        className={`px-[0.65rem] py-[0.35rem] rounded-md text-sm bg-transparent border-none cursor-pointer transition-all whitespace-nowrap ${
+          isAdmin
+            ? 'opacity-100 text-primary font-semibold'
+            : 'opacity-10 text-foreground hover:opacity-100 hover:text-primary'
+        }`}
         onClick={handleClick}
       >
         {isAdmin
@@ -71,21 +78,24 @@ function AdminButton() {
           : (language === 'ko' ? '관리자' : 'Admin')}
       </button>
       {showInput && !isAdmin && (
-        <form className="admin-pin-form" onSubmit={handleSubmit}>
-          <input
+        <form
+          className="absolute top-[calc(100%+6px)] left-0 flex items-center gap-[0.4rem] bg-card border border-border rounded-lg px-3 py-2 shadow-[var(--shadow)] z-[200] whitespace-nowrap max-[768px]:fixed max-[768px]:top-12 max-[768px]:left-1/2 max-[768px]:-translate-x-1/2"
+          onSubmit={handleSubmit}
+        >
+          <Input
             ref={inputRef}
             type="password"
-            className="admin-pin-input"
             value={pin}
             onChange={(e) => { setPin(e.target.value); setError(false) }}
             placeholder="PIN"
             maxLength={20}
+            className="w-28"
           />
-          <button type="submit" className="admin-pin-submit">
+          <Button type="submit" size="sm">
             {language === 'ko' ? '확인' : 'OK'}
-          </button>
+          </Button>
           {error && (
-            <span className="admin-pin-error">
+            <span className="text-xs text-destructive">
               {language === 'ko' ? '잘못된 PIN' : 'Wrong PIN'}
             </span>
           )}
@@ -108,19 +118,23 @@ function NavMenu() {
   ]
 
   return (
-    <nav className="header-nav">
+    <nav className="flex items-center gap-1 flex-shrink-0 max-[1079px]:hidden">
       {links.map((link) => (
         <NavLink
           key={link.to}
           to={link.to}
           end={link.end}
           className={({ isActive }) =>
-            `header-nav__link${isActive ? ' header-nav__link--active' : ''}`
+            `px-[0.65rem] py-[0.35rem] rounded-md text-sm no-underline whitespace-nowrap transition-colors ${
+              isActive
+                ? 'text-primary font-semibold'
+                : 'text-muted-foreground hover:text-primary'
+            }`
           }
           onClick={link.onClick}
         >
           {link.label}
-          {link.locked && <span className="nav-lock-icon">🔒</span>}
+          {link.locked && <span className="ml-1 text-[0.75em] opacity-50">🔒</span>}
         </NavLink>
       ))}
       <AdminButton />
@@ -133,7 +147,11 @@ function SignupLink() {
   const { isAdmin } = useAdmin()
   if (isAdmin) return null
   return (
-    <NavLink to="/signup" className="header-signup-btn">
+    <NavLink
+      to="/signup"
+      className="flex-shrink-0 px-[1.1rem] py-2 bg-primary text-primary-foreground rounded-md text-sm font-semibold whitespace-nowrap no-underline hover:brightness-105 transition-all"
+      onClick={trackSignupClick}
+    >
       {language === 'ko' ? '회원가입 신청' : 'Sign Up'}
     </NavLink>
   )
@@ -149,20 +167,24 @@ function HeaderSearch() {
   }
 
   return (
-    <form className="header-search" onSubmit={handleSubmit}>
-      <label className="header-search__label" htmlFor="ingredient-search">
+    <form className="flex items-center gap-2 ml-auto flex-shrink min-w-0" onSubmit={handleSubmit}>
+      <label className="sr-only" htmlFor="ingredient-search">
         {t.searchLabel}
       </label>
-      <div className="header-search__input-wrap">
-        <input
+      <div className="relative flex items-center">
+        <Input
           id="ingredient-search"
           type="search"
-          className="header-search__input"
+          className="w-[min(220px,40vw)] pr-8"
           placeholder={t.searchPlaceholder}
           value={searchInput}
           onChange={(event) => setSearchInput(event.target.value)}
         />
-        <button type="submit" className="header-search__button" aria-label={t.searchButton}>
+        <button
+          type="submit"
+          className="absolute right-0 top-0 bottom-0 flex items-center justify-center w-8 border-none bg-transparent text-primary cursor-pointer hover:brightness-105"
+          aria-label={t.searchButton}
+        >
           <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <circle cx="11" cy="11" r="8"/>
             <line x1="21" y1="21" x2="16.65" y2="16.65"/>
@@ -200,39 +222,41 @@ function HamburgerMenu() {
   ]
 
   return (
-    <div className="hamburger" ref={containerRef}>
+    <div className="relative min-[1080px]:hidden" ref={containerRef}>
       <button
         type="button"
-        className="hamburger__btn"
+        className="flex flex-col justify-center items-center gap-[5px] w-8 h-8 bg-transparent border-none cursor-pointer p-1"
         aria-label="Menu"
         aria-expanded={open}
         onClick={() => setOpen((prev) => !prev)}
       >
-        <span className="hamburger__bar" />
-        <span className="hamburger__bar" />
-        <span className="hamburger__bar" />
+        <span className="block w-5 h-[2px] bg-foreground rounded" />
+        <span className="block w-5 h-[2px] bg-foreground rounded" />
+        <span className="block w-5 h-[2px] bg-foreground rounded" />
       </button>
       {open && (
-        <>
-          <div className="hamburger__menu">
-            <div className="hamburger__divider" />
-            {links.map((link) => (
-              <button
-                key={link.to}
-                type="button"
-                className="hamburger__title-btn"
-                onClick={link.onClick}
-              >
-                {link.label}
-                {link.locked && <span className="nav-lock-icon">🔒</span>}
-              </button>
-            ))}
-            <div className="hamburger__divider" />
+        <div className="absolute top-[calc(100%+8px)] right-0 min-w-[180px] bg-card border border-border rounded-xl shadow-lg z-[200] py-2 flex flex-col gap-1">
+          <div className="h-px bg-border mx-3 my-1" />
+          {links.map((link) => (
+            <button
+              key={link.to}
+              type="button"
+              className="w-full text-left px-4 py-2 text-sm text-foreground bg-transparent border-none cursor-pointer hover:bg-muted hover:text-primary transition-colors"
+              onClick={link.onClick}
+            >
+              {link.label}
+              {link.locked && <span className="ml-1 text-[0.75em] opacity-50">🔒</span>}
+            </button>
+          ))}
+          <div className="h-px bg-border mx-3 my-1" />
+          <div className="px-3 py-1">
             <LanguageToggle />
-            <div className="hamburger__divider" />
+          </div>
+          <div className="h-px bg-border mx-3 my-1" />
+          <div className="px-3 py-1">
             <AdminButton />
           </div>
-        </>
+        </div>
       )}
     </div>
   )
@@ -242,8 +266,8 @@ function LayoutContent() {
   const { t } = useLanguage()
 
   return (
-    <div className="app">
-      <header className="header">
+    <div className="min-h-screen flex flex-col">
+      <header className="sticky top-0 z-[100] flex items-center flex-nowrap gap-x-4 gap-y-3 bg-[rgba(250,249,245,0.92)] backdrop-blur-sm border-b border-border shadow-[var(--shadow)] px-5 py-[0.65rem]">
         <HeaderTitle />
         <NavMenu />
         <HeaderSearch />
@@ -251,11 +275,11 @@ function LayoutContent() {
         <LanguageToggle />
         <HamburgerMenu />
       </header>
-      <main className="main">
+      <main className="flex-1 px-5 pt-[3.75rem] max-w-[900px] w-full mx-auto">
         <Outlet />
       </main>
-      <footer className="footer">
-        <p className="footer__text">{t.footerCopyright}</p>
+      <footer className="mt-[130px] bg-card border-t border-border px-5 py-4 text-center">
+        <p className="m-0 text-sm text-muted-foreground">{t.footerCopyright}</p>
       </footer>
     </div>
   )

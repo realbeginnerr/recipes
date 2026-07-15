@@ -11,9 +11,15 @@ import {
   type FirestoreIngredient,
 } from '../services/ingredientService'
 import { Toast, useToast } from '../components/Toast'
+import { Modal } from '../components/Modal'
 import { IngredientSearchModal } from '../components/IngredientSearchModal'
+import { trackAddRecipeModeSelected, trackAddRecipeCompleted, trackIngredientSearchOpened } from '../utils/analytics'
 import { ingredientById } from '../data/ingredients'
 import type { Ingredient } from '../types'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
+import { Textarea } from '@/components/ui/textarea'
+import { UnitSelect } from '../components/UnitSelect'
 
 type ParsedRow = {
   name: string
@@ -48,7 +54,7 @@ function parseIngredientText(text: string): ParsedRow[] {
   return text
     .split('\n')
     .map((line) => line.trim())
-    .filter((line) => line.length > 0 && !line.includes(' / '))
+    .filter((line) => line.length > 0 && !line.includes(' / ') && !line.startsWith('`'))
     .map((line) => {
       const cols = line.split('/')
       return {
@@ -85,7 +91,7 @@ function fmt(n: number): string {
   return (Math.round(n * 10) / 10).toFixed(1)
 }
 
-const RECOMMENDED = { carbs: 77, protein: 33, fat: 22 }
+const RECOMMENDED = { carbs: 75, protein: 33, fat: 22 }
 
 function macroColor(value: number, target: number): string {
   const diff = Math.abs(value - target)
@@ -317,9 +323,9 @@ export function AddRecipePage() {
     })
   }
 
-  function handleMergeRecipes() {
+  async function handleMergeRecipes() {
     const selected = savedRecipes.filter((r) => selectedRecipeIds.has(r.id ?? ''))
-    const lineMap = new Map<string, { name: string; amount: number; unit: string }>()
+    const lineMap = new Map<string, { ingredientId: string; name: string; amount: number; unit: string }>()
     for (const recipe of selected) {
       for (const item of recipe.items) {
         const ing = [...ingredientByName.values()].find((v) => v.id === item.ingredientId)
@@ -328,20 +334,51 @@ export function AddRecipePage() {
         if (existing && existing.unit === item.unit) {
           existing.amount += item.amount
         } else {
-          lineMap.set(name, { name, amount: item.amount, unit: item.unit })
+          lineMap.set(name, { ingredientId: item.ingredientId, name, amount: item.amount, unit: item.unit })
         }
       }
     }
-    const lines = [...lineMap.values()].map((r) => `${r.name}/${r.amount}/${r.unit}`)
-    setPastedText(lines.join('\n'))
-    setResolved(false)
-    setResolvedRows([])
-    setEnRows([])
+    setShowRecipeList(false)
+    setSelectedRecipeIds(new Set())
     setDataError('')
     setNameError('')
     setNameKoError('')
-    setShowRecipeList(false)
-    setSelectedRecipeIds(new Set())
+
+    if (mode === 'manual') {
+      const rows: ResolvedRow[] = [...lineMap.values()].map((entry) => {
+        const found = findIngredientByName(entry.name)
+        const macros = found ? scaledMacros(found, entry.amount, entry.unit) : { carbs: 0, protein: 0, fat: 0 }
+        return {
+          name: entry.name,
+          amount: String(entry.amount),
+          unit: entry.unit,
+          carbs: String(macros.carbs),
+          protein: String(macros.protein),
+          fat: String(macros.fat),
+          ingredientId: found?.id ?? entry.ingredientId,
+          isNew: !found,
+          displayCarbs: macros.carbs,
+          displayProtein: macros.protein,
+          displayFat: macros.fat,
+        }
+      })
+      setResolvedRows(rows)
+      setResolved(true)
+      setTranslating(true)
+      const translations = await Promise.all(rows.map((row) => translateKoToEn(row.name)))
+      setEnRows(rows.map((row, i) => ({
+        nameEn: translations[i],
+        amount: toEnAmount(Number.parseFloat(row.amount) || 0, row.unit),
+        unit: toEnUnit(row.unit),
+      })))
+      setTranslating(false)
+    } else {
+      const lines = [...lineMap.values()].map((r) => `${r.name}/${r.amount}/${r.unit}`)
+      setPastedText(lines.join('\n'))
+      setResolved(false)
+      setResolvedRows([])
+      setEnRows([])
+    }
   }
 
   function handleReset() {
@@ -424,6 +461,7 @@ export function AddRecipePage() {
         })),
       })
 
+      trackAddRecipeCompleted(mode as 'sns' | 'manual', recipeNameKo.trim())
       showToast(isKo ? '레시피가 저장되었습니다.' : 'Recipe saved!', 'success')
       setRecipeName('')
       setRecipeNameKo('')
@@ -468,9 +506,9 @@ export function AddRecipePage() {
         <tr className="recipe-table__division-row recipe-table__muted">
           <td colSpan={3}>
             {isKoTable ? (
-              <><input type="number" className="amount-input" min={1} step={1} value={divisionCount}
+              <><Input type="number" className="h-7 w-16 text-sm inline-flex" min={1} step={1} value={divisionCount}
                 onChange={(e) => { const v = Number.parseInt(e.target.value, 10); if (!Number.isNaN(v) && v > 0) setDivisionCount(v) }}
-                style={{ width: '60px', display: 'inline-block' }} />{' '}끼로 나누기</>
+              />{' '}끼로 나누기</>
             ) : (
               <>Divide into {divisionCount} meals</>
             )}
@@ -490,20 +528,25 @@ export function AddRecipePage() {
             <tr key={row.ingredientId} className="recipe-table__multigrain-row">
               <td>{isKoTable ? (ing.nameKo || ing.name) : ing.name}</td>
               <td>
-                <input type="number" className="amount-input" min={0} step={1}
+                <Input type="number" className="h-7 w-20 text-sm" min={0} step={1}
                   value={row.amount}
                   onChange={(e) => { const v = Number.parseFloat(e.target.value); if (!Number.isNaN(v) && v >= 0) setSideRows((prev) => prev.map((r) => r.ingredientId === row.ingredientId ? { ...r, amount: v } : r)) }} />
               </td>
               <td>
-                <select className="unit-select" value={row.unit} onChange={(e) => setSideRows((prev) => prev.map((r) => r.ingredientId === row.ingredientId ? { ...r, unit: e.target.value } : r))}>
-                  {ing.allowedUnits?.map((u) => <option key={u} value={u}>{u}</option>) ?? <option value={ing.baseUnit}>{ing.baseUnit}</option>}
-                </select>
+                <UnitSelect
+                  value={row.unit}
+                  onValueChange={(v) => setSideRows((prev) => prev.map((r) => r.ingredientId === row.ingredientId ? { ...r, unit: v } : r))}
+                  language={isKoTable ? 'ko' : 'en'}
+                  options={ing.allowedUnits ?? [ing.baseUnit]}
+                />
               </td>
               <td className="macro">{fmt(sideCarbs)}</td>
               <td className="macro">{fmt(sideProtein)}</td>
               <td className="macro">{fmt(sideFat)}</td>
               <td className="edit-inline__delete-cell">
-                <button type="button" className="edit-inline__delete-btn" onClick={() => setSideRows((prev) => prev.filter((r) => r.ingredientId !== row.ingredientId))}>✕</button>
+                <Button type="button" variant="ghost" size="icon-sm"
+                  className="text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+                  onClick={() => setSideRows((prev) => prev.filter((r) => r.ingredientId !== row.ingredientId))}>✕</Button>
               </td>
             </tr>
           )
@@ -534,7 +577,7 @@ export function AddRecipePage() {
         })()}
         <tr className="recipe-table__recommended">
           <td colSpan={3}><strong>{isKoTable ? '한끼 권장량' : 'Recommended per meal'}</strong></td>
-          <td className="macro"><strong>77.0</strong></td>
+          <td className="macro"><strong>75.0</strong></td>
           <td className="macro"><strong>33.0</strong></td>
           <td className="macro"><strong>22.0</strong></td>
         </tr>
@@ -587,17 +630,21 @@ export function AddRecipePage() {
           {isKo ? '어떤 방식으로 레시피를 추가하시겠어요?' : 'How would you like to add a recipe?'}
         </p>
         <div className="add-recipe__select-cards">
-          <button type="button" className="add-recipe__card add-recipe__card--primary" onClick={() => setMode('sns')}>
-            <span className="add-recipe__card-icon">📱</span>
-            <span className="add-recipe__card-title">{isKo ? 'SNS에서 레시피 추가하기' : 'Add from SNS'}</span>
-            <span className="add-recipe__card-desc">
+          <button type="button"
+            className="flex flex-col items-start gap-2 p-8 border-[1.5px] border-primary rounded-xl bg-primary/8 text-left cursor-pointer transition-all hover:shadow-md hover:border-foreground/40"
+            onClick={() => { setMode('sns'); trackAddRecipeModeSelected('sns') }}>
+            <span className="text-3xl leading-none">📱</span>
+            <span className="text-base font-semibold text-primary">{isKo ? 'SNS에서 레시피 추가하기' : 'Add from SNS'}</span>
+            <span className="text-sm text-muted-foreground leading-relaxed">
               {isKo ? 'AI 프롬프트로 영상 속 식재료를 자동 추출합니다' : 'Auto-extract ingredients from video with AI'}
             </span>
           </button>
-          <button type="button" className="add-recipe__card" onClick={() => setMode('manual')}>
-            <span className="add-recipe__card-icon">✏️</span>
-            <span className="add-recipe__card-title">{isKo ? '직접 레시피 작성하기' : 'Write manually'}</span>
-            <span className="add-recipe__card-desc">
+          <button type="button"
+            className="flex flex-col items-start gap-2 p-8 border-[1.5px] border-border rounded-xl bg-card text-left cursor-pointer transition-all hover:shadow-md hover:border-muted-foreground/40"
+            onClick={() => { setMode('manual'); trackAddRecipeModeSelected('manual') }}>
+            <span className="text-3xl leading-none">✏️</span>
+            <span className="text-base font-semibold text-foreground">{isKo ? '직접 레시피 작성하기' : 'Write manually'}</span>
+            <span className="text-sm text-muted-foreground leading-relaxed">
               {isKo ? '식재료와 영양 정보를 직접 입력합니다' : 'Enter ingredients and nutrition info manually'}
             </span>
           </button>
@@ -609,9 +656,9 @@ export function AddRecipePage() {
   return (
     <section className="page">
       <div className="add-recipe__mode-header">
-        <button type="button" className="add-recipe__back-btn" onClick={() => setMode('select')}>
-          ← {isKo ? '돌아가기' : 'Back'}
-        </button>
+        <Button type="button" variant="ghost" size="sm" onClick={() => setMode('select')}>
+          ← {isKo ? '뒤로' : 'Back'}
+        </Button>
         <h2 className="page__heading" style={{ margin: 0 }}>
           {isKo
             ? (mode === 'sns' ? 'SNS에서 레시피 추가하기' : '직접 레시피 작성하기')
@@ -660,7 +707,7 @@ export function AddRecipePage() {
                 ? '첫 줄: 레시피 제목 (한글 / English) | 이후: 식재료명/양/단위/탄수화물/단백질/지방'
                 : 'First line: recipe title (KO / EN) | Then: name/amount/unit/carbs/protein/fat'}
             </p>
-            <textarea className="add-recipe__textarea" value={pastedText} rows={8}
+            <Textarea value={pastedText} rows={8} className="font-mono text-sm"
               onChange={(e) => {
                 const text = e.target.value
                 setPastedText(text)
@@ -679,67 +726,32 @@ export function AddRecipePage() {
             {dataError && <p className="add-recipe__field-error">{dataError}</p>}
           </div>
         )}
-        <div className="add-recipe__load-section">
-          <button type="button" className="add-recipe__load-btn" onClick={handleOpenRecipeList} disabled={loadingRecipes}>
-            {loadingRecipes ? (isKo ? '불러오는 중...' : 'Loading...') : (isKo ? '기존 레시피 불러오기' : 'Load from existing recipes')}
-          </button>
-          {showRecipeList && savedRecipes.length > 0 && (
-            <>
-              <ul className="add-recipe__recipe-list">
-                {savedRecipes.map((r) => (
-                  <li key={r.id}>
-                    <label className="add-recipe__recipe-list-item">
-                      <input
-                        type="checkbox"
-                        checked={selectedRecipeIds.has(r.id ?? '')}
-                        onChange={() => handleToggleRecipe(r.id ?? '')}
-                      />
-                      {r.nameKo || r.name}
-                    </label>
-                  </li>
-                ))}
-              </ul>
-              <button
-                type="button"
-                className="add-recipe__merge-btn"
-                onClick={handleMergeRecipes}
-                disabled={selectedRecipeIds.size === 0}
-              >
-                {isKo
-                  ? `선택한 ${selectedRecipeIds.size}개 레시피 합치기`
-                  : `Merge ${selectedRecipeIds.size} selected recipe${selectedRecipeIds.size !== 1 ? 's' : ''}`}
-              </button>
-            </>
-          )}
-        </div>
 
         {mode === 'sns' && (
-          <button type="button" className="add-recipe__confirm-btn" onClick={handleConfirm} disabled={confirming}>
+          <Button type="button" onClick={handleConfirm} disabled={confirming} className="mt-2">
             {confirming ? (isKo ? '조회 중...' : 'Loading...') : (isKo ? '미리보기' : 'Preview')}
-          </button>
+          </Button>
         )}
       </div>
 
       {(mode === 'manual' || (resolved && resolvedRows.length > 0)) && (
         <div className="add-recipe__preview">
           <div className="add-recipe__preview-header">
-            <h3 className="add-recipe__preview-title">{isKo ? '미리보기' : 'Preview'}</h3>
+            {mode === 'sns' && <h3 className="add-recipe__preview-title">{isKo ? '미리보기' : 'Preview'}</h3>}
             {mode === 'sns' && (
-              <button type="button" className="edit-inline__cancel-btn" onClick={handleReset}>
+              <Button type="button" variant="outline" size="sm" onClick={handleReset}>
                 {isKo ? '다시 입력' : 'Reset'}
-              </button>
+              </Button>
             )}
           </div>
 
           <div className="recipe-block__title-edit" style={{ marginBottom: '1rem' }}>
-            <input
-              className="recipe-block__title-input"
+            <Input
               value={recipeNameKo}
               onChange={(e) => { setRecipeNameKo(e.target.value); setNameKoError('') }}
               placeholder="한글 이름"
             />
-            <input
-              className="recipe-block__title-input"
+            <Input
               value={recipeName}
               onChange={(e) => { setRecipeName(e.target.value); setNameError('') }}
               placeholder="English name"
@@ -750,175 +762,140 @@ export function AddRecipePage() {
 
           <div className="edit-inline__link-field">
             <label className="edit-inline__link-label">{isKo ? '링크 (선택)' : 'Link (optional)'}</label>
-            <input
+            <Input
               type="url"
-              className="add-recipe__input"
               value={recipeLink}
               onChange={(e) => setRecipeLink(e.target.value)}
               placeholder="https://..."
             />
           </div>
 
-          {/* 한글 테이블 */}
-          <p className="add-recipe__table-label">🇰🇷 한국어</p>
-          <div className="table-container">
-            <table className="data-table recipe-table">
-              <thead>
-                <tr>
-                  <th>식재료</th>
-                  <th>양</th>
-                  <th style={{ textAlign: 'right' }}>단위</th>
-                  <th>탄수화물</th>
-                  <th>단백질</th>
-                  <th>지방</th>
-                  <th />
-                </tr>
-              </thead>
-              <tbody>
-                {resolvedRows.map((row, i) => (
-                  <tr key={i} style={{ background: row.isNew ? '#fffbeb' : undefined }}>
-                    <td>
-                      <input
-                        className="edit-inline__input"
-                        value={row.name}
-                        onChange={(e) => handleRowNameChange(i, e.target.value)}
-                      />
-                      {row.isNew && (
-                        <span style={{ display: 'block', fontSize: '0.75rem', color: '#b45309', fontWeight: 600, marginTop: '2px' }}>
-                          새 식재료
-                        </span>
-                      )}
-                    </td>
-                    <td>
-                      <input type="number" className="amount-input" min={0} step={0.1}
-                        value={row.amount}
-                        onChange={(e) => handleRowAmountChange(i, e.target.value)} />
-                    </td>
-                    <td style={{ textAlign: 'right' }}>
-                      <select className="unit-select" value={row.unit}
-                        onChange={(e) => handleRowUnitChange(i, e.target.value)}>
-                        <option value="g">g</option>
-                        <option value="ml">ml</option>
-                        <option value="T">T</option>
-                        <option value="t">t</option>
-                        <option value="컵">컵</option>
-                        <option value="개">개</option>
-                        <option value="캔">캔</option>
-                        <option value="팩">팩</option>
-                        <option value="꼬집">꼬집</option>
-                        <option value="oz">oz</option>
-                        <option value="lbs">lbs</option>
-                      </select>
-                    </td>
-                    <td className="macro">{fmt(row.displayCarbs)}</td>
-                    <td className="macro">{fmt(row.displayProtein)}</td>
-                    <td className="macro">{fmt(row.displayFat)}</td>
-                    <td className="edit-inline__delete-cell">
-                      <button type="button" className="edit-inline__delete-btn" onClick={() => handleRowDelete(i)}>✕</button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-              {tfoot('ko')}
-            </table>
-          </div>
+          {(() => {
+            const koTable = (first: boolean) => (
+              <div style={first ? undefined : { marginTop: '2rem' }}>
+                <div className="add-recipe__table-label-row">
+                  <p className="add-recipe__table-label">🇰🇷 한국어</p>
+                </div>
+                <div className="table-container">
+                  <table className="data-table recipe-table">
+                    <thead>
+                      <tr>
+                        <th>식재료</th>
+                        <th>양</th>
+                        <th style={{ textAlign: 'right' }}>단위</th>
+                        <th>탄수화물</th>
+                        <th>단백질</th>
+                        <th>지방</th>
+                        <th className="edit-inline__delete-cell">
+                          <Button type="button" variant="ghost" size="icon-sm" title="전체 삭제" className="text-muted-foreground hover:text-destructive hover:bg-destructive/10" onClick={() => { setResolvedRows([]); setEnRows([]); setSideRows([]) }}>✕</Button>
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {resolvedRows.map((row, i) => (
+                        <tr key={i} style={{ background: row.isNew ? '#fffbeb' : undefined }}>
+                          <td>
+                            <Input className="h-7 text-sm" value={row.name} onChange={(e) => handleRowNameChange(i, e.target.value)} />
+                            {row.isNew && <span style={{ display: 'block', fontSize: '0.75rem', color: '#b45309', fontWeight: 600, marginTop: '2px' }}>새 식재료</span>}
+                          </td>
+                          <td><Input type="number" className="h-7 w-20 text-sm" min={0} step={0.1} value={row.amount} onChange={(e) => handleRowAmountChange(i, e.target.value)} /></td>
+                          <td style={{ textAlign: 'right' }}>
+                            <UnitSelect value={row.unit} onValueChange={(v) => handleRowUnitChange(i, v)} language="ko" />
+                          </td>
+                          <td className="macro">{fmt(row.displayCarbs)}</td>
+                          <td className="macro">{fmt(row.displayProtein)}</td>
+                          <td className="macro">{fmt(row.displayFat)}</td>
+                          <td className="edit-inline__delete-cell"><Button type="button" variant="ghost" size="icon-sm" className="text-muted-foreground hover:text-destructive hover:bg-destructive/10" onClick={() => handleRowDelete(i)}>✕</Button></td>
+                        </tr>
+                      ))}
+                    </tbody>
+                    {tfoot('ko')}
+                  </table>
+                </div>
+                {resolvedRows.some((r) => r.isNew) && (
+                  <p style={{ fontSize: '0.85rem', color: '#b45309', margin: '0.5rem 0 0' }}>
+                    노란 배경 행은 새로운 식재료입니다. 저장 시 데이터베이스에 추가됩니다.
+                  </p>
+                )}
+              </div>
+            )
 
-          {resolvedRows.some((r) => r.isNew) && (
-            <p style={{ fontSize: '0.85rem', color: '#b45309', margin: '0.5rem 0 0' }}>
-              노란 배경 행은 새로운 식재료입니다. 저장 시 데이터베이스에 추가됩니다.
-            </p>
-          )}
+            const enTable = (first: boolean) => (
+              <div style={first ? undefined : { marginTop: '2rem' }}>
+                <div className="add-recipe__table-label-row">
+                  <p className="add-recipe__table-label">🇺🇸 English</p>
+                </div>
+                {translating ? (
+                  <p style={{ color: 'var(--muted-foreground)', fontSize: '0.9rem' }}>Translating...</p>
+                ) : (
+                  <div className="table-container">
+                    <table className="data-table recipe-table">
+                      <thead>
+                        <tr>
+                          <th>Ingredient</th>
+                          <th>Amount</th>
+                          <th style={{ textAlign: 'right' }}>Unit</th>
+                          <th>Carbs</th>
+                          <th>Protein</th>
+                          <th>Fat</th>
+                          <th className="edit-inline__delete-cell">
+                            <Button type="button" variant="ghost" size="icon-sm" className="text-muted-foreground hover:text-destructive" title="Delete all" onClick={() => { setResolvedRows([]); setEnRows([]); setSideRows([]) }}>✕</Button>
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {enRows.map((row, i) => (
+                          <tr key={i} style={{ background: resolvedRows[i]?.isNew ? '#fffbeb' : undefined }}>
+                            <td>
+                              <Input className="h-7 text-sm" value={row.nameEn} onChange={(e) => setEnRows((prev) => prev.map((r, j) => j === i ? { ...r, nameEn: e.target.value } : r))} />
+                              {resolvedRows[i]?.isNew && <span style={{ display: 'block', fontSize: '0.75rem', color: '#b45309', fontWeight: 600, marginTop: '2px' }}>New</span>}
+                            </td>
+                            <td><Input type="number" className="h-7 w-20 text-sm" min={0} step={0.1} value={fmt(row.amount)} onChange={(e) => setEnRows((prev) => prev.map((r, j) => j === i ? { ...r, amount: Number.parseFloat(e.target.value) || 0 } : r))} /></td>
+                            <td style={{ textAlign: 'right' }}>
+                              <UnitSelect value={row.unit} onValueChange={(v) => setEnRows((prev) => prev.map((r, j) => j === i ? { ...r, unit: v } : r))} language="en" />
+                            </td>
+                            <td className="macro">{fmt(resolvedRows[i]?.displayCarbs ?? 0)}</td>
+                            <td className="macro">{fmt(resolvedRows[i]?.displayProtein ?? 0)}</td>
+                            <td className="macro">{fmt(resolvedRows[i]?.displayFat ?? 0)}</td>
+                            <td className="edit-inline__delete-cell"><Button type="button" variant="ghost" size="icon-sm" className="text-muted-foreground hover:text-destructive hover:bg-destructive/10" onClick={() => handleRowDelete(i)}>✕</Button></td>
+                          </tr>
+                        ))}
+                      </tbody>
+                      {tfoot('en')}
+                    </table>
+                  </div>
+                )}
+              </div>
+            )
 
-          <div className="edit-bottom-bar">
-            <div className="edit-bottom-bar__add">
-              <button type="button" className="add-food-btn" style={{ background: 'none', color: 'var(--muted)', border: '1px solid var(--border)' }} onClick={() => setIsAddSideModalOpen(true)}>
-                + {isKo ? '부재료 추가' : 'Add side ingredient'}
-              </button>
-              <button type="button" className="add-food-btn" onClick={() => setIsAddMainModalOpen(true)}>
-                + {isKo ? '주재료 추가' : 'Add main ingredient'}
-              </button>
-            </div>
-          </div>
+            const bottomBar = (
+              <div className="edit-bottom-bar">
+                <div className="edit-bottom-bar__left">
+                  {mode === 'manual' && (
+                    <Button type="button" variant="outline" size="sm" onClick={handleOpenRecipeList} disabled={loadingRecipes}>
+                      {loadingRecipes ? (isKo ? '불러오는 중...' : 'Loading...') : (isKo ? '기존 레시피 불러오기' : 'Load from existing')}
+                    </Button>
+                  )}
+                </div>
+                <div className="edit-bottom-bar__add">
+                  <Button type="button" variant="outline" size="sm" onClick={() => { setIsAddSideModalOpen(true); trackIngredientSearchOpened('side') }}>
+                    + {isKo ? '부재료 추가' : 'Add side ingredient'}
+                  </Button>
+                  <Button type="button" size="sm" onClick={() => { setIsAddMainModalOpen(true); trackIngredientSearchOpened('main') }}>
+                    + {isKo ? '주재료 추가' : 'Add main ingredient'}
+                  </Button>
+                </div>
+              </div>
+            )
 
-          {/* 영어 테이블 */}
-          <p className="add-recipe__table-label" style={{ marginTop: '2rem' }}>🇺🇸 English</p>
-          {translating ? (
-            <p style={{ color: 'var(--muted)', fontSize: '0.9rem' }}>Translating...</p>
-          ) : (
-            <div className="table-container">
-              <table className="data-table recipe-table">
-                <thead>
-                  <tr>
-                    <th>Ingredient</th>
-                    <th>Amount</th>
-                    <th style={{ textAlign: 'right' }}>Unit</th>
-                    <th>Carbs</th>
-                    <th>Protein</th>
-                    <th>Fat</th>
-                    <th />
-                  </tr>
-                </thead>
-                <tbody>
-                  {enRows.map((row, i) => (
-                    <tr key={i} style={{ background: resolvedRows[i]?.isNew ? '#fffbeb' : undefined }}>
-                      <td>
-                        <input
-                          className="edit-inline__input"
-                          value={row.nameEn}
-                          onChange={(e) => setEnRows((prev) => prev.map((r, j) => j === i ? { ...r, nameEn: e.target.value } : r))}
-                        />
-                        {resolvedRows[i]?.isNew && (
-                          <span style={{ display: 'block', fontSize: '0.75rem', color: '#b45309', fontWeight: 600, marginTop: '2px' }}>
-                            New
-                          </span>
-                        )}
-                      </td>
-                      <td>
-                        <input
-                          type="number"
-                          className="amount-input"
-                          min={0}
-                          step={0.1}
-                          value={fmt(row.amount)}
-                          onChange={(e) => setEnRows((prev) => prev.map((r, j) => j === i ? { ...r, amount: Number.parseFloat(e.target.value) || 0 } : r))}
-                        />
-                      </td>
-                      <td style={{ textAlign: 'right' }}>
-                        <select
-                          className="unit-select"
-                          value={row.unit}
-                          onChange={(e) => setEnRows((prev) => prev.map((r, j) => j === i ? { ...r, unit: e.target.value } : r))}
-                        >
-                          <option value="oz">oz</option>
-                          <option value="lbs">lbs</option>
-                          <option value="tbsp">tbsp</option>
-                          <option value="tsp">tsp</option>
-                          <option value="cup">cup</option>
-                          <option value="each">each</option>
-                          <option value="can">can</option>
-                          <option value="pack">pack</option>
-                          <option value="pinch">pinch</option>
-                          <option value="g">g</option>
-                          <option value="ml">ml</option>
-                        </select>
-                      </td>
-                      <td className="macro">{fmt(resolvedRows[i]?.displayCarbs ?? 0)}</td>
-                      <td className="macro">{fmt(resolvedRows[i]?.displayProtein ?? 0)}</td>
-                      <td className="macro">{fmt(resolvedRows[i]?.displayFat ?? 0)}</td>
-                      <td className="edit-inline__delete-cell">
-                        <button type="button" className="edit-inline__delete-btn" onClick={() => handleRowDelete(i)}>✕</button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-                {tfoot('en')}
-              </table>
-            </div>
-          )}
+            return isKo
+              ? <>{koTable(true)}{bottomBar}{enTable(false)}</>
+              : <>{enTable(true)}{bottomBar}{koTable(false)}</>
+          })()}
 
-          <button type="button" className="add-recipe__save-btn" onClick={handleSave} disabled={saving || translating}>
+          <Button type="button" size="lg" onClick={handleSave} disabled={saving || translating} className="w-full mt-4">
             {saving ? (isKo ? '저장 중...' : 'Saving...') : (isKo ? '레시피 추가' : 'Add Recipe')}
-          </button>
+          </Button>
         </div>
       )}
 
@@ -936,6 +913,36 @@ export function AddRecipePage() {
         existingIngredientIds={new Set(sideRows.map((r) => r.ingredientId))}
         multiSelect
       />
+
+      <Modal
+        isOpen={showRecipeList}
+        onClose={() => setShowRecipeList(false)}
+        title={isKo ? '기존 레시피 불러오기' : 'Load from existing recipes'}
+        actions={[
+          { label: isKo ? '취소' : 'Cancel', variant: 'ghost', onClick: () => setShowRecipeList(false) },
+          {
+            label: isKo ? `선택한 ${selectedRecipeIds.size}개 불러오기` : `Load ${selectedRecipeIds.size} selected`,
+            variant: 'primary',
+            onClick: () => { handleMergeRecipes() },
+            disabled: selectedRecipeIds.size === 0,
+          },
+        ]}
+      >
+        <ul className="add-recipe__recipe-list" style={{ maxHeight: '320px', overflowY: 'auto', margin: '0.5rem 0' }}>
+          {savedRecipes.map((r) => (
+            <li key={r.id}>
+              <label className="add-recipe__recipe-list-item">
+                <input
+                  type="checkbox"
+                  checked={selectedRecipeIds.has(r.id ?? '')}
+                  onChange={() => handleToggleRecipe(r.id ?? '')}
+                />
+                {r.nameKo || r.name}
+              </label>
+            </li>
+          ))}
+        </ul>
+      </Modal>
 
       {toast && <Toast message={toast.message} type={toast.type} onClose={closeToast} />}
     </section>

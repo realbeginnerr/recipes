@@ -9,6 +9,8 @@ import {
 } from 'firebase/firestore'
 import { db } from '../firebase'
 import { useLanguage } from '../context/LanguageContext'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
 
 const COLLECTION = 'signups'
 
@@ -67,7 +69,7 @@ export function SignupPage() {
             <ul>
               <li>✏️ 나만의 레시피 추가 · 수정 · 저장</li>
               <li>🥦 식재료 직접 추가 · 수정 · 관리</li>
-              <li>📊 대시보드 — 내 식습관 패턴을 한눈에</li>
+              <li>🎯 탄단지 권장량을 내 목표에 맞게 직접 설정</li>
             </ul>
           </>
         ) : (
@@ -89,18 +91,16 @@ export function SignupPage() {
           {isKo ? '이메일 주소' : 'Email address'}
         </label>
         <div className="signup-page__row">
-          <input
+          <Input
             id="signup-email"
             type="email"
-            className="signup-page__input"
             placeholder={isKo ? 'example@email.com' : 'example@email.com'}
             value={email}
             onChange={(e) => { setEmail(e.target.value); setStatus('idle') }}
             disabled={status === 'loading' || status === 'done'}
           />
-          <button
+          <Button
             type="submit"
-            className="signup-page__btn"
             disabled={status === 'loading' || status === 'done' || !email.trim()}
           >
             {status === 'loading'
@@ -108,7 +108,7 @@ export function SignupPage() {
               : status === 'done'
               ? (isKo ? '신청 완료 ✓' : 'Done ✓')
               : (isKo ? '신청하기' : 'Sign up')}
-          </button>
+          </Button>
         </div>
 
         {status === 'duplicate' && (
