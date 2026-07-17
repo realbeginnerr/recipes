@@ -1,5 +1,6 @@
 import { useLanguage } from '../context/LanguageContext'
 import type { Language } from '../i18n/translations'
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 
 const base = import.meta.env.BASE_URL
 
@@ -12,24 +13,22 @@ export function LanguageToggle() {
   const { language, setLanguage } = useLanguage()
 
   return (
-    <div className="lang-toggle" role="group" aria-label="Language">
+    <ToggleGroup
+      value={[language]}
+      onValueChange={(vals) => { if (vals.length > 0) setLanguage(vals[0] as Language) }}
+      aria-label="Language"
+      className="gap-1"
+    >
       {options.map((option) => (
-        <button
+        <ToggleGroupItem
           key={option.value}
-          type="button"
-          className={`lang-toggle__btn${language === option.value ? ' lang-toggle__btn--active' : ''}`}
-          onClick={() => setLanguage(option.value)}
-          aria-pressed={language === option.value}
+          value={option.value}
+          aria-label={option.label}
+          className="h-auto w-auto p-1 rounded-md opacity-50 aria-pressed:opacity-100 hover:bg-transparent hover:opacity-75"
         >
-          <img
-            src={option.icon}
-            alt={option.label}
-            width="22"
-            height="16"
-            style={{ opacity: language === option.value ? 1 : 0.5 }}
-          />
-        </button>
+          <img src={option.icon} alt={option.label} width="22" height="16" />
+        </ToggleGroupItem>
       ))}
-    </div>
+    </ToggleGroup>
   )
 }

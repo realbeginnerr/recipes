@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Button } from '@/components/ui/button'
 
 type ToastType = 'success' | 'error'
 
@@ -24,14 +25,16 @@ export function Toast({ message, type, onClose, duration = 3000 }: ToastProps) {
   return (
     <div className={`toast toast--${type} ${visible ? 'toast--visible' : ''}`}>
       <span className="toast__message">{message}</span>
-      <button
+      <Button
         type="button"
+        variant="ghost"
+        size="icon-sm"
         className="toast__close"
         onClick={() => { setVisible(false); setTimeout(onClose, 300) }}
         aria-label="Close"
       >
         ✕
-      </button>
+      </Button>
     </div>
   )
 }

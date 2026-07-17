@@ -22,13 +22,14 @@ function HeaderTitle() {
   }
 
   return (
-    <button
+    <Button
       type="button"
-      className="m-0 p-0 border-none bg-transparent text-[1.05rem] font-bold text-foreground whitespace-nowrap flex-shrink-0 cursor-pointer text-left hover:text-primary transition-colors"
+      variant="ghost"
+      className="m-0 p-0 h-auto text-[1.05rem] font-bold text-foreground whitespace-nowrap flex-shrink-0 hover:text-primary hover:bg-transparent transition-colors"
       onClick={handleClick}
     >
       {t.appTitle}
-    </button>
+    </Button>
   )
 }
 
@@ -51,9 +52,10 @@ function AdminButton() {
     setTimeout(() => inputRef.current?.focus(), 50)
   }
 
-  function handleSubmit(e: FormEvent) {
+  async function handleSubmit(e: FormEvent) {
     e.preventDefault()
-    if (login(pin)) {
+    const ok = await login(pin)
+    if (ok) {
       setShowInput(false)
       setPin('')
       setError(false)
@@ -180,16 +182,18 @@ function HeaderSearch() {
           value={searchInput}
           onChange={(event) => setSearchInput(event.target.value)}
         />
-        <button
+        <Button
           type="submit"
-          className="absolute right-0 top-0 bottom-0 flex items-center justify-center w-8 border-none bg-transparent text-primary cursor-pointer hover:brightness-105"
+          variant="ghost"
+          size="icon"
+          className="absolute right-0 top-0 bottom-0 w-8 h-auto text-primary hover:bg-transparent hover:brightness-105"
           aria-label={t.searchButton}
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <circle cx="11" cy="11" r="8"/>
             <line x1="21" y1="21" x2="16.65" y2="16.65"/>
           </svg>
-        </button>
+        </Button>
       </div>
     </form>
   )
@@ -223,9 +227,11 @@ function HamburgerMenu() {
 
   return (
     <div className="relative min-[1080px]:hidden" ref={containerRef}>
-      <button
+      <Button
         type="button"
-        className="flex flex-col justify-center items-center gap-[5px] w-8 h-8 bg-transparent border-none cursor-pointer p-1"
+        variant="ghost"
+        size="icon"
+        className="flex flex-col justify-center items-center gap-[5px] w-8 h-8 p-1"
         aria-label="Menu"
         aria-expanded={open}
         onClick={() => setOpen((prev) => !prev)}
@@ -233,20 +239,21 @@ function HamburgerMenu() {
         <span className="block w-5 h-[2px] bg-foreground rounded" />
         <span className="block w-5 h-[2px] bg-foreground rounded" />
         <span className="block w-5 h-[2px] bg-foreground rounded" />
-      </button>
+      </Button>
       {open && (
         <div className="absolute top-[calc(100%+8px)] right-0 min-w-[180px] bg-card border border-border rounded-xl shadow-lg z-[200] py-2 flex flex-col gap-1">
           <div className="h-px bg-border mx-3 my-1" />
           {links.map((link) => (
-            <button
+            <Button
               key={link.to}
               type="button"
-              className="w-full text-left px-4 py-2 text-sm text-foreground bg-transparent border-none cursor-pointer hover:bg-muted hover:text-primary transition-colors"
+              variant="ghost"
+              className="w-full justify-start px-4 py-2 text-sm text-foreground hover:text-primary h-auto"
               onClick={link.onClick}
             >
               {link.label}
               {link.locked && <span className="ml-1 text-[0.75em] opacity-50">🔒</span>}
-            </button>
+            </Button>
           ))}
           <div className="h-px bg-border mx-3 my-1" />
           <div className="px-3 py-1">

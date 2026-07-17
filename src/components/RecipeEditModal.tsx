@@ -13,6 +13,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { UnitSelect } from './UnitSelect'
+import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table'
 
 type Props = {
   recipe: Recipe
@@ -99,23 +100,23 @@ export function RecipeEditModal({ recipe, onSave, onClose }: Props) {
 
           <section className="space-y-2">
             <label className="text-sm font-medium">{t.colIngredient}</label>
-            <table className="edit-modal__table">
-              <thead>
-                <tr>
-                  <th>식재료</th>
-                  <th>양</th>
-                  <th>단위</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
+            <Table className="edit-modal__table">
+              <TableHeader>
+                <TableRow>
+                  <TableHead>식재료</TableHead>
+                  <TableHead>양</TableHead>
+                  <TableHead>단위</TableHead>
+                  <TableHead></TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
                 {items.map((item, index) => {
                   const ing = ingredientById.get(item.ingredientId)
                   if (!ing) return null
                   return (
-                    <tr key={item.ingredientId}>
-                      <td>{getIngredientDisplayName(ing, language)}</td>
-                      <td>
+                    <TableRow key={item.ingredientId}>
+                      <TableCell>{getIngredientDisplayName(ing, language)}</TableCell>
+                      <TableCell>
                         <Input
                           type="number"
                           className="w-20"
@@ -124,16 +125,16 @@ export function RecipeEditModal({ recipe, onSave, onClose }: Props) {
                           value={item.defaultAmount}
                           onChange={(e) => handleAmountChange(index, e.target.value)}
                         />
-                      </td>
-                      <td>
+                      </TableCell>
+                      <TableCell>
                         <UnitSelect
                           value={item.defaultUnit}
                           onValueChange={(v) => handleUnitChange(index, v)}
                           language={language}
                           options={ing.allowedUnits}
                         />
-                      </td>
-                      <td>
+                      </TableCell>
+                      <TableCell>
                         <Button
                           type="button"
                           variant="ghost"
@@ -142,12 +143,12 @@ export function RecipeEditModal({ recipe, onSave, onClose }: Props) {
                         >
                           ✕
                         </Button>
-                      </td>
-                    </tr>
+                      </TableCell>
+                    </TableRow>
                   )
                 })}
-              </tbody>
-            </table>
+              </TableBody>
+            </Table>
 
             <div className="relative mt-2">
               <Input
@@ -160,13 +161,14 @@ export function RecipeEditModal({ recipe, onSave, onClose }: Props) {
                 <ul className="edit-modal__suggestions">
                   {filteredIngredients.slice(0, 8).map((ing) => (
                     <li key={ing.id}>
-                      <button
+                      <Button
                         type="button"
-                        className="edit-modal__suggestion-btn"
+                        variant="ghost"
+                        className="edit-modal__suggestion-btn w-full justify-start h-auto py-1.5 px-2 text-sm font-normal"
                         onClick={() => handleAddIngredient(ing.id)}
                       >
                         {getIngredientDisplayName(ing, language)}
-                      </button>
+                      </Button>
                     </li>
                   ))}
                 </ul>

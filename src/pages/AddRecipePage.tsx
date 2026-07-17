@@ -20,6 +20,7 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { UnitSelect } from '../components/UnitSelect'
+import { Table, TableHeader, TableBody, TableFooter, TableRow, TableHead, TableCell } from '@/components/ui/table'
 
 type ParsedRow = {
   name: string
@@ -496,15 +497,15 @@ export function AddRecipePage() {
   function tfoot(lang: 'ko' | 'en') {
     const isKoTable = lang === 'ko'
     return (
-      <tfoot>
-        <tr className="recipe-table__total recipe-table__muted">
-          <td colSpan={3}>{isKoTable ? '합계' : 'Total'}</td>
-          <td className="macro">{fmt(totals.carbs)}</td>
-          <td className="macro">{fmt(totals.protein)}</td>
-          <td className="macro">{fmt(totals.fat)}</td>
-        </tr>
-        <tr className="recipe-table__division-row recipe-table__muted">
-          <td colSpan={3}>
+      <TableFooter>
+        <TableRow className="recipe-table__total recipe-table__muted">
+          <TableCell colSpan={3}>{isKoTable ? '합계' : 'Total'}</TableCell>
+          <TableCell className="macro">{fmt(totals.carbs)}</TableCell>
+          <TableCell className="macro">{fmt(totals.protein)}</TableCell>
+          <TableCell className="macro">{fmt(totals.fat)}</TableCell>
+        </TableRow>
+        <TableRow className="recipe-table__division-row recipe-table__muted">
+          <TableCell colSpan={3}>
             {isKoTable ? (
               <><Input type="number" className="h-7 w-16 text-sm inline-flex" min={1} step={1} value={divisionCount}
                 onChange={(e) => { const v = Number.parseInt(e.target.value, 10); if (!Number.isNaN(v) && v > 0) setDivisionCount(v) }}
@@ -512,11 +513,11 @@ export function AddRecipePage() {
             ) : (
               <>Divide into {divisionCount} meals</>
             )}
-          </td>
-          <td className="macro">{fmt(totals.carbs / divisionCount)}</td>
-          <td className="macro">{fmt(totals.protein / divisionCount)}</td>
-          <td className="macro">{fmt(totals.fat / divisionCount)}</td>
-        </tr>
+          </TableCell>
+          <TableCell className="macro">{fmt(totals.carbs / divisionCount)}</TableCell>
+          <TableCell className="macro">{fmt(totals.protein / divisionCount)}</TableCell>
+          <TableCell className="macro">{fmt(totals.fat / divisionCount)}</TableCell>
+        </TableRow>
         {sideRows.map((row) => {
           const ing = ingredientById.get(row.ingredientId)
           if (!ing) return null
@@ -525,30 +526,30 @@ export function AddRecipePage() {
           const sideProtein = (row.amount * ing.protein / ing.baseAmount * 100) / 100
           const sideFat = (row.amount * ing.fat / ing.baseAmount * 100) / 100
           return (
-            <tr key={row.ingredientId} className="recipe-table__multigrain-row">
-              <td>{isKoTable ? (ing.nameKo || ing.name) : ing.name}</td>
-              <td>
+            <TableRow key={row.ingredientId} className="recipe-table__multigrain-row">
+              <TableCell>{isKoTable ? (ing.nameKo || ing.name) : ing.name}</TableCell>
+              <TableCell>
                 <Input type="number" className="h-7 w-20 text-sm" min={0} step={1}
                   value={row.amount}
                   onChange={(e) => { const v = Number.parseFloat(e.target.value); if (!Number.isNaN(v) && v >= 0) setSideRows((prev) => prev.map((r) => r.ingredientId === row.ingredientId ? { ...r, amount: v } : r)) }} />
-              </td>
-              <td>
+              </TableCell>
+              <TableCell>
                 <UnitSelect
                   value={row.unit}
                   onValueChange={(v) => setSideRows((prev) => prev.map((r) => r.ingredientId === row.ingredientId ? { ...r, unit: v } : r))}
                   language={isKoTable ? 'ko' : 'en'}
                   options={ing.allowedUnits ?? [ing.baseUnit]}
                 />
-              </td>
-              <td className="macro">{fmt(sideCarbs)}</td>
-              <td className="macro">{fmt(sideProtein)}</td>
-              <td className="macro">{fmt(sideFat)}</td>
-              <td className="edit-inline__delete-cell">
+              </TableCell>
+              <TableCell className="macro">{fmt(sideCarbs)}</TableCell>
+              <TableCell className="macro">{fmt(sideProtein)}</TableCell>
+              <TableCell className="macro">{fmt(sideFat)}</TableCell>
+              <TableCell className="edit-inline__delete-cell">
                 <Button type="button" variant="ghost" size="icon-sm"
                   className="text-muted-foreground hover:text-destructive hover:bg-destructive/10"
                   onClick={() => setSideRows((prev) => prev.filter((r) => r.ingredientId !== row.ingredientId))}>✕</Button>
-              </td>
-            </tr>
+              </TableCell>
+            </TableRow>
           )
         })}
         {(() => {
@@ -567,21 +568,21 @@ export function AddRecipePage() {
             fat: perMeal.fat + sideTotals.fat,
           }
           return (
-            <tr className="recipe-table__total">
-              <td colSpan={3}><strong>{isKoTable ? '1끼 합계' : 'Per meal'}</strong></td>
-              <td className="macro"><strong style={{ color: macroColor(combined.carbs, RECOMMENDED.carbs) }}>{fmt(combined.carbs)}</strong></td>
-              <td className="macro"><strong style={{ color: macroColor(combined.protein, RECOMMENDED.protein) }}>{fmt(combined.protein)}</strong></td>
-              <td className="macro"><strong style={{ color: macroColor(combined.fat, RECOMMENDED.fat) }}>{fmt(combined.fat)}</strong></td>
-            </tr>
+            <TableRow className="recipe-table__total">
+              <TableCell colSpan={3}><strong>{isKoTable ? '1끼 합계' : 'Per meal'}</strong></TableCell>
+              <TableCell className="macro"><strong style={{ color: macroColor(combined.carbs, RECOMMENDED.carbs) }}>{fmt(combined.carbs)}</strong></TableCell>
+              <TableCell className="macro"><strong style={{ color: macroColor(combined.protein, RECOMMENDED.protein) }}>{fmt(combined.protein)}</strong></TableCell>
+              <TableCell className="macro"><strong style={{ color: macroColor(combined.fat, RECOMMENDED.fat) }}>{fmt(combined.fat)}</strong></TableCell>
+            </TableRow>
           )
         })()}
-        <tr className="recipe-table__recommended">
-          <td colSpan={3}><strong>{isKoTable ? '한끼 권장량' : 'Recommended per meal'}</strong></td>
-          <td className="macro"><strong>75.0</strong></td>
-          <td className="macro"><strong>33.0</strong></td>
-          <td className="macro"><strong>22.0</strong></td>
-        </tr>
-      </tfoot>
+        <TableRow className="recipe-table__recommended">
+          <TableCell colSpan={3}><strong>{isKoTable ? '한끼 권장량' : 'Recommended per meal'}</strong></TableCell>
+          <TableCell className="macro"><strong>75.0</strong></TableCell>
+          <TableCell className="macro"><strong>33.0</strong></TableCell>
+          <TableCell className="macro"><strong>22.0</strong></TableCell>
+        </TableRow>
+      </TableFooter>
     )
   }
 
@@ -667,42 +668,78 @@ export function AddRecipePage() {
       </div>
 
       {mode === 'sns' && (
-        <>
-          <div className="add-recipe__prompt-header">
-            <h3 className="add-recipe__prompt-title">{isKo ? 'AI용 프롬프트' : 'AI Prompt'}</h3>
-            <button
-              type="button"
-              className="add-recipe__prompt-copy"
-              onClick={() => navigator.clipboard.writeText(GPT_PROMPT)}
-              title={isKo ? '프롬프트 복사' : 'Copy prompt'}
-            >
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
-                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
-              </svg>
-              {isKo ? '복사' : 'Copy'}
-            </button>
+        <div className="space-y-7 mt-2">
+          {/* Step 1 */}
+          <div>
+            <h3 className="flex items-center gap-2.5 font-semibold text-[0.95rem] mb-3">
+              <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary text-primary-foreground text-xs flex items-center justify-center font-bold">1</span>
+              {isKo ? '아래 프롬프트 복사하기' : 'Copy the prompt below'}
+            </h3>
+            <div className="add-recipe__prompt-box">
+              <div className="flex justify-end mb-1">
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  className="add-recipe__prompt-copy"
+                  onClick={() => navigator.clipboard.writeText(GPT_PROMPT)}
+                  title={isKo ? '프롬프트 복사' : 'Copy prompt'}
+                >
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                  </svg>
+                  {isKo ? '복사' : 'Copy'}
+                </Button>
+              </div>
+              <pre className="add-recipe__prompt-text">
+                {PROMPT_MID}
+                <span style={{ color: '#dc2626', fontWeight: 600 }}>{PROMPT_EDIT_AMOUNT}</span>
+                {PROMPT_AFTER_1}
+                <span style={{ color: '#dc2626', fontWeight: 600 }}>{PROMPT_EDIT_NAMES}</span>
+                {PROMPT_AFTER_2}
+                <span style={{ color: '#dc2626', fontWeight: 600 }}>{PROMPT_EDIT_LINK}</span>
+              </pre>
+            </div>
           </div>
-          <div className="add-recipe__prompt-box">
-            <pre className="add-recipe__prompt-text">
-              {PROMPT_MID}
-              <span style={{ color: '#dc2626', fontWeight: 600 }}>{PROMPT_EDIT_AMOUNT}</span>
-              {PROMPT_AFTER_1}
-              <span style={{ color: '#dc2626', fontWeight: 600 }}>{PROMPT_EDIT_NAMES}</span>
-              {PROMPT_AFTER_2}
-              <span style={{ color: '#dc2626', fontWeight: 600 }}>{PROMPT_EDIT_LINK}</span>
-            </pre>
-          </div>
-        </>
-      )}
 
-      <div className="add-recipe__form">
-        {mode === 'sns' && (
-          <div className="add-recipe__field">
-            <label className="add-recipe__label">
-              {isKo ? 'AI 응답 붙여넣기 (레시피 제목 + 식재료 데이터)' : 'Paste AI response (recipe title + ingredient data)'}
-            </label>
-            <p className="add-recipe__hint">
+          {/* Step 2 */}
+          <div>
+            <h3 className="flex items-center gap-2.5 font-semibold text-[0.95rem]">
+              <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary text-primary-foreground text-xs flex items-center justify-center font-bold">2</span>
+              {isKo
+                ? 'ChatGPT / Gemini 등 AI 웹사이트에 붙여넣기 — 아직 엔터키 누르지 말고 대기'
+                : 'Go to ChatGPT / Gemini etc. and paste — do not press Enter yet'}
+            </h3>
+          </div>
+
+          {/* Step 3 */}
+          <div>
+            <h3 className="flex items-center gap-2.5 font-semibold text-[0.95rem]">
+              <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary text-primary-foreground text-xs flex items-center justify-center font-bold">3</span>
+              {isKo ? 'SNS 레시피에서 재료 적힌 부분 스크린샷 하기' : 'Screenshot the ingredients section of your SNS recipe'}
+            </h3>
+          </div>
+
+          {/* Step 4 */}
+          <div>
+            <h3 className="flex items-center gap-2.5 font-semibold text-[0.95rem]">
+              <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary text-primary-foreground text-xs flex items-center justify-center font-bold">4</span>
+              {isKo
+                ? 'AI 웹사이트로 돌아가서 스크린샷 붙여넣고 엔터 누르기'
+                : 'Go back to the AI website, paste the screenshot, then press Enter'}
+            </h3>
+          </div>
+
+          {/* Step 5 */}
+          <div>
+            <h3 className="flex items-center gap-2.5 font-semibold text-[0.95rem] mb-3">
+              <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary text-primary-foreground text-xs flex items-center justify-center font-bold">5</span>
+              {isKo
+                ? '이 웹사이트로 돌아와서 AI 답변 붙여넣기. 미리보기 버튼 클릭 → 내용 확인 후 \'레시피 추가\' 버튼 클릭'
+                : "Come back here and paste the AI response. Click Preview → confirm content → click 'Add Recipe'"}
+            </h3>
+            <p className="add-recipe__hint mb-2">
               {isKo
                 ? '첫 줄: 레시피 제목 (한글 / English) | 이후: 식재료명/양/단위/탄수화물/단백질/지방'
                 : 'First line: recipe title (KO / EN) | Then: name/amount/unit/carbs/protein/fat'}
@@ -724,15 +761,12 @@ export function AddRecipePage() {
                 ? '닭갈비 / Dakgalbi\n닭다리살/600/g/0/156/36\n양파/0.5/개/9/1/0'
                 : 'Dakgalbi / 닭갈비\nChicken thigh/600/g/0/156/36'} />
             {dataError && <p className="add-recipe__field-error">{dataError}</p>}
+            <Button type="button" onClick={handleConfirm} disabled={confirming} className="mt-3">
+              {confirming ? (isKo ? '조회 중...' : 'Loading...') : (isKo ? '미리보기' : 'Preview')}
+            </Button>
           </div>
-        )}
-
-        {mode === 'sns' && (
-          <Button type="button" onClick={handleConfirm} disabled={confirming} className="mt-2">
-            {confirming ? (isKo ? '조회 중...' : 'Loading...') : (isKo ? '미리보기' : 'Preview')}
-          </Button>
-        )}
-      </div>
+        </div>
+      )}
 
       {(mode === 'manual' || (resolved && resolvedRows.length > 0)) && (
         <div className="add-recipe__preview">
@@ -776,42 +810,40 @@ export function AddRecipePage() {
                 <div className="add-recipe__table-label-row">
                   <p className="add-recipe__table-label">🇰🇷 한국어</p>
                 </div>
-                <div className="table-container">
-                  <table className="data-table recipe-table">
-                    <thead>
-                      <tr>
-                        <th>식재료</th>
-                        <th>양</th>
-                        <th style={{ textAlign: 'right' }}>단위</th>
-                        <th>탄수화물</th>
-                        <th>단백질</th>
-                        <th>지방</th>
-                        <th className="edit-inline__delete-cell">
-                          <Button type="button" variant="ghost" size="icon-sm" title="전체 삭제" className="text-muted-foreground hover:text-destructive hover:bg-destructive/10" onClick={() => { setResolvedRows([]); setEnRows([]); setSideRows([]) }}>✕</Button>
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {resolvedRows.map((row, i) => (
-                        <tr key={i} style={{ background: row.isNew ? '#fffbeb' : undefined }}>
-                          <td>
-                            <Input className="h-7 text-sm" value={row.name} onChange={(e) => handleRowNameChange(i, e.target.value)} />
-                            {row.isNew && <span style={{ display: 'block', fontSize: '0.75rem', color: '#b45309', fontWeight: 600, marginTop: '2px' }}>새 식재료</span>}
-                          </td>
-                          <td><Input type="number" className="h-7 w-20 text-sm" min={0} step={0.1} value={row.amount} onChange={(e) => handleRowAmountChange(i, e.target.value)} /></td>
-                          <td style={{ textAlign: 'right' }}>
-                            <UnitSelect value={row.unit} onValueChange={(v) => handleRowUnitChange(i, v)} language="ko" />
-                          </td>
-                          <td className="macro">{fmt(row.displayCarbs)}</td>
-                          <td className="macro">{fmt(row.displayProtein)}</td>
-                          <td className="macro">{fmt(row.displayFat)}</td>
-                          <td className="edit-inline__delete-cell"><Button type="button" variant="ghost" size="icon-sm" className="text-muted-foreground hover:text-destructive hover:bg-destructive/10" onClick={() => handleRowDelete(i)}>✕</Button></td>
-                        </tr>
-                      ))}
-                    </tbody>
-                    {tfoot('ko')}
-                  </table>
-                </div>
+                <Table className="data-table recipe-table">
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>식재료</TableHead>
+                      <TableHead>양</TableHead>
+                      <TableHead style={{ textAlign: 'right' }}>단위</TableHead>
+                      <TableHead>탄수화물</TableHead>
+                      <TableHead>단백질</TableHead>
+                      <TableHead>지방</TableHead>
+                      <TableHead className="edit-inline__delete-cell">
+                        <Button type="button" variant="ghost" size="icon-sm" title="전체 삭제" className="text-muted-foreground hover:text-destructive hover:bg-destructive/10" onClick={() => { setResolvedRows([]); setEnRows([]); setSideRows([]) }}>✕</Button>
+                      </TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {resolvedRows.map((row, i) => (
+                      <TableRow key={i} style={{ background: row.isNew ? '#fffbeb' : undefined }}>
+                        <TableCell>
+                          <Input className="h-7 text-sm" value={row.name} onChange={(e) => handleRowNameChange(i, e.target.value)} />
+                          {row.isNew && <span style={{ display: 'block', fontSize: '0.75rem', color: '#b45309', fontWeight: 600, marginTop: '2px' }}>새 식재료</span>}
+                        </TableCell>
+                        <TableCell><Input type="number" className="h-7 w-20 text-sm" min={0} step={0.1} value={row.amount} onChange={(e) => handleRowAmountChange(i, e.target.value)} /></TableCell>
+                        <TableCell style={{ textAlign: 'right' }}>
+                          <UnitSelect value={row.unit} onValueChange={(v) => handleRowUnitChange(i, v)} language="ko" />
+                        </TableCell>
+                        <TableCell className="macro">{fmt(row.displayCarbs)}</TableCell>
+                        <TableCell className="macro">{fmt(row.displayProtein)}</TableCell>
+                        <TableCell className="macro">{fmt(row.displayFat)}</TableCell>
+                        <TableCell className="edit-inline__delete-cell"><Button type="button" variant="ghost" size="icon-sm" className="text-muted-foreground hover:text-destructive hover:bg-destructive/10" onClick={() => handleRowDelete(i)}>✕</Button></TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                  {tfoot('ko')}
+                </Table>
                 {resolvedRows.some((r) => r.isNew) && (
                   <p style={{ fontSize: '0.85rem', color: '#b45309', margin: '0.5rem 0 0' }}>
                     노란 배경 행은 새로운 식재료입니다. 저장 시 데이터베이스에 추가됩니다.
@@ -828,42 +860,40 @@ export function AddRecipePage() {
                 {translating ? (
                   <p style={{ color: 'var(--muted-foreground)', fontSize: '0.9rem' }}>Translating...</p>
                 ) : (
-                  <div className="table-container">
-                    <table className="data-table recipe-table">
-                      <thead>
-                        <tr>
-                          <th>Ingredient</th>
-                          <th>Amount</th>
-                          <th style={{ textAlign: 'right' }}>Unit</th>
-                          <th>Carbs</th>
-                          <th>Protein</th>
-                          <th>Fat</th>
-                          <th className="edit-inline__delete-cell">
-                            <Button type="button" variant="ghost" size="icon-sm" className="text-muted-foreground hover:text-destructive" title="Delete all" onClick={() => { setResolvedRows([]); setEnRows([]); setSideRows([]) }}>✕</Button>
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {enRows.map((row, i) => (
-                          <tr key={i} style={{ background: resolvedRows[i]?.isNew ? '#fffbeb' : undefined }}>
-                            <td>
-                              <Input className="h-7 text-sm" value={row.nameEn} onChange={(e) => setEnRows((prev) => prev.map((r, j) => j === i ? { ...r, nameEn: e.target.value } : r))} />
-                              {resolvedRows[i]?.isNew && <span style={{ display: 'block', fontSize: '0.75rem', color: '#b45309', fontWeight: 600, marginTop: '2px' }}>New</span>}
-                            </td>
-                            <td><Input type="number" className="h-7 w-20 text-sm" min={0} step={0.1} value={fmt(row.amount)} onChange={(e) => setEnRows((prev) => prev.map((r, j) => j === i ? { ...r, amount: Number.parseFloat(e.target.value) || 0 } : r))} /></td>
-                            <td style={{ textAlign: 'right' }}>
-                              <UnitSelect value={row.unit} onValueChange={(v) => setEnRows((prev) => prev.map((r, j) => j === i ? { ...r, unit: v } : r))} language="en" />
-                            </td>
-                            <td className="macro">{fmt(resolvedRows[i]?.displayCarbs ?? 0)}</td>
-                            <td className="macro">{fmt(resolvedRows[i]?.displayProtein ?? 0)}</td>
-                            <td className="macro">{fmt(resolvedRows[i]?.displayFat ?? 0)}</td>
-                            <td className="edit-inline__delete-cell"><Button type="button" variant="ghost" size="icon-sm" className="text-muted-foreground hover:text-destructive hover:bg-destructive/10" onClick={() => handleRowDelete(i)}>✕</Button></td>
-                          </tr>
-                        ))}
-                      </tbody>
-                      {tfoot('en')}
-                    </table>
-                  </div>
+                  <Table className="data-table recipe-table">
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Ingredient</TableHead>
+                        <TableHead>Amount</TableHead>
+                        <TableHead style={{ textAlign: 'right' }}>Unit</TableHead>
+                        <TableHead>Carbs</TableHead>
+                        <TableHead>Protein</TableHead>
+                        <TableHead>Fat</TableHead>
+                        <TableHead className="edit-inline__delete-cell">
+                          <Button type="button" variant="ghost" size="icon-sm" className="text-muted-foreground hover:text-destructive" title="Delete all" onClick={() => { setResolvedRows([]); setEnRows([]); setSideRows([]) }}>✕</Button>
+                        </TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {enRows.map((row, i) => (
+                        <TableRow key={i} style={{ background: resolvedRows[i]?.isNew ? '#fffbeb' : undefined }}>
+                          <TableCell>
+                            <Input className="h-7 text-sm" value={row.nameEn} onChange={(e) => setEnRows((prev) => prev.map((r, j) => j === i ? { ...r, nameEn: e.target.value } : r))} />
+                            {resolvedRows[i]?.isNew && <span style={{ display: 'block', fontSize: '0.75rem', color: '#b45309', fontWeight: 600, marginTop: '2px' }}>New</span>}
+                          </TableCell>
+                          <TableCell><Input type="number" className="h-7 w-20 text-sm" min={0} step={0.1} value={fmt(row.amount)} onChange={(e) => setEnRows((prev) => prev.map((r, j) => j === i ? { ...r, amount: Number.parseFloat(e.target.value) || 0 } : r))} /></TableCell>
+                          <TableCell style={{ textAlign: 'right' }}>
+                            <UnitSelect value={row.unit} onValueChange={(v) => setEnRows((prev) => prev.map((r, j) => j === i ? { ...r, unit: v } : r))} language="en" />
+                          </TableCell>
+                          <TableCell className="macro">{fmt(resolvedRows[i]?.displayCarbs ?? 0)}</TableCell>
+                          <TableCell className="macro">{fmt(resolvedRows[i]?.displayProtein ?? 0)}</TableCell>
+                          <TableCell className="macro">{fmt(resolvedRows[i]?.displayFat ?? 0)}</TableCell>
+                          <TableCell className="edit-inline__delete-cell"><Button type="button" variant="ghost" size="icon-sm" className="text-muted-foreground hover:text-destructive hover:bg-destructive/10" onClick={() => handleRowDelete(i)}>✕</Button></TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                    {tfoot('en')}
+                  </Table>
                 )}
               </div>
             )

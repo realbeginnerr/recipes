@@ -17,6 +17,9 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { UnitSelect } from '../components/UnitSelect'
+import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table'
+import { Textarea } from '@/components/ui/textarea'
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 
 function dedupeIngredients(isKo: boolean, order: 'alpha-asc' | 'alpha-desc' = 'alpha-asc'): FirestoreIngredient[] {
   const seen = new Set<string>()
@@ -253,22 +256,18 @@ export function IngredientsPage() {
   return (
     <section className="page" ref={sectionRef}>
       <div className="ing-page__toolbar">
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          <button
-            type="button"
-            onClick={() => setFavTab('all')}
-            style={{ padding: '4px 14px', borderRadius: '20px', border: '1px solid', fontSize: '0.85rem', cursor: 'pointer', borderColor: favTab === 'all' ? 'var(--primary)' : 'var(--border)', background: favTab === 'all' ? 'var(--accent-soft)' : 'none', color: favTab === 'all' ? 'var(--primary)' : 'var(--muted-foreground)', fontWeight: favTab === 'all' ? 600 : 400 }}
-          >
+        <ToggleGroup
+          value={[favTab]}
+          onValueChange={(vals) => { if (vals.length > 0) setFavTab(vals[0] as 'all' | 'favorites') }}
+          className="gap-2"
+        >
+          <ToggleGroupItem value="all" className="rounded-full border border-border h-auto px-[14px] py-1 text-[0.85rem] text-muted-foreground font-normal aria-pressed:border-primary aria-pressed:bg-[var(--accent-soft)] aria-pressed:text-primary aria-pressed:font-semibold hover:bg-transparent">
             {isKo ? '전체' : 'All'}
-          </button>
-          <button
-            type="button"
-            onClick={() => setFavTab('favorites')}
-            style={{ padding: '4px 14px', borderRadius: '20px', border: '1px solid', fontSize: '0.85rem', cursor: 'pointer', borderColor: favTab === 'favorites' ? 'var(--primary)' : 'var(--border)', background: favTab === 'favorites' ? 'var(--accent-soft)' : 'none', color: favTab === 'favorites' ? 'var(--primary)' : 'var(--muted-foreground)', fontWeight: favTab === 'favorites' ? 600 : 400 }}
-          >
+          </ToggleGroupItem>
+          <ToggleGroupItem value="favorites" className="rounded-full border border-border h-auto px-[14px] py-1 text-[0.85rem] text-muted-foreground font-normal aria-pressed:border-primary aria-pressed:bg-[var(--accent-soft)] aria-pressed:text-primary aria-pressed:font-semibold hover:bg-transparent">
             ★ {isKo ? '즐겨찾기' : 'Favorites'}
-          </button>
-        </div>
+          </ToggleGroupItem>
+        </ToggleGroup>
         <Select value={sortOrder} onValueChange={(v) => setSortOrder(v as typeof sortOrder)}>
           <SelectTrigger className="w-44">
             <SelectValue />
@@ -324,29 +323,29 @@ export function IngredientsPage() {
         </div>
       ) : (
         <div className="table-container table-container--sticky-header">
-          <table className="data-table">
-            <thead>
-              <tr>
-                <th>{isKo ? '식재료' : 'Ingredient'}</th>
-                <th style={{ textAlign: 'right' }}>{isKo ? '양' : 'Amount'}</th>
-                <th style={{ textAlign: 'right' }}>{isKo ? '단위' : 'Unit'}</th>
-                <th>{isKo ? '탄수화물' : 'Carbs'}</th>
-                <th>{isKo ? '단백질' : 'Protein'}</th>
-                <th>{isKo ? '지방' : 'Fat'}</th>
-                <th style={{ textAlign: 'center' }}>1T=?g</th>
-                <th style={{ textAlign: 'center' }}>1t=?g</th>
-                <th style={{ textAlign: 'center' }}>1컵=?g</th>
-                <th style={{ textAlign: 'center' }}>1개=?g</th>
-                <th style={{ textAlign: 'center' }}>1캔=?g</th>
-                <th style={{ textAlign: 'center' }}>1팩=?g</th>
-                {isEditing ? <th /> : <th />}
-              </tr>
-            </thead>
-            <tbody>
+          <Table className="data-table">
+            <TableHeader>
+              <TableRow>
+                <TableHead>{isKo ? '식재료' : 'Ingredient'}</TableHead>
+                <TableHead style={{ textAlign: 'right' }}>{isKo ? '양' : 'Amount'}</TableHead>
+                <TableHead style={{ textAlign: 'right' }}>{isKo ? '단위' : 'Unit'}</TableHead>
+                <TableHead>{isKo ? '탄수화물' : 'Carbs'}</TableHead>
+                <TableHead>{isKo ? '단백질' : 'Protein'}</TableHead>
+                <TableHead>{isKo ? '지방' : 'Fat'}</TableHead>
+                <TableHead style={{ textAlign: 'center' }}>1T=?g</TableHead>
+                <TableHead style={{ textAlign: 'center' }}>1t=?g</TableHead>
+                <TableHead style={{ textAlign: 'center' }}>1컵=?g</TableHead>
+                <TableHead style={{ textAlign: 'center' }}>1개=?g</TableHead>
+                <TableHead style={{ textAlign: 'center' }}>1캔=?g</TableHead>
+                <TableHead style={{ textAlign: 'center' }}>1팩=?g</TableHead>
+                <TableHead />
+              </TableRow>
+            </TableHeader>
+            <TableBody>
               {displayRows.map((ing) =>
                 isEditing ? (
-                  <tr key={ing.id}>
-                    <td>
+                  <TableRow key={ing.id}>
+                    <TableCell>
                       <Input
                         value={ing.nameKo || ing.name}
                         onChange={(e) => updateEditRow(ing.id, 'nameKo', e.target.value)}
@@ -360,8 +359,8 @@ export function IngredientsPage() {
                           placeholder="English name"
                         />
                       )}
-                    </td>
-                    <td style={{ textAlign: 'right' }}>
+                    </TableCell>
+                    <TableCell style={{ textAlign: 'right' }}>
                       <Input
                         type="number"
                         className="w-16"
@@ -370,16 +369,16 @@ export function IngredientsPage() {
                         value={ing.baseAmount}
                         onChange={(e) => updateEditRow(ing.id, 'baseAmount', Number.parseFloat(e.target.value) || 0)}
                       />
-                    </td>
-                    <td style={{ textAlign: 'right' }}>
+                    </TableCell>
+                    <TableCell style={{ textAlign: 'right' }}>
                       <UnitSelect
                         value={ing.baseUnit}
                         onValueChange={(v) => updateEditRow(ing.id, 'baseUnit', v)}
                         language={language}
                         options={UNITS}
                       />
-                    </td>
-                    <td>
+                    </TableCell>
+                    <TableCell>
                       <Input
                         type="number"
                         className="w-16"
@@ -388,8 +387,8 @@ export function IngredientsPage() {
                         value={ing.carbs}
                         onChange={(e) => updateEditRow(ing.id, 'carbs', Number.parseFloat(e.target.value) || 0)}
                       />
-                    </td>
-                    <td>
+                    </TableCell>
+                    <TableCell>
                       <Input
                         type="number"
                         className="w-16"
@@ -398,8 +397,8 @@ export function IngredientsPage() {
                         value={ing.protein}
                         onChange={(e) => updateEditRow(ing.id, 'protein', Number.parseFloat(e.target.value) || 0)}
                       />
-                    </td>
-                    <td>
+                    </TableCell>
+                    <TableCell>
                       <Input
                         type="number"
                         className="w-16"
@@ -408,8 +407,8 @@ export function IngredientsPage() {
                         value={ing.fat}
                         onChange={(e) => updateEditRow(ing.id, 'fat', Number.parseFloat(e.target.value) || 0)}
                       />
-                    </td>
-                    <td style={{ textAlign: 'center' }}>
+                    </TableCell>
+                    <TableCell style={{ textAlign: 'center' }}>
                       <Input
                         type="number"
                         className="w-16"
@@ -419,8 +418,8 @@ export function IngredientsPage() {
                         value={ing.gramsPerTbsp ?? ''}
                         onChange={(e) => updateEditRow(ing.id, 'gramsPerTbsp', e.target.value === '' ? undefined : Number.parseFloat(e.target.value))}
                       />
-                    </td>
-                    <td style={{ textAlign: 'center' }}>
+                    </TableCell>
+                    <TableCell style={{ textAlign: 'center' }}>
                       <Input
                         type="number"
                         className="w-16"
@@ -430,8 +429,8 @@ export function IngredientsPage() {
                         value={ing.gramsPerTsp ?? ''}
                         onChange={(e) => updateEditRow(ing.id, 'gramsPerTsp', e.target.value === '' ? undefined : Number.parseFloat(e.target.value))}
                       />
-                    </td>
-                    <td style={{ textAlign: 'center' }}>
+                    </TableCell>
+                    <TableCell style={{ textAlign: 'center' }}>
                       <Input
                         type="number"
                         className="w-16"
@@ -441,8 +440,8 @@ export function IngredientsPage() {
                         value={ing.gramsPerCup ?? ''}
                         onChange={(e) => updateEditRow(ing.id, 'gramsPerCup', e.target.value === '' ? undefined : Number.parseFloat(e.target.value))}
                       />
-                    </td>
-                    <td style={{ textAlign: 'center' }}>
+                    </TableCell>
+                    <TableCell style={{ textAlign: 'center' }}>
                       <Input
                         type="number"
                         className="w-16"
@@ -452,8 +451,8 @@ export function IngredientsPage() {
                         value={ing.gramsPerEach ?? ''}
                         onChange={(e) => updateEditRow(ing.id, 'gramsPerEach', e.target.value === '' ? undefined : Number.parseFloat(e.target.value))}
                       />
-                    </td>
-                    <td style={{ textAlign: 'center' }}>
+                    </TableCell>
+                    <TableCell style={{ textAlign: 'center' }}>
                       <Input
                         type="number"
                         className="w-16"
@@ -463,8 +462,8 @@ export function IngredientsPage() {
                         value={ing.gramsPerCan ?? ''}
                         onChange={(e) => updateEditRow(ing.id, 'gramsPerCan', e.target.value === '' ? undefined : Number.parseFloat(e.target.value))}
                       />
-                    </td>
-                    <td style={{ textAlign: 'center' }}>
+                    </TableCell>
+                    <TableCell style={{ textAlign: 'center' }}>
                       <Input
                         type="number"
                         className="w-16"
@@ -474,8 +473,8 @@ export function IngredientsPage() {
                         value={ing.gramsPerPack ?? ''}
                         onChange={(e) => updateEditRow(ing.id, 'gramsPerPack', e.target.value === '' ? undefined : Number.parseFloat(e.target.value))}
                       />
-                    </td>
-                    <td>
+                    </TableCell>
+                    <TableCell>
                       <Button
                         type="button"
                         variant="ghost"
@@ -484,38 +483,42 @@ export function IngredientsPage() {
                       >
                         ✕
                       </Button>
-                    </td>
-                  </tr>
+                    </TableCell>
+                  </TableRow>
                 ) : (
-                  <tr key={ing.id}>
-                    <td>
+                  <TableRow key={ing.id}>
+                    <TableCell>
                       {isKo && ing.nameKo ? ing.nameKo : toTitleCase(ing.name)}
                       {isKo && ing.name && (
                         <span style={{ display: 'block', fontSize: '0.78rem', opacity: 0.5 }}>{toTitleCase(ing.name)}</span>
                       )}
-                    </td>
-                    <td style={{ textAlign: 'right' }}>{ing.baseAmount}</td>
-                    <td style={{ textAlign: 'right' }}>{ing.baseUnit}</td>
-                    <td>{Number(ing.carbs).toFixed(1)}</td>
-                    <td>{Number(ing.protein).toFixed(1)}</td>
-                    <td>{Number(ing.fat).toFixed(1)}</td>
-                    <td style={{ textAlign: 'center' }}>{ing.gramsPerTbsp ?? '-'}</td>
-                    <td style={{ textAlign: 'center' }}>{ing.gramsPerTsp ?? '-'}</td>
-                    <td style={{ textAlign: 'center' }}>{ing.gramsPerCup ?? '-'}</td>
-                    <td style={{ textAlign: 'center' }}>{ing.gramsPerEach ?? '-'}</td>
-                    <td style={{ textAlign: 'center' }}>{ing.gramsPerCan ?? '-'}</td>
-                    <td style={{ textAlign: 'center' }}>{ing.gramsPerPack ?? '-'}</td>
-                    <td style={{ textAlign: 'center', whiteSpace: 'nowrap' }}>
-                      <button
+                    </TableCell>
+                    <TableCell style={{ textAlign: 'right' }}>{ing.baseAmount}</TableCell>
+                    <TableCell style={{ textAlign: 'right' }}>{ing.baseUnit}</TableCell>
+                    <TableCell>{Number(ing.carbs).toFixed(1)}</TableCell>
+                    <TableCell>{Number(ing.protein).toFixed(1)}</TableCell>
+                    <TableCell>{Number(ing.fat).toFixed(1)}</TableCell>
+                    <TableCell style={{ textAlign: 'center' }}>{ing.gramsPerTbsp ?? '-'}</TableCell>
+                    <TableCell style={{ textAlign: 'center' }}>{ing.gramsPerTsp ?? '-'}</TableCell>
+                    <TableCell style={{ textAlign: 'center' }}>{ing.gramsPerCup ?? '-'}</TableCell>
+                    <TableCell style={{ textAlign: 'center' }}>{ing.gramsPerEach ?? '-'}</TableCell>
+                    <TableCell style={{ textAlign: 'center' }}>{ing.gramsPerCan ?? '-'}</TableCell>
+                    <TableCell style={{ textAlign: 'center' }}>{ing.gramsPerPack ?? '-'}</TableCell>
+                    <TableCell style={{ textAlign: 'center', whiteSpace: 'nowrap' }}>
+                      <Button
                         type="button"
+                        variant="ghost"
+                        size="icon-sm"
                         onClick={() => toggleFavorite(ing.id)}
                         title={favorites.has(ing.id) ? (isKo ? '즐겨찾기 해제' : 'Remove from favorites') : (isKo ? '즐겨찾기 추가' : 'Add to favorites')}
-                        style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1rem', color: favorites.has(ing.id) ? '#f59e0b' : 'var(--border)', padding: '0 4px', lineHeight: 1 }}
+                        style={{ color: favorites.has(ing.id) ? '#f59e0b' : 'var(--border)' }}
                       >
                         {favorites.has(ing.id) ? '★' : '☆'}
-                      </button>
-                      <button
+                      </Button>
+                      <Button
                         type="button"
+                        variant="ghost"
+                        size="icon-sm"
                         className={`ing-report-btn${reportedIds.has(ing.id) ? ' ing-report-btn--reported' : ''}`}
                         onClick={() => !reportedIds.has(ing.id) && setReportTarget(ing)}
                         title={isKo ? '잘못된 정보 신고' : 'Report incorrect data'}
@@ -526,21 +529,21 @@ export function IngredientsPage() {
                           <path d="M4 21V3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" fill="none"/>
                           <path d="M4 4l14 5-14 5V4z" fill="currentColor"/>
                         </svg>
-                      </button>
-                    </td>
-                  </tr>
+                      </Button>
+                    </TableCell>
+                  </TableRow>
                 ),
               )}
               {isEditing && (
-                <tr className="recipe-table__division-row">
-                  <td>
+                <TableRow className="recipe-table__division-row">
+                  <TableCell>
                     <Input
                       placeholder={isKo ? '이름' : 'Name'}
                       value={newRow.nameKo}
                       onChange={(e) => setNewRow((p) => ({ ...p, nameKo: e.target.value, name: e.target.value }))}
                     />
-                  </td>
-                  <td style={{ textAlign: 'right' }}>
+                  </TableCell>
+                  <TableCell style={{ textAlign: 'right' }}>
                     <Input
                       type="number"
                       className="w-16"
@@ -548,16 +551,16 @@ export function IngredientsPage() {
                       value={newRow.baseAmount}
                       onChange={(e) => setNewRow((p) => ({ ...p, baseAmount: e.target.value }))}
                     />
-                  </td>
-                  <td style={{ textAlign: 'right' }}>
+                  </TableCell>
+                  <TableCell style={{ textAlign: 'right' }}>
                     <UnitSelect
                       value={newRow.baseUnit}
                       onValueChange={(v) => setNewRow((p) => ({ ...p, baseUnit: v }))}
                       language={language}
                       options={UNITS}
                     />
-                  </td>
-                  <td>
+                  </TableCell>
+                  <TableCell>
                     <Input
                       type="number"
                       className="w-16"
@@ -565,8 +568,8 @@ export function IngredientsPage() {
                       value={newRow.carbs}
                       onChange={(e) => setNewRow((p) => ({ ...p, carbs: e.target.value }))}
                     />
-                  </td>
-                  <td>
+                  </TableCell>
+                  <TableCell>
                     <Input
                       type="number"
                       className="w-16"
@@ -574,8 +577,8 @@ export function IngredientsPage() {
                       value={newRow.protein}
                       onChange={(e) => setNewRow((p) => ({ ...p, protein: e.target.value }))}
                     />
-                  </td>
-                  <td>
+                  </TableCell>
+                  <TableCell>
                     <Input
                       type="number"
                       className="w-16"
@@ -583,8 +586,8 @@ export function IngredientsPage() {
                       value={newRow.fat}
                       onChange={(e) => setNewRow((p) => ({ ...p, fat: e.target.value }))}
                     />
-                  </td>
-                  <td>
+                  </TableCell>
+                  <TableCell>
                     <Input
                       type="number"
                       className="w-16"
@@ -592,8 +595,8 @@ export function IngredientsPage() {
                       value={newRow.gramsPerTbsp}
                       onChange={(e) => setNewRow((p) => ({ ...p, gramsPerTbsp: e.target.value }))}
                     />
-                  </td>
-                  <td>
+                  </TableCell>
+                  <TableCell>
                     <Input
                       type="number"
                       className="w-16"
@@ -601,8 +604,8 @@ export function IngredientsPage() {
                       value={newRow.gramsPerTsp}
                       onChange={(e) => setNewRow((p) => ({ ...p, gramsPerTsp: e.target.value }))}
                     />
-                  </td>
-                  <td>
+                  </TableCell>
+                  <TableCell>
                     <Input
                       type="number"
                       className="w-16"
@@ -610,8 +613,8 @@ export function IngredientsPage() {
                       value={newRow.gramsPerCup}
                       onChange={(e) => setNewRow((p) => ({ ...p, gramsPerCup: e.target.value }))}
                     />
-                  </td>
-                  <td>
+                  </TableCell>
+                  <TableCell>
                     <Input
                       type="number"
                       className="w-16"
@@ -619,8 +622,8 @@ export function IngredientsPage() {
                       value={newRow.gramsPerEach}
                       onChange={(e) => setNewRow((p) => ({ ...p, gramsPerEach: e.target.value }))}
                     />
-                  </td>
-                  <td>
+                  </TableCell>
+                  <TableCell>
                     <Input
                       type="number"
                       className="w-16"
@@ -628,8 +631,8 @@ export function IngredientsPage() {
                       value={newRow.gramsPerCan}
                       onChange={(e) => setNewRow((p) => ({ ...p, gramsPerCan: e.target.value }))}
                     />
-                  </td>
-                  <td>
+                  </TableCell>
+                  <TableCell>
                     <Input
                       type="number"
                       className="w-16"
@@ -637,12 +640,12 @@ export function IngredientsPage() {
                       value={newRow.gramsPerPack}
                       onChange={(e) => setNewRow((p) => ({ ...p, gramsPerPack: e.target.value }))}
                     />
-                  </td>
-                  <td />
-                </tr>
+                  </TableCell>
+                  <TableCell />
+                </TableRow>
               )}
-            </tbody>
-          </table>
+            </TableBody>
+          </Table>
         </div>
       )}
 
@@ -703,7 +706,7 @@ export function IngredientsPage() {
           { label: isKo ? '신고하기' : 'Report', onClick: () => { handleReport(reportTarget!, reportNote.trim()); setReportTarget(null); setReportNote('') }, disabled: !reportNote.trim() },
         ]}
       >
-        <textarea
+        <Textarea
           className="add-recipe__textarea"
           rows={3}
           style={{ width: '100%', fontSize: '0.875rem' }}

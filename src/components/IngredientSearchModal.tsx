@@ -12,6 +12,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 
 const FAVORITES_KEY = 'ingredient_favorites'
 
@@ -119,36 +120,18 @@ export function IngredientSearchModal({
 
         <div className="px-6 flex-shrink-0">
           {/* 탭 */}
-          <div className="flex gap-2 mb-3">
-            <button
-              type="button"
-              onClick={() => setTab('all')}
-              style={{
-                padding: '4px 14px', borderRadius: '20px', border: '1px solid',
-                fontSize: '0.85rem', cursor: 'pointer',
-                borderColor: tab === 'all' ? 'var(--primary)' : 'var(--border)',
-                background: tab === 'all' ? 'var(--accent-soft)' : 'none',
-                color: tab === 'all' ? 'var(--primary)' : 'var(--muted-foreground)',
-                fontWeight: tab === 'all' ? 600 : 400,
-              }}
-            >
+          <ToggleGroup
+            value={[tab]}
+            onValueChange={(vals) => { if (vals.length > 0) setTab(vals[0] as 'all' | 'favorites') }}
+            className="gap-2 mb-3"
+          >
+            <ToggleGroupItem value="all" className="rounded-full border border-border h-auto px-[14px] py-1 text-[0.85rem] text-muted-foreground font-normal aria-pressed:border-primary aria-pressed:bg-[var(--accent-soft)] aria-pressed:text-primary aria-pressed:font-semibold hover:bg-transparent">
               {language === 'ko' ? '전체' : 'All'}
-            </button>
-            <button
-              type="button"
-              onClick={() => setTab('favorites')}
-              style={{
-                padding: '4px 14px', borderRadius: '20px', border: '1px solid',
-                fontSize: '0.85rem', cursor: 'pointer',
-                borderColor: tab === 'favorites' ? 'var(--primary)' : 'var(--border)',
-                background: tab === 'favorites' ? 'var(--accent-soft)' : 'none',
-                color: tab === 'favorites' ? 'var(--primary)' : 'var(--muted-foreground)',
-                fontWeight: tab === 'favorites' ? 600 : 400,
-              }}
-            >
+            </ToggleGroupItem>
+            <ToggleGroupItem value="favorites" className="rounded-full border border-border h-auto px-[14px] py-1 text-[0.85rem] text-muted-foreground font-normal aria-pressed:border-primary aria-pressed:bg-[var(--accent-soft)] aria-pressed:text-primary aria-pressed:font-semibold hover:bg-transparent">
               ★ {language === 'ko' ? '즐겨찾기' : 'Favorites'}
-            </button>
-          </div>
+            </ToggleGroupItem>
+          </ToggleGroup>
 
           <Input
             type="search"
@@ -190,22 +173,16 @@ export function IngredientSearchModal({
                 const isFav = favorites.has(ingredient.id)
                 return (
                   <div key={ingredient.id} className="flex items-center gap-1 mb-2">
-                    <button
+                    <Button
                       type="button"
+                      variant="outline"
                       onClick={() => multiSelect ? handleToggle(ingredient) : handleSingleClick(ingredient)}
+                      className="flex-1 justify-between px-3 h-auto py-[0.65rem] text-sm font-normal"
                       style={{
-                        flex: 1,
-                        padding: '0.65rem 0.75rem',
-                        border: `1px solid ${isSelected ? 'var(--primary)' : 'var(--border)'}`,
-                        borderRadius: '6px',
-                        background: isSelected ? 'var(--accent-soft)' : '#fff',
-                        textAlign: 'left',
+                        borderColor: isSelected ? 'var(--primary)' : undefined,
+                        background: isSelected ? 'var(--accent-soft)' : undefined,
                         cursor: isExisting ? 'default' : 'pointer',
-                        fontSize: '0.9rem',
                         opacity: isExisting ? 0.4 : 1,
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
                       }}
                     >
                       <span>{getIngredientDisplayName(ingredient, language)}</span>
@@ -213,15 +190,18 @@ export function IngredientSearchModal({
                         ? <span style={{ color: 'var(--muted-foreground)', fontWeight: 700 }}>✓</span>
                         : (multiSelect && isSelected && <span style={{ color: 'var(--primary)', fontWeight: 700 }}>✓</span>)
                       }
-                    </button>
-                    <button
+                    </Button>
+                    <Button
                       type="button"
+                      variant="ghost"
+                      size="icon-sm"
                       onClick={(e) => toggleFavorite(e, ingredient.id)}
                       title={isFav ? (language === 'ko' ? '즐겨찾기 해제' : 'Remove from favorites') : (language === 'ko' ? '즐겨찾기 추가' : 'Add to favorites')}
-                      style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.1rem', color: isFav ? '#f59e0b' : 'var(--border)', padding: '0.4rem', lineHeight: 1, flexShrink: 0 }}
+                      className="flex-shrink-0 text-[1.1rem]"
+                      style={{ color: isFav ? '#f59e0b' : 'var(--border)' }}
                     >
                       {isFav ? '★' : '☆'}
-                    </button>
+                    </Button>
                   </div>
                 )
               })}
