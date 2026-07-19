@@ -1,5 +1,5 @@
 import { type FormEvent, useEffect, useRef, useState } from 'react'
-import { NavLink, Outlet, useNavigate } from 'react-router-dom'
+import { NavLink, Outlet, useNavigate, useLocation } from 'react-router-dom'
 import { trackSignupClick } from '../utils/analytics'
 import {
   LanguageProvider,
@@ -13,12 +13,17 @@ import { Button } from '@/components/ui/button'
 
 function HeaderTitle() {
   const navigate = useNavigate()
+  const location = useLocation()
   const { resetHome } = useSearch()
   const { t } = useLanguage()
 
   function handleClick() {
     resetHome()
-    navigate('/', { replace: true })
+    if (location.pathname === '/') {
+      navigate(0)
+    } else {
+      navigate('/')
+    }
   }
 
   return (
@@ -279,7 +284,9 @@ function LayoutContent() {
         <NavMenu />
         <HeaderSearch />
         <SignupLink />
-        <LanguageToggle />
+        <div className="max-[1079px]:hidden">
+          <LanguageToggle />
+        </div>
         <HamburgerMenu />
       </header>
       <main className="flex-1 px-5 pt-[3.75rem] max-w-[900px] w-full mx-auto">

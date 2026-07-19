@@ -1,5 +1,4 @@
-import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useState } from 'react'
 import { useLanguage } from '../context/LanguageContext'
 import { useAdmin } from '../context/AdminContext'
 import { saveIngredientToFirestore } from '../services/ingredientService'
@@ -61,13 +60,9 @@ const AI_PROMPT = `아래 식재료들의 영양 정보를 알려줘.
 export function AddIngredientPage() {
   const { language } = useLanguage()
   const { isAdmin } = useAdmin()
-  const navigate = useNavigate()
   const isKo = language === 'ko'
   const { toast, showToast, closeToast } = useToast()
 
-  useEffect(() => {
-    if (!isAdmin) navigate('/', { replace: true })
-  }, [isAdmin, navigate])
 
   const [mode, setMode] = useState<'select' | 'ai' | 'manual'>('select')
 
@@ -142,9 +137,28 @@ export function AddIngredientPage() {
   }
 
   // 선택 화면
+  const guestBanner = !isAdmin && (
+    <div className="mb-4 rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-800 dark:border-amber-700 dark:bg-amber-950 dark:text-amber-300">
+      {isKo ? (
+        <>
+          현재 로그인, 회원가입 기능은 없습니다. 로그인 하지 않은 상태에서 입력한 내용은 저장되지 않습니다.<br />
+          레시피, 식재료 추가 기능을 필요로 하는 분들이 많아지면 그때 해당 기능을 추가할 예정입니다.<br />
+          필요하신 분은 화면 상단의 '회원가입 신청' 버튼을 클릭해주세요.
+        </>
+      ) : (
+        <>
+          Login and sign-up features are not currently available. Content entered without logging in will not be saved.<br />
+          If enough people need the ability to add recipes and ingredients, we'll add that feature at that time.<br />
+          If you're interested, please click the 'Sign Up' button at the top of the screen.
+        </>
+      )}
+    </div>
+  )
+
   if (mode === 'select') {
     return (
       <section className="page">
+        {guestBanner}
         <h2 className="page__heading">{isKo ? '식재료 추가' : 'Add Ingredient'}</h2>
         <p style={{ color: 'var(--muted-foreground)', marginBottom: '2rem' }}>
           {isKo ? '식재료를 어떻게 추가할까요?' : 'How would you like to add ingredients?'}
@@ -178,6 +192,7 @@ export function AddIngredientPage() {
   if (mode === 'ai') {
     return (
       <section className="page">
+        {guestBanner}
         <div className="add-recipe__mode-header">
           <Button type="button" variant="ghost" size="sm" onClick={() => { setMode('select'); setAiResolved(false); setPastedText(''); setAiRows([]); setDataError('') }}>
             ← {isKo ? '뒤로' : 'Back'}
@@ -280,6 +295,7 @@ export function AddIngredientPage() {
   // 직접 입력 모드
   return (
     <section className="page">
+      {guestBanner}
       <div className="add-recipe__mode-header">
         <Button type="button" variant="ghost" size="sm" onClick={() => { setMode('select'); setManualRows([{ ...EMPTY_MANUAL }]) }}>
           ← {isKo ? '뒤로' : 'Back'}

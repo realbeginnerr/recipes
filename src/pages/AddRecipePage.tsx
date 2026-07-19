@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { useLanguage } from '../context/LanguageContext'
 import { useAdmin } from '../context/AdminContext'
 import { saveRecipeToFirestore, loadRecipesFromFirestore, type FirestoreRecipe } from '../services/recipeService'
@@ -21,6 +20,7 @@ import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { UnitSelect } from '../components/UnitSelect'
 import { Table, TableHeader, TableBody, TableFooter, TableRow, TableHead, TableCell } from '@/components/ui/table'
+import { ScrollArea } from '@/components/ui/scroll-area'
 
 type ParsedRow = {
   name: string
@@ -141,12 +141,8 @@ async function translateKoToEn(text: string): Promise<string> {
 export function AddRecipePage() {
   const { language } = useLanguage()
   const { isAdmin } = useAdmin()
-  const navigate = useNavigate()
   const isKo = language === 'ko'
 
-  useEffect(() => {
-    if (!isAdmin) navigate('/', { replace: true })
-  }, [isAdmin, navigate])
 
   const [mode, setMode] = useState<'select' | 'sns' | 'manual'>('select')
   const [recipeName, setRecipeName] = useState('')
@@ -626,6 +622,23 @@ export function AddRecipePage() {
   if (mode === 'select') {
     return (
       <section className="page">
+        {!isAdmin && (
+          <div className="mb-4 rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-800 dark:border-amber-700 dark:bg-amber-950 dark:text-amber-300">
+            {isKo ? (
+              <>
+                현재 로그인, 회원가입 기능은 없습니다. 로그인 하지 않은 상태에서 입력한 내용은 저장되지 않습니다.<br />
+                레시피, 식재료 추가 기능을 필요로 하는 분들이 많아지면 그때 해당 기능을 추가할 예정입니다.<br />
+                필요하신 분은 화면 상단의 '회원가입 신청' 버튼을 클릭해주세요.
+              </>
+            ) : (
+              <>
+                Login and sign-up features are not currently available. Content entered without logging in will not be saved.<br />
+                If enough people need the ability to add recipes and ingredients, we'll add that feature at that time.<br />
+                If you're interested, please click the 'Sign Up' button at the top of the screen.
+              </>
+            )}
+          </div>
+        )}
         <h2 className="page__heading">{isKo ? '레시피 추가' : 'Add Recipe'}</h2>
         <p className="add-recipe__select-subtitle">
           {isKo ? '어떤 방식으로 레시피를 추가하시겠어요?' : 'How would you like to add a recipe?'}
@@ -692,43 +705,56 @@ export function AddRecipePage() {
                   {isKo ? '복사' : 'Copy'}
                 </Button>
               </div>
-              <pre className="add-recipe__prompt-text">
-                {PROMPT_MID}
-                <span style={{ color: '#dc2626', fontWeight: 600 }}>{PROMPT_EDIT_AMOUNT}</span>
-                {PROMPT_AFTER_1}
-                <span style={{ color: '#dc2626', fontWeight: 600 }}>{PROMPT_EDIT_NAMES}</span>
-                {PROMPT_AFTER_2}
-                <span style={{ color: '#dc2626', fontWeight: 600 }}>{PROMPT_EDIT_LINK}</span>
-              </pre>
+              <ScrollArea className="h-[300px]">
+                <pre className="add-recipe__prompt-text">
+                  {PROMPT_MID}
+                  <span style={{ color: '#dc2626', fontWeight: 600 }}>{PROMPT_EDIT_AMOUNT}</span>
+                  {PROMPT_AFTER_1}
+                  <span style={{ color: '#dc2626', fontWeight: 600 }}>{PROMPT_EDIT_NAMES}</span>
+                  {PROMPT_AFTER_2}
+                  <span style={{ color: '#dc2626', fontWeight: 600 }}>{PROMPT_EDIT_LINK}</span>
+                </pre>
+              </ScrollArea>
             </div>
           </div>
 
           {/* Step 2 */}
           <div>
-            <h3 className="flex items-center gap-2.5 font-semibold text-[0.95rem]">
+            <h3 className="flex items-center gap-2.5 font-semibold text-[0.95rem] mb-3">
               <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary text-primary-foreground text-xs flex items-center justify-center font-bold">2</span>
-              {isKo
-                ? 'ChatGPT / Gemini 등 AI 웹사이트에 붙여넣기 — 아직 엔터키 누르지 말고 대기'
-                : 'Go to ChatGPT / Gemini etc. and paste — do not press Enter yet'}
+              {isKo ? (
+                <><a href="https://chatgpt.com" target="_blank" rel="noopener noreferrer" className="text-primary underline underline-offset-2">ChatGPT</a>{' / '}<a href="https://gemini.google.com" target="_blank" rel="noopener noreferrer" className="text-primary underline underline-offset-2">Gemini</a>{' 등 AI 웹사이트에 붙여넣기 — 아직 엔터키 누르지 말고 대기'}</>
+              ) : (
+                <>{'Go to '}<a href="https://chatgpt.com" target="_blank" rel="noopener noreferrer" className="text-primary underline underline-offset-2">ChatGPT</a>{' / '}<a href="https://gemini.google.com" target="_blank" rel="noopener noreferrer" className="text-primary underline underline-offset-2">Gemini</a>{' etc. and paste — do not press Enter yet'}</>
+              )}
             </h3>
+            <div className="w-[400px] h-[300px] rounded-lg border-2 border-dashed border-border bg-muted flex items-center justify-center text-muted-foreground text-sm">
+              이미지
+            </div>
           </div>
 
           {/* Step 3 */}
           <div>
-            <h3 className="flex items-center gap-2.5 font-semibold text-[0.95rem]">
+            <h3 className="flex items-center gap-2.5 font-semibold text-[0.95rem] mb-3">
               <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary text-primary-foreground text-xs flex items-center justify-center font-bold">3</span>
               {isKo ? 'SNS 레시피에서 재료 적힌 부분 스크린샷 하기' : 'Screenshot the ingredients section of your SNS recipe'}
             </h3>
+            <div className="w-[400px] h-[300px] rounded-lg border-2 border-dashed border-border bg-muted flex items-center justify-center text-muted-foreground text-sm">
+              이미지
+            </div>
           </div>
 
           {/* Step 4 */}
           <div>
-            <h3 className="flex items-center gap-2.5 font-semibold text-[0.95rem]">
+            <h3 className="flex items-center gap-2.5 font-semibold text-[0.95rem] mb-3">
               <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary text-primary-foreground text-xs flex items-center justify-center font-bold">4</span>
               {isKo
                 ? 'AI 웹사이트로 돌아가서 스크린샷 붙여넣고 엔터 누르기'
                 : 'Go back to the AI website, paste the screenshot, then press Enter'}
             </h3>
+            <div className="w-[400px] h-[300px] rounded-lg border-2 border-dashed border-border bg-muted flex items-center justify-center text-muted-foreground text-sm">
+              이미지
+            </div>
           </div>
 
           {/* Step 5 */}
