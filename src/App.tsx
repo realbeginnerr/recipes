@@ -6,12 +6,14 @@ import { IngredientsPage } from './pages/IngredientsPage'
 import { AddIngredientPage } from './pages/AddIngredientPage'
 import { SignupPage } from './pages/SignupPage'
 import { RecipeDetailPage } from './pages/RecipeDetailPage'
+import { EatingOutPage } from './pages/EatingOutPage'
 
 export function App() {
   return (
     <Routes>
       <Route element={<Layout />}>
         <Route index element={<RecipePage />} />
+        <Route path="eating-out" element={<EatingOutPage />} />
         <Route path="add-recipe" element={<AddRecipePage />} />
         <Route path="ingredients" element={<IngredientsPage />} />
         <Route path="add-ingredient" element={<AddIngredientPage />} />

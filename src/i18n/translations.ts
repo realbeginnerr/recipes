@@ -2,7 +2,7 @@ export type Language = 'en' | 'ko'
 
 export const translations = {
   en: {
-    appTitle: "T's recipe",
+    appTitle: "T's Diet",
     searchLabel: 'Search',
     searchPlaceholder: 'Recipe or ingredient name…',
     searchButton: 'Search',
@@ -19,6 +19,7 @@ export const translations = {
     colCarbs: 'Carbs',
     colProtein: 'Protein',
     colFat: 'Fat',
+    colAddedSugar: 'Added Sugar',
     total: 'Total',
     recommendedPerMeal: 'Recommended per meal',
     divideByMeals: 'Divide into',
@@ -35,7 +36,7 @@ export const translations = {
     },
   },
   ko: {
-    appTitle: 'T의 레시피',
+    appTitle: '딸이 알려주는 식단관리',
     searchLabel: '검색',
     searchPlaceholder: '레시피/식재료 이름…',
     searchButton: '검색',
@@ -52,6 +53,7 @@ export const translations = {
     colCarbs: '탄수화물',
     colProtein: '단백질',
     colFat: '지방',
+    colAddedSugar: '첨가당',
     total: '합계',
     recommendedPerMeal: '한끼 권장량',
     divideByMeals: '끼로 나누기',

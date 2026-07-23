@@ -11,6 +11,7 @@ export const ingredients: Ingredient[] = [
     carbs: 0,
     protein: 26.1,
     fat: 15.0,
+
     conversions: { g: 1, oz: 28.35 },
     allowedUnits: ['g', 'oz'],
   },
@@ -23,6 +24,7 @@ export const ingredients: Ingredient[] = [
     carbs: 9.3,
     protein: 1.1,
     fat: 0.1,
+
     conversions: { g: 1, piece: 150, oz: 28.35 },
     allowedUnits: ['g', 'piece', 'oz'],
   },
@@ -35,6 +37,7 @@ export const ingredients: Ingredient[] = [
     carbs: 33.1,
     protein: 6.4,
     fat: 0.5,
+
     conversions: { g: 1, piece: 3, oz: 28.35 },
     allowedUnits: ['g', 'piece', 'oz'],
   },
@@ -47,6 +50,7 @@ export const ingredients: Ingredient[] = [
     carbs: 22.8,
     protein: 8.7,
     fat: 0.5,
+
     conversions: { g: 1, oz: 28.35 },
     allowedUnits: ['g', 'oz'],
   },
@@ -59,6 +63,7 @@ export const ingredients: Ingredient[] = [
     carbs: 3.9,
     protein: 0.9,
     fat: 0.2,
+
     conversions: { g: 1, ml: 1.04, oz: 28.35 },
     allowedUnits: ['g', 'ml', 'oz'],
   },
@@ -71,6 +76,7 @@ export const ingredients: Ingredient[] = [
     carbs: 18.9,
     protein: 4.3,
     fat: 0.2,
+
     conversions: { g: 1, ml: 1.15, oz: 28.35 },
     allowedUnits: ['g', 'ml', 'oz'],
   },
@@ -83,6 +89,7 @@ export const ingredients: Ingredient[] = [
     carbs: 0.5,
     protein: 1.2,
     fat: 0.1,
+
     conversions: { ml: 1, oz: 29.57 },
     allowedUnits: ['ml', 'oz'],
   },
@@ -95,6 +102,7 @@ export const ingredients: Ingredient[] = [
     carbs: 49.7,
     protein: 13.5,
     fat: 14.3,
+
     conversions: { g: 1, oz: 28.35 },
     allowedUnits: ['g', 'oz'],
   },
@@ -107,6 +115,7 @@ export const ingredients: Ingredient[] = [
     carbs: 44.2,
     protein: 17.8,
     fat: 22.3,
+
     conversions: { g: 1, oz: 28.35 },
     allowedUnits: ['g', 'oz'],
   },
@@ -119,6 +128,7 @@ export const ingredients: Ingredient[] = [
     carbs: 0,
     protein: 0,
     fat: 100,
+
     conversions: { g: 1, ml: 0.92, oz: 28.35 },
     allowedUnits: ['g', 'ml', 'oz'],
   },
@@ -131,6 +141,7 @@ export const ingredients: Ingredient[] = [
     carbs: 0,
     protein: 0,
     fat: 0,
+
     conversions: { g: 1, oz: 28.35 },
     allowedUnits: ['g', 'oz'],
   },
@@ -143,6 +154,7 @@ export const ingredients: Ingredient[] = [
     carbs: 63.9,
     protein: 10.4,
     fat: 3.3,
+
     conversions: { g: 1, oz: 28.35 },
     allowedUnits: ['g', 'oz'],
   },
@@ -155,6 +167,7 @@ export const ingredients: Ingredient[] = [
     carbs: 28.5,
     protein: 3.1,
     fat: 0.8,
+
     conversions: { g: 1, oz: 28.35 },
     allowedUnits: ['g', 'oz'],
   },

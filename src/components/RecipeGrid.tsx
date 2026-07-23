@@ -1,8 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import type { Recipe } from '../types'
 
-const MULTIGRAIN_ID = '__multigrain_rice__'
-
 const base = import.meta.env.BASE_URL
 
 const localImageMap: Record<string, string> = {
@@ -24,94 +22,16 @@ function resolveImage(recipe: Recipe): string {
   return localImageMap[recipe.nameKo] ?? ''
 }
 import { useLanguage } from '../context/LanguageContext'
-import { ingredientById } from '../data/ingredients'
-import { amountToGrams, calculateMacros } from '../utils/nutrition'
 import { trackRecipeView } from '../utils/analytics'
-
-interface Macros { carbs: number; protein: number; fat: number }
-
-const REC = { carbs: 75, protein: 33, fat: 22 }
-
-function calcMacros(recipe: Recipe): Macros {
-  let carbs = 0, protein = 0, fat = 0
-  for (const item of recipe.items) {
-    const ing = ingredientById.get(item.ingredientId)
-    if (!ing) continue
-    const grams = amountToGrams(item.defaultAmount, item.defaultUnit, ing.conversions)
-    const m = calculateMacros(grams, ing)
-    carbs += m.carbs
-    protein += m.protein
-    fat += m.fat
-  }
-  const division = recipe.divisionCount ?? 4
-  const sideItems = recipe.sideItems ?? []
-  let sideCarbs = 0, sideProtein = 0, sideFat = 0
-  for (const item of sideItems) {
-    if (item.ingredientId === MULTIGRAIN_ID) {
-      const g = item.defaultUnit === 'oz' ? item.defaultAmount * 28.3495 : item.defaultAmount
-      sideCarbs += (g * 28.5) / 100
-      sideProtein += (g * 3.1) / 100
-      sideFat += (g * 0.8) / 100
-      continue
-    }
-    const ing = ingredientById.get(item.ingredientId)
-    if (!ing) continue
-    const grams = amountToGrams(item.defaultAmount, item.defaultUnit, ing.conversions)
-    const m = calculateMacros(grams, ing)
-    sideCarbs += m.carbs
-    sideProtein += m.protein
-    sideFat += m.fat
-  }
-  return {
-    carbs: carbs / division + sideCarbs,
-    protein: protein / division + sideProtein,
-    fat: fat / division + sideFat,
-  }
-}
-
-function macroColor(value: number, target: number): string {
-  const diff = Math.abs(value - target)
-  if (diff >= 10) return '#dc2626'
-  if (diff >= 5) return '#ea580c'
-  return '#16a34a'
-}
-
-function MacroChart({ macros }: { macros: Macros }) {
-  const { language } = useLanguage()
-  const bars = [
-    { label: language === 'ko' ? '탄' : 'C', value: macros.carbs, rec: REC.carbs },
-    { label: language === 'ko' ? '단' : 'P', value: macros.protein, rec: REC.protein },
-    { label: language === 'ko' ? '지' : 'F', value: macros.fat, rec: REC.fat },
-  ]
-
-  return (
-    <div className="macro-chart">
-      {bars.map(({ label, value, rec }) => {
-        const pct = Math.min((value / rec) / 1.3 * 100, 100)
-        const color = macroColor(value, rec)
-        return (
-          <div key={label} className="macro-chart__row">
-            <span className="macro-chart__label">{label}</span>
-            <div className="macro-chart__track">
-              <div className="macro-chart__bar" style={{ width: `${pct}%`, background: color }} />
-              <div className="macro-chart__rec-line" style={{ left: `${(100 / 130) * 100}%` }} />
-            </div>
-            <span className="macro-chart__value" style={{ color }}>
-              {Math.round(value)} / {rec}
-            </span>
-          </div>
-        )
-      })}
-    </div>
-  )
-}
+import { getRecipeBadge } from '../utils/recipeBadge'
+import { RecipeBadge, MacroBadge } from './RecipeBadge'
 
 function RecipeCard({ recipe }: { recipe: Recipe }) {
   const navigate = useNavigate()
   const { language } = useLanguage()
   const name = language === 'ko' ? recipe.nameKo : recipe.name
-  const macros = calcMacros(recipe)
   const imageUrl = resolveImage(recipe)
+  const badge = getRecipeBadge(recipe)
 
   function handleClick() {
     trackRecipeView(recipe.nameKo, recipe.name)
@@ -143,7 +63,10 @@ function RecipeCard({ recipe }: { recipe: Recipe }) {
       </div>
       <div className="recipe-card__footer">
         <span className="recipe-card__name">{name}</span>
-        <MacroChart macros={macros} />
+        <div style={{ marginTop: '4px', marginBottom: '2px', display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+          <RecipeBadge result={badge} language={language} />
+          <MacroBadge result={badge} language={language} />
+        </div>
       </div>
     </article>
   )

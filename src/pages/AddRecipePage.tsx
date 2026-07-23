@@ -681,7 +681,7 @@ export function AddRecipePage() {
       </div>
 
       {mode === 'sns' && (
-        <div className="space-y-7 mt-2">
+        <div className="space-y-14 mt-2">
           {/* Step 1 */}
           <div>
             <h3 className="flex items-center gap-2.5 font-semibold text-[0.95rem] mb-3">
@@ -728,9 +728,11 @@ export function AddRecipePage() {
                 <>{'Go to '}<a href="https://chatgpt.com" target="_blank" rel="noopener noreferrer" className="text-primary underline underline-offset-2">ChatGPT</a>{' / '}<a href="https://gemini.google.com" target="_blank" rel="noopener noreferrer" className="text-primary underline underline-offset-2">Gemini</a>{' etc. and paste — do not press Enter yet'}</>
               )}
             </h3>
-            <div className="w-[400px] h-[300px] rounded-lg border-2 border-dashed border-border bg-muted flex items-center justify-center text-muted-foreground text-sm">
-              이미지
-            </div>
+            <img
+              src={`${import.meta.env.BASE_URL}images/add recipe 2.png`}
+              alt={isKo ? '2단계 설명 이미지' : 'Step 2 illustration'}
+              className="w-[400px] max-w-full rounded-lg border border-border"
+            />
           </div>
 
           {/* Step 3 */}
@@ -739,9 +741,11 @@ export function AddRecipePage() {
               <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary text-primary-foreground text-xs flex items-center justify-center font-bold">3</span>
               {isKo ? 'SNS 레시피에서 재료 적힌 부분 스크린샷 하기' : 'Screenshot the ingredients section of your SNS recipe'}
             </h3>
-            <div className="w-[400px] h-[300px] rounded-lg border-2 border-dashed border-border bg-muted flex items-center justify-center text-muted-foreground text-sm">
-              이미지
-            </div>
+            <img
+              src={`${import.meta.env.BASE_URL}images/add recipe 3.png`}
+              alt={isKo ? '3단계 설명 이미지' : 'Step 3 illustration'}
+              className="w-[400px] max-w-full rounded-lg border border-border"
+            />
           </div>
 
           {/* Step 4 */}
@@ -752,9 +756,11 @@ export function AddRecipePage() {
                 ? 'AI 웹사이트로 돌아가서 스크린샷 붙여넣고 엔터 누르기'
                 : 'Go back to the AI website, paste the screenshot, then press Enter'}
             </h3>
-            <div className="w-[400px] h-[300px] rounded-lg border-2 border-dashed border-border bg-muted flex items-center justify-center text-muted-foreground text-sm">
-              이미지
-            </div>
+            <img
+              src={`${import.meta.env.BASE_URL}images/add recipe 4.png`}
+              alt={isKo ? '4단계 설명 이미지' : 'Step 4 illustration'}
+              className="w-[400px] max-w-full rounded-lg border border-border"
+            />
           </div>
 
           {/* Step 5 */}

@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useLanguage } from '../context/LanguageContext'
 import { useSearch } from '../context/SearchContext'
 import { useAdmin } from '../context/AdminContext'
@@ -23,6 +24,7 @@ export function RecipePage() {
   const { appliedSearch, homeVersion } = useSearch()
   const { language, t } = useLanguage()
   const { isAdmin } = useAdmin()
+  const navigate = useNavigate()
   const [recipes, setRecipes] = useState<Recipe[]>(staticRecipes)
   const [recipeStates, setRecipeStates] = useState<RecipeStates>(() =>
     buildInitialRecipeStates(language),
@@ -183,7 +185,7 @@ export function RecipePage() {
 
   return (
     <section className="page">
-      <div className="recipe-sort">
+      <div className="recipe-sort" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <Select value={sortOrder} onValueChange={(v) => setSortOrder(v as typeof sortOrder)}>
           <SelectTrigger className="w-48">
             <SelectValue />
@@ -195,6 +197,13 @@ export function RecipePage() {
             <SelectItem value="alpha-desc">{language === 'ko' ? '이름순 (ㅎ~ㄱ)' : 'Name (Z→A)'}</SelectItem>
           </SelectContent>
         </Select>
+        <button
+          type="button"
+          onClick={() => navigate('/add-recipe')}
+          style={{ fontSize: '0.85rem', color: 'var(--primary)', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 600, padding: '4px 0' }}
+        >
+          {language === 'ko' ? '+ 레시피 추가' : '+ Add Recipe'}
+        </button>
       </div>
 
       {appliedSearch ? (

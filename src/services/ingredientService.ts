@@ -11,6 +11,8 @@ export type FirestoreIngredient = {
   carbs: number
   protein: number
   fat: number
+  addedSugar?: number
+  isRefinedCarb?: boolean
   gramsPerTbsp?: number
   gramsPerTsp?: number
   gramsPerCup?: number
@@ -87,6 +89,8 @@ function registerIngredient(ing: FirestoreIngredient) {
     carbs: ing.carbs,
     protein: ing.protein,
     fat: ing.fat,
+    addedSugar: ing.addedSugar,
+    isRefinedCarb: ing.isRefinedCarb,
     conversions: buildConversions(ing),
     allowedUnits: buildAllowedUnits(ing),
   })

@@ -36,8 +36,11 @@ import {
   formatAmount,
   formatMacro,
 } from '../utils/nutrition'
+import { isRefinedCarb, isAddedSugarIngredient } from '../data/refinedCarbs'
 import { getIngredientDisplayName, getRecipeDisplayName } from '../utils/displayNames'
 import { ingredientMatchesSearch } from '../utils/search'
+import { getRecipeBadge } from '../utils/recipeBadge'
+import { RecipeBadge, MacroBadge } from './RecipeBadge'
 
 type RecipeTableProps = {
   recipe: Recipe
@@ -326,6 +329,12 @@ export function RecipeTable({
               {getRecipeDisplayName(activeRecipe, language)}
             </h2>
           )}
+          {!isEditing && (
+            <div style={{ marginTop: '4px', display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+              <RecipeBadge result={getRecipeBadge(activeRecipe)} language={language} />
+              <MacroBadge result={getRecipeBadge(activeRecipe)} language={language} />
+            </div>
+          )}
           <div className="recipe-block__ratings">
             <StarRating
               label={language === 'ko' ? '맛' : 'Taste'}
@@ -450,7 +459,7 @@ export function RecipeTable({
                     >⠿</TableCell>
                     <TableCell
                       className="edit-inline__replace-cell"
-                      style={{ fontWeight: isNew ? 700 : undefined }}
+                      style={{ fontWeight: isNew ? 700 : undefined, color: isAddedSugarIngredient(ingredient.nameKo) ? '#dc2626' : isRefinedCarb(ingredient.nameKo, ingredient.name, ingredient.isRefinedCarb) ? '#ea580c' : undefined }}
                       onClick={() => { setReplaceSide(false); setReplaceTargetIndex(index) }}
                       title={language === 'ko' ? '클릭하여 식재료 교체' : 'Click to replace ingredient'}
                     >
@@ -506,7 +515,7 @@ export function RecipeTable({
                     key={row.ingredientId}
                     className={isMatch ? 'recipe-table__row--match' : undefined}
                   >
-                    <TableCell>{getIngredientDisplayName(ingredient, language)}</TableCell>
+                    <TableCell style={{ color: isAddedSugarIngredient(ingredient.nameKo) ? '#dc2626' : isRefinedCarb(ingredient.nameKo, ingredient.name, ingredient.isRefinedCarb) ? '#ea580c' : undefined }}>{getIngredientDisplayName(ingredient, language)}</TableCell>
                     <TableCell>
                       <Input
                         type="number"
@@ -642,6 +651,7 @@ export function RecipeTable({
                   )}
                   <TableCell
                     className={!isRice && isEditing ? 'edit-inline__replace-cell' : undefined}
+                    style={{ color: !isRice && ing ? (isAddedSugarIngredient(ing.nameKo) ? '#dc2626' : isRefinedCarb(ing.nameKo, ing.name, ing.isRefinedCarb) ? '#ea580c' : undefined) : undefined }}
                     onClick={!isRice && isEditing ? () => { setReplaceSide(true); setReplaceTargetIndex(index) } : undefined}
                     title={!isRice && isEditing ? (language === 'ko' ? '클릭하여 식재료 교체' : 'Click to replace ingredient') : undefined}
                   >
@@ -711,7 +721,7 @@ export function RecipeTable({
             })}
             {isEditing && !editSideItems.some((i) => i.ingredientId === MULTIGRAIN_ID) && (
               <TableRow className="recipe-table__multigrain-row">
-                <TableCell colSpan={8}>
+                <TableCell colSpan={9}>
                   <Button
                     type="button"
                     variant="outline"
@@ -843,38 +853,6 @@ export function RecipeTable({
           )}
         </div>
       )}
-      {!isCollapsed && (() => {
-        const mealCarbs = totals.carbs / effectiveDivision + sideTotals.carbs
-        const mealProtein = totals.protein / effectiveDivision + sideTotals.protein
-        const mealFat = totals.fat / effectiveDivision + sideTotals.fat
-        const REC = { carbs: 75, protein: 33, fat: 22 }
-        const bars = [
-          { label: language === 'ko' ? '탄수화물' : 'Carbs', value: mealCarbs, rec: REC.carbs },
-          { label: language === 'ko' ? '단백질' : 'Protein', value: mealProtein, rec: REC.protein },
-          { label: language === 'ko' ? '지방' : 'Fat', value: mealFat, rec: REC.fat },
-        ]
-        return (
-          <div className="macro-chart">
-            {bars.map(({ label, value, rec }) => {
-              const pct = Math.min((value / rec) / 1.3 * 100, 100)
-              const diff = Math.abs(value - rec)
-              const color = diff >= 10 ? '#dc2626' : diff >= 5 ? '#ea580c' : '#16a34a'
-              return (
-                <div key={label} className="macro-chart__row">
-                  <span className="macro-chart__label">{label}</span>
-                  <div className="macro-chart__track">
-                    <div className="macro-chart__bar" style={{ width: `${pct}%`, background: color }} />
-                    <div className="macro-chart__rec-line" style={{ left: `${(100 / 130) * 100}%` }} />
-                  </div>
-                  <span className="macro-chart__value" style={{ color }}>
-                    {formatMacro(value)}g / {rec}g
-                  </span>
-                </div>
-              )
-            })}
-          </div>
-        )
-      })()}
 
       {!isCollapsed && isEditing && (
         <div className="edit-bottom-bar">

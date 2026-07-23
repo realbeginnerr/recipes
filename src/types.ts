@@ -7,6 +7,8 @@ export type Ingredient = {
   carbs: number
   protein: number
   fat: number
+  addedSugar?: number
+  isRefinedCarb?: boolean
   conversions: Record<string, number>
   allowedUnits: string[]
 }

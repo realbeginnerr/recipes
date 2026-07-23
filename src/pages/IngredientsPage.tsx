@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useLanguage } from '../context/LanguageContext'
 import { useAdmin } from '../context/AdminContext'
 import { toTitleCase } from '../utils/displayNames'
@@ -20,6 +21,7 @@ import { UnitSelect } from '../components/UnitSelect'
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table'
 import { Textarea } from '@/components/ui/textarea'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
+import { isRefinedCarb, isAddedSugarIngredient } from '../data/refinedCarbs'
 
 function dedupeIngredients(isKo: boolean, order: 'alpha-asc' | 'alpha-desc' = 'alpha-asc'): FirestoreIngredient[] {
   const seen = new Set<string>()
@@ -70,6 +72,7 @@ function saveFavoritesToStorage(ids: Set<string>) {
 export function IngredientsPage() {
   const { language } = useLanguage()
   const { isAdmin } = useAdmin()
+  const navigate = useNavigate()
   const isKo = language === 'ko'
 
   const [ingredients, setIngredients] = useState<FirestoreIngredient[]>([])
@@ -287,12 +290,21 @@ export function IngredientsPage() {
             </Button>
           </div>
         ) : (
-          <Button type="button" variant="ghost" size="icon-sm" onClick={startEditing} aria-label="Edit">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
-            </svg>
-          </Button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <Button type="button" variant="ghost" size="icon-sm" onClick={startEditing} aria-label="Edit">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+              </svg>
+            </Button>
+            <button
+              type="button"
+              onClick={() => navigate('/add-ingredient')}
+              style={{ fontSize: '0.85rem', color: 'var(--primary)', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 600, padding: '4px 0' }}
+            >
+              {isKo ? '+ 식재료 추가' : '+ Add Ingredient'}
+            </button>
+          </div>
         )}
       </div>
 
@@ -345,7 +357,7 @@ export function IngredientsPage() {
               {displayRows.map((ing) =>
                 isEditing ? (
                   <TableRow key={ing.id}>
-                    <TableCell>
+                    <TableCell style={{ color: isAddedSugarIngredient(ing.nameKo) ? '#dc2626' : isRefinedCarb(ing.nameKo, ing.name, ing.isRefinedCarb) ? '#ea580c' : undefined }}>
                       <Input
                         value={ing.nameKo || ing.name}
                         onChange={(e) => updateEditRow(ing.id, 'nameKo', e.target.value)}
@@ -487,7 +499,7 @@ export function IngredientsPage() {
                   </TableRow>
                 ) : (
                   <TableRow key={ing.id}>
-                    <TableCell>
+                    <TableCell style={{ color: isAddedSugarIngredient(ing.nameKo) ? '#dc2626' : isRefinedCarb(ing.nameKo, ing.name, ing.isRefinedCarb) ? '#ea580c' : undefined }}>
                       {isKo && ing.nameKo ? ing.nameKo : toTitleCase(ing.name)}
                       {isKo && ing.name && (
                         <span style={{ display: 'block', fontSize: '0.78rem', opacity: 0.5 }}>{toTitleCase(ing.name)}</span>
