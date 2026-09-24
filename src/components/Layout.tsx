@@ -115,12 +115,13 @@ function AdminButton() {
 function NavMenu() {
   const { language } = useLanguage()
   const { resetHome } = useSearch()
-  const { isAdmin } = useAdmin()
 
   const links = [
-    { to: '/eating-out', label: language === 'ko' ? '외식/배달' : 'Eating Out', end: false, onClick: undefined, locked: false },
-    { to: '/', label: language === 'ko' ? '집밥 요리' : 'Recipes', end: true, onClick: resetHome, locked: false },
-    { to: '/ingredients', label: language === 'ko' ? '식재료' : 'Ingredients', end: false, locked: !isAdmin },
+    { to: '/eating-out', label: language === 'ko' ? '외식/배달' : 'Eating Out', end: false, onClick: undefined },
+    { to: '/', label: language === 'ko' ? '집밥 요리' : 'Recipes', end: true, onClick: resetHome },
+    { to: '/add-recipe', label: language === 'ko' ? '레시피 추가' : 'Add Recipe', end: false },
+    { to: '/ingredients', label: language === 'ko' ? '식재료' : 'Ingredients', end: false },
+    { to: '/add-ingredient', label: language === 'ko' ? '식재료 추가' : 'Add Ingredient', end: false },
   ]
 
   return (
@@ -140,7 +141,6 @@ function NavMenu() {
           onClick={link.onClick}
         >
           {link.label}
-          {link.locked && <span className="ml-1 text-[0.75em] opacity-50">🔒</span>}
         </NavLink>
       ))}
       <AdminButton />
@@ -208,7 +208,6 @@ function HamburgerMenu() {
   const { language } = useLanguage()
   const navigate = useNavigate()
   const { resetHome } = useSearch()
-  const { isAdmin } = useAdmin()
   const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -223,9 +222,11 @@ function HamburgerMenu() {
   }, [open])
 
   const links = [
-    { to: '/eating-out', label: language === 'ko' ? '외식/배달' : 'Eating Out', onClick: () => { navigate('/eating-out'); setOpen(false) }, locked: false },
-    { to: '/', label: language === 'ko' ? '집밥 요리' : 'Recipes', onClick: () => { resetHome(); navigate('/'); setOpen(false) }, locked: false },
-    { to: '/ingredients', label: language === 'ko' ? '식재료' : 'Ingredients', onClick: () => { navigate('/ingredients'); setOpen(false) }, locked: !isAdmin },
+    { to: '/eating-out', label: language === 'ko' ? '외식/배달' : 'Eating Out', onClick: () => { navigate('/eating-out'); setOpen(false) } },
+    { to: '/', label: language === 'ko' ? '집밥 요리' : 'Recipes', onClick: () => { resetHome(); navigate('/'); setOpen(false) } },
+    { to: '/add-recipe', label: language === 'ko' ? '레시피 추가' : 'Add Recipe', onClick: () => { navigate('/add-recipe'); setOpen(false) } },
+    { to: '/ingredients', label: language === 'ko' ? '식재료' : 'Ingredients', onClick: () => { navigate('/ingredients'); setOpen(false) } },
+    { to: '/add-ingredient', label: language === 'ko' ? '식재료 추가' : 'Add Ingredient', onClick: () => { navigate('/add-ingredient'); setOpen(false) } },
   ]
 
   return (
@@ -255,7 +256,6 @@ function HamburgerMenu() {
               onClick={link.onClick}
             >
               {link.label}
-              {link.locked && <span className="ml-1 text-[0.75em] opacity-50">🔒</span>}
             </Button>
           ))}
           <div className="h-px bg-border mx-3 my-1" />

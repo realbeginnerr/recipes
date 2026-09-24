@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import { useLanguage } from '../context/LanguageContext'
-import { useAdmin } from '../context/AdminContext'
 import { saveRecipeToFirestore, loadRecipesFromFirestore, type FirestoreRecipe } from '../services/recipeService'
 import {
   loadIngredientsFromFirestore,
@@ -140,7 +139,6 @@ async function translateKoToEn(text: string): Promise<string> {
 
 export function AddRecipePage() {
   const { language } = useLanguage()
-  const { isAdmin } = useAdmin()
   const isKo = language === 'ko'
 
 
@@ -622,23 +620,6 @@ export function AddRecipePage() {
   if (mode === 'select') {
     return (
       <section className="page">
-        {!isAdmin && (
-          <div className="mb-4 rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-800 dark:border-amber-700 dark:bg-amber-950 dark:text-amber-300">
-            {isKo ? (
-              <>
-                현재 로그인, 회원가입 기능은 없습니다. 로그인 하지 않은 상태에서 입력한 내용은 저장되지 않습니다.<br />
-                레시피, 식재료 추가 기능을 필요로 하는 분들이 많아지면 그때 해당 기능을 추가할 예정입니다.<br />
-                필요하신 분은 화면 상단의 '회원가입 신청' 버튼을 클릭해주세요.
-              </>
-            ) : (
-              <>
-                Login and sign-up features are not currently available. Content entered without logging in will not be saved.<br />
-                If enough people need the ability to add recipes and ingredients, we'll add that feature at that time.<br />
-                If you're interested, please click the 'Sign Up' button at the top of the screen.
-              </>
-            )}
-          </div>
-        )}
         <h2 className="page__heading">{isKo ? '레시피 추가' : 'Add Recipe'}</h2>
         <p className="add-recipe__select-subtitle">
           {isKo ? '어떤 방식으로 레시피를 추가하시겠어요?' : 'How would you like to add a recipe?'}

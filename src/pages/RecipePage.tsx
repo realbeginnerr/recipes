@@ -37,9 +37,13 @@ export function RecipePage() {
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false)
   const [sortOrder, setSortOrder] = useState<'alpha-asc' | 'alpha-desc' | 'date-desc' | 'date-asc'>('date-desc')
   const [loading, setLoading] = useState(true)
+  const [loadFailed, setLoadFailed] = useState(false)
+  const [loadAttempt, setLoadAttempt] = useState(0)
 
   useEffect(() => {
     async function load() {
+      setLoading(true)
+      setLoadFailed(false)
       try {
         await loadIngredientsFromFirestore()
         const fsDocs = await loadRecipesFromFirestore()
@@ -58,12 +62,15 @@ export function RecipePage() {
         }
         return { ...current, ...extra }
       })
+      } catch (error) {
+        console.error('Failed to load recipes:', error)
+        setLoadFailed(true)
       } finally {
         setLoading(false)
       }
     }
-    load().catch(console.error)
-  }, [])
+    void load()
+  }, [loadAttempt])
 
   useEffect(() => {
     setRecipeStates(buildInitialRecipeStates(language))
@@ -213,7 +220,16 @@ export function RecipePage() {
         </header>
       ) : null}
 
-      {appliedSearch ? (
+      {loadFailed ? (
+        <div className="empty-state" role="alert">
+          <p className="empty-state__text">
+            {language === 'ko' ? '레시피를 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.' : 'Unable to load recipes. Please try again shortly.'}
+          </p>
+          <button type="button" onClick={() => setLoadAttempt((attempt) => attempt + 1)}>
+            {language === 'ko' ? '다시 시도' : 'Try again'}
+          </button>
+        </div>
+      ) : appliedSearch ? (
         <div className="recipe-list">
           {visibleRecipes.length === 0 ? (
             <p className="page__empty">{t.noRecipesFound(appliedSearch)}</p>

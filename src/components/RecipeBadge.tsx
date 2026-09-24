@@ -69,8 +69,6 @@ const NUTRIENT_LABEL: Record<string, { ko: string; en: string }> = {
 
 function macroIssueText(issue: MacroIssue, isKo: boolean): string {
   const label = isKo ? NUTRIENT_LABEL[issue.nutrient].ko : NUTRIENT_LABEL[issue.nutrient].en
-  const val = Math.round(issue.value)
-  const tgt = issue.target
   if (isKo) return issue.direction === 'over' ? `${label} 과다` : `${label} 부족`
   return issue.direction === 'over' ? `Too much ${label}` : `Low ${label}`
 }

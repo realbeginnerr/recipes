@@ -48,7 +48,7 @@ const GI_BY_KO: Record<string, number> = {
   '다시마': 15,
 }
 
-export function getGI(nameKo?: string, name?: string, gi?: number): number | undefined {
+export function getGI(nameKo?: string, _name?: string, gi?: number): number | undefined {
   if (gi !== undefined) return gi
   if (nameKo) {
     if (GI_BY_KO[nameKo] !== undefined) return GI_BY_KO[nameKo]
