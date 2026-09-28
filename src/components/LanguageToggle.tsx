@@ -24,7 +24,7 @@ export function LanguageToggle() {
           key={option.value}
           value={option.value}
           aria-label={option.label}
-          className="h-auto w-auto p-1 rounded-md opacity-50 aria-pressed:opacity-100 hover:bg-transparent hover:opacity-75"
+          className="h-auto w-auto p-1 rounded-md opacity-50 aria-pressed:opacity-100  "
         >
           <img src={option.icon} alt={option.label} width="22" height="16" />
         </ToggleGroupItem>

@@ -7,9 +7,9 @@ const REC = { carbs: 75, protein: 33, fat: 22 }
 
 function macroColor(value: number, target: number): string {
   const diff = Math.abs(value - target)
-  if (diff >= 10) return '#dc2626'
-  if (diff >= 5) return '#ea580c'
-  return '#16a34a'
+  if (diff >= 10) return 'var(--destructive)'
+  if (diff >= 5) return 'var(--warning)'
+  return 'var(--success)'
 }
 
 function MacroChart({ macros }: { macros: { carbs: number; protein: number; fat: number } }) {
@@ -42,19 +42,19 @@ function MacroChart({ macros }: { macros: { carbs: number; protein: number; fat:
 }
 
 const LEVEL_CONFIG: Record<BadgeLevel, { emoji: string; ko: string; en: string; bg: string; color: string }> = {
-  good:     { emoji: '🟢', ko: '혈당 양호', en: 'Blood Sugar: Good',     bg: 'rgba(22,163,74,0.10)',  color: '#15803d' },
-  moderate: { emoji: '🟡', ko: '혈당 보통', en: 'Blood Sugar: Moderate', bg: 'rgba(202,138,4,0.12)',  color: '#a16207' },
-  caution:  { emoji: '🔴', ko: '혈당 주의', en: 'Blood Sugar: Caution',  bg: 'rgba(220,38,38,0.10)',  color: '#b91c1c' },
+  good:     { emoji: '🟢', ko: '혈당 양호', en: 'Blood Sugar: Good',     bg: 'var(--surface-sage)',  color: 'var(--primary)' },
+  moderate: { emoji: '🟡', ko: '혈당 보통', en: 'Blood Sugar: Moderate', bg: 'var(--warning)',  color: 'var(--foreground)' },
+  caution:  { emoji: '🔴', ko: '혈당 주의', en: 'Blood Sugar: Caution',  bg: 'var(--surface-soft)',  color: 'var(--destructive)' },
 }
 
 const BADGE_STYLE: CSSProperties = {
   display: 'inline-flex',
   alignItems: 'center',
   gap: '4px',
-  padding: '2px 8px',
+  padding: '4px 12px',
   borderRadius: '9999px',
-  fontSize: '0.72rem',
-  fontWeight: 600,
+  fontSize: '13px',
+  fontWeight: 500,
   whiteSpace: 'nowrap',
   lineHeight: 1.6,
   border: 'none',
@@ -80,7 +80,7 @@ const SECTION_STYLE: CSSProperties = {
 }
 
 const LABEL_STYLE: CSSProperties = {
-  fontSize: '0.72rem',
+  fontSize: '13px',
   fontWeight: 700,
   textTransform: 'uppercase',
   letterSpacing: '0.04em',
@@ -88,9 +88,9 @@ const LABEL_STYLE: CSSProperties = {
   marginBottom: '4px',
 }
 
-const STATUS_GOOD: CSSProperties  = { fontWeight: 600, color: '#15803d' }
-const STATUS_WARN: CSSProperties  = { fontWeight: 600, color: '#b91c1c' }
-const STATUS_MID: CSSProperties   = { fontWeight: 600, color: '#a16207' }
+const STATUS_GOOD: CSSProperties  = { fontWeight: 500, color: 'var(--primary)' }
+const STATUS_WARN: CSSProperties  = { fontWeight: 500, color: 'var(--destructive)' }
+const STATUS_MID: CSSProperties   = { fontWeight: 500, color: 'var(--foreground)' }
 
 export function RecipeBadge({ result, language }: { result: RecipeBadgeResult; language: 'ko' | 'en' }) {
   const c = LEVEL_CONFIG[result.level]
@@ -143,7 +143,7 @@ export function RecipeBadge({ result, language }: { result: RecipeBadgeResult; l
               : '(e.g.) For a 2,000kcal daily intake, aim for under 25g of added sugars per day.'}
           </p>
           {result.addedSugarItems.length > 0 && (
-            <ul style={{ marginTop: '4px', paddingLeft: 0, listStyle: 'none', fontSize: '0.78rem', color: '#b91c1c' }}>
+            <ul style={{ marginTop: '4px', paddingLeft: 0, listStyle: 'none', fontSize: '0.78rem', color: 'var(--destructive)' }}>
               {result.addedSugarItems.map((item, i) => <li key={i}>- {item.nameKo}</li>)}
             </ul>
           )}
@@ -157,7 +157,7 @@ export function RecipeBadge({ result, language }: { result: RecipeBadgeResult; l
           ) : (
             <>
               <p style={STATUS_WARN}>{isKo ? '주의 필요' : 'Caution'}</p>
-              <ul style={{ marginTop: '4px', paddingLeft: 0, listStyle: 'none', fontSize: '0.78rem', color: '#b91c1c' }}>
+              <ul style={{ marginTop: '4px', paddingLeft: 0, listStyle: 'none', fontSize: '0.78rem', color: 'var(--destructive)' }}>
                 {result.refinedCarbItems.map((item, i) => <li key={i}>- {item.nameKo}</li>)}
               </ul>
             </>
@@ -173,8 +173,8 @@ export function MacroBadge({ result, language }: { result: RecipeBadgeResult; la
   const isKo = language === 'ko'
   const hasIssues = result.macroIssues.length > 0
 
-  const bg = hasIssues ? 'rgba(202,138,4,0.12)' : 'rgba(22,163,74,0.10)'
-  const color = hasIssues ? '#a16207' : '#15803d'
+  const bg = hasIssues ? 'var(--warning)' : 'var(--surface-sage)'
+  const color = hasIssues ? 'var(--foreground)' : 'var(--primary)'
   const emoji = hasIssues ? '🟡' : '🟢'
 
   return (

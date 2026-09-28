@@ -1,24 +1,4 @@
 import { useState, useRef, useEffect } from 'react'
-
-function StarRating({ label, value, onChange }: { label: string; value: number; onChange?: (v: number) => void }) {
-  return (
-    <div className="star-rating">
-      <span className="star-rating__label">{label}</span>
-      {[1, 2, 3, 4, 5].map((star) => (
-        <button
-          key={star}
-          type="button"
-          className={`star-rating__star${star <= value ? ' star-rating__star--filled' : ''}`}
-          onClick={onChange ? () => onChange(star) : undefined}
-          style={{ cursor: onChange ? 'pointer' : 'default' }}
-          tabIndex={onChange ? 0 : -1}
-        >
-          ★
-        </button>
-      ))}
-    </div>
-  )
-}
 import { useLanguage } from '../context/LanguageContext'
 import { useAdmin } from '../context/AdminContext'
 import { ingredientById } from '../data/ingredients'
@@ -41,6 +21,7 @@ import { getIngredientDisplayName, getRecipeDisplayName } from '../utils/display
 import { ingredientMatchesSearch } from '../utils/search'
 import { getRecipeBadge } from '../utils/recipeBadge'
 import { RecipeBadge, MacroBadge } from './RecipeBadge'
+import { StarRating } from './StarRating'
 
 type RecipeTableProps = {
   recipe: Recipe
@@ -236,9 +217,9 @@ export function RecipeTable({
 
   function macroColor(value: number, target: number): string {
     const diff = Math.abs(value - target)
-    if (diff >= 10) return '#dc2626'
-    if (diff >= 5) return '#ea580c'
-    return '#16a34a'
+    if (diff >= 10) return 'var(--destructive)'
+    if (diff >= 5) return 'var(--warning)'
+    return 'var(--success)'
   }
 
   const totals = (isEditing ? editItems : rows).reduce(
@@ -421,7 +402,7 @@ export function RecipeTable({
                   size="icon-sm"
                   title={language === 'ko' ? '전체 삭제' : 'Delete all'}
                   onClick={() => { setEditItems([]); setEditSideItems([]) }}
-                  className="text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+                  className="text-muted-foreground  "
                 >✕</Button>
               </TableHead>
             )}
@@ -459,7 +440,7 @@ export function RecipeTable({
                     >⠿</TableCell>
                     <TableCell
                       className="edit-inline__replace-cell"
-                      style={{ fontWeight: isNew ? 700 : undefined, color: isAddedSugarIngredient(ingredient.nameKo) ? '#dc2626' : isRefinedCarb(ingredient.nameKo, ingredient.name, ingredient.isRefinedCarb) ? '#ea580c' : undefined }}
+                      style={{ fontWeight: isNew ? 700 : undefined, color: isAddedSugarIngredient(ingredient.nameKo) ? 'var(--destructive)' : isRefinedCarb(ingredient.nameKo, ingredient.name, ingredient.isRefinedCarb) ? 'var(--warning)' : undefined }}
                       onClick={() => { setReplaceSide(false); setReplaceTargetIndex(index) }}
                       title={language === 'ko' ? '클릭하여 식재료 교체' : 'Click to replace ingredient'}
                     >
@@ -491,7 +472,7 @@ export function RecipeTable({
                         variant="ghost"
                         size="icon-sm"
                         onClick={() => handleDeleteItem(index)}
-                        className="text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+                        className="text-muted-foreground  "
                       >
                         ✕
                       </Button>
@@ -515,7 +496,7 @@ export function RecipeTable({
                     key={row.ingredientId}
                     className={isMatch ? 'recipe-table__row--match' : undefined}
                   >
-                    <TableCell style={{ color: isAddedSugarIngredient(ingredient.nameKo) ? '#dc2626' : isRefinedCarb(ingredient.nameKo, ingredient.name, ingredient.isRefinedCarb) ? '#ea580c' : undefined }}>{getIngredientDisplayName(ingredient, language)}</TableCell>
+                    <TableCell style={{ color: isAddedSugarIngredient(ingredient.nameKo) ? 'var(--destructive)' : isRefinedCarb(ingredient.nameKo, ingredient.name, ingredient.isRefinedCarb) ? 'var(--warning)' : undefined }}>{getIngredientDisplayName(ingredient, language)}</TableCell>
                     <TableCell>
                       <Input
                         type="number"
@@ -651,7 +632,7 @@ export function RecipeTable({
                   )}
                   <TableCell
                     className={!isRice && isEditing ? 'edit-inline__replace-cell' : undefined}
-                    style={{ color: !isRice && ing ? (isAddedSugarIngredient(ing.nameKo) ? '#dc2626' : isRefinedCarb(ing.nameKo, ing.name, ing.isRefinedCarb) ? '#ea580c' : undefined) : undefined }}
+                    style={{ color: !isRice && ing ? (isAddedSugarIngredient(ing.nameKo) ? 'var(--destructive)' : isRefinedCarb(ing.nameKo, ing.name, ing.isRefinedCarb) ? 'var(--warning)' : undefined) : undefined }}
                     onClick={!isRice && isEditing ? () => { setReplaceSide(true); setReplaceTargetIndex(index) } : undefined}
                     title={!isRice && isEditing ? (language === 'ko' ? '클릭하여 식재료 교체' : 'Click to replace ingredient') : undefined}
                   >
@@ -712,7 +693,7 @@ export function RecipeTable({
                         variant="ghost"
                         size="icon-sm"
                         onClick={() => handleDeleteSideItem(index)}
-                        className="text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+                        className="text-muted-foreground  "
                       >✕</Button>
                     </TableCell>
                   )}

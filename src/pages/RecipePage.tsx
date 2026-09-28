@@ -1,272 +1,112 @@
-import { useEffect, useMemo, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { ContentState, LoadingState } from '../components/ContentState'
+import { PageIntro, CatalogToolbar, CategoryFilter, SearchField, SortSelect } from '../components/CatalogControls'
+import { Button } from '@/components/ui/button'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { Link, useSearchParams } from 'react-router-dom'
 import { useLanguage } from '../context/LanguageContext'
 import { useSearch } from '../context/SearchContext'
 import { useAdmin } from '../context/AdminContext'
-import { RecipeTable } from '../components/RecipeTable'
 import { RecipeGrid } from '../components/RecipeGrid'
-import { IngredientSearchModal } from '../components/IngredientSearchModal'
 import { recipes as staticRecipes } from '../data/recipe'
-import {
-  applyLanguageToRecipeStates,
-  buildInitialRecipeStates,
-  type RecipeStates,
-} from '../utils/recipeState'
-import { convertUnit, roundToOne } from '../utils/nutrition'
-import { ingredientById } from '../data/ingredients'
 import { recipeMatchesSearch } from '../utils/search'
-import { loadRecipesFromFirestore, convertToRecipe, deleteRecipeFromFirestore, updateRecipeInFirestore } from '../services/recipeService'
+import { recipeContainsIngredient } from '../utils/recipeIngredients'
+import { ingredientById } from '../data/ingredients'
+import { loadRecipesFromFirestore, convertToRecipe } from '../services/recipeService'
 import { loadIngredientsFromFirestore } from '../services/ingredientService'
+import { recipeCategories, categoryEnglish, getRecipeCategories, type RecipeCategory } from '../utils/recipeCategory'
 import type { Recipe } from '../types'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import './RecipePage.css'
 
 export function RecipePage() {
-  const { appliedSearch, homeVersion } = useSearch()
-  const { language, t } = useLanguage()
+  const { homeVersion, resetHome } = useSearch()
+  const [searchParams, setSearchParams] = useSearchParams()
+  const appliedSearch = searchParams.get('q') ?? ''
+  const ingredientId = searchParams.get('ingredient') ?? ''
+  const { language } = useLanguage()
   const { isAdmin } = useAdmin()
-  const navigate = useNavigate()
+  const ko = language === 'ko'
+  const selectedIngredient = ingredientById.get(ingredientId)
+  const ingredientName = selectedIngredient ? (ko ? selectedIngredient.nameKo ?? selectedIngredient.name : selectedIngredient.name) : ingredientId
   const [recipes, setRecipes] = useState<Recipe[]>(staticRecipes)
-  const [recipeStates, setRecipeStates] = useState<RecipeStates>(() =>
-    buildInitialRecipeStates(language),
-  )
-  const [divisionCount, setDivisionCount] = useState(4)
-  const [multigrainRiceAmount, setMultigrainRiceAmount] = useState(130)
-  const [multigrainRiceUnit, setMultigrainRiceUnit] = useState(() =>
-    language === 'en' ? 'oz' : 'g',
-  )
-  const [isSearchModalOpen, setIsSearchModalOpen] = useState(false)
-  const [sortOrder, setSortOrder] = useState<'alpha-asc' | 'alpha-desc' | 'date-desc' | 'date-asc'>('date-desc')
+  const [category, setCategory] = useState<RecipeCategory[]>([])
+  const [sortOrder, setSortOrder] = useState('date-desc')
   const [loading, setLoading] = useState(true)
   const [loadFailed, setLoadFailed] = useState(false)
   const [loadAttempt, setLoadAttempt] = useState(0)
+  const [limit, setLimit] = useState(8)
+  const sentinel = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
+    let cancelled = false
     async function load() {
       setLoading(true)
       setLoadFailed(false)
       try {
         await loadIngredientsFromFirestore()
-        const fsDocs = await loadRecipesFromFirestore()
-        const converted = fsDocs.map(convertToRecipe)
-        setRecipes([...staticRecipes, ...converted])
-      setRecipeStates((current) => {
-        const extra: RecipeStates = {}
-        for (const r of converted) {
-          if (!current[r.id]) {
-            extra[r.id] = r.items.map((item) => ({
-              ingredientId: item.ingredientId,
-              amount: item.defaultAmount,
-              unit: item.defaultUnit,
-            }))
-          }
-        }
-        return { ...current, ...extra }
-      })
-      } catch (error) {
-        console.error('Failed to load recipes:', error)
-        setLoadFailed(true)
+        const docs = await loadRecipesFromFirestore()
+        if (!cancelled) setRecipes([...staticRecipes, ...docs.map(convertToRecipe)])
+      } catch {
+        if (!cancelled) setLoadFailed(true)
       } finally {
-        setLoading(false)
+        if (!cancelled) setLoading(false)
       }
     }
     void load()
+    return () => { cancelled = true }
   }, [loadAttempt])
 
+  const visibleRecipes = useMemo(() => recipes
+    .filter(recipe => isAdmin || !recipe.hidden)
+    .filter(recipe => category.length === 0 || getRecipeCategories(recipe).some(value => category.includes(value)))
+    .filter(recipe => !appliedSearch || recipeMatchesSearch(recipe, appliedSearch))
+    .filter(recipe => !ingredientId || recipeContainsIngredient(recipe, ingredientId))
+    .sort((a, b) => {
+      if (sortOrder.startsWith('alpha')) {
+        const result = (ko ? a.nameKo : a.name).localeCompare(ko ? b.nameKo : b.name, language)
+        return sortOrder === 'alpha-asc' ? result : -result
+      }
+      const result = (a.createdAt ?? 0) - (b.createdAt ?? 0)
+      return sortOrder === 'date-asc' ? result : -result
+    }), [recipes, category, appliedSearch, ingredientId, isAdmin, sortOrder, ko, language])
+
+  useEffect(() => { setLimit(8) }, [category, appliedSearch, ingredientId, sortOrder, homeVersion])
+  useEffect(() => { setCategory([]) }, [homeVersion])
+  const hasMore = limit < visibleRecipes.length
   useEffect(() => {
-    setRecipeStates(buildInitialRecipeStates(language))
-  }, [homeVersion])
+    if (!hasMore || loading || !sentinel.current || !('IntersectionObserver' in window)) return
+    const observer = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting) setLimit(current => current + 8)
+    }, { rootMargin: '160px' })
+    observer.observe(sentinel.current)
+    return () => observer.disconnect()
+  }, [hasMore, limit, loading])
 
-  useEffect(() => {
-    setRecipeStates((current) => applyLanguageToRecipeStates(current, language))
-    setMultigrainRiceUnit(language === 'en' ? 'oz' : 'g')
-  }, [language])
-
-  const visibleRecipes = useMemo(() => {
-    const filtered = recipes
-      .filter((recipe) => isAdmin || !recipe.hidden)
-      .filter((recipe) => !appliedSearch || recipeMatchesSearch(recipe, appliedSearch))
-
-    return filtered.sort((a, b) => {
-      if (sortOrder === 'alpha-asc') {
-        const nameA = language === 'ko' ? a.nameKo : a.name
-        const nameB = language === 'ko' ? b.nameKo : b.name
-        return nameA.localeCompare(nameB, language === 'ko' ? 'ko' : 'en')
-      }
-      if (sortOrder === 'alpha-desc') {
-        const nameA = language === 'ko' ? a.nameKo : a.name
-        const nameB = language === 'ko' ? b.nameKo : b.name
-        return nameB.localeCompare(nameA, language === 'ko' ? 'ko' : 'en')
-      }
-      if (sortOrder === 'date-desc') {
-        return (b.createdAt ?? 0) - (a.createdAt ?? 0)
-      }
-      return (a.createdAt ?? 0) - (b.createdAt ?? 0)
-    })
-  }, [appliedSearch, recipes, sortOrder, language, isAdmin])
-
-  function updateAmount(recipeId: string, ingredientId: string, raw: string) {
-    const parsed = raw === '' ? 0 : Number.parseFloat(raw)
-    if (Number.isNaN(parsed) || parsed < 0) return
-
-    setRecipeStates((current) => ({
-      ...current,
-      [recipeId]: current[recipeId].map((row) =>
-        row.ingredientId === ingredientId
-          ? { ...row, amount: roundToOne(parsed) }
-          : row,
-      ),
-    }))
-  }
-
-  function updateUnit(recipeId: string, ingredientId: string, newUnit: string) {
-    setRecipeStates((current) => ({
-      ...current,
-      [recipeId]: current[recipeId].map((row) => {
-        if (row.ingredientId !== ingredientId) return row
-
-        const ingredient = ingredientById.get(row.ingredientId)
-        if (!ingredient || row.unit === newUnit) return row
-
-        const converted = convertUnit(
-          row.amount,
-          row.unit,
-          newUnit,
-          ingredient.conversions,
-        )
-
-        return { ...row, unit: newUnit, amount: roundToOne(converted) }
-      }),
-    }))
-  }
-
-  async function handleDeleteRecipe(id: string) {
-    await deleteRecipeFromFirestore(id)
-    setRecipes((prev) => prev.filter((r) => r.id !== id))
-    setRecipeStates((prev) => {
-      const next = { ...prev }
-      delete next[id]
-      return next
-    })
-  }
-
-  function handleSaveRecipe(updated: Recipe) {
-    setRecipes((prev) => prev.map((r) => (r.id === updated.id ? updated : r)))
-    setRecipeStates((current) => ({
-      ...current,
-      [updated.id]: updated.items.map((item) => ({
-        ingredientId: item.ingredientId,
-        amount: item.defaultAmount,
-        unit: item.defaultUnit,
-      })),
-    }))
-    updateRecipeInFirestore(updated).catch(console.error)
-  }
-
-  const recipeCountLabel =
-    visibleRecipes.length === 1
-      ? t.recipeFoundOne
-      : t.recipeFoundMany(visibleRecipes.length)
-
-  const recipeList = visibleRecipes.map((recipe) => (
-    <RecipeTable
-      key={recipe.id}
-      recipe={recipe}
-      rows={recipeStates[recipe.id]}
-      appliedSearch={appliedSearch}
-      divisionCount={divisionCount}
-      onDivisionCountChange={setDivisionCount}
-      multigrainRiceAmount={multigrainRiceAmount}
-      onMultigrainRiceAmountChange={setMultigrainRiceAmount}
-      multigrainRiceUnit={multigrainRiceUnit}
-      onMultigrainRiceUnitChange={setMultigrainRiceUnit}
-      onSaveRecipe={handleSaveRecipe}
-      onDeleteRecipe={handleDeleteRecipe}
-      onAmountChange={(ingredientId, raw) =>
-        updateAmount(recipe.id, ingredientId, raw)
-      }
-      onUnitChange={(ingredientId, newUnit) =>
-        updateUnit(recipe.id, ingredientId, newUnit)
-      }
+  return <section className="recipe-catalog" lang={language}>
+    <PageIntro
+      title={ko ? '다음주엔 뭘 해줄까?' : 'Gotta eat something tasty tomorrow too'}
+      description={ko ? '' : 'Find the recipe you’re craving with categories and search.'}
     />
-  ))
-
-  return (
-    <section className="page">
-      <div className="recipe-sort" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <Select value={sortOrder} onValueChange={(v) => setSortOrder(v as typeof sortOrder)}>
-          <SelectTrigger className="w-48">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="date-desc">{language === 'ko' ? '최신 등록순' : 'Newest first'}</SelectItem>
-            <SelectItem value="date-asc">{language === 'ko' ? '오래된 등록순' : 'Oldest first'}</SelectItem>
-            <SelectItem value="alpha-asc">{language === 'ko' ? '이름순 (ㄱ~ㅎ)' : 'Name (A→Z)'}</SelectItem>
-            <SelectItem value="alpha-desc">{language === 'ko' ? '이름순 (ㅎ~ㄱ)' : 'Name (Z→A)'}</SelectItem>
-          </SelectContent>
-        </Select>
-        <button
-          type="button"
-          onClick={() => navigate('/add-recipe')}
-          style={{ fontSize: '0.85rem', color: 'var(--primary)', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 600, padding: '4px 0' }}
-        >
-          {language === 'ko' ? '+ 레시피 추가' : '+ Add Recipe'}
-        </button>
-      </div>
-
-      {appliedSearch ? (
-        <header className="search-results">
-          <h2 className="page__heading">{t.searchResults}</h2>
-          <p className="search-results__count">{recipeCountLabel}</p>
-        </header>
-      ) : null}
-
-      {loadFailed ? (
-        <div className="empty-state" role="alert">
-          <p className="empty-state__text">
-            {language === 'ko' ? '레시피를 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.' : 'Unable to load recipes. Please try again shortly.'}
-          </p>
-          <button type="button" onClick={() => setLoadAttempt((attempt) => attempt + 1)}>
-            {language === 'ko' ? '다시 시도' : 'Try again'}
-          </button>
-        </div>
-      ) : appliedSearch ? (
-        <div className="recipe-list">
-          {visibleRecipes.length === 0 ? (
-            <p className="page__empty">{t.noRecipesFound(appliedSearch)}</p>
-          ) : (
-            recipeList
-          )}
-        </div>
-      ) : loading ? (
-        <div className="empty-state">
-          <svg className="empty-state__icon empty-state__icon--spin" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeDasharray="31.4 31.4" />
-          </svg>
-          <p className="empty-state__text">{language === 'ko' ? '불러오는 중...' : 'Loading...'}</p>
-        </div>
-      ) : visibleRecipes.length === 0 ? (
-        <div className="empty-state">
-          <svg className="empty-state__icon" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <ellipse cx="40" cy="58" rx="28" ry="6" fill="currentColor" opacity="0.08" />
-            <path d="M14 38 C14 24 26 14 40 14 C54 14 66 24 66 38" stroke="currentColor" strokeWidth="3" strokeLinecap="round" fill="none" />
-            <line x1="10" y1="38" x2="70" y2="38" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
-            <path d="M30 38 L30 50 Q30 54 34 54 L46 54 Q50 54 50 50 L50 38" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-            <line x1="56" y1="20" x2="56" y2="38" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
-            <path d="M52 20 Q52 16 56 16 Q60 16 60 20 L60 28" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" fill="none" />
-          </svg>
-          <p className="empty-state__text">{language === 'ko' ? '등록된 레시피가 없습니다' : 'No recipes yet'}</p>
-        </div>
-      ) : (
-        <RecipeGrid recipes={visibleRecipes} />
-      )}
-
-      <IngredientSearchModal
-        isOpen={isSearchModalOpen}
-        onClose={() => setIsSearchModalOpen(false)}
-        onIngredientSelect={(ingredient) => {
-          console.log('Selected ingredient:', ingredient)
-        }}
-      />
-    </section>
-  )
+    <CatalogToolbar>
+      <CategoryFilter<RecipeCategory> label={ko ? '레시피 분류' : 'Recipe categories'} value={category.length ? category : ['전체']} options={recipeCategories.map(value => ({ value, label: ko ? value : categoryEnglish[value] }))} onValueChange={value => setCategory(value === '전체' ? [] : [value])} />
+      <SearchField label={ko ? '레시피 검색' : 'Search recipes'} value={appliedSearch} onValueChange={value => setSearchParams(current => {
+        const next = new URLSearchParams(current)
+        if (value) next.set('q', value)
+        else next.delete('q')
+        return next
+      }, { replace: true })} />
+      <SortSelect label={ko ? '레시피 정렬' : 'Sort recipes'} value={sortOrder} options={[{ value: 'date-desc', label: ko ? '최근 등록순' : 'Newest first' }, { value: 'date-asc', label: ko ? '오래된 등록순' : 'Oldest first' }, { value: 'alpha-asc', label: ko ? '이름순 (ㄱ~ㅎ)' : 'Name (A–Z)' }, { value: 'alpha-desc', label: ko ? '이름순 (ㅎ~ㄱ)' : 'Name (Z–A)' }]} onValueChange={setSortOrder} />
+    </CatalogToolbar>
+    <div className="catalog-container catalog-results" aria-busy={loading}>
+      {ingredientId && <p className="catalog-count">{ko ? `${ingredientName} 포함 레시피` : `Recipes with ${ingredientName}`} · <Button variant="link" size="content" onClick={() => setSearchParams(current => {
+        const next = new URLSearchParams(current)
+        next.delete('ingredient')
+        return next
+      })}>{ko ? '재료 필터 해제' : 'Clear ingredient filter'}</Button></p>}
+      {!loading && <div className="catalog-count-row"><p className="catalog-count" role="status">{ko ? '레시피 ' : 'Recipes '}<strong>{visibleRecipes.length}{ko ? '개' : ''}</strong>{appliedSearch && <span> · “{appliedSearch}”</span>}</p><Button nativeButton={false} render={<Link to="/add-recipe" />} variant="link" size="content" className="catalog-intro__subtle-action">{ko ? '레시피 추가' : 'Add recipe'}</Button></div>}
+      {loadFailed ? <ContentState error title={ko ? '레시피를 불러오지 못했습니다' : 'Unable to load recipes'}><Button className="catalog-primary" onClick={() => setLoadAttempt(n => n + 1)}>{ko ? '다시 시도' : 'Try again'}</Button></ContentState>
+        : loading ? <LoadingState skeleton label={ko ? '레시피 불러오는 중' : 'Loading recipes'} />
+        : visibleRecipes.length === 0 ? <ContentState icon="🥗" title={ko ? '조건에 맞는 레시피가 없어요' : 'No recipes match your selection'} description={ko ? '필터를 조정해보세요.' : 'Try adjusting your filters.'}><Button className="catalog-primary" onClick={() => { setCategory([]); setSearchParams({}); resetHome() }}>{ko ? '필터 초기화' : 'Reset filters'}</Button></ContentState>
+        : <><RecipeGrid recipes={visibleRecipes.slice(0, limit)} /><div className="catalog-end" ref={sentinel}>{hasMore ? <Button variant="ghost" size="content" type="button" onClick={() => setLimit(n => n + 8)}>{ko ? '레시피 더 보기' : 'Load more recipes'}</Button> : <span>🎉 {ko ? '내가 만들어본 레시피 끝!' : 'You’ve seen all the recipes!'}</span>}</div></>}
+    </div>
+  </section>
 }

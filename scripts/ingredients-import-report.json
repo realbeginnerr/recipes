@@ -1,0 +1,2425 @@
+{
+  "csvRows": 174,
+  "uniqueRows": 173,
+  "duplicates": [
+    "무화과"
+  ],
+  "updates": 38,
+  "creates": 141,
+  "pending": [],
+  "retained": [
+    "계란 (삶은 것)",
+    "고구마",
+    "오일",
+    "조미료 (다시다)",
+    "통조림 옥수수",
+    "닭다리살",
+    "깨",
+    "돼지 앞다리살 (지방 있음)",
+    "홀그레인머스터드",
+    "청고추",
+    "양조간장",
+    "발사믹글레이즈",
+    "단백질파우더",
+    "올리브유",
+    "드라이이스트",
+    "코인육수",
+    "생강즙",
+    "진간장",
+    "까나리액젓",
+    "식용유",
+    "감자 (중)",
+    "감자 (중)",
+    "다진생강",
+    "고추장 (저당)",
+    "인스턴트드라이이스트",
+    "알룰로스",
+    "강력분",
+    "참기름",
+    "떡",
+    "대파",
+    "물",
+    "버터 (소금 무첨가)",
+    "맛술"
+  ],
+  "changes": [
+    {
+      "action": "update",
+      "id": "dZG543p9EPQddoltNyUv",
+      "existingName": "가지 (중)",
+      "csvName": "가지",
+      "data": {
+        "baseAmount": 130,
+        "baseUnit": "g",
+        "carbs": 3.8,
+        "protein": 0.8,
+        "fat": 0.2,
+        "gramsPerEach": 130
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-33f260e0ceece725d98ebfbe",
+      "csvName": "감자",
+      "data": {
+        "baseAmount": 150,
+        "baseUnit": "g",
+        "carbs": 25,
+        "protein": 3,
+        "fat": 0.1,
+        "gramsPerEach": 150
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-bbda485d0968d1e7857cf449",
+      "csvName": "계란",
+      "data": {
+        "baseAmount": 55,
+        "baseUnit": "g",
+        "carbs": 0.4,
+        "protein": 6.3,
+        "fat": 5.3,
+        "gramsPerEach": 55
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-f27dcdaf2369686a4a068d44",
+      "csvName": "고등어",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 0,
+        "protein": 19,
+        "fat": 10
+      }
+    },
+    {
+      "action": "update",
+      "id": "Bjknsh8lnyHq4ZKMwZHm",
+      "existingName": "고춧가루",
+      "csvName": "고춧가루",
+      "data": {
+        "baseAmount": 8,
+        "baseUnit": "g",
+        "carbs": 4,
+        "protein": 1,
+        "fat": 0.8,
+        "gramsPerTbsp": 8,
+        "gramsPerTsp": 2.6666666666666665
+      }
+    },
+    {
+      "action": "update",
+      "id": "CqRBLpFNPZlDvtaQEarv",
+      "existingName": "고춧가루",
+      "csvName": "고춧가루",
+      "data": {
+        "baseAmount": 8,
+        "baseUnit": "g",
+        "carbs": 4,
+        "protein": 1,
+        "fat": 0.8,
+        "gramsPerTbsp": 8,
+        "gramsPerTsp": 2.6666666666666665
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-f178c49e645f3f230b963093",
+      "csvName": "고추장 (저당. 해찬들)",
+      "data": {
+        "baseAmount": 15,
+        "baseUnit": "g",
+        "carbs": 6.8,
+        "protein": 0.8,
+        "fat": 0.3,
+        "gramsPerTbsp": 15,
+        "gramsPerTsp": 5
+      }
+    },
+    {
+      "action": "update",
+      "id": "Mnoi1kWdMamMMlCLwzBQ",
+      "existingName": "고추장",
+      "csvName": "고추장",
+      "data": {
+        "baseAmount": 15,
+        "baseUnit": "g",
+        "carbs": 7.2,
+        "protein": 0.8,
+        "fat": 0.3,
+        "gramsPerTbsp": 15,
+        "gramsPerTsp": 5
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-8f96470ba1ffc4fce5b3473e",
+      "csvName": "굴소스 (저당. 청정원)",
+      "data": {
+        "baseAmount": 15,
+        "baseUnit": "g",
+        "carbs": 2.3,
+        "protein": 0.3,
+        "fat": 0.1,
+        "gramsPerTbsp": 15,
+        "gramsPerTsp": 5
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-339a7176ded9a5b925ff4c50",
+      "csvName": "그릭 요거트",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 4,
+        "protein": 10,
+        "fat": 4,
+        "gramsPerTbsp": 16.666666666666668,
+        "gramsPerTsp": 5.555555555555555
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-160b99332158481e8732b948",
+      "csvName": "그린커리 페이스트 카레 (LOBO)",
+      "data": {
+        "baseAmount": 15,
+        "baseUnit": "g",
+        "carbs": 2.3,
+        "protein": 0.6,
+        "fat": 1.8,
+        "gramsPerTbsp": 15,
+        "gramsPerTsp": 5
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-5c2d7543e265ac411a76966f",
+      "csvName": "김 (조미)",
+      "data": {
+        "baseAmount": 2,
+        "baseUnit": "g",
+        "carbs": 0.8,
+        "protein": 0.8,
+        "fat": 0.3,
+        "gramsPerCan": 2,
+        "gramsPerPack": 2
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-1acad7fe1cdd5978f7182eee",
+      "csvName": "김밥김",
+      "data": {
+        "baseAmount": 3,
+        "baseUnit": "g",
+        "carbs": 1.2,
+        "protein": 1,
+        "fat": 0.1,
+        "gramsPerEach": 3
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-23e6f8fadaba3e987bdfc402",
+      "csvName": "깜빠뉴",
+      "data": {
+        "baseAmount": 60,
+        "baseUnit": "g",
+        "carbs": 30,
+        "protein": 5,
+        "fat": 1,
+        "gramsPerEach": 60
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-889f701f028e336972239702",
+      "csvName": "꽈리고추",
+      "data": {
+        "baseAmount": 10,
+        "baseUnit": "g",
+        "carbs": 0.8,
+        "protein": 0.2,
+        "fat": 0.1,
+        "gramsPerEach": 10
+      }
+    },
+    {
+      "action": "update",
+      "id": "2iCufeMFi1yiJZ9vPSIw",
+      "existingName": "깻잎",
+      "csvName": "깻잎",
+      "data": {
+        "baseAmount": 0.75,
+        "baseUnit": "g",
+        "carbs": 0.05,
+        "protein": 0.03,
+        "fat": 0.01,
+        "gramsPerEach": 0.75
+      }
+    },
+    {
+      "action": "update",
+      "id": "829YpxVHPDAcLsnd136y",
+      "existingName": "통깨",
+      "csvName": "깨 (참깨. 통깨)",
+      "data": {
+        "baseAmount": 8,
+        "baseUnit": "g",
+        "carbs": 1.8,
+        "protein": 1.5,
+        "fat": 4,
+        "gramsPerTbsp": 8,
+        "gramsPerTsp": 2.6666666666666665
+      }
+    },
+    {
+      "action": "update",
+      "id": "njgvSxGdsHZe5WbgB54j",
+      "existingName": "참깨",
+      "csvName": "깨 (참깨. 통깨)",
+      "data": {
+        "baseAmount": 8,
+        "baseUnit": "g",
+        "carbs": 1.8,
+        "protein": 1.5,
+        "fat": 4,
+        "gramsPerTbsp": 8,
+        "gramsPerTsp": 2.6666666666666665
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-58680b03a814640efc4d31ee",
+      "csvName": "깨 (들깨가루. 햇님마을)",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 15,
+        "protein": 16,
+        "fat": 45,
+        "gramsPerTbsp": 16.666666666666668,
+        "gramsPerTsp": 5.555555555555555
+      }
+    },
+    {
+      "action": "update",
+      "id": "Jy1IPwEISRB5j1ei9Btw",
+      "existingName": "꿀",
+      "csvName": "꿀",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 82,
+        "protein": 0.3,
+        "fat": 0,
+        "gramsPerTbsp": 16.666666666666668,
+        "gramsPerTsp": 5.555555555555555
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-672eaa9aa9669fa88491800d",
+      "csvName": "파스타면 (꼰길리에. 데치코)",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 72,
+        "protein": 12,
+        "fat": 1.5
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-dcbea265856b811c139fc09d",
+      "csvName": "냉면 사리",
+      "data": {
+        "baseAmount": 160,
+        "baseUnit": "g",
+        "carbs": 50,
+        "protein": 6,
+        "fat": 1,
+        "gramsPerCan": 160,
+        "gramsPerPack": 160
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-53fec7399dba24eb70bdcf99",
+      "csvName": "뇨끼",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 30,
+        "protein": 4,
+        "fat": 1
+      }
+    },
+    {
+      "action": "update",
+      "id": "KiclanzESLnu5nzgri5x",
+      "existingName": "다진마늘",
+      "csvName": "다진마늘",
+      "data": {
+        "baseAmount": 15,
+        "baseUnit": "g",
+        "carbs": 5,
+        "protein": 1,
+        "fat": 0.1,
+        "gramsPerTbsp": 15,
+        "gramsPerTsp": 5
+      }
+    },
+    {
+      "action": "update",
+      "id": "PVB1l0VMQQh0Nmr1Sa7h",
+      "existingName": "다진 마늘",
+      "csvName": "다진마늘",
+      "data": {
+        "baseAmount": 15,
+        "baseUnit": "g",
+        "carbs": 5,
+        "protein": 1,
+        "fat": 0.1,
+        "gramsPerTbsp": 15,
+        "gramsPerTsp": 5
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-33b0dfe06fc25fb30dc20345",
+      "csvName": "다짐육 (호주산 소고기. 냉동. 지방함량 보통 15%)",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 0,
+        "protein": 18,
+        "fat": 15
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-1cb238a6683e20537f249fe8",
+      "csvName": "다짐육 (돼지 뒷다리살)",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 0,
+        "protein": 20,
+        "fat": 8
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-e490cb40a53b2bf9f063aeba",
+      "csvName": "단무지 (CJ)",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 8,
+        "protein": 0.5,
+        "fat": 0.1
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-8432b196c0b75c6fcea4ea70",
+      "csvName": "단호박 (껍질·씨 제거, 찐 것)",
+      "data": {
+        "baseAmount": 150,
+        "baseUnit": "g",
+        "carbs": 22,
+        "protein": 2,
+        "fat": 0.2,
+        "gramsPerEach": 150
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-6ce4a73320a43bd7b3bedd12",
+      "csvName": "단호박 (껍질·씨 제거,구운 것)",
+      "data": {
+        "baseAmount": 150,
+        "baseUnit": "g",
+        "carbs": 25,
+        "protein": 2.2,
+        "fat": 0.3,
+        "gramsPerEach": 150
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-a88b13c00b2d0e7c666a86e7",
+      "csvName": "당근 . 홍당무",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 9,
+        "protein": 1,
+        "fat": 0.2,
+        "gramsPerEach": 100
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-103378c3f27c7c4f9340372a",
+      "csvName": "당면 (마른 것)",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 85,
+        "protein": 0.5,
+        "fat": 0.1
+      }
+    },
+    {
+      "action": "update",
+      "id": "73jxlRA7fzKJm2JLdzMP",
+      "existingName": "닭가슴살 (생닭)",
+      "csvName": "닭가슴살 (생닭)",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 0,
+        "protein": 23,
+        "fat": 1.5
+      }
+    },
+    {
+      "action": "update",
+      "id": "RmjGbcCJBOM2zSueqnyW",
+      "existingName": "닭가슴살 (삶은 것)",
+      "csvName": "닭가슴살 (삶은 후)",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 0,
+        "protein": 30,
+        "fat": 2
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-d294c6c6322ee381d733a320",
+      "csvName": "닭다리 (생닭. 뼈X. 껍질 X)",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 0,
+        "protein": 18,
+        "fat": 5
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-730360d8e7afa3e1c904d1dd",
+      "csvName": "닭다리 (생닭. 뼈O. 껍질 X)",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 0,
+        "protein": 15,
+        "fat": 4.5
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-351ce38a125d3185ea3b5990",
+      "csvName": "닭다리 (삶은 후)",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 0,
+        "protein": 22,
+        "fat": 6
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-145b9ea676a2b4681765a681",
+      "csvName": "닭안심 (힘줄 제거. 생닭)",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 0,
+        "protein": 24,
+        "fat": 1
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-3105c0f95fa1139c398858dd",
+      "csvName": "닭안심 (힘줄 제거. 삶은 후)",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 0,
+        "protein": 31,
+        "fat": 1.2
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-1b8a5781977e904d3aa6197c",
+      "csvName": "닭봉",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 0,
+        "protein": 17,
+        "fat": 6
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-157c413f752e5bb37a75faed",
+      "csvName": "대파 썰은 것",
+      "data": {
+        "baseAmount": 30,
+        "baseUnit": "g",
+        "carbs": 2,
+        "protein": 0.5,
+        "fat": 0.1
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-fa068c144575ad2de2642749",
+      "csvName": "대두가루 (노란콩 가루)",
+      "data": {
+        "baseAmount": 8,
+        "baseUnit": "g",
+        "carbs": 2.5,
+        "protein": 3,
+        "fat": 1.5,
+        "gramsPerTbsp": 8,
+        "gramsPerTsp": 2.6666666666666665
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-e3153fafce613b7af7dfd467",
+      "csvName": "도토리묵 (풀무원)",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 6,
+        "protein": 0.2,
+        "fat": 0.1
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-ef423b65216e70fcac774cf7",
+      "csvName": "돈까스 (컬리)",
+      "data": {
+        "baseAmount": 120,
+        "baseUnit": "g",
+        "carbs": 18,
+        "protein": 12,
+        "fat": 10,
+        "gramsPerEach": 120
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-2473c1fb7863fcaf82150f55",
+      "csvName": "돈까스 소스",
+      "data": {
+        "baseAmount": 15,
+        "baseUnit": "g",
+        "carbs": 4,
+        "protein": 0.2,
+        "fat": 0.1,
+        "gramsPerTbsp": 15,
+        "gramsPerTsp": 5
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-83704f823568fd14d4d2a1be",
+      "csvName": "된장",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 25,
+        "protein": 12,
+        "fat": 5,
+        "gramsPerTbsp": 16.666666666666668,
+        "gramsPerTsp": 5.555555555555555
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-cf308997daba9a8a38103d49",
+      "csvName": "돼지 뒷다리살",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 0,
+        "protein": 20,
+        "fat": 7
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-f3a76b6651905fdddec15bbb",
+      "csvName": "돼지 앞다리살 (껍질제거. 지방O)",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 0,
+        "protein": 18,
+        "fat": 12
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-d574759a9f6f67a84ba5b5e7",
+      "csvName": "돼지 앞다리살 (껍질제거. 지방X)",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 0,
+        "protein": 21,
+        "fat": 5
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-b14d8ceedfd6783e4870f507",
+      "csvName": "돼지 목살",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 0,
+        "protein": 19,
+        "fat": 14
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-5c5b44d3136ae63370a8c2bf",
+      "csvName": "돼지 목전지",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 0,
+        "protein": 18,
+        "fat": 13
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-7444f3f90a321562d5190ee6",
+      "csvName": "돼지 삼겹살",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 0,
+        "protein": 14,
+        "fat": 28
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-3b1eddf75bb863c1d03db4b3",
+      "csvName": "두부",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 2,
+        "protein": 8,
+        "fat": 4
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-af49be09c7da5e5617ba77fa",
+      "csvName": "두부. 곰곰. 알뜰. 800",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 2,
+        "protein": 8,
+        "fat": 4
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-9f926e05586491579d99ccd7",
+      "csvName": "등갈비 (돼지, 김치등갈비찜용. 여기에서 뼈, 지방 안먹는다는가정하에 계산)",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 0,
+        "protein": 20,
+        "fat": 10
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-b8d836df1591ff78925b745e",
+      "csvName": "땅콩버터 (제이넛터 크런치)",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 20,
+        "protein": 25,
+        "fat": 50,
+        "gramsPerTbsp": 16.666666666666668,
+        "gramsPerTsp": 5.555555555555555
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-b1eaf4e4207b5637d525ca45",
+      "csvName": "딸기 (작은크기)",
+      "data": {
+        "baseAmount": 60,
+        "baseUnit": "g",
+        "carbs": 4.5,
+        "protein": 0.5,
+        "fat": 0.2,
+        "gramsPerEach": 10
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-587f409927fd86f7460843ef",
+      "csvName": "또띠아. 곰곰. 밀. 6인치. 15cm",
+      "data": {
+        "baseAmount": 30,
+        "baseUnit": "g",
+        "carbs": 15,
+        "protein": 3,
+        "fat": 2.5,
+        "gramsPerEach": 30
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-42fc756b6f53945b05d09a4a",
+      "csvName": "라이스페이퍼",
+      "data": {
+        "baseAmount": 10,
+        "baseUnit": "g",
+        "carbs": 8,
+        "protein": 0.1,
+        "fat": 0,
+        "gramsPerEach": 10
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-ad69fe4d0da9494c71c5e5d6",
+      "csvName": "라가토니 면. 파스타. 디벨라",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 72,
+        "protein": 12,
+        "fat": 1.5
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-c566ca8515a3251cfe9e0646",
+      "csvName": "레몬즙",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 7,
+        "protein": 0.4,
+        "fat": 0.2,
+        "gramsPerTbsp": 16.666666666666668,
+        "gramsPerTsp": 5.555555555555555
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-fdf6fc2c31d704fbcf26c754",
+      "csvName": "마요네즈",
+      "data": {
+        "baseAmount": 15,
+        "baseUnit": "g",
+        "carbs": 0.2,
+        "protein": 0.1,
+        "fat": 11,
+        "gramsPerTbsp": 15,
+        "gramsPerTsp": 5
+      }
+    },
+    {
+      "action": "update",
+      "id": "kjjPpy8hPKVpedeBHExH",
+      "existingName": "마요네즈 (하프)",
+      "csvName": "마요네즈 (하프)",
+      "data": {
+        "baseAmount": 15,
+        "baseUnit": "g",
+        "carbs": 2,
+        "protein": 0.2,
+        "fat": 5,
+        "gramsPerTbsp": 15,
+        "gramsPerTsp": 5
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-2894978b122605bc6292aee4",
+      "csvName": "만두피 (곰곰)",
+      "data": {
+        "baseAmount": 10,
+        "baseUnit": "g",
+        "carbs": 6,
+        "protein": 1,
+        "fat": 0.2,
+        "gramsPerEach": 10
+      }
+    },
+    {
+      "action": "update",
+      "id": "wsISdD0sZqfZxiJkEgK4",
+      "existingName": "매실액",
+      "csvName": "매실액",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 75,
+        "protein": 0.1,
+        "fat": 0,
+        "gramsPerTbsp": 16.666666666666668,
+        "gramsPerTsp": 5.555555555555555
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-48f995f06d1fd05cc686dc43",
+      "csvName": "메밀면 면사랑",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 70,
+        "protein": 10,
+        "fat": 1
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-d077ec4578ef9f72f01828cc",
+      "csvName": "메밀소바 소스 장국",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 15,
+        "protein": 3,
+        "fat": 0,
+        "gramsPerTbsp": 16.666666666666668,
+        "gramsPerTsp": 5.555555555555555
+      }
+    },
+    {
+      "action": "update",
+      "id": "oPt5dRoG6qUTrWvCVYBz",
+      "existingName": "멸치",
+      "csvName": "멸치",
+      "data": {
+        "baseAmount": 30,
+        "baseUnit": "g",
+        "carbs": 1,
+        "protein": 18,
+        "fat": 2,
+        "gramsPerCup": 30
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-d5c0a936afac14da39b72087",
+      "csvName": "멸치액젓",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 2,
+        "protein": 6,
+        "fat": 0.5,
+        "gramsPerTbsp": 16.666666666666668,
+        "gramsPerTsp": 5.555555555555555
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-24cf9488f8d60f5c25dabca0",
+      "csvName": "모닝빵 (삼립. 저당)",
+      "data": {
+        "baseAmount": 30,
+        "baseUnit": "g",
+        "carbs": 14,
+        "protein": 3,
+        "fat": 1.5,
+        "gramsPerEach": 30
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-868000119d96fda81186a3d7",
+      "csvName": "무염버터 (앵커)",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 0.1,
+        "protein": 0.8,
+        "fat": 81,
+        "gramsPerTbsp": 16.666666666666668,
+        "gramsPerTsp": 5.555555555555555
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-a367ab3717bfa4f8a3ea8d77",
+      "csvName": "무",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 4,
+        "protein": 0.6,
+        "fat": 0.1,
+        "gramsPerEach": 100
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-ebac9d6c1af393fcd5dc3024",
+      "csvName": "무화과",
+      "data": {
+        "baseAmount": 50,
+        "baseUnit": "g",
+        "carbs": 10,
+        "protein": 0.8,
+        "fat": 0.2,
+        "gramsPerEach": 50
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-e2fd74da730b15ade14fc395",
+      "csvName": "맛술 (청정원. 미림)",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 40,
+        "protein": 0.1,
+        "fat": 0,
+        "gramsPerTbsp": 16.666666666666668,
+        "gramsPerTsp": 5.555555555555555
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-87e6493b024a22e26249c285",
+      "csvName": "매실액 (매실+설탕 절인 것)",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 75,
+        "protein": 0.1,
+        "fat": 0,
+        "gramsPerTbsp": 16.666666666666668,
+        "gramsPerTsp": 5.555555555555555
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-5d9c0e6d701ead73af79d757",
+      "csvName": "미숫가루",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 70,
+        "protein": 15,
+        "fat": 3,
+        "gramsPerTbsp": 16.666666666666668,
+        "gramsPerTsp": 5.555555555555555
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-24e179482ad1206b64c73ea1",
+      "csvName": "밀가루 (강력분. 백설)",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 74,
+        "protein": 12,
+        "fat": 1,
+        "gramsPerTbsp": 16.666666666666668,
+        "gramsPerTsp": 5.555555555555555
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-f2c3666b51c7a3bca259f792",
+      "csvName": "밀가루 (박력분. 백설)",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 76,
+        "protein": 9,
+        "fat": 1,
+        "gramsPerTbsp": 16.666666666666668,
+        "gramsPerTsp": 5.555555555555555
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-ed7e59c0798a1ac9f819665d",
+      "csvName": "밀가루 (중력분. 백설)",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 75,
+        "protein": 10,
+        "fat": 1,
+        "gramsPerTbsp": 16.666666666666668,
+        "gramsPerTsp": 5.555555555555555
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-5412337d0db0338a236a6915",
+      "csvName": "바나나",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 23,
+        "protein": 1.2,
+        "fat": 0.3,
+        "gramsPerEach": 100
+      }
+    },
+    {
+      "action": "update",
+      "id": "78Y5Fnm1Lp7REmYOnnAJ",
+      "existingName": "바질 (데친 후 물기 꽉 짠 상태)",
+      "csvName": "바질 (데친 후 물기 꽉 짠 상태)",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 6,
+        "protein": 3,
+        "fat": 0.6
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-eb216137aa991fcab1283a42",
+      "csvName": "박력분",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 76,
+        "protein": 9,
+        "fat": 1,
+        "gramsPerTbsp": 16.666666666666668,
+        "gramsPerTsp": 5.555555555555555
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-9497608ce1a51fcb3a97a8bd",
+      "csvName": "배추김치",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 4,
+        "protein": 1.5,
+        "fat": 0.5
+      }
+    },
+    {
+      "action": "update",
+      "id": "1fzxts2JUJhTYVVEHepS",
+      "existingName": "느타리버섯",
+      "csvName": "버섯 (느타리)",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 5,
+        "protein": 3,
+        "fat": 0.3
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-7f0d750b85d6e17953a8d2b7",
+      "csvName": "버섯 (새송이)",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 7,
+        "protein": 2.5,
+        "fat": 0.2
+      }
+    },
+    {
+      "action": "update",
+      "id": "9m4eL3c32S10wgkna0Fk",
+      "existingName": "양송이 버섯 (중)",
+      "csvName": "버섯 (양송이)",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 5,
+        "protein": 3,
+        "fat": 0.3
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-5802c102d898452a1383bb41",
+      "csvName": "버섯 (표고)",
+      "data": {
+        "baseAmount": 20,
+        "baseUnit": "g",
+        "carbs": 3,
+        "protein": 0.5,
+        "fat": 0.1,
+        "gramsPerEach": 20
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-1de9a256caa520f9b216c6f5",
+      "csvName": "베이킹소다",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 0,
+        "protein": 0,
+        "fat": 0,
+        "gramsPerTbsp": 16.666666666666668,
+        "gramsPerTsp": 5.555555555555555
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-d7e97abac199ef7e7c6dd44e",
+      "csvName": "베이킹파우더",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 25,
+        "protein": 0,
+        "fat": 0,
+        "gramsPerTbsp": 16.666666666666668,
+        "gramsPerTsp": 5.555555555555555
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-5102c666a4ab89c952a88453",
+      "csvName": "베이글 (저당)",
+      "data": {
+        "baseAmount": 90,
+        "baseUnit": "g",
+        "carbs": 42,
+        "protein": 10,
+        "fat": 1.5,
+        "gramsPerEach": 90
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-2ff9c3dacce0aed7ded80bb9",
+      "csvName": "베트남쌀국수 (오뚜기)",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 80,
+        "protein": 7,
+        "fat": 0.5
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-6b9405d3441120162a2bdbb3",
+      "csvName": "봄동",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 4,
+        "protein": 1.5,
+        "fat": 0.2
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-c4cd786252046269bf32e6e2",
+      "csvName": "복숭아",
+      "data": {
+        "baseAmount": 150,
+        "baseUnit": "g",
+        "carbs": 14,
+        "protein": 1,
+        "fat": 0.1,
+        "gramsPerEach": 150
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-1ad0b371b22fd1548b29d83d",
+      "csvName": "부추",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 5,
+        "protein": 2.2,
+        "fat": 0.4
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-eef5fd7c8f1243e107e1432b",
+      "csvName": "부라타 치즈",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 2,
+        "protein": 11,
+        "fat": 18,
+        "gramsPerEach": 100
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-816951c7d3030883ec85b65c",
+      "csvName": "브로콜리",
+      "data": {
+        "baseAmount": 200,
+        "baseUnit": "g",
+        "carbs": 8,
+        "protein": 5,
+        "fat": 0.8,
+        "gramsPerEach": 200
+      }
+    },
+    {
+      "action": "update",
+      "id": "jHed3fhQSNmZb2hebHL8",
+      "existingName": "빵가루",
+      "csvName": "빵가루",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 70,
+        "protein": 10,
+        "fat": 2,
+        "gramsPerTbsp": 16.666666666666668,
+        "gramsPerTsp": 5.555555555555555
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-8f3f6b606fc57d4327bfa9b2",
+      "csvName": "사과 (중간, 껍질 씨 제거)",
+      "data": {
+        "baseAmount": 180,
+        "baseUnit": "g",
+        "carbs": 25,
+        "protein": 0.5,
+        "fat": 0.3,
+        "gramsPerEach": 180
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-56325f2ae50e36527ff83a72",
+      "csvName": "사골 곰탕",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 0.5,
+        "protein": 3.5,
+        "fat": 1.5
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-73c6ee0ca6bfd44e14adf74e",
+      "csvName": "삶은 병아리콩",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 27,
+        "protein": 9,
+        "fat": 2.5
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-fd7862fa6687a6088a8118a6",
+      "csvName": "새우",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 0,
+        "protein": 18,
+        "fat": 1
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-e68824e57c1995e81fca648b",
+      "csvName": "새우튀김",
+      "data": {
+        "baseAmount": 30,
+        "baseUnit": "g",
+        "carbs": 12,
+        "protein": 4,
+        "fat": 6,
+        "gramsPerEach": 30
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-7af75ba86ee09992f6d87c7b",
+      "csvName": "생크림",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 3,
+        "protein": 2,
+        "fat": 38
+      }
+    },
+    {
+      "action": "update",
+      "id": "yzGYvY3ytIneCU1yowa1",
+      "existingName": "설탕",
+      "csvName": "설탕",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 100,
+        "protein": 0,
+        "fat": 0,
+        "gramsPerTbsp": 16.666666666666668,
+        "gramsPerTsp": 5.555555555555555
+      }
+    },
+    {
+      "action": "update",
+      "id": "N2a6l7d2ieuJTU08nPwE",
+      "existingName": "소금",
+      "csvName": "소금",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 0,
+        "protein": 0,
+        "fat": 0,
+        "gramsPerTbsp": 16.666666666666668,
+        "gramsPerTsp": 5.555555555555555
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-4ef9b7d8ecdb1abca0a3f7d7",
+      "csvName": "소면",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 74,
+        "protein": 10,
+        "fat": 1
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-3844086b6b199396107c9098",
+      "csvName": "소면 생면",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 55,
+        "protein": 8,
+        "fat": 1.2
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-33fc0153b2a31e3e617d1cc8",
+      "csvName": "소고기 앞다리살",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 0,
+        "protein": 21,
+        "fat": 8
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-9375b0dc54036ec53a6fe60b",
+      "csvName": "수박",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 8,
+        "protein": 0.6,
+        "fat": 0.2
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-cbea0ba006aaf918084955b5",
+      "csvName": "순대 (곰곰 장충동식 찰순대)",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 30,
+        "protein": 5,
+        "fat": 4
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-82027fa6f73ad7739ce7afca",
+      "csvName": "숙주나물",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 3.5,
+        "protein": 2.8,
+        "fat": 0.1
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-0680ecd98fcd2179744e3b2e",
+      "csvName": "시나몬파우더",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 80,
+        "protein": 4,
+        "fat": 1.2,
+        "gramsPerTbsp": 16.666666666666668,
+        "gramsPerTsp": 5.555555555555555
+      }
+    },
+    {
+      "action": "update",
+      "id": "4x2YuF2jUBe2DFXLlMa4",
+      "existingName": "식초",
+      "csvName": "식초",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 0.4,
+        "protein": 0,
+        "fat": 0,
+        "gramsPerTbsp": 16.666666666666668,
+        "gramsPerTsp": 5.555555555555555
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-e7db0f8cb87db51cf9b03fe6",
+      "csvName": "식빵 (널담 고단백 저당 슬랩)",
+      "data": {
+        "baseAmount": 40,
+        "baseUnit": "g",
+        "carbs": 12,
+        "protein": 8,
+        "fat": 2,
+        "gramsPerEach": 40
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-9d014f6c9006bdcfc81cff0a",
+      "csvName": "식빵 (직접 만든 것)",
+      "data": {
+        "baseAmount": 50,
+        "baseUnit": "g",
+        "carbs": 25,
+        "protein": 4,
+        "fat": 2,
+        "gramsPerEach": 50
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-0dfc83d4b6dbebc154b567be",
+      "csvName": "식빵 (곰곰. 저당)",
+      "data": {
+        "baseAmount": 40,
+        "baseUnit": "g",
+        "carbs": 18,
+        "protein": 4,
+        "fat": 1.5,
+        "gramsPerEach": 40
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-ba5b4aef1d6d25e0617dd653",
+      "csvName": "썬드라이 토마토 (기름제거)",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 30,
+        "protein": 4,
+        "fat": 3,
+        "gramsPerTbsp": 16.666666666666668,
+        "gramsPerTsp": 5.555555555555555
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-151c2679dc7f90bcd0b76d15",
+      "csvName": "아몬드 가루",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 10,
+        "protein": 21,
+        "fat": 54,
+        "gramsPerTbsp": 16.666666666666668,
+        "gramsPerTsp": 5.555555555555555
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-b67272753b678243fdde1557",
+      "csvName": "아보카도 (냉동)",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 9,
+        "protein": 2,
+        "fat": 15
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-12b27b32e60599ae539b7e91",
+      "csvName": "알룰로스 (가루)",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 98,
+        "protein": 0,
+        "fat": 0,
+        "gramsPerTbsp": 16.666666666666668,
+        "gramsPerTsp": 5.555555555555555
+      }
+    },
+    {
+      "action": "update",
+      "id": "NMmVq5ULBoHPtXpzvCk0",
+      "existingName": "알배추 (중)",
+      "csvName": "알배추",
+      "data": {
+        "baseAmount": 1000,
+        "baseUnit": "g",
+        "carbs": 35,
+        "protein": 15,
+        "fat": 2,
+        "gramsPerEach": 1000
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-304ad3aa5ceaece1a30a1e56",
+      "csvName": "애호박",
+      "data": {
+        "baseAmount": 200,
+        "baseUnit": "g",
+        "carbs": 8,
+        "protein": 1.5,
+        "fat": 0.3,
+        "gramsPerEach": 200
+      }
+    },
+    {
+      "action": "update",
+      "id": "X9fNU5amsczJCJ7vBrVP",
+      "existingName": "양배추",
+      "csvName": "양배추",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 6,
+        "protein": 1.3,
+        "fat": 0.2
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-96c423c04630df6abd2ae380",
+      "csvName": "양배추 썰은 것",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 6,
+        "protein": 1.3,
+        "fat": 0.2
+      }
+    },
+    {
+      "action": "update",
+      "id": "9WeXrM3WaIuTgQLipEdZ",
+      "existingName": "갈은 양파",
+      "csvName": "양파",
+      "data": {
+        "baseAmount": 150,
+        "baseUnit": "g",
+        "carbs": 12,
+        "protein": 1.5,
+        "fat": 0.1,
+        "gramsPerEach": 150
+      }
+    },
+    {
+      "action": "update",
+      "id": "NABn6oX6dmxAafwJTdHg",
+      "existingName": "양파 (중)",
+      "csvName": "양파",
+      "data": {
+        "baseAmount": 150,
+        "baseUnit": "g",
+        "carbs": 12,
+        "protein": 1.5,
+        "fat": 0.1,
+        "gramsPerEach": 150
+      }
+    },
+    {
+      "action": "update",
+      "id": "myqweahoroS1k1eaTQmi",
+      "existingName": "양파",
+      "csvName": "양파",
+      "data": {
+        "baseAmount": 150,
+        "baseUnit": "g",
+        "carbs": 12,
+        "protein": 1.5,
+        "fat": 0.1,
+        "gramsPerEach": 150
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-28434ee71c4cb180a0269924",
+      "csvName": "어묵 (고래사어묵. 생선살 듬뿍)",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 18,
+        "protein": 12,
+        "fat": 6
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-1207a106dd4e1e5c8fd90bad",
+      "csvName": "올리브 오일. 식용유",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 0,
+        "protein": 0,
+        "fat": 100,
+        "gramsPerTbsp": 16.666666666666668,
+        "gramsPerTsp": 5.555555555555555
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-3ba1c580e4879ae2e56e0f54",
+      "csvName": "오이",
+      "data": {
+        "baseAmount": 150,
+        "baseUnit": "g",
+        "carbs": 3.5,
+        "protein": 0.9,
+        "fat": 0.1,
+        "gramsPerEach": 150
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-990b196480e3e8f016f5c116",
+      "csvName": "오트밀 (롤드. 대구농산)",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 66,
+        "protein": 13,
+        "fat": 7,
+        "gramsPerTbsp": 16.666666666666668,
+        "gramsPerTsp": 5.555555555555555
+      }
+    },
+    {
+      "action": "update",
+      "id": "s8WMkf7PVq0E6kkofDH9",
+      "existingName": "올리브",
+      "csvName": "올리브",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 6,
+        "protein": 1,
+        "fat": 15,
+        "gramsPerTbsp": 16.666666666666668,
+        "gramsPerTsp": 5.555555555555555
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-d761704dca36e99ff0fc7818",
+      "csvName": "옥수수. 초당",
+      "data": {
+        "baseAmount": 150,
+        "baseUnit": "g",
+        "carbs": 25,
+        "protein": 3.5,
+        "fat": 1.5,
+        "gramsPerEach": 150
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-b7ee10aaa2f756561c410e47",
+      "csvName": "옥수수 (스위트콘. 동원. 노슈가. 통조림)",
+      "data": {
+        "baseAmount": 340,
+        "baseUnit": "g",
+        "carbs": 65,
+        "protein": 8,
+        "fat": 2,
+        "gramsPerCan": 340,
+        "gramsPerPack": 340
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-f6bad033f767fcd7cd867e21",
+      "csvName": "옥수수 (스위트콘. 이마트)",
+      "data": {
+        "baseAmount": 340,
+        "baseUnit": "g",
+        "carbs": 68,
+        "protein": 8,
+        "fat": 2.5,
+        "gramsPerCan": 340,
+        "gramsPerPack": 340
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-2b7e75051be2c51a0337cb5b",
+      "csvName": "우유",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 4.8,
+        "protein": 3.2,
+        "fat": 3.6
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-c5c299b1efb9fc133a18c8d7",
+      "csvName": "유부초밥. 풀무원",
+      "data": {
+        "baseAmount": 200,
+        "baseUnit": "g",
+        "carbs": 45,
+        "protein": 6,
+        "fat": 10,
+        "gramsPerCan": 200,
+        "gramsPerPack": 200
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-3409738d0454d795be1682bd",
+      "csvName": "자두. 딱딱. 작은 것",
+      "data": {
+        "baseAmount": 60,
+        "baseUnit": "g",
+        "carbs": 7.5,
+        "protein": 0.5,
+        "fat": 0.1,
+        "gramsPerEach": 60
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-7fab042694f9766a20226c0b",
+      "csvName": "자두. 물렁. 작은 것",
+      "data": {
+        "baseAmount": 60,
+        "baseUnit": "g",
+        "carbs": 7.8,
+        "protein": 0.5,
+        "fat": 0.1,
+        "gramsPerEach": 60
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-3461773f920d8abad4740a4e",
+      "csvName": "잣",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 4,
+        "protein": 14,
+        "fat": 68,
+        "gramsPerTbsp": 16.666666666666668,
+        "gramsPerTsp": 5.555555555555555
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-409668b14ff6c36e60738cda",
+      "csvName": "쌀",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 78,
+        "protein": 6.5,
+        "fat": 0.5,
+        "gramsPerTbsp": 16.666666666666668,
+        "gramsPerTsp": 5.555555555555555
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-613310c0f167a0578a38949b",
+      "csvName": "호랑이콩",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 60,
+        "protein": 22,
+        "fat": 2,
+        "gramsPerTbsp": 16.666666666666668,
+        "gramsPerTsp": 5.555555555555555
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-8b6e691b4b710f86b303a546",
+      "csvName": "서리태콩",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 30,
+        "protein": 40,
+        "fat": 18,
+        "gramsPerTbsp": 16.666666666666668,
+        "gramsPerTsp": 5.555555555555555
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-3968e04791ced8901e9cd0c5",
+      "csvName": "진간장 (햇살담은 두번달여 더 진한)",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 8,
+        "protein": 6,
+        "fat": 0,
+        "gramsPerTbsp": 16.666666666666668,
+        "gramsPerTsp": 5.555555555555555
+      }
+    },
+    {
+      "action": "update",
+      "id": "lzOhIxClIImcUDhJogLg",
+      "existingName": "카레가루",
+      "csvName": "카레가루",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 65,
+        "protein": 8,
+        "fat": 10,
+        "gramsPerTbsp": 16.666666666666668,
+        "gramsPerTsp": 5.555555555555555
+      }
+    },
+    {
+      "action": "update",
+      "id": "88ikjN3lW9Hk6ppCqqts",
+      "existingName": "쫄면 (면)",
+      "csvName": "쫄면 (면만)",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 75,
+        "protein": 8,
+        "fat": 1
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-b07a85f41f90390cfa886c85",
+      "csvName": "쭈꾸미 손질된 것",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 0,
+        "protein": 15,
+        "fat": 1
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-ab66b08942bf440602ba1b46",
+      "csvName": "참치액",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 5,
+        "protein": 8,
+        "fat": 0,
+        "gramsPerTbsp": 16.666666666666668,
+        "gramsPerTsp": 5.555555555555555
+      }
+    },
+    {
+      "action": "update",
+      "id": "ZNpppHRwmBr4rvISz1q3",
+      "existingName": "참외 (중)",
+      "csvName": "참외 (중 사이즈)",
+      "data": {
+        "baseAmount": 250,
+        "baseUnit": "g",
+        "carbs": 20,
+        "protein": 1.5,
+        "fat": 0.2,
+        "gramsPerEach": 250
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-146cdde54cf28bd79456ef10",
+      "csvName": "참치 (기름 빼고)",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 0,
+        "protein": 24,
+        "fat": 5,
+        "gramsPerCan": 100,
+        "gramsPerPack": 100
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-9cbb1ac94c5cd26b2839bfa1",
+      "csvName": "찹쌀가루",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 80,
+        "protein": 6,
+        "fat": 0.8,
+        "gramsPerTbsp": 16.666666666666668,
+        "gramsPerTsp": 5.555555555555555
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-93f07709976bc1b8fed25ffd",
+      "csvName": "천도",
+      "data": {
+        "baseAmount": 120,
+        "baseUnit": "g",
+        "carbs": 14,
+        "protein": 1,
+        "fat": 0.2,
+        "gramsPerEach": 120
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-bc7eef98b737f31989e5bb1f",
+      "csvName": "청경채",
+      "data": {
+        "baseAmount": 50,
+        "baseUnit": "g",
+        "carbs": 1.2,
+        "protein": 0.8,
+        "fat": 0.1,
+        "gramsPerEach": 50
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-c5219f0cc470bdbb4e19ca2e",
+      "csvName": "치즈 (필라델피아)",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 4,
+        "protein": 6,
+        "fat": 30,
+        "gramsPerTbsp": 16.666666666666668,
+        "gramsPerTsp": 5.555555555555555
+      }
+    },
+    {
+      "action": "update",
+      "id": "FToK9wdNj0aE6TkYUjRj",
+      "existingName": "모짜렐라치즈",
+      "csvName": "치즈 (모짜렐라)",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 2,
+        "protein": 22,
+        "fat": 22,
+        "gramsPerTbsp": 16.666666666666668,
+        "gramsPerTsp": 5.555555555555555
+      }
+    },
+    {
+      "action": "update",
+      "id": "PXOUpHYxTe4s8zIGKTaD",
+      "existingName": "모짜렐라",
+      "csvName": "치즈 (모짜렐라)",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 2,
+        "protein": 22,
+        "fat": 22,
+        "gramsPerTbsp": 16.666666666666668,
+        "gramsPerTsp": 5.555555555555555
+      }
+    },
+    {
+      "action": "update",
+      "id": "K9LI2MGxnDeirSIwJ2Qg",
+      "existingName": "파마산 치즈",
+      "csvName": "치즈 (파마산)",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 4,
+        "protein": 35,
+        "fat": 30,
+        "gramsPerTbsp": 16.666666666666668,
+        "gramsPerTsp": 5.555555555555555
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-ec965ba9d0a09240febbbef5",
+      "csvName": "치즈 (리코타)",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 3,
+        "protein": 11,
+        "fat": 13,
+        "gramsPerTbsp": 16.666666666666668,
+        "gramsPerTsp": 5.555555555555555
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-611fd5ef4e3c14d95cf93794",
+      "csvName": "치즈 (페타 루사스 포션)",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 1,
+        "protein": 14,
+        "fat": 21,
+        "gramsPerTbsp": 16.666666666666668,
+        "gramsPerTsp": 5.555555555555555
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-36d406a7dd92914e369bcc15",
+      "csvName": "치즈 (체다(서울우유))",
+      "data": {
+        "baseAmount": 20,
+        "baseUnit": "g",
+        "carbs": 0.5,
+        "protein": 4.5,
+        "fat": 6,
+        "gramsPerEach": 20
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-4a20f70be589faaf8faceb99",
+      "csvName": "치킨스톡",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 20,
+        "protein": 10,
+        "fat": 10,
+        "gramsPerTbsp": 16.666666666666668,
+        "gramsPerTsp": 5.555555555555555
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-899355dc49c690aa43c55db5",
+      "csvName": "카카오 분말 가루. 코코아파우더. 무가당. 대장균검사",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 20,
+        "protein": 20,
+        "fat": 13,
+        "gramsPerTbsp": 16.666666666666668,
+        "gramsPerTsp": 5.555555555555555
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-0e4aab40f6e3ffb17f80f0df",
+      "csvName": "캐슈넛. 케슈넛",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 30,
+        "protein": 18,
+        "fat": 44,
+        "gramsPerTbsp": 16.666666666666668,
+        "gramsPerTsp": 5.555555555555555
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-96d6c186cc7ad6ae4c28b333",
+      "csvName": "콩국물 (이마트 두부코너)",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 3,
+        "protein": 4,
+        "fat": 2
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-5f9bbbae4e8125a6dfcd4b88",
+      "csvName": "콩나물",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 2.5,
+        "protein": 3,
+        "fat": 0.2
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-651905b9a1b626856cc7a3da",
+      "csvName": "크림소스 (폰타나. 카르니아 베이컨 앤 머쉬룸 크림 파스타 소스. 총 430g)",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 8,
+        "protein": 2,
+        "fat": 13,
+        "gramsPerCan": 430,
+        "gramsPerPack": 430
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-13de02352d461c10dd85a902",
+      "csvName": "토마토 (일반. 중)",
+      "data": {
+        "baseAmount": 135,
+        "baseUnit": "g",
+        "carbs": 5,
+        "protein": 1,
+        "fat": 0.2,
+        "gramsPerEach": 135
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-a232d0c9fd467c94f5f3fbba",
+      "csvName": "토마토 (방울)",
+      "data": {
+        "baseAmount": 13,
+        "baseUnit": "g",
+        "carbs": 0.5,
+        "protein": 0.1,
+        "fat": 0,
+        "gramsPerEach": 13
+      }
+    },
+    {
+      "action": "update",
+      "id": "jlmPkV112g6rFJlOW3va",
+      "existingName": "토마토홀 (줄리에토)",
+      "csvName": "토마토홀 (줄리에토)",
+      "data": {
+        "baseAmount": 400,
+        "baseUnit": "g",
+        "carbs": 16,
+        "protein": 3,
+        "fat": 0.5,
+        "gramsPerCan": 400,
+        "gramsPerPack": 400
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-565a9d0e6aa4b9ee78d7d60e",
+      "csvName": "토마토 소스. 폰타나 시칠리아 아라비아따 저당 파스타 소스",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 7,
+        "protein": 1.5,
+        "fat": 2,
+        "gramsPerTbsp": 16.666666666666668,
+        "gramsPerTsp": 5.555555555555555
+      }
+    },
+    {
+      "action": "update",
+      "id": "bEAw3O6ada00RgxKjyBP",
+      "existingName": "통밀빵",
+      "csvName": "통밀빵",
+      "data": {
+        "baseAmount": 60,
+        "baseUnit": "g",
+        "carbs": 26,
+        "protein": 5,
+        "fat": 1.5,
+        "gramsPerEach": 60
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-d5922974f3c0ddfea0663e12",
+      "csvName": "튀김가루",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 75,
+        "protein": 8,
+        "fat": 1,
+        "gramsPerTbsp": 16.666666666666668,
+        "gramsPerTsp": 5.555555555555555
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-c5d8bc3b83e4e8ca9f285613",
+      "csvName": "파스타면 (링귀니)",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 74,
+        "protein": 12,
+        "fat": 1.5
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-3f43c01a518915d5419b7663",
+      "csvName": "파스타면 (리가토니)",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 72,
+        "protein": 12,
+        "fat": 1.5
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-b60256a0cd26acae941a0c45",
+      "csvName": "파스타면 (스파게티)",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 74,
+        "protein": 12,
+        "fat": 1.5
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-c23026ffcb736fb03e5c79b0",
+      "csvName": "파프리카",
+      "data": {
+        "baseAmount": 150,
+        "baseUnit": "g",
+        "carbs": 9,
+        "protein": 1.2,
+        "fat": 0.3,
+        "gramsPerEach": 150
+      }
+    },
+    {
+      "action": "update",
+      "id": "LMSglwCZYdS1XmO2CwLQ",
+      "existingName": "팥",
+      "csvName": "팥",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 60,
+        "protein": 20,
+        "fat": 1,
+        "gramsPerTbsp": 16.666666666666668,
+        "gramsPerTsp": 5.555555555555555
+      }
+    },
+    {
+      "action": "create",
+      "id": "csv-0f7706d92c4d69b9de0c554d",
+      "csvName": "포도",
+      "data": {
+        "baseAmount": 100,
+        "baseUnit": "g",
+        "carbs": 16,
+        "protein": 0.6,
+        "fat": 0.3
+      }
+    },
+    {
+      "action": "update",
+      "id": "iRdGAm11O0WrEGsFCQ2j",
+      "existingName": "후추",
+      "csvName": "후추가루",
+      "data": {
+        "baseAmount": 2,
+        "baseUnit": "g",
+        "carbs": 1.3,
+        "protein": 0.2,
+        "fat": 0.1,
+        "gramsPerTsp": 2
+      }
+    }
+  ]
+}

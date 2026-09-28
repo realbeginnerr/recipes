@@ -10,6 +10,7 @@ import {
 } from 'firebase/firestore'
 import { db } from '../firebase'
 import type { Recipe } from '../types'
+import { getRecipeCategories, type RecipeCategory } from '../utils/recipeCategory'
 
 export type FirestoreRecipeItem = {
   ingredientId: string
@@ -18,6 +19,7 @@ export type FirestoreRecipeItem = {
 }
 
 export type FirestoreRecipe = {
+  categories?: RecipeCategory[]
   id?: string
   name: string
   nameKo: string
@@ -39,6 +41,7 @@ export async function saveRecipeToFirestore(
 ): Promise<string> {
   const docRef = await addDoc(collection(db, COLLECTION), {
     ...recipe,
+    categories: getRecipeCategories(recipe),
     createdAt: Date.now(),
   })
   return docRef.id
@@ -48,6 +51,7 @@ export async function updateRecipeInFirestore(recipe: Recipe): Promise<void> {
   const { id, items, sideItems, ...rest } = recipe
   const data: Record<string, unknown> = {
     ...rest,
+    categories: getRecipeCategories(recipe),
     items: items.map((item) => ({
       ingredientId: item.ingredientId,
       amount: item.defaultAmount,
@@ -81,6 +85,7 @@ export async function loadRecipesFromFirestore(): Promise<FirestoreRecipe[]> {
 export function convertToRecipe(fs: FirestoreRecipe): Recipe {
   return {
     id: fs.id ?? '',
+    categories: getRecipeCategories(fs),
     name: fs.name,
     nameKo: fs.nameKo || fs.name,
     imageUrl: fs.imageUrl || '',

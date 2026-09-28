@@ -144,7 +144,7 @@ export function AddIngredientPage() {
         </p>
         <div className="add-recipe__select-cards">
           <button type="button"
-            className="flex flex-col items-start gap-2 p-8 border-[1.5px] border-primary rounded-xl bg-primary/8 text-left cursor-pointer transition-all hover:shadow-md hover:border-foreground/40"
+            className="flex flex-col items-start gap-2 p-8 border-[1.5px] border-primary rounded-xl bg-primary/8 text-left cursor-pointer transition-all  "
             onClick={() => setMode('ai')}>
             <span className="text-3xl leading-none">🤖</span>
             <span className="text-base font-semibold text-primary">{isKo ? 'AI로 여러 개 한번에 추가' : 'Add multiple with AI'}</span>
@@ -153,7 +153,7 @@ export function AddIngredientPage() {
             </span>
           </button>
           <button type="button"
-            className="flex flex-col items-start gap-2 p-8 border-[1.5px] border-border rounded-xl bg-card text-left cursor-pointer transition-all hover:shadow-md hover:border-muted-foreground/40"
+            className="flex flex-col items-start gap-2 p-8 border-[1.5px] border-border rounded-xl bg-card text-left cursor-pointer transition-all  "
             onClick={() => setMode('manual')}>
             <span className="text-3xl leading-none">✏️</span>
             <span className="text-base font-semibold text-foreground">{isKo ? '직접 입력하기' : 'Enter manually'}</span>
@@ -229,7 +229,7 @@ export function AddIngredientPage() {
                     <TableCell><Input type="number" className="h-7 w-20 text-sm" min={0} step={0.1} value={row.carbs} onChange={(e) => handleAiRowChange(i, 'carbs', e.target.value)} /></TableCell>
                     <TableCell><Input type="number" className="h-7 w-20 text-sm" min={0} step={0.1} value={row.protein} onChange={(e) => handleAiRowChange(i, 'protein', e.target.value)} /></TableCell>
                     <TableCell><Input type="number" className="h-7 w-20 text-sm" min={0} step={0.1} value={row.fat} onChange={(e) => handleAiRowChange(i, 'fat', e.target.value)} /></TableCell>
-                    <TableCell className="edit-inline__delete-cell"><Button type="button" variant="ghost" size="icon-sm" className="text-muted-foreground hover:text-destructive hover:bg-destructive/10" onClick={() => setAiRows((p) => p.filter((_, j) => j !== i))}>✕</Button></TableCell>
+                    <TableCell className="edit-inline__delete-cell"><Button type="button" variant="ghost" size="icon-sm" className="text-muted-foreground  " onClick={() => setAiRows((p) => p.filter((_, j) => j !== i))}>✕</Button></TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -302,7 +302,7 @@ export function AddIngredientPage() {
               <TableCell><Input type="number" className="h-7 w-20 text-sm" min={0} step={0.1} placeholder="0" value={row.protein} onChange={(e) => handleManualRowChange(i, 'protein', e.target.value)} /></TableCell>
               <TableCell><Input type="number" className="h-7 w-20 text-sm" min={0} step={0.1} placeholder="0" value={row.fat} onChange={(e) => handleManualRowChange(i, 'fat', e.target.value)} /></TableCell>
               <TableCell className="edit-inline__delete-cell">
-                {manualRows.length > 1 && <Button type="button" variant="ghost" size="icon-sm" className="text-muted-foreground hover:text-destructive hover:bg-destructive/10" onClick={() => setManualRows((p) => p.filter((_, j) => j !== i))}>✕</Button>}
+                {manualRows.length > 1 && <Button type="button" variant="ghost" size="icon-sm" className="text-muted-foreground  " onClick={() => setManualRows((p) => p.filter((_, j) => j !== i))}>✕</Button>}
               </TableCell>
             </TableRow>
           ))}

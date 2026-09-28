@@ -1,3 +1,5 @@
+import type { RecipeCategory } from './utils/recipeCategory'
+
 export type Ingredient = {
   id: string
   name: string
@@ -20,6 +22,7 @@ export type RecipeItem = {
 }
 
 export type Recipe = {
+  categories?: RecipeCategory[]
   id: string
   name: string
   nameKo: string

@@ -1,0 +1,8 @@
+.detail-state { padding-top: 64px; padding-bottom: 64px; }
+.catalog-empty { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 96px 0; }
+.catalog-empty > span { font-size: 60px; margin-bottom: 24px; }
+.catalog-empty h2 { font-size: 18px; font-weight: 500; margin: 0 0 8px; }
+.catalog-empty p { font-size: 14px; color: #899591; margin: 0 0 32px; }
+.catalog-skeleton { background: #E9EBE8; border-radius: 12px; overflow: hidden; padding-bottom: 24px; }
+.catalog-skeleton > div { aspect-ratio: 4 / 3; background: #D4D9D7; }
+.catalog-skeleton > span { display: block; height: 24px; margin: 20px 20px 0; border-radius: 8px; background: #CBD4D2; }

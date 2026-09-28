@@ -1,0 +1,18 @@
+.reference-header :is(a, button) { letter-spacing: -.04em; line-height: 1.5; font-weight: 500; }
+.reference-header { height: 64px; flex-shrink: 0; position: sticky; top: 0; z-index: 50; background: #fff; border-bottom: 1px solid #E5EAE9; }
+.reference-header-inner { height: 100%; display: flex; align-items: center; gap: 24px; }
+.reference-brand { flex-shrink: 0; font-size: 22px; font-weight: 500; color: #122B22; text-decoration: none; }
+.reference-desktop-nav { display: none; align-items: center; gap: 4px; }
+.reference-desktop-nav a { position: relative; padding: 4px 12px; font-size: 14px; font-weight: 500; color: #596B64; text-decoration: none; }
+.reference-desktop-nav a.is-active { color: #122B22; }
+.reference-desktop-nav a.is-active::after { content: ''; position: absolute; bottom: 0; left: 12px; right: 12px; height: 2px; background: #255A46; border-radius: 2px; }
+.reference-request { display: inline-flex; align-items: center; justify-content: center; height: 36px; padding: 0 20px; border: 0; border-radius: 8px; background: #255A46; color: white; font-size: 14px; cursor: pointer; text-decoration: none; }
+.reference-header-inner > .reference-request { display: none; margin-left: auto; }
+.reference-menu-toggle { margin-left: auto; padding: 8px; display: flex; flex-direction: column; gap: 6px; background: none; border: 0; cursor: pointer; }
+.reference-menu-toggle span { width: 20px; height: 2px; background: #122B22; }
+.reference-mobile-nav { display: flex; flex-direction: column; gap: 12px; padding: 16px; border-top: 1px solid #E5EAE9; border-bottom: 1px solid #E5EAE9; background: #fff; }
+.reference-mobile-nav a:not(.reference-request) { color: #596B64; font-size: 14px; padding: 4px 0; text-decoration: none; }
+.reference-mobile-nav a.is-active { color: #122B22; font-weight: 600; }
+.reference-mobile-nav .reference-request { height: 40px; margin-top: 4px; }
+@media (min-width: 768px) { .reference-desktop-nav, .reference-header-inner > .reference-request { display: flex; } }
+@media (min-width: 768px) { .reference-menu-toggle, .reference-mobile-nav { display: none; } }

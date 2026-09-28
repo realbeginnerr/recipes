@@ -1,6 +1,8 @@
 import { collection, addDoc, getDocs, updateDoc, deleteDoc, doc } from 'firebase/firestore'
 import { db } from '../firebase'
 import { ingredientById } from '../data/ingredients'
+import { ingredientCsvData } from '../data/ingredientCsvData'
+import { ingredientNameOverrides } from '../data/ingredientCatalogOverrides'
 
 export type FirestoreIngredient = {
   id: string
@@ -13,6 +15,9 @@ export type FirestoreIngredient = {
   fat: number
   addedSugar?: number
   isRefinedCarb?: boolean
+  imageUrl?: string
+  category?: string
+  createdAt?: number
   gramsPerTbsp?: number
   gramsPerTsp?: number
   gramsPerCup?: number
@@ -27,6 +32,19 @@ const COLLECTION = 'ingredients'
 export const ingredientByName = new Map<string, FirestoreIngredient>()
 
 let loaded = false
+const csvById = new Map<string, Partial<FirestoreIngredient>>(ingredientCsvData.map(row => [row.id, row]))
+
+function withCsvData(ingredient: FirestoreIngredient): FirestoreIngredient {
+  const csv = csvById.get(ingredient.id)
+  if (!csv) return ingredient
+  // N/A in the CSV clears outdated unit conversions while preserving metadata.
+  return {
+    ...ingredient,
+    gramsPerTbsp: undefined, gramsPerTsp: undefined, gramsPerCup: undefined,
+    gramsPerEach: undefined, gramsPerCan: undefined, gramsPerPack: undefined,
+    ...csv,
+  }
+}
 
 export async function loadIngredientsFromFirestore(): Promise<void> {
   if (loaded) return
@@ -34,7 +52,7 @@ export async function loadIngredientsFromFirestore(): Promise<void> {
   for (const doc of snapshot.docs) {
     const data = doc.data() as Omit<FirestoreIngredient, 'id'>
     const ing: FirestoreIngredient = { id: doc.id, ...data }
-    registerIngredient(ing)
+    registerIngredient(withCsvData(ing))
   }
   loaded = true
 }
@@ -75,15 +93,16 @@ function registerIngredient(ing: FirestoreIngredient) {
     console.warn('Skipping ingredient with missing name:', ing.id)
     return
   }
+  const normalized = { ...ing, ...ingredientNameOverrides[ing.id] }
   for (const [key, val] of ingredientByName.entries()) {
     if (val.id === ing.id) ingredientByName.delete(key)
   }
-  ingredientByName.set(ing.name.toLowerCase(), ing)
-  if (ing.nameKo) ingredientByName.set(ing.nameKo, ing)
+  ingredientByName.set(normalized.name.toLowerCase(), normalized)
+  if (normalized.nameKo) ingredientByName.set(normalized.nameKo, normalized)
   ingredientById.set(ing.id, {
     id: ing.id,
-    name: ing.name,
-    nameKo: ing.nameKo || ing.name,
+    name: normalized.name,
+    nameKo: normalized.nameKo || normalized.name,
     baseUnit: ing.baseUnit,
     baseAmount: ing.baseAmount,
     carbs: ing.carbs,
@@ -161,4 +180,9 @@ function buildAllowedUnits(ing: Pick<FirestoreIngredient, 'baseUnit' | 'gramsPer
   if (ing.gramsPerCan && !units.includes('캔')) units.push('캔')
   if (ing.gramsPerPack && !units.includes('팩')) units.push('팩')
   return units
+}
+
+// Make the supplied CSV available immediately, including rows not yet in Firestore.
+for (const row of ingredientCsvData) {
+  registerIngredient({ name: row.nameKo, ...row })
 }

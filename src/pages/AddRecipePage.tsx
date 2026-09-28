@@ -20,6 +20,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { UnitSelect } from '../components/UnitSelect'
 import { Table, TableHeader, TableBody, TableFooter, TableRow, TableHead, TableCell } from '@/components/ui/table'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import { recipeCategories, categoryEnglish, type RecipeCategory } from '../utils/recipeCategory'
 
 type ParsedRow = {
   name: string
@@ -146,6 +147,7 @@ export function AddRecipePage() {
   const [recipeName, setRecipeName] = useState('')
   const [recipeNameKo, setRecipeNameKo] = useState('')
   const [recipeLink, setRecipeLink] = useState('')
+  const [categories, setCategories] = useState<RecipeCategory[]>([])
   const [pastedText, setPastedText] = useState('')
   const [resolvedRows, setResolvedRows] = useState<ResolvedRow[]>([])
   const [enRows, setEnRows] = useState<EnRow[]>([])
@@ -440,6 +442,7 @@ export function AddRecipePage() {
       await saveRecipeToFirestore({
         name: recipeName.trim(),
         nameKo: recipeNameKo.trim(),
+        categories: categories.length ? categories : ['기타'],
         imageUrl: '',
         link: recipeLink.trim(),
         memo: '',
@@ -461,6 +464,7 @@ export function AddRecipePage() {
       setRecipeName('')
       setRecipeNameKo('')
       setRecipeLink('')
+      setCategories([])
       setPastedText('')
       setResolvedRows([])
       setEnRows([])
@@ -540,7 +544,7 @@ export function AddRecipePage() {
               <TableCell className="macro">{fmt(sideFat)}</TableCell>
               <TableCell className="edit-inline__delete-cell">
                 <Button type="button" variant="ghost" size="icon-sm"
-                  className="text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+                  className="text-muted-foreground  "
                   onClick={() => setSideRows((prev) => prev.filter((r) => r.ingredientId !== row.ingredientId))}>✕</Button>
               </TableCell>
             </TableRow>
@@ -626,7 +630,7 @@ export function AddRecipePage() {
         </p>
         <div className="add-recipe__select-cards">
           <button type="button"
-            className="flex flex-col items-start gap-2 p-8 border-[1.5px] border-primary rounded-xl bg-primary/8 text-left cursor-pointer transition-all hover:shadow-md hover:border-foreground/40"
+            className="flex flex-col items-start gap-2 p-8 border-[1.5px] border-primary rounded-xl bg-primary/8 text-left cursor-pointer transition-all  "
             onClick={() => { setMode('sns'); trackAddRecipeModeSelected('sns') }}>
             <span className="text-3xl leading-none">📱</span>
             <span className="text-base font-semibold text-primary">{isKo ? 'SNS에서 레시피 추가하기' : 'Add from SNS'}</span>
@@ -635,7 +639,7 @@ export function AddRecipePage() {
             </span>
           </button>
           <button type="button"
-            className="flex flex-col items-start gap-2 p-8 border-[1.5px] border-border rounded-xl bg-card text-left cursor-pointer transition-all hover:shadow-md hover:border-muted-foreground/40"
+            className="flex flex-col items-start gap-2 p-8 border-[1.5px] border-border rounded-xl bg-card text-left cursor-pointer transition-all  "
             onClick={() => { setMode('manual'); trackAddRecipeModeSelected('manual') }}>
             <span className="text-3xl leading-none">✏️</span>
             <span className="text-base font-semibold text-foreground">{isKo ? '직접 레시피 작성하기' : 'Write manually'}</span>
@@ -807,6 +811,20 @@ export function AddRecipePage() {
             {nameError && <p className="add-recipe__field-error">{nameError}</p>}
           </div>
 
+          <fieldset className="mb-4 min-w-0" disabled={saving}>
+            <legend className="mb-2 text-sm font-medium">{isKo ? '태그 (여러 개 선택 가능)' : 'Tags (select multiple)'}</legend>
+            <div className="flex flex-wrap gap-2">
+              {recipeCategories.filter(category => category !== '전체').map(category => (
+                <Button key={category} type="button" variant="filter" size="compact"
+                  aria-pressed={categories.includes(category)}
+                  onClick={() => setCategories(current => current.includes(category) ? current.filter(value => value !== category) : [...current, category])}>
+                  {isKo ? category : categoryEnglish[category]}
+                </Button>
+              ))}
+            </div>
+            <p className="mt-2 text-xs text-muted-foreground">{isKo ? '선택하지 않으면 ‘기타’로 저장됩니다.' : 'Saved as “Other” if no tags are selected.'}</p>
+          </fieldset>
+
           <div className="edit-inline__link-field">
             <label className="edit-inline__link-label">{isKo ? '링크 (선택)' : 'Link (optional)'}</label>
             <Input
@@ -833,7 +851,7 @@ export function AddRecipePage() {
                       <TableHead>단백질</TableHead>
                       <TableHead>지방</TableHead>
                       <TableHead className="edit-inline__delete-cell">
-                        <Button type="button" variant="ghost" size="icon-sm" title="전체 삭제" className="text-muted-foreground hover:text-destructive hover:bg-destructive/10" onClick={() => { setResolvedRows([]); setEnRows([]); setSideRows([]) }}>✕</Button>
+                        <Button type="button" variant="ghost" size="icon-sm" title="전체 삭제" className="text-muted-foreground  " onClick={() => { setResolvedRows([]); setEnRows([]); setSideRows([]) }}>✕</Button>
                       </TableHead>
                     </TableRow>
                   </TableHeader>
@@ -851,7 +869,7 @@ export function AddRecipePage() {
                         <TableCell className="macro">{fmt(row.displayCarbs)}</TableCell>
                         <TableCell className="macro">{fmt(row.displayProtein)}</TableCell>
                         <TableCell className="macro">{fmt(row.displayFat)}</TableCell>
-                        <TableCell className="edit-inline__delete-cell"><Button type="button" variant="ghost" size="icon-sm" className="text-muted-foreground hover:text-destructive hover:bg-destructive/10" onClick={() => handleRowDelete(i)}>✕</Button></TableCell>
+                        <TableCell className="edit-inline__delete-cell"><Button type="button" variant="ghost" size="icon-sm" className="text-muted-foreground  " onClick={() => handleRowDelete(i)}>✕</Button></TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
@@ -883,7 +901,7 @@ export function AddRecipePage() {
                         <TableHead>Protein</TableHead>
                         <TableHead>Fat</TableHead>
                         <TableHead className="edit-inline__delete-cell">
-                          <Button type="button" variant="ghost" size="icon-sm" className="text-muted-foreground hover:text-destructive" title="Delete all" onClick={() => { setResolvedRows([]); setEnRows([]); setSideRows([]) }}>✕</Button>
+                          <Button type="button" variant="ghost" size="icon-sm" className="text-muted-foreground " title="Delete all" onClick={() => { setResolvedRows([]); setEnRows([]); setSideRows([]) }}>✕</Button>
                         </TableHead>
                       </TableRow>
                     </TableHeader>
@@ -901,7 +919,7 @@ export function AddRecipePage() {
                           <TableCell className="macro">{fmt(resolvedRows[i]?.displayCarbs ?? 0)}</TableCell>
                           <TableCell className="macro">{fmt(resolvedRows[i]?.displayProtein ?? 0)}</TableCell>
                           <TableCell className="macro">{fmt(resolvedRows[i]?.displayFat ?? 0)}</TableCell>
-                          <TableCell className="edit-inline__delete-cell"><Button type="button" variant="ghost" size="icon-sm" className="text-muted-foreground hover:text-destructive hover:bg-destructive/10" onClick={() => handleRowDelete(i)}>✕</Button></TableCell>
+                          <TableCell className="edit-inline__delete-cell"><Button type="button" variant="ghost" size="icon-sm" className="text-muted-foreground  " onClick={() => handleRowDelete(i)}>✕</Button></TableCell>
                         </TableRow>
                       ))}
                     </TableBody>

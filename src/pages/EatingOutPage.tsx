@@ -1,15 +1,15 @@
 export function EatingOutPage() {
   return (
-    <div style={{ maxWidth: '680px', margin: '0 auto', padding: '32px 20px 64px' }}>
+    <div className="eating-out-page">
 
-      <h1 style={{ fontSize: '1.4rem', fontWeight: 700, marginBottom: '24px', color: 'var(--foreground)' }}>
+      <h1 className="page__heading">
         식사할 때 다음 세가지를 꼭 기억하세요!
       </h1>
 
-      <div style={{ marginBottom: '40px', padding: '40px', background: 'var(--muted)', borderRadius: '10px', display: 'flex', flexDirection: 'column', gap: '0' }}>
+      <div style={{ marginBottom: '40px', padding: '32px', background: 'var(--muted)', borderRadius: '12px', display: 'flex', flexDirection: 'column', gap: '0' }}>
 
         <div style={{ paddingBottom: '32px' }}>
-          <p style={{ fontWeight: 700, marginBottom: '6px', color: 'var(--foreground)' }}>
+          <p style={{ fontWeight: 500, marginBottom: '6px', color: 'var(--foreground)' }}>
             1. 첨가당 많이 들어간 것은 최대한 적게 드세요
           </p>
           <p style={{ fontSize: '0.85rem', color: 'var(--muted-foreground)', marginBottom: '12px' }}>
@@ -31,7 +31,7 @@ export function EatingOutPage() {
         <hr style={{ border: 'none', borderTop: '1px solid var(--border)', margin: '0 0 32px' }} />
 
         <div style={{ paddingBottom: '32px' }}>
-          <p style={{ fontWeight: 700, marginBottom: '6px', color: 'var(--foreground)' }}>
+          <p style={{ fontWeight: 500, marginBottom: '6px', color: 'var(--foreground)' }}>
             2. 탄수화물 비중 높은 음식 먹을 때는 탄수화물 양을 절반 정도로 줄이고 대신 고기를 같이 드세요.
           </p>
           <p style={{ fontSize: '0.85rem', color: 'var(--muted-foreground)', marginBottom: '12px' }}>
@@ -52,7 +52,7 @@ export function EatingOutPage() {
         <hr style={{ border: 'none', borderTop: '1px solid var(--border)', margin: '0 0 32px' }} />
 
         <div>
-          <p style={{ fontWeight: 700, marginBottom: '6px', color: 'var(--foreground)' }}>
+          <p style={{ fontWeight: 500, marginBottom: '6px', color: 'var(--foreground)' }}>
             3. 지방 비율 높은 음식 먹을 때는 딱 1인분만 먹고 다음날 한 끼 굶는 것이 좋아요.
           </p>
           <p style={{ fontSize: '0.92rem', fontWeight: 600, color: 'var(--foreground)', marginBottom: '6px' }}>
@@ -89,7 +89,7 @@ export function EatingOutPage() {
       </div>
 
       <section style={{ marginBottom: '40px' }}>
-        <h2 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '20px', color: 'var(--foreground)' }}>
+        <h2 style={{ fontSize: '22px', fontWeight: 500, marginBottom: '20px', color: 'var(--foreground)' }}>
           🩸 칼로리보다는 '혈당'부터 신경쓰기
         </h2>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
@@ -111,7 +111,7 @@ export function EatingOutPage() {
       <hr style={{ border: 'none', borderTop: '1px solid var(--border)', margin: '0 0 40px' }} />
 
       <section style={{ marginBottom: '40px' }}>
-        <h2 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '20px', color: 'var(--foreground)' }}>
+        <h2 style={{ fontSize: '22px', fontWeight: 500, marginBottom: '20px', color: 'var(--foreground)' }}>
           ⚖️ 무조건 "적게" 먹기? NO. 탄단지 "균형"이 중요!
         </h2>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
@@ -133,7 +133,7 @@ export function EatingOutPage() {
       <hr style={{ border: 'none', borderTop: '1px solid var(--border)', margin: '0 0 40px' }} />
 
       <section>
-        <h2 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '20px', color: 'var(--foreground)' }}>
+        <h2 style={{ fontSize: '22px', fontWeight: 500, marginBottom: '20px', color: 'var(--foreground)' }}>
           🔢 체중계 숫자에 흔들리지 마세요
         </h2>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
