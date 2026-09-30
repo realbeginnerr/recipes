@@ -5,6 +5,7 @@ import { LanguageProvider, useLanguage } from '../context/LanguageContext'
 import { SearchProvider } from '../context/SearchContext'
 import { AdminProvider } from '../context/AdminContext'
 import { SiteFooter } from './SiteFooter'
+import { AddPageAccessProvider } from './AddPageAccessProvider'
 import { LoadingState } from './feedback/ContentState'
 import './SiteLayout.css'
 
@@ -25,5 +26,5 @@ function LayoutContent() {
 }
 
 export function Layout() {
-  return <AdminProvider><LanguageProvider><SearchProvider><LayoutContent /></SearchProvider></LanguageProvider></AdminProvider>
+  return <AdminProvider><LanguageProvider><SearchProvider><AddPageAccessProvider><LayoutContent /></AddPageAccessProvider></SearchProvider></LanguageProvider></AdminProvider>
 }

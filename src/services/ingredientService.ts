@@ -2,7 +2,7 @@ import { collection, addDoc, getDocs, updateDoc, deleteDoc, doc } from 'firebase
 import { db } from '../firebase'
 import { ingredientById } from '../data/ingredients'
 import { ingredientCsvData } from '../data/ingredientCsvData'
-import { ingredientNameOverrides } from '../data/ingredientCatalogOverrides'
+import { canonicalIngredientId, ingredientNameOverrides } from '../data/ingredientCatalogOverrides'
 
 export type FirestoreIngredient = {
   id: string
@@ -89,6 +89,7 @@ export function findIngredientByName(name: string): FirestoreIngredient | undefi
 }
 
 function registerIngredient(ing: FirestoreIngredient) {
+  if (canonicalIngredientId(ing.id) !== ing.id) return
   if (!ing.name) {
     console.warn('Skipping ingredient with missing name:', ing.id)
     return

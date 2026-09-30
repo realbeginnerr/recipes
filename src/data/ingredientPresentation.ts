@@ -2,6 +2,46 @@
 const base = import.meta.env.BASE_URL
 
 export const ingredientPresentation: Record<string, { image: string; category: string; preferImage?: boolean }> = {
+  "냉면 사리": {
+    "image": `${base}images/냉면사리 (면사랑, 함흥냉면).png`,
+    "preferImage": true,
+    "category": "탄수화물"
+  },
+  "뇨끼": {
+    "image": `${base}images/뇨끼 (파타타).png`,
+    "preferImage": true,
+    "category": "탄수화물"
+  },
+  "다진마늘": {
+    "image": `${base}images/다진마늘.png`,
+    "preferImage": true,
+    "category": "채소"
+  },
+  "다짐육 (호주산 소고기. 냉동. 지방함량 보통 15%)": {
+    "image": `${base}images/다짐육 (호주산 소고기냉동지방함량보통.png`,
+    "preferImage": true,
+    "category": "단백질"
+  },
+  "다짐육 (돼지 뒷다리살)": {
+    "image": `${base}images/다짐육 (돼지 뒷다리살).png`,
+    "preferImage": true,
+    "category": "단백질"
+  },
+  "단무지": {
+    "image": `${base}images/단무지.png`,
+    "preferImage": true,
+    "category": "채소"
+  },
+  "단백질파우더": {
+    "image": `${base}images/단백질파우서.png`,
+    "preferImage": true,
+    "category": "단백질"
+  },
+  "단백질 파우더": {
+    "image": `${base}images/단백질파우서.png`,
+    "preferImage": true,
+    "category": "단백질"
+  },
   "강력분 (백설. 밀가루)": {
     "image": `${base}images/강력분 (백설. 밀가루).jpg`,
     "preferImage": true,

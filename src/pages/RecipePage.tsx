@@ -1,8 +1,9 @@
+import { useAddPageAccess } from '../components/AddPageAccessProvider'
 import { ContentState, LoadingState } from '../components/feedback/ContentState'
 import { PageIntro, CatalogToolbar, CategoryFilter, SearchField, SortSelect } from '../components/catalog/CatalogControls'
 import { Button } from '@/components/ui/button'
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { Link, useSearchParams } from 'react-router-dom'
+import { useSearchParams } from 'react-router-dom'
 import { useLanguage } from '../context/LanguageContext'
 import { useSearch } from '../context/SearchContext'
 import { useAdmin } from '../context/AdminContext'
@@ -18,6 +19,7 @@ import type { Recipe } from '../types'
 import './RecipePage.css'
 
 export function RecipePage() {
+  const { requestAccess } = useAddPageAccess()
   const { homeVersion, resetHome } = useSearch()
   const [searchParams, setSearchParams] = useSearchParams()
   const appliedSearch = searchParams.get('q') ?? ''
@@ -85,7 +87,7 @@ export function RecipePage() {
     <PageIntro
       title={ko ? '다음주엔 뭘 해줄까?' : 'Gotta eat something tasty tomorrow too'}
       description={ko ? '' : 'Find the recipe you’re craving with categories and search.'}
-      titleImage={{ src: `${import.meta.env.BASE_URL}images/라마얼굴만동동.png`, alt: ko ? '라마 얼굴' : 'Llama face' }}
+      titleImage={{ src: `${import.meta.env.BASE_URL}images/라마얼굴만동동 (윙크).png`, alt: ko ? '윙크하는 라마 얼굴' : 'Winking llama face' }}
     />
     <CatalogToolbar>
       <CategoryFilter<RecipeCategory> label={ko ? '레시피 분류' : 'Recipe categories'} value={category.length ? category : ['전체']} options={recipeCategories.map(value => ({ value, label: ko ? value : categoryEnglish[value] }))} onValueChange={value => setCategory(value === '전체' ? [] : [value])} />
@@ -103,7 +105,7 @@ export function RecipePage() {
         next.delete('ingredient')
         return next
       })}>{ko ? '재료 필터 해제' : 'Clear ingredient filter'}</Button></p>}
-      {!loading && <div className="catalog-count-row"><p className="catalog-count" role="status">{ko ? '레시피 ' : 'Recipes '}<strong>{visibleRecipes.length}{ko ? '개' : ''}</strong>{appliedSearch && <span> · “{appliedSearch}”</span>}</p><Button nativeButton={false} render={<Link to="/add-recipe" />} variant="link" size="content" className="catalog-intro__subtle-action">{ko ? '레시피 추가' : 'Add recipe'}</Button></div>}
+      {!loading && <div className="catalog-count-row"><p className="catalog-count" role="status">{ko ? '레시피 ' : 'Recipes '}<strong>{visibleRecipes.length}{ko ? '개' : ''}</strong>{appliedSearch && <span> · “{appliedSearch}”</span>}</p><Button onClick={() => requestAccess('/add-recipe')} variant="link" size="content" className="catalog-intro__subtle-action">{ko ? '레시피 추가' : 'Add recipe'}</Button></div>}
       {loadFailed ? <ContentState error title={ko ? '레시피를 불러오지 못했습니다' : 'Unable to load recipes'}><Button className="catalog-primary" onClick={() => setLoadAttempt(n => n + 1)}>{ko ? '다시 시도' : 'Try again'}</Button></ContentState>
         : loading ? <LoadingState skeleton label={ko ? '레시피 불러오는 중' : 'Loading recipes'} />
         : visibleRecipes.length === 0 ? <ContentState icon="🥗" title={ko ? '조건에 맞는 레시피가 없어요' : 'No recipes match your selection'} description={ko ? '필터를 조정해보세요.' : 'Try adjusting your filters.'}><Button className="catalog-primary" onClick={() => { setCategory([]); setSearchParams({}); resetHome() }}>{ko ? '필터 초기화' : 'Reset filters'}</Button></ContentState>

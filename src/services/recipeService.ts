@@ -9,6 +9,7 @@ import {
   setDoc,
 } from 'firebase/firestore'
 import { db } from '../firebase'
+import { canonicalIngredientId } from '../data/ingredientCatalogOverrides'
 import type { Recipe } from '../types'
 import { getRecipeCategories, type RecipeCategory } from '../utils/recipeCategory'
 
@@ -41,6 +42,8 @@ export async function saveRecipeToFirestore(
 ): Promise<string> {
   const docRef = await addDoc(collection(db, COLLECTION), {
     ...recipe,
+    items: recipe.items.map(item => ({ ...item, ingredientId: canonicalIngredientId(item.ingredientId) })),
+    ...(recipe.sideItems ? { sideItems: recipe.sideItems.map(item => ({ ...item, ingredientId: canonicalIngredientId(item.ingredientId) })) } : {}),
     categories: getRecipeCategories(recipe),
     createdAt: Date.now(),
   })
@@ -53,12 +56,12 @@ export async function updateRecipeInFirestore(recipe: Recipe): Promise<void> {
     ...rest,
     categories: getRecipeCategories(recipe),
     items: items.map((item) => ({
-      ingredientId: item.ingredientId,
+      ingredientId: canonicalIngredientId(item.ingredientId),
       amount: item.defaultAmount,
       unit: item.defaultUnit,
     })),
     sideItems: (sideItems ?? []).map((item) => ({
-      ingredientId: item.ingredientId,
+      ingredientId: canonicalIngredientId(item.ingredientId),
       amount: item.defaultAmount,
       unit: item.defaultUnit,
     })),
@@ -79,6 +82,10 @@ export async function loadRecipesFromFirestore(): Promise<FirestoreRecipe[]> {
   return snapshot.docs.map((doc) => ({
     id: doc.id,
     ...(doc.data() as Omit<FirestoreRecipe, 'id'>),
+  })).map(recipe => ({
+    ...recipe,
+    items: recipe.items.map(item => ({ ...item, ingredientId: canonicalIngredientId(item.ingredientId) })),
+    sideItems: recipe.sideItems?.map(item => ({ ...item, ingredientId: canonicalIngredientId(item.ingredientId) })),
   }))
 }
 
@@ -96,12 +103,12 @@ export function convertToRecipe(fs: FirestoreRecipe): Recipe {
     link: fs.link,
     hidden: fs.hidden,
     items: fs.items.map((item) => ({
-      ingredientId: item.ingredientId,
+      ingredientId: canonicalIngredientId(item.ingredientId),
       defaultAmount: item.amount,
       defaultUnit: item.unit,
     })),
     sideItems: fs.sideItems?.map((item) => ({
-      ingredientId: item.ingredientId,
+      ingredientId: canonicalIngredientId(item.ingredientId),
       defaultAmount: item.amount,
       defaultUnit: item.unit,
     })),

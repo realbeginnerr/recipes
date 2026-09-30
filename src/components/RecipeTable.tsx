@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { useLanguage } from '../context/LanguageContext'
 import { useAdmin } from '../context/AdminContext'
+import { useAddPageAccess } from './AddPageAccessProvider'
 import { ingredientById } from '../data/ingredients'
 import { IngredientSearchModal } from './IngredientSearchModal'
 import { Modal } from './Modal'
@@ -24,6 +25,7 @@ import { RecipeBadge, MacroBadge } from './recipe/RecipeBadge'
 import { StarRating } from './recipe/StarRating'
 
 type RecipeTableProps = {
+  defaultEditing?: boolean
   recipe: Recipe
   rows: RecipeRowState[]
   appliedSearch: string
@@ -35,12 +37,13 @@ type RecipeTableProps = {
   onMultigrainRiceAmountChange: (value: number) => void
   multigrainRiceUnit: string
   onMultigrainRiceUnitChange: (value: string) => void
-  onSaveRecipe: (updated: Recipe) => void
+  onSaveRecipe: (updated: Recipe) => void | Promise<void>
   onDeleteRecipe?: (id: string) => void
 }
 
 
 export function RecipeTable({
+  defaultEditing = false,
   recipe,
   rows,
   appliedSearch,
@@ -59,18 +62,26 @@ export function RecipeTable({
 
   const { language, t } = useLanguage()
   const { isAdmin } = useAdmin()
+  const { approvedPath } = useAddPageAccess()
+  const canSave = isAdmin || approvedPath === `/recipe/${recipe.id}/edit`
+  const [isSaving, setIsSaving] = useState(false)
+  const [saveError, setSaveError] = useState(false)
+  const [saveErrorCode, setSaveErrorCode] = useState('')
   const [localRecipe, setLocalRecipe] = useState(recipe)
   const activeRecipe = localRecipe
-  const [isEditing, setIsEditing] = useState(false)
+  const [isEditing, setIsEditing] = useState(defaultEditing)
   const [editImageUrl, setEditImageUrl] = useState(activeRecipe.imageUrl)
   const [editLink, setEditLink] = useState(activeRecipe.link ?? '')
-  const [editItems, setEditItems] = useState<RecipeItem[]>(activeRecipe.items)
-  const [editSideItems, setEditSideItems] = useState<RecipeItem[]>([])
+  const [editItems, setEditItems] = useState<RecipeItem[]>(() => activeRecipe.items.map(item => {
+    const row = defaultEditing ? rows.find(value => value.ingredientId === item.ingredientId) : undefined
+    return row ? { ...item, defaultAmount: row.amount, defaultUnit: row.unit } : item
+  }))
+  const [editSideItems, setEditSideItems] = useState<RecipeItem[]>(activeRecipe.sideItems ?? [])
   const [editMemo, setEditMemo] = useState(activeRecipe.memo ?? '')
   const [editTasteRating, setEditTasteRating] = useState(activeRecipe.tasteRating ?? 4)
   const [editName, setEditName] = useState(activeRecipe.name)
   const [editNameKo, setEditNameKo] = useState(activeRecipe.nameKo)
-  const [isCollapsed, setIsCollapsed] = useState(recipe.hidden ?? false)
+  const [isCollapsed, setIsCollapsed] = useState(defaultEditing ? false : recipe.hidden ?? false)
   const [divisionInput, setDivisionInput] = useState(String(activeRecipe.divisionCount ?? divisionCount))
   const parsedDivisionInput = Number.parseInt(divisionInput, 10)
   const effectiveDivision = !Number.isNaN(parsedDivisionInput) && parsedDivisionInput > 0 ? parsedDivisionInput : divisionCount
@@ -122,7 +133,8 @@ export function RecipeTable({
     setIsEditing(false)
   }
 
-  function handleSave() {
+  async function handleSave() {
+    if (isSaving) return
     const riceItem = editSideItems.find((i) => i.ingredientId === MULTIGRAIN_ID)
     if (riceItem) {
       onMultigrainRiceAmountChange(riceItem.defaultAmount)
@@ -132,12 +144,24 @@ export function RecipeTable({
     const validDivision = !Number.isNaN(parsedDivision) && parsedDivision > 0 ? parsedDivision : divisionCount
     onDivisionCountChange(validDivision)
     const updated = { ...activeRecipe, name: editName.trim() || activeRecipe.name, nameKo: editNameKo.trim() || activeRecipe.nameKo, imageUrl: editImageUrl, link: editLink, items: editItems, sideItems: editSideItems, memo: editMemo, tasteRating: editTasteRating, divisionCount: validDivision }
-    setLocalRecipe(updated)
-    if (isAdmin) {
-      onSaveRecipe(updated)
+    if (canSave) {
+      setIsSaving(true)
+      setSaveError(false)
+      try {
+        await onSaveRecipe(updated)
+      } catch (error) {
+        const code = error && typeof error === 'object' && 'code' in error ? String(error.code) : 'unknown'
+        setSaveErrorCode(code)
+        console.error('Recipe save failed', error)
+        setSaveError(true)
+        return
+      } finally {
+        setIsSaving(false)
+      }
     } else {
       setIsGuestSaveModalOpen(true)
     }
+    setLocalRecipe(updated)
     setNewlyAddedIds(new Set())
     setIsEditing(false)
   }
@@ -794,6 +818,14 @@ export function RecipeTable({
         )}
       />
 
+      <Modal
+        isOpen={saveError}
+        onClose={() => setSaveError(false)}
+        message={language === 'ko'
+          ? `변경 사항을 저장하지 못했습니다.${saveErrorCode === 'permission-denied' ? ' 데이터베이스 저장 권한이 거부되었습니다.' : saveErrorCode === 'unavailable' ? ' 서버에 연결할 수 없습니다. 연결 상태를 확인하고 다시 시도해 주세요.' : ' 다시 시도해 주세요.'} (오류 코드: ${saveErrorCode})`
+          : `Unable to save changes. Please try again. (Error code: ${saveErrorCode})`}
+        actions={[{ label: language === 'ko' ? '확인' : 'OK', onClick: () => setSaveError(false) }]}
+      />
       <Modal
         isOpen={isGuestSaveModalOpen}
         onClose={() => setIsGuestSaveModalOpen(false)}

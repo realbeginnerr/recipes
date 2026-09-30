@@ -45,3 +45,39 @@ assert.equal(ingredientById.get('csv-58680b03a814640efc4d31ee').nameKo, '깨 (�
 assert.equal(ingredientById.has('csv-23e6f8fadaba3e987bdfc402'), false)
 assert.ok(service.findIngredientByName('계란'))
 console.log('CSV values, aliases, existing IDs/metadata, cleared N/A conversions, and recipe nutrition lookup verified.')
+
+const keptGarlicId = 'KiclanzESLnu5nzgri5x'
+const mergedGarlicId = 'PVB1l0VMQQh0Nmr1Sa7h'
+assert.equal(ingredientById.has(mergedGarlicId), false)
+assert.equal(service.findIngredientByName('다진마늘').id, keptGarlicId)
+const originalRecipe = {
+  name: 'Garlic recipe', nameKo: '마늘 레시피',
+  items: [{ ingredientId: mergedGarlicId, amount: 2, unit: 'T' }],
+  sideItems: [{ ingredientId: mergedGarlicId, amount: 5, unit: 'g' }],
+}
+let writtenRecipe
+const recipes = await evaluate('../src/services/recipeService.ts', {
+  '../firebase': { db: {} },
+  '../data/ingredientCatalogOverrides': catalogOverrides,
+  '../utils/recipeCategory': { getRecipeCategories: () => [] },
+  'firebase/firestore': {
+    collection: () => ({}), query: () => ({}), orderBy: () => ({}), doc: () => ({}),
+    getDocs: async () => ({ docs: [{ id: 'recipe', data: () => originalRecipe }] }),
+    setDoc: async (_ref, data) => { writtenRecipe = data },
+    addDoc: async (_ref, data) => { writtenRecipe = data; return { id: 'new' } },
+  },
+})
+const [linkedRecipe] = await recipes.loadRecipesFromFirestore()
+assert.deepEqual(linkedRecipe.items, [{ ingredientId: keptGarlicId, amount: 2, unit: 'T' }])
+assert.deepEqual(linkedRecipe.sideItems, [{ ingredientId: keptGarlicId, amount: 5, unit: 'g' }])
+const converted = recipes.convertToRecipe({ id: 'recipe', ...originalRecipe })
+const related = await evaluate('../src/utils/recipeIngredients.ts', { '../data/ingredientCatalogOverrides': catalogOverrides })
+assert.equal(related.recipeContainsIngredient(converted, keptGarlicId), true)
+await recipes.updateRecipeInFirestore(converted)
+assert.deepEqual(writtenRecipe.items, linkedRecipe.items)
+assert.deepEqual(writtenRecipe.sideItems, linkedRecipe.sideItems)
+await recipes.saveRecipeToFirestore(originalRecipe)
+assert.deepEqual(writtenRecipe.items, linkedRecipe.items)
+assert.deepEqual(writtenRecipe.sideItems, linkedRecipe.sideItems)
+assert.equal(originalRecipe.items[0].ingredientId, mergedGarlicId)
+console.log('Duplicate garlic merged; recipe links, amounts, units, and saves verified.')

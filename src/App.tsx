@@ -27,7 +27,7 @@ export function App() {
         <Route path="ingredients/manage" element={<IngredientManagementPage />} />
         <Route path="add-ingredient" element={<AddPagePasswordGate key="add-ingredient"><AddIngredientPage /></AddPagePasswordGate>} />
         <Route path="recipe/:id" element={<RecipeDetailPage />} />
-        <Route path="recipe/:id/edit" element={<RecipeManagementPage />} />
+        <Route path="recipe/:id/edit" element={<AddPagePasswordGate key="edit-recipe"><RecipeManagementPage /></AddPagePasswordGate>} />
         <Route path="signup" element={<SignupPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>

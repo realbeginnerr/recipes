@@ -1,5 +1,6 @@
+import { useAddPageAccess } from '../components/AddPageAccessProvider'
 import { useEffect, useRef, useState, useCallback } from 'react'
-import { useNavigate } from 'react-router-dom'
+
 import { useLanguage } from '../context/LanguageContext'
 import { useAdmin } from '../context/AdminContext'
 import { toTitleCase } from '../utils/displayNames'
@@ -64,7 +65,7 @@ export function IngredientsPage({ visibleIds }: { visibleIds?: string[] } = {}) 
   const embedded = visibleIds !== undefined
   const { language } = useLanguage()
   const { isAdmin } = useAdmin()
-  const navigate = useNavigate()
+  const { requestAccess } = useAddPageAccess()
   const isKo = language === 'ko'
 
   const [ingredients, setIngredients] = useState<FirestoreIngredient[]>([])
@@ -304,7 +305,7 @@ export function IngredientsPage({ visibleIds }: { visibleIds?: string[] } = {}) 
             </Button>
             <button
               type="button"
-              onClick={() => navigate('/add-ingredient')}
+              onClick={() => requestAccess('/add-ingredient')}
               style={{ fontSize: '14px', color: 'var(--primary)', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 600, padding: '4px 0' }}
             >
               {isKo ? '+ 식재료 추가' : '+ Add Ingredient'}

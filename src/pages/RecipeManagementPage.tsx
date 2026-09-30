@@ -99,7 +99,8 @@ export function RecipeDetailPage() {
     navigate('/recipes', { replace: true })
   }
 
-  function handleSaveRecipe(updated: Recipe) {
+  async function handleSaveRecipe(updated: Recipe) {
+    await updateRecipeInFirestore(updated)
     setRecipes((prev) => prev.map((r) => (r.id === updated.id ? updated : r)))
     setRecipeStates((current) => ({
       ...current,
@@ -109,7 +110,6 @@ export function RecipeDetailPage() {
         unit: item.defaultUnit,
       })),
     }))
-    updateRecipeInFirestore(updated).catch(console.error)
   }
 
   if (loading) {
@@ -137,11 +137,13 @@ export function RecipeDetailPage() {
   }
 
   return (
-    <section className="page">
+    <section className="page" style={{ paddingBottom: 100 }}>
       <Button type="button" variant="ghost" size="sm" onClick={() => navigate(-1)}>
         {language === 'ko' ? '← 뒤로' : '← Back'}
       </Button>
       <RecipeTable
+        key={recipe.id}
+        defaultEditing
         recipe={recipe}
         rows={recipeStates[recipe.id] ?? []}
         appliedSearch=""

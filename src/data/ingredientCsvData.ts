@@ -272,7 +272,7 @@ export const ingredientCsvData = [
   },
   {
     "id": "csv-e490cb40a53b2bf9f063aeba",
-    "nameKo": "단무지 (CJ)",
+    "nameKo": "단무지",
     "baseAmount": 100,
     "baseUnit": "g",
     "carbs": 8,

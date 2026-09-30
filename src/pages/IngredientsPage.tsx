@@ -1,3 +1,4 @@
+import { useAddPageAccess } from '../components/AddPageAccessProvider'
 import { ContentState } from '../components/feedback/ContentState'
 import { IngredientCard } from '../components/ingredient/IngredientCard'
 import { IngredientsPage as IngredientTable } from './IngredientManagementPage'
@@ -34,6 +35,7 @@ function presentation(ingredient: Ingredient) {
 }
 
 export function IngredientsPage() {
+  const { requestAccess } = useAddPageAccess()
   const { language } = useLanguage()
   const { isAdmin } = useAdmin()
   const ko = language === 'ko'
@@ -93,7 +95,7 @@ export function IngredientsPage() {
     <PageIntro
       title={ko ? '식재료 정보는 다 여기에' : 'Organizing ingredient info is a chore.. But it has to be done..'}
       description={ko ? '' : 'Search ingredients to find their nutrition and recipes that use them.'}
-      titleImage={{ src: `${import.meta.env.BASE_URL}images/라마얼굴만동동.png`, alt: ko ? '라마 얼굴' : 'Llama face' }}
+      titleImage={{ src: `${import.meta.env.BASE_URL}images/라마얼굴만동동 (안경).png`, alt: ko ? '안경 쓴 라마 얼굴' : 'Llama face with glasses' }}
     />
     <CatalogToolbar>
       <CategoryFilter label={ko ? '식재료 분류' : 'Ingredient categories'} value={category.length ? category : ['전체']} options={filterOptions.map(value => ({ value, label: ko ? value : english[value] }))} onValueChange={value => {
@@ -108,7 +110,7 @@ export function IngredientsPage() {
     </CatalogToolbar>
     <div className="catalog-container catalog-results" aria-busy={loading}>
       {isAdmin && <p><Link to="/ingredients/manage">{ko ? '식재료 정보 관리' : 'Manage ingredient data'}</Link></p>}
-      {!loading && <div className="catalog-count-row"><p className="catalog-count" role="status">{ko ? '식재료 ' : 'Ingredients '}<strong>{visible.length}{ko ? '개' : ''}</strong>{query && <span> · “{query}”</span>}</p><Button nativeButton={false} render={<Link to="/add-ingredient" />} variant="link" size="content" className="catalog-intro__subtle-action">{ko ? '식재료 추가' : 'Add ingredient'}</Button></div>}
+      {!loading && <div className="catalog-count-row"><p className="catalog-count" role="status">{ko ? '식재료 ' : 'Ingredients '}<strong>{visible.length}{ko ? '개' : ''}</strong>{query && <span> · “{query}”</span>}</p><Button onClick={() => requestAccess('/add-ingredient')} variant="link" size="content" className="catalog-intro__subtle-action">{ko ? '식재료 추가' : 'Add ingredient'}</Button></div>}
       {error && <ContentState variant="inline" error title={ko ? '최신 정보를 불러오지 못했습니다. 저장된 정보를 표시합니다.' : 'Could not load the latest data. Showing available ingredients.'}><Button variant="ghost" size="content" onClick={() => setAttempt(value => value + 1)}>{ko ? '다시 시도' : 'Retry'}</Button></ContentState>}
       {visible.length === 0 ? <ContentState icon="⌕" title={ko ? '찾으시는 재료가 아직 없어요.' : 'We could not find that ingredient.'} description={ko ? '다른 이름으로 검색하거나, 철자를 확인해 보세요.' : 'Try another name or check the spelling.'}></ContentState> :
       view === 'list' ? <IngredientTable visibleIds={visible.map(ingredient => ingredient.id)} /> : <div className="ingredient-grid">{visible.map(ingredient => {

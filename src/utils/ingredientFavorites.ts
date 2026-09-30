@@ -16,7 +16,7 @@ export function loadFavoriteIngredientIds(): Set<string> {
       localStorage.setItem(FAVORITES_KEY, JSON.stringify(Array.from(favorites)))
       localStorage.setItem(FAVORITES_DEFAULTS_MIGRATED_KEY, 'true')
     }
-    return favorites
+    return new Set([...favorites].map(canonicalIngredientId))
   } catch {
     return new Set(DEFAULT_FAVORITE_IDS)
   }
@@ -26,3 +26,4 @@ export function saveFavoriteIngredientIds(ids: Set<string>) {
   localStorage.setItem(FAVORITES_KEY, JSON.stringify(Array.from(ids)))
   localStorage.setItem(FAVORITES_DEFAULTS_MIGRATED_KEY, 'true')
 }
+import { canonicalIngredientId } from '../data/ingredientCatalogOverrides'

@@ -1,4 +1,5 @@
 import { NutritionTable, MacroCells } from '../components/NutritionTable'
+import { useAddPageAccess } from '../components/AddPageAccessProvider'
 import { NutritionSummary } from '../components/NutritionSummary'
 import { QuantityUnitCells } from '../components/QuantityUnitCells'
 import { FoodImage } from '../components/FoodImage'
@@ -18,6 +19,7 @@ import { amountToGrams, calculateMacros, convertUnit } from '../utils/nutrition'
 import { resolveRecipeImage } from '../utils/recipeImage'
 import { categoryEnglish, getRecipeCategories } from '../utils/recipeCategory'
 import type { Ingredient, Recipe, RecipeRowState } from '../types'
+import '../components/catalog/CatalogControls.css'
 import './RecipeDetailPage.css'
 
 type Macros = { carbs: number; protein: number; fat: number }
@@ -38,13 +40,13 @@ function TableNutritionSummary({ total }: { total: Macros }) {
 }
 
 function RecipeNutrition({ recipe }: { recipe: Recipe }) {
+  const { requestAccess } = useAddPageAccess()
   const { language } = useLanguage()
-  const { isAdmin } = useAdmin()
   const ko = language === 'ko'
   const name = ko ? recipe.nameKo : recipe.name
   const [rows, setRows] = useState<RecipeRowState[]>(() => initialRows(recipe))
   const [divisions, setDivisions] = useState(Math.max(1, recipe.divisionCount ?? 4))
-  const [sides, setSides] = useState<RecipeRowState[]>(() => recipe.sideItems?.length ? recipe.sideItems.map(item => ({ ingredientId: item.ingredientId, amount: item.defaultAmount, unit: item.defaultUnit })) : [{ ingredientId: 'multigrain-rice', amount: 150, unit: 'g' }])
+  const [sides, setSides] = useState<RecipeRowState[]>(() => (recipe.sideItems ?? []).map(item => ({ ingredientId: item.ingredientId, amount: item.defaultAmount, unit: item.defaultUnit })))
   const [memo] = useState(() => { try { return localStorage.getItem(`recipe-note:${recipe.id}`) ?? recipe.memo ?? '' } catch { return recipe.memo ?? '' } })
   const macros = rows.map(macrosFor)
   const total = sum(macros)
@@ -68,7 +70,10 @@ function RecipeNutrition({ recipe }: { recipe: Recipe }) {
   }
 
   return <article className="nutrition-detail reference-container" lang={language}>
-    <Link className="detail-back" to="/recipes">{ko ? '← 레시피 목록' : '← All recipes'}</Link>
+    <div className="detail-topbar">
+      <Link className="detail-back" to="/recipes">{ko ? '← 뒤로가기' : '← All recipes'}</Link>
+      <Button onClick={() => requestAccess(`/recipe/${recipe.id}/edit`)} variant="link" size="content" className="catalog-intro__subtle-action">{ko ? '레시피 수정' : 'Edit recipe'}</Button>
+    </div>
     <div className="detail-layout">
       <header className="detail-heading">
         <div className="catalog-card-categories detail-image-tags" role="group" aria-label={ko ? '레시피 분류' : 'Recipe categories'}>
@@ -79,7 +84,6 @@ function RecipeNutrition({ recipe }: { recipe: Recipe }) {
           <h1>{name}</h1>
           <div className="detail-heading-actions">
             {recipe.link ? <a className="detail-source" href={recipe.link} target="_blank" rel="noopener noreferrer">↗ {ko ? (/instagram/.test(recipe.link) ? '인스타그램 원본 레시피' : /youtu/.test(recipe.link) ? '원본 레시피' : '원본 레시피') : 'Original recipe'}</a> : <span className="detail-source detail-source-empty">↗ {ko ? '원본 레시피 링크' : 'Original recipe link'}</span>}
-            {isAdmin && <Link to={`/recipe/${recipe.id}/edit`} className="detail-manage">{ko ? '레시피 수정' : 'Edit recipe'}</Link>}
           </div>
         </div>
       </header>
@@ -131,6 +135,6 @@ export function RecipeDetailPage() {
   }, [attempt])
   const recipe = recipes.find(value => value.id === id && (isAdmin || !value.hidden))
   if (loading) return <LoadingState label={language === 'ko' ? '불러오는 중...' : 'Loading...'} />
-  if (!recipe) return <ContentState variant="detail" error={error} title={language === 'ko' ? (error ? '레시피를 불러오지 못했습니다.' : '레시피를 찾을 수 없습니다.') : 'Recipe unavailable.'}>{error && <Button variant="ghost" size="content" onClick={() => setAttempt(value => value + 1)}>{language === 'ko' ? '다시 시도' : 'Retry'}</Button>}<Link to="/recipes">{language === 'ko' ? '레시피 목록' : 'All recipes'}</Link></ContentState>
+  if (!recipe) return <ContentState variant="detail" error={error} title={language === 'ko' ? (error ? '레시피를 불러오지 못했습니다.' : '레시피를 찾을 수 없습니다.') : 'Recipe unavailable.'}>{error && <Button variant="ghost" size="content" onClick={() => setAttempt(value => value + 1)}>{language === 'ko' ? '다시 시도' : 'Retry'}</Button>}<Link to="/recipes">{language === 'ko' ? '뒤로가기' : 'All recipes'}</Link></ContentState>
   return <RecipeNutrition key={recipe.id} recipe={recipe} />
 }
