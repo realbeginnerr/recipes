@@ -1,8 +1,8 @@
-import { ContentState } from '../components/ContentState'
-import { IngredientCard } from '../components/IngredientCard'
+import { ContentState } from '../components/feedback/ContentState'
+import { IngredientCard } from '../components/ingredient/IngredientCard'
 import { IngredientsPage as IngredientTable } from './IngredientManagementPage'
 import { LayoutGrid, List } from 'lucide-react'
-import { PageIntro, CatalogToolbar, CategoryFilter, SearchField } from '../components/CatalogControls'
+import { PageIntro, CatalogToolbar, CategoryFilter, SearchField } from '../components/catalog/CatalogControls'
 import { Button } from '@/components/ui/button'
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
@@ -17,32 +17,20 @@ import type { Ingredient, Recipe } from '../types'
 import './RecipePage.css'
 import './IngredientsPage.css'
 import { recipeContainsIngredient } from '../utils/recipeIngredients'
+import { ingredientCategory } from '../utils/ingredientCategory'
 import { loadFavoriteIngredientIds } from '../utils/ingredientFavorites'
 import { retiredIngredientIds } from '../data/ingredientCatalogOverrides'
 
 const categories = ['전체', '탄수화물', '단백질', '지방', '채소', '과일', '기타']
 const filterOptions = ['전체', '즐겨찾기', ...categories.slice(1)]
 const english: Record<string, string> = { 전체: 'All', 즐겨찾기: 'Favorites', 탄수화물: 'Carbs', 단백질: 'Protein', 지방: 'Fats', 채소: 'Vegetables', 과일: 'Fruit', 기타: 'Other' }
-function ingredientCategory(ingredient: Ingredient, saved?: string, reference?: string) {
-  if (saved && categories.includes(saved) && saved !== '전체' && saved !== '기타') return saved
-  const name = `${ingredient.nameKo ?? ''} ${ingredient.name}`
-  if (/소스|드레싱|시럽|육수|분말|가루|sauce|dressing|syrup|stock|powder/i.test(name)) {
-    return /밀가루|쌀가루|전분|flour|starch/i.test(name) ? '탄수화물' : '기타'
-  }
-  if (/오일|기름|버터|견과|아몬드|호두|땅콩|참깨|들깨|oil|butter|nuts?|almond|walnut|peanut|sesame/i.test(name)) return '지방'
-  if (/사과|바나나|딸기|블루베리|포도|오렌지|레몬|망고|키위|아보카도|apple|banana|berr|grape|orange|lemon|mango|kiwi|avocado/i.test(name)) return '과일'
-  if (/고구마|감자|현미|백미|잡곡|쌀|밥|귀리|오트|퀴노아|빵|면|떡|옥수수|potato|rice|oat|quinoa|bread|noodle|pasta|corn/i.test(name)) return '탄수화물'
-  if (/닭|소고기|돼지|쇠고기|연어|참치|황태|새우|멸치|계란|달걀|두부|콩|요거트|요구르트|우유|치즈|beef|chicken|pork|salmon|tuna|shrimp|anchov|\beggs?\b|tofu|bean|yogurt|milk|cheese/i.test(name)) return '단백질'
-  if (saved === '고기류' || reference === '고기류') return '단백질'
-  if (saved === '채소류' || reference === '채소류' || /양파|마늘|버섯|브로콜리|시금치|토마토|배추|당근|가지|파프리카|호박|오이|상추|대파|미역|onion|garlic|mushroom|broccoli|spinach|tomato|cabbage|carrot|eggplant|pepper|zucchini|cucumber|lettuce|seaweed/i.test(name)) return '채소'
-  return '기타'
-}
 function presentation(ingredient: Ingredient) {
   const name = ingredient.nameKo ?? ingredient.name
   const stored = ingredientByName.get(name) ?? ingredientByName.get(ingredient.name.toLowerCase())
   const reference = ingredientPresentation[name] ?? Object.entries(ingredientPresentation).find(([key]) => name.includes(key))?.[1]
   const category = ingredientCategory(ingredient, stored?.category, reference?.category)
-  return { category, image: stored?.imageUrl ?? reference?.image, createdAt: stored?.createdAt ?? 0 }
+  const image = reference?.preferImage ? reference.image : stored?.imageUrl || reference?.image
+  return { category, image, createdAt: stored?.createdAt ?? 0 }
 }
 
 export function IngredientsPage() {
@@ -105,6 +93,7 @@ export function IngredientsPage() {
     <PageIntro
       title={ko ? '식재료 정보는 다 여기에' : 'Organizing ingredient info is a chore.. But it has to be done..'}
       description={ko ? '' : 'Search ingredients to find their nutrition and recipes that use them.'}
+      titleImage={{ src: `${import.meta.env.BASE_URL}images/라마얼굴만동동.png`, alt: ko ? '라마 얼굴' : 'Llama face' }}
     />
     <CatalogToolbar>
       <CategoryFilter label={ko ? '식재료 분류' : 'Ingredient categories'} value={category.length ? category : ['전체']} options={filterOptions.map(value => ({ value, label: ko ? value : english[value] }))} onValueChange={value => {

@@ -1,15 +1,15 @@
-import { FoodImage } from './FoodImage'
-import { MacroSummary } from './MacroDisplay'
-import { NutritionSummary } from './NutritionSummary'
+import { FoodImage } from '../FoodImage'
+import { MacroSummary } from '../MacroDisplay'
+import { NutritionSummary } from '../NutritionSummary'
 import { StarRating } from './StarRating'
 import { useNavigate } from 'react-router-dom'
-import type { Recipe } from '../types'
+import type { Recipe } from '../../types'
 
-import { resolveRecipeImage } from '../utils/recipeImage'
-import { useLanguage } from '../context/LanguageContext'
-import { trackRecipeView } from '../utils/analytics'
-import { recipeMealMacros } from '../utils/recipeNutrition'
-import { categoryEnglish, getRecipeCategories } from '../utils/recipeCategory'
+import { resolveRecipeImage } from '../../utils/recipeImage'
+import { useLanguage } from '../../context/LanguageContext'
+import { trackRecipeView } from '../../utils/analytics'
+import { recipeMealMacros } from '../../utils/recipeNutrition'
+import { categoryEnglish, getRecipeCategories } from '../../utils/recipeCategory'
 
 function RecipeCard({ recipe }: { recipe: Recipe }) {
   const navigate = useNavigate()
@@ -47,7 +47,7 @@ function RecipeCard({ recipe }: { recipe: Recipe }) {
         <div className="catalog-card-categories">{categories.map(category => <span key={category} className="catalog-category">{language === 'ko' ? category : categoryEnglish[category]}</span>)}</div>
         <h2 className="recipe-card__name">{name}</h2>
         <div className="recipe-card__rating"><StarRating label={language === 'ko' ? '맛' : 'Taste'} value={recipe.tasteRating ?? 4} showLabel={false} /></div>
-        <MacroSummary macros={{ carbs, protein, fat }} />
+        <MacroSummary macros={{ carbs, protein, fat }} variant="recipe" />
         <NutritionSummary carbs={carbs} protein={protein} fat={fat} perMeal />
       </div>
     </article>

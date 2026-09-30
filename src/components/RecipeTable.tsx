@@ -20,8 +20,8 @@ import { isRefinedCarb, isAddedSugarIngredient } from '../data/refinedCarbs'
 import { getIngredientDisplayName, getRecipeDisplayName } from '../utils/displayNames'
 import { ingredientMatchesSearch } from '../utils/search'
 import { getRecipeBadge } from '../utils/recipeBadge'
-import { RecipeBadge, MacroBadge } from './RecipeBadge'
-import { StarRating } from './StarRating'
+import { RecipeBadge, MacroBadge } from './recipe/RecipeBadge'
+import { StarRating } from './recipe/StarRating'
 
 type RecipeTableProps = {
   recipe: Recipe
@@ -707,7 +707,7 @@ export function RecipeTable({
                     type="button"
                     variant="outline"
                     size="sm"
-                    className="text-muted-foreground text-xs"
+                    className="text-muted-foreground text-sm"
                     onClick={() => setEditSideItems((prev) => [...prev, { ingredientId: MULTIGRAIN_ID, defaultAmount: multigrainRiceAmount, defaultUnit: multigrainRiceUnit }])}
                   >
                     + {language === 'ko' ? '잡곡밥 추가' : 'Add multigrain rice'}
@@ -730,7 +730,7 @@ export function RecipeTable({
                 return (
                   <TableCell className="macro">
                     <strong style={{ color }}>{formatMacro(value)}</strong>
-                    {show(delta) && <div style={{ color, fontSize: '0.75rem', lineHeight: 1.1 }}>{fmt(delta)}</div>}
+                    {show(delta) && <div style={{ color, fontSize: '14px', lineHeight: 1.1 }}>{fmt(delta)}</div>}
                   </TableCell>
                 )
               }

@@ -68,7 +68,7 @@ export function IngredientCsvTable({ ingredients }: { ingredients: FirestoreIngr
         const grams = values[0]
         return <TableRow key={ingredient.id}>
           <TableCell>{name}
-            {grams === undefined && <span className="block text-xs text-muted-foreground">{ingredient.baseAmount} {ingredient.baseUnit}</span>}
+            {grams === undefined && <span className="block text-sm text-muted-foreground">{ingredient.baseAmount} {ingredient.baseUnit}</span>}
           </TableCell>
           {values.map((value, index) => {
             const display = format(value)

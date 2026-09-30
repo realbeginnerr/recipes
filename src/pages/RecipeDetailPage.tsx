@@ -1,7 +1,8 @@
 import { NutritionTable, MacroCells } from '../components/NutritionTable'
 import { NutritionSummary } from '../components/NutritionSummary'
 import { QuantityUnitCells } from '../components/QuantityUnitCells'
-import { ContentState, LoadingState } from '../components/ContentState'
+import { FoodImage } from '../components/FoodImage'
+import { ContentState, LoadingState } from '../components/feedback/ContentState'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
@@ -14,6 +15,7 @@ import { recipes as staticRecipes } from '../data/recipe'
 import { loadIngredientsFromFirestore } from '../services/ingredientService'
 import { loadRecipesFromFirestore, convertToRecipe } from '../services/recipeService'
 import { amountToGrams, calculateMacros, convertUnit } from '../utils/nutrition'
+import { resolveRecipeImage } from '../utils/recipeImage'
 import { categoryEnglish, getRecipeCategories } from '../utils/recipeCategory'
 import type { Ingredient, Recipe, RecipeRowState } from '../types'
 import './RecipeDetailPage.css'
@@ -67,22 +69,25 @@ function RecipeNutrition({ recipe }: { recipe: Recipe }) {
 
   return <article className="nutrition-detail reference-container" lang={language}>
     <Link className="detail-back" to="/recipes">{ko ? '← 레시피 목록' : '← All recipes'}</Link>
-    <header className="detail-heading">
-      <div>
-        <div className="catalog-card-categories" role="group" aria-label={ko ? '레시피 분류' : 'Recipe categories'}>
+    <div className="detail-layout">
+      <header className="detail-heading">
+        <div className="catalog-card-categories detail-image-tags" role="group" aria-label={ko ? '레시피 분류' : 'Recipe categories'}>
           {getRecipeCategories(recipe).map(category => <span key={category} className="catalog-category">{ko ? category : categoryEnglish[category]}</span>)}
         </div>
-        <h1>{name}</h1>
-      </div>
-      {recipe.link ? <a className="detail-source" href={recipe.link} target="_blank" rel="noopener noreferrer">↗ {ko ? (/instagram/.test(recipe.link) ? '인스타그램 원본 레시피' : /youtu/.test(recipe.link) ? '유튜브 원본 레시피' : '원본 레시피') : 'Original recipe'}</a> : <span className="detail-source detail-source-empty">↗ {ko ? '원본 레시피 링크' : 'Original recipe link'}</span>}
-      {isAdmin && <Link to={`/recipe/${recipe.id}/edit`} className="detail-manage">{ko ? '레시피 수정' : 'Edit recipe'}</Link>}
-    </header>
-    <div className="detail-tables">
-    <section className="detail-section" aria-labelledby="whole-recipe-title"><div className="detail-section-heading"><h2 id="whole-recipe-title">{ko ? '전체 재료' : 'All ingredients'}</h2></div>
+        <div className="detail-image-frame"><FoodImage src={resolveRecipeImage(recipe)} alt={name} className="detail-image" /></div>
+        <div className="detail-heading-content">
+          <h1>{name}</h1>
+          <div className="detail-heading-actions">
+            {recipe.link ? <a className="detail-source" href={recipe.link} target="_blank" rel="noopener noreferrer">↗ {ko ? (/instagram/.test(recipe.link) ? '인스타그램 원본 레시피' : /youtu/.test(recipe.link) ? '원본 레시피' : '원본 레시피') : 'Original recipe'}</a> : <span className="detail-source detail-source-empty">↗ {ko ? '원본 레시피 링크' : 'Original recipe link'}</span>}
+            {isAdmin && <Link to={`/recipe/${recipe.id}/edit`} className="detail-manage">{ko ? '레시피 수정' : 'Edit recipe'}</Link>}
+          </div>
+        </div>
+      </header>
+      <section className="detail-section" aria-labelledby="whole-recipe-title"><div className="detail-section-heading"><h2 id="whole-recipe-title">{ko ? '전체 재료' : 'All ingredients'}</h2></div>
       <NutritionTable total={total} labelledBy="whole-recipe-title">{rows.map((row, index) => <tr key={`${row.ingredientId}-${index}`}><td>{label(ingredientFor(row.ingredientId), row.ingredientId)}</td>{quantityCells(row, index)}<MacroCells values={macros[index]} /></tr>)}</NutritionTable>
       <TableNutritionSummary total={total} />
-    </section>
-    <section className="detail-section" aria-labelledby="meal-title">
+      </section>
+      <section className="detail-section" aria-labelledby="meal-title">
       <div className="detail-section-heading">
         <h2 id="meal-title"><label htmlFor="meal-divisions">{ko ? '몇 등분할까요?' : 'How many portions?'}</label></h2>
         <div className="detail-divisions"><Input density="quantity" id="meal-divisions" type="number" min="1" step="1" value={divisions} onChange={event => setDivisions(Math.max(1, Math.floor(amount(event.target.value))))} /><span>{ko ? '등분' : 'portions'}</span></div>
@@ -97,7 +102,7 @@ function RecipeNutrition({ recipe }: { recipe: Recipe }) {
       </NutritionTable>
       <TableNutritionSummary total={meal} />
       <section className="detail-notes"><h2>{ko ? '메모' : 'Notes'}</h2><p>{memo.trim() ? memo : (ko ? '메모 없음' : 'No notes')}</p></section>
-    </section>
+      </section>
     </div>
   </article>
 }

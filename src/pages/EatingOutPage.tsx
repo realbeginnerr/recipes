@@ -12,7 +12,7 @@ export function EatingOutPage() {
           <p style={{ fontWeight: 500, marginBottom: '6px', color: 'var(--foreground)' }}>
             1. 첨가당 많이 들어간 것은 최대한 적게 드세요
           </p>
-          <p style={{ fontSize: '0.85rem', color: 'var(--muted-foreground)', marginBottom: '12px' }}>
+          <p style={{ fontSize: '14px', color: 'var(--muted-foreground)', marginBottom: '12px' }}>
             *첨가당: 설탕, 물엿, 조청 등
           </p>
           <ul style={{ paddingLeft: '16px', listStyle: 'disc', display: 'flex', flexDirection: 'column', gap: '6px' }}>
@@ -34,7 +34,7 @@ export function EatingOutPage() {
           <p style={{ fontWeight: 500, marginBottom: '6px', color: 'var(--foreground)' }}>
             2. 탄수화물 비중 높은 음식 먹을 때는 탄수화물 양을 절반 정도로 줄이고 대신 고기를 같이 드세요.
           </p>
-          <p style={{ fontSize: '0.85rem', color: 'var(--muted-foreground)', marginBottom: '12px' }}>
+          <p style={{ fontSize: '14px', color: 'var(--muted-foreground)', marginBottom: '12px' }}>
             *단백질 파우더를 들고 다니는 것도 좋아요. 디저트 카페에서 고기를 같이 먹을 수 없으니까요.
           </p>
           <ul style={{ paddingLeft: '16px', listStyle: 'disc', display: 'flex', flexDirection: 'column', gap: '6px' }}>

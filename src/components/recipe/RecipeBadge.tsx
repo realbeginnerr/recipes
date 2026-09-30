@@ -1,7 +1,7 @@
-import { useLanguage } from '../context/LanguageContext'
+import { useLanguage } from '../../context/LanguageContext'
 import type { CSSProperties } from 'react'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
-import type { BadgeLevel, MacroIssue, RecipeBadgeResult } from '../utils/recipeBadge'
+import type { BadgeLevel, MacroIssue, RecipeBadgeResult } from '../../utils/recipeBadge'
 
 const REC = { carbs: 75, protein: 33, fat: 22 }
 
@@ -53,7 +53,7 @@ const BADGE_STYLE: CSSProperties = {
   gap: '4px',
   padding: '4px 12px',
   borderRadius: '9999px',
-  fontSize: '13px',
+  fontSize: '14px',
   fontWeight: 500,
   whiteSpace: 'nowrap',
   lineHeight: 1.6,
@@ -80,7 +80,7 @@ const SECTION_STYLE: CSSProperties = {
 }
 
 const LABEL_STYLE: CSSProperties = {
-  fontSize: '13px',
+  fontSize: '14px',
   fontWeight: 700,
   textTransform: 'uppercase',
   letterSpacing: '0.04em',
@@ -117,33 +117,33 @@ export function RecipeBadge({ result, language }: { result: RecipeBadgeResult; l
               ? (isKo ? '양호' : 'Good')
               : (isKo ? '주의' : 'Caution')}
           </p>
-          <p style={{ fontSize: '0.78rem', color: 'var(--muted-foreground)', marginTop: '2px' }}>
+          <p style={{ fontSize: '14px', color: 'var(--muted-foreground)', marginTop: '2px' }}>
             {isKo
               ? `WHO 권장 한도 ${sugarOk ? '미만' : '초과'}이에요`
               : `${sugarOk ? 'Below' : 'Above'} WHO recommended limit`}
           </p>
-          <p style={{ fontSize: '0.78rem', color: 'var(--muted-foreground)', opacity: 0.5 }}>
+          <p style={{ fontSize: '14px', color: 'var(--muted-foreground)', opacity: 0.5 }}>
             {isKo
               ? `현재 레시피 포함량: ${sugarG}g`
               : `This recipe: ${sugarG}g`}
           </p>
-          <p style={{ fontSize: '0.78rem', color: 'var(--muted-foreground)', opacity: 0.5 }}>
+          <p style={{ fontSize: '14px', color: 'var(--muted-foreground)', opacity: 0.5 }}>
             {isKo
               ? 'WHO 권장량: 8g 미만/끼니'
               : 'WHO guideline: < 8g/meal'}
           </p>
-          <p style={{ fontSize: '0.78rem', color: 'var(--muted-foreground)', opacity: 0.5, marginTop: '4px' }}>
+          <p style={{ fontSize: '14px', color: 'var(--muted-foreground)', opacity: 0.5, marginTop: '4px' }}>
             {isKo
               ? '첨가당(자유당): 하루 총 에너지의 5% 미만.'
               : 'Added sugars: less than 5% of total daily energy.'}
           </p>
-          <p style={{ fontSize: '0.78rem', color: 'var(--muted-foreground)', opacity: 0.5 }}>
+          <p style={{ fontSize: '14px', color: 'var(--muted-foreground)', opacity: 0.5 }}>
             {isKo
               ? '(예) 하루 권장 섭취 칼로리가 2,000kcal 일 경우, 첨가당은 하루 약 25g 이하로 섭취하는 것이 좋다.'
               : '(e.g.) For a 2,000kcal daily intake, aim for under 25g of added sugars per day.'}
           </p>
           {result.addedSugarItems.length > 0 && (
-            <ul style={{ marginTop: '4px', paddingLeft: 0, listStyle: 'none', fontSize: '0.78rem', color: 'var(--destructive)' }}>
+            <ul style={{ marginTop: '4px', paddingLeft: 0, listStyle: 'none', fontSize: '14px', color: 'var(--destructive)' }}>
               {result.addedSugarItems.map((item, i) => <li key={i}>- {item.nameKo}</li>)}
             </ul>
           )}
@@ -157,7 +157,7 @@ export function RecipeBadge({ result, language }: { result: RecipeBadgeResult; l
           ) : (
             <>
               <p style={STATUS_WARN}>{isKo ? '주의 필요' : 'Caution'}</p>
-              <ul style={{ marginTop: '4px', paddingLeft: 0, listStyle: 'none', fontSize: '0.78rem', color: 'var(--destructive)' }}>
+              <ul style={{ marginTop: '4px', paddingLeft: 0, listStyle: 'none', fontSize: '14px', color: 'var(--destructive)' }}>
                 {result.refinedCarbItems.map((item, i) => <li key={i}>- {item.nameKo}</li>)}
               </ul>
             </>
@@ -192,7 +192,7 @@ export function MacroBadge({ result, language }: { result: RecipeBadgeResult; la
           {hasIssues ? (
             <>
               <p style={STATUS_MID}>{isKo ? '불균형' : 'Imbalanced'}</p>
-              <ul style={{ marginTop: '4px', paddingLeft: 0, listStyle: 'none', fontSize: '0.78rem', color: 'var(--muted-foreground)' }}>
+              <ul style={{ marginTop: '4px', paddingLeft: 0, listStyle: 'none', fontSize: '14px', color: 'var(--muted-foreground)' }}>
                 {result.macroIssues.map((issue, i) => (
                   <li key={i}>{macroIssueText(issue, isKo)}</li>
                 ))}

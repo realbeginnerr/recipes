@@ -1,12 +1,12 @@
-import { ContentState, LoadingState } from '../components/ContentState'
-import { PageIntro, CatalogToolbar, CategoryFilter, SearchField, SortSelect } from '../components/CatalogControls'
+import { ContentState, LoadingState } from '../components/feedback/ContentState'
+import { PageIntro, CatalogToolbar, CategoryFilter, SearchField, SortSelect } from '../components/catalog/CatalogControls'
 import { Button } from '@/components/ui/button'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { useLanguage } from '../context/LanguageContext'
 import { useSearch } from '../context/SearchContext'
 import { useAdmin } from '../context/AdminContext'
-import { RecipeGrid } from '../components/RecipeGrid'
+import { RecipeGrid } from '../components/recipe/RecipeGrid'
 import { recipes as staticRecipes } from '../data/recipe'
 import { recipeMatchesSearch } from '../utils/search'
 import { recipeContainsIngredient } from '../utils/recipeIngredients'
@@ -85,6 +85,7 @@ export function RecipePage() {
     <PageIntro
       title={ko ? '다음주엔 뭘 해줄까?' : 'Gotta eat something tasty tomorrow too'}
       description={ko ? '' : 'Find the recipe you’re craving with categories and search.'}
+      titleImage={{ src: `${import.meta.env.BASE_URL}images/라마얼굴만동동.png`, alt: ko ? '라마 얼굴' : 'Llama face' }}
     />
     <CatalogToolbar>
       <CategoryFilter<RecipeCategory> label={ko ? '레시피 분류' : 'Recipe categories'} value={category.length ? category : ['전체']} options={recipeCategories.map(value => ({ value, label: ko ? value : categoryEnglish[value] }))} onValueChange={value => setCategory(value === '전체' ? [] : [value])} />

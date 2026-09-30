@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useLanguage } from '../context/LanguageContext'
 import { saveIngredientToFirestore } from '../services/ingredientService'
-import { Toast, useToast } from '../components/Toast'
+import { Toast, useToast } from '../components/feedback/Toast'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
@@ -186,7 +186,7 @@ export function AddIngredientPage() {
                 {copied ? (isKo ? '복사됨 ✓' : 'Copied ✓') : (isKo ? '복사' : 'Copy')}
               </Button>
             </div>
-            <pre className="add-recipe__prompt-box" style={{ whiteSpace: 'pre-wrap', fontSize: '0.85rem', background: 'var(--surface-soft)', border: '1px solid var(--border)', borderRadius: '8px', padding: '1rem', marginBottom: '1.5rem', color: 'var(--text-body)' }}>{AI_PROMPT}</pre>
+            <pre className="add-recipe__prompt-box" style={{ whiteSpace: 'pre-wrap', fontSize: '14px', background: 'var(--surface-soft)', border: '1px solid var(--border)', borderRadius: '8px', padding: '1rem', marginBottom: '1.5rem', color: 'var(--text-body)' }}>{AI_PROMPT}</pre>
 
             <div className="add-recipe__form">
               <div className="add-recipe__field">

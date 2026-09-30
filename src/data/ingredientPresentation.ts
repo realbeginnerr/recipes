@@ -1,7 +1,60 @@
 // Presentation references from the published design; nutrition comes from our ingredient data.
 const base = import.meta.env.BASE_URL
 
-export const ingredientPresentation: Record<string, { image: string; category: string }> = {
+export const ingredientPresentation: Record<string, { image: string; category: string; preferImage?: boolean }> = {
+  "강력분 (백설. 밀가루)": {
+    "image": `${base}images/강력분 (백설. 밀가루).jpg`,
+    "preferImage": true,
+    "category": "탄수화물"
+  },
+  "고추장 (저당. 해찬들)": {
+    "image": `${base}images/고추장 (저당. 해찬들).png`,
+    "category": "기타"
+  },
+  "고추장": {
+    "image": `${base}images/고추장.png`,
+    "category": "기타"
+  },
+  "굴소스 (저당. 청정원)": {
+    "image": `${base}images/굴소스 (저당. 청정원).png`,
+    "category": "기타"
+  },
+  "그린커리 페이스트 카레 (LOBO)": {
+    "image": `${base}images/그린커리 페이스트 카레 (LOBO).jpg`,
+    "category": "기타"
+  },
+  "김 (조미)": {
+    "image": `${base}images/김 (조미).png`,
+    "category": "기타"
+  },
+  "김밥김": {
+    "image": `${base}images/김밥김.png`,
+    "category": "기타"
+  },
+  "까나리액젓": {
+    "image": `${base}images/까나리액젓.png`,
+    "category": "기타"
+  },
+  "깨 (들깨가루)": {
+    "image": `${base}images/깨 (들깨가루).png`,
+    "category": "기타"
+  },
+  "깨 (참깨. 통깨)": {
+    "image": `${base}images/깨 (참깨. 통깨).png`,
+    "category": "기타"
+  },
+  "깻잎": {
+    "image": `${base}images/깻잎.png`,
+    "category": "기타"
+  },
+  "꽈리고추": {
+    "image": `${base}images/꽈리고추.png`,
+    "category": "기타"
+  },
+  "꿀": {
+    "image": `${base}images/꿀.jpg`,
+    "category": "기타"
+  },
   "양파": {
     "image": `${base}images/양파.jpg`,
     "category": "채소류"
@@ -23,7 +76,7 @@ export const ingredientPresentation: Record<string, { image: string; category: s
     "category": "기타"
   },
   "밀가루": {
-    "image": `${base}images/밀가루.jpg`,
+    "image": `${base}images/강력분 (백설. 밀가루).jpg`,
     "category": "탄수화물"
   },
   "닭가슴살": {

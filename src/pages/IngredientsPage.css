@@ -1,12 +1,7 @@
-﻿.ingredient-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
-@media (min-width: 640px) { .ingredient-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+﻿.ingredient-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 256px), 1fr)); gap: 16px; }
 @media (min-width: 768px) { .ingredient-grid { gap: 20px; } }
-@media (min-width: 1024px) { .ingredient-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
-@media (min-width: 1280px) { .ingredient-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
-.ingredient-catalog .catalog-results { width: 100%; max-width: none; padding-inline: 16px; }
 .ingredient-csv-table > [data-slot="table-container"] { overflow: visible; }
 .ingredient-csv-table .data-table thead { position: sticky; top: 0; z-index: 3; }
 .ingredient-csv-table .data-table th { background: var(--card); box-shadow: inset 0 -1px 0 var(--border); }
 .ingredient-csv-table .data-table :is(th, td) { font-weight: 400; }
 .ingredient-csv-table .data-table :is(th, td):nth-child(n+8) { font-weight: 700; }
-@media (min-width: 768px) { .ingredient-catalog .catalog-results { padding-inline: 24px; } }

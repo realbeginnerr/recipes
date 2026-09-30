@@ -1,19 +1,20 @@
 import type { ReactNode } from 'react'
 import { Link } from 'react-router-dom'
-import { Button } from './ui/button'
-import { Input } from './ui/input'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select'
+import { Button } from '../ui/button'
+import { Input } from '../ui/input'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select'
 import './CatalogControls.css'
 
 type Option<T extends string> = { value: T; label: string }
 
-export function PageIntro({ title, description, action }: {
+export function PageIntro({ title, description, action, titleImage }: {
   title: string
   description: string
   action?: { to: string; label: string; subtle?: boolean }
+  titleImage?: { src: string; alt: string }
 }) {
   return <header className="catalog-intro"><div className="catalog-container catalog-intro__inner">
-    <div><h1>{title}</h1>{description && <p>{description}</p>}</div>
+    <div>{titleImage ? <div className="catalog-intro__title-with-image"><h1>{title}</h1><img className="catalog-intro__title-image" src={titleImage.src} alt={titleImage.alt} /></div> : <h1>{title}</h1>}{description && <p>{description}</p>}</div>
     {action && <Button nativeButton={false} render={<Link to={action.to} />} variant={action.subtle ? 'link' : 'default'} className={action.subtle ? 'catalog-intro__subtle-action' : 'catalog-primary'}>{!action.subtle && <span aria-hidden="true">＋</span>}{action.label}</Button>}
   </div></header>
 }

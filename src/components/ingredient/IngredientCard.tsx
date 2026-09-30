@@ -1,13 +1,14 @@
 import './IngredientCard.css'
 import { useState } from 'react'
-import type { Ingredient, Recipe } from '../types'
-import { useLanguage } from '../context/LanguageContext'
-import { amountToGrams, calculateMacros, convertUnit } from '../utils/nutrition'
-import { Input } from './ui/input'
-import { Button } from './ui/button'
-import { UnitSelect } from './UnitSelect'
-import { FoodImage } from './FoodImage'
-import { MacroSummary } from './MacroDisplay'
+import type { Ingredient, Recipe } from '../../types'
+import { useLanguage } from '../../context/LanguageContext'
+import { amountToGrams, calculateMacros, convertUnit } from '../../utils/nutrition'
+import { Input } from '../ui/input'
+import { Button } from '../ui/button'
+import { UnitSelect } from '../UnitSelect'
+import { FoodImage } from '../FoodImage'
+import { MacroSummary } from '../MacroDisplay'
+import { NutritionSummary } from '../NutritionSummary'
 import { RelatedRecipes } from './RelatedRecipes'
 
 export function IngredientCard({ ingredient, image, category, related }: { ingredient: Ingredient; image?: string; category: string; related: Recipe[] }) {
@@ -38,7 +39,7 @@ export function IngredientCard({ ingredient, image, category, related }: { ingre
 
   return <article className="ingredient-card">
     <div className="ingredient-photo"><FoodImage src={image} alt={name} /></div>
-    <div className="ingredient-card-body"><div className="catalog-card-categories"><span className="catalog-category">{category}</span></div><div className="ingredient-card-heading"><h2>{name}</h2><span>{Math.round(macros.carbs * 4 + macros.protein * 4 + macros.fat * 9)} kcal</span></div>
+    <div className="ingredient-card-body"><div className="catalog-card-categories"><span className="catalog-category">{category}</span></div><div className="ingredient-card-heading"><h2>{name}</h2></div>
       <div className="ingredient-basis">
         <Input density="quantity" type="number" min="0" step="any" aria-label={`${name} ${ko ? '용량' : 'amount'}`} value={quantity} onChange={event => {
           const value = event.target.value
@@ -49,6 +50,7 @@ export function IngredientCard({ ingredient, image, category, related }: { ingre
         {changed && <Button type="button" variant="ghost" size="content" aria-label={`${name} ${ko ? '용량 초기화' : 'reset amount'}`} onClick={() => { setQuantity(String(defaultAmount)); setUnit(defaultUnit) }}>{ko ? '초기화' : 'Reset'}</Button>}
       </div>
       <MacroSummary macros={macros} />
+      <NutritionSummary carbs={macros.carbs} protein={macros.protein} fat={macros.fat} />
       <RelatedRecipes recipes={related} ingredientId={ingredient.id} />
     </div>
   </article>

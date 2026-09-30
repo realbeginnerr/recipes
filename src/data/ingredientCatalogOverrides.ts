@@ -10,5 +10,6 @@ export const retiredIngredientIds = new Set([
 ])
 
 export const ingredientNameOverrides: Record<string, { name: string; nameKo: string }> = {
+  'jEqm93wSTmv5KCvkGM9q': { name: '강력분 (백설. 밀가루)', nameKo: '강력분 (백설. 밀가루)' },
   '9WeXrM3WaIuTgQLipEdZ': { name: 'onion', nameKo: '양파' },
 }

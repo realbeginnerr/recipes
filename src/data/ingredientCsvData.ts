@@ -138,16 +138,6 @@ export const ingredientCsvData = [
     "gramsPerEach": 3
   },
   {
-    "id": "csv-23e6f8fadaba3e987bdfc402",
-    "nameKo": "깜빠뉴",
-    "baseAmount": 60,
-    "baseUnit": "g",
-    "carbs": 30,
-    "protein": 5,
-    "fat": 1,
-    "gramsPerEach": 60
-  },
-  {
     "id": "csv-889f701f028e336972239702",
     "nameKo": "꽈리고추",
     "baseAmount": 10,
@@ -191,7 +181,7 @@ export const ingredientCsvData = [
   },
   {
     "id": "csv-58680b03a814640efc4d31ee",
-    "nameKo": "깨 (들깨가루. 햇님마을)",
+    "nameKo": "깨 (들깨가루)",
     "baseAmount": 100,
     "baseUnit": "g",
     "carbs": 15,
@@ -763,7 +753,7 @@ export const ingredientCsvData = [
   },
   {
     "id": "csv-24e179482ad1206b64c73ea1",
-    "nameKo": "밀가루 (강력분. 백설)",
+    "nameKo": "강력분 (백설. 밀가루)",
     "baseAmount": 100,
     "baseUnit": "g",
     "carbs": 74,

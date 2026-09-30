@@ -1,0 +1,8 @@
+.ingredient-related { border-top: 1px solid #D4D9D7; padding-top: 12px; }
+.ingredient-related-heading { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
+.ingredient-related p { margin: 0; color: #255A46; font-size: 14px; font-weight: 500; }
+.ingredient-recipe { display: flex; align-items: center; gap: 12px; background: #D4D9D7; border-radius: 8px; overflow: hidden; text-decoration: none; color: #122B22; }
+.ingredient-recipe img { width: 48px; height: 48px; object-fit: cover; flex-shrink: 0; }
+.ingredient-recipe span { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; min-width: 0; font-size: 14px; padding-right: 8px; }
+.ingredient-more { flex-shrink: 0; font-size: 14px; color: #255A46; text-decoration: underline; text-underline-offset: 4px; }
+.ingredient-no-recipes { font-size: 14px; color: #899591; }

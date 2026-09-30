@@ -1,11 +1,11 @@
 {
-  "csvRows": 174,
-  "uniqueRows": 173,
+  "csvRows": 173,
+  "uniqueRows": 172,
   "duplicates": [
     "무화과"
   ],
   "updates": 38,
-  "creates": 141,
+  "creates": 140,
   "pending": [],
   "retained": [
     "계란 (삶은 것)",
@@ -225,19 +225,6 @@
     },
     {
       "action": "create",
-      "id": "csv-23e6f8fadaba3e987bdfc402",
-      "csvName": "깜빠뉴",
-      "data": {
-        "baseAmount": 60,
-        "baseUnit": "g",
-        "carbs": 30,
-        "protein": 5,
-        "fat": 1,
-        "gramsPerEach": 60
-      }
-    },
-    {
-      "action": "create",
       "id": "csv-889f701f028e336972239702",
       "csvName": "꽈리고추",
       "data": {
@@ -296,7 +283,7 @@
     {
       "action": "create",
       "id": "csv-58680b03a814640efc4d31ee",
-      "csvName": "깨 (들깨가루. 햇님마을)",
+      "csvName": "깨 (들깨가루)",
       "data": {
         "baseAmount": 100,
         "baseUnit": "g",
@@ -1050,7 +1037,7 @@
     {
       "action": "create",
       "id": "csv-24e179482ad1206b64c73ea1",
-      "csvName": "밀가루 (강력분. 백설)",
+      "csvName": "강력분 (백설. 밀가루)",
       "data": {
         "baseAmount": 100,
         "baseUnit": "g",

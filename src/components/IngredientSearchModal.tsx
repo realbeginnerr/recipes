@@ -111,10 +111,10 @@ export function IngredientSearchModal({
             onValueChange={(vals) => { if (vals.length > 0) setTab(vals[0] as 'all' | 'favorites') }}
             className="gap-2 mb-3"
           >
-            <ToggleGroupItem value="all" className="rounded-full border border-border h-auto px-[14px] py-1 text-[0.85rem] text-muted-foreground font-normal aria-pressed:border-primary aria-pressed:bg-[var(--accent-soft)] aria-pressed:text-primary aria-pressed:font-semibold ">
+            <ToggleGroupItem value="all" className="rounded-full border border-border h-auto px-[14px] py-1 text-sm text-muted-foreground font-normal aria-pressed:border-primary aria-pressed:bg-[var(--accent-soft)] aria-pressed:text-primary aria-pressed:font-semibold ">
               {language === 'ko' ? '전체' : 'All'}
             </ToggleGroupItem>
-            <ToggleGroupItem value="favorites" className="rounded-full border border-border h-auto px-[14px] py-1 text-[0.85rem] text-muted-foreground font-normal aria-pressed:border-primary aria-pressed:bg-[var(--accent-soft)] aria-pressed:text-primary aria-pressed:font-semibold ">
+            <ToggleGroupItem value="favorites" className="rounded-full border border-border h-auto px-[14px] py-1 text-sm text-muted-foreground font-normal aria-pressed:border-primary aria-pressed:bg-[var(--accent-soft)] aria-pressed:text-primary aria-pressed:font-semibold ">
               ★ {language === 'ko' ? '즐겨찾기' : 'Favorites'}
             </ToggleGroupItem>
           </ToggleGroup>
@@ -128,7 +128,7 @@ export function IngredientSearchModal({
             autoFocus
           />
           {duplicateError && (
-            <p className="text-xs text-destructive mb-2">{duplicateError}</p>
+            <p className="text-sm text-destructive mb-2">{duplicateError}</p>
           )}
         </div>
 
@@ -145,7 +145,7 @@ export function IngredientSearchModal({
                   href="/recipes/add-ingredient"
                   target="_blank"
                   rel="noopener noreferrer"
-                  style={{ display: 'inline-block', padding: '8px 16px', borderRadius: '8px', background: 'var(--primary)', color: '#fff', fontSize: '0.85rem', fontWeight: 600, textDecoration: 'none' }}
+                  style={{ display: 'inline-block', padding: '8px 16px', borderRadius: '8px', background: 'var(--primary)', color: '#fff', fontSize: '14px', fontWeight: 600, textDecoration: 'none' }}
                 >
                   + {language === 'ko' ? '식재료 추가' : 'Add ingredient'}
                 </a>

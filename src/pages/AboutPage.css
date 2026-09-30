@@ -2,7 +2,8 @@
 .service-page { font-family: 'Pretendard Variable', sans-serif; font-size: 16px; line-height: 1.85; letter-spacing: -0.04em; color: #596B64; background: #FFFFFF; }
 .service-page * { box-sizing: border-box; }
 .service-page h1, .service-page h2 { font-family: var(--font-display); font-weight: 400; font-synthesis: none; letter-spacing: -0.02em; color: #122B22; }
-.service-page h2 { font-size: clamp(20px, 2.8vw, 26px); line-height: 1.5; margin: 0 0 28px; }
+.service-page h2 { font-size: 40px; line-height: 1.5; margin: 0 0 28px; }
+.service-page .story-panel h2 { font-size: 40px; }
 .service-page p { margin: 0; }
 .service-page:lang(en) { font-family: 'Inter', sans-serif; letter-spacing: 0; }
 .service-page:lang(en) h1, .service-page:lang(en) h2 { letter-spacing: -0.02em; }
@@ -11,9 +12,9 @@
 .story-hero > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center top; }
 .story-hero::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(20,15,8,.28) 0%, rgba(18,14,6,.52) 55%, rgba(12,9,4,.74) 100%); }
 .story-hero-content { position: relative; z-index: 1; width: 100%; max-width: 1100px; margin: 0 auto; padding: 120px 24px 80px; text-align: center; }
-.service-page .story-eyebrow { font-size: 11px; font-weight: 500; line-height: 1.5; letter-spacing: 2px; text-transform: uppercase; color: #255A46; margin-bottom: 24px; }
-.story-hero .story-eyebrow { color: #B7DBBF; font-size: 12px; margin-bottom: 36px; }
+.service-page .story-eyebrow { font-size: 14px; font-weight: 500; line-height: 1.5; letter-spacing: 2px; text-transform: uppercase; color: #255A46; margin-bottom: 24px; }
+.story-hero .story-eyebrow { color: #B7DBBF; font-size: 14px; margin-bottom: 36px; }
 .story-hero h3 { font-family: var(--font-display); font-weight: 400; font-synthesis: none; letter-spacing: -0.02em; color: #FFFFFF; font-size: clamp(26px, 4.5vw, 52px); line-height: 1.55; margin: 0 0 36px; overflow-wrap: break-word; }
-.story-hero .story-intro { font-size: clamp(15px, 1.8vw, 17px); color: rgba(183,219,191,.85); line-height: 1.8; max-width: 540px; margin: 0 auto 52px; }
-.story-scroll { display: flex; flex-direction: column; align-items: center; gap: 8px; color: #B7DBBF; opacity: .5; font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; text-decoration: none; }
+.story-hero .story-intro { font-size: clamp(15px, 1.8vw, 17px); color: rgba(183,219,191,.85); line-height: 1.8; max-width: 540px; margin: 0 auto 52px; white-space: pre-line; }
+.story-scroll { display: flex; flex-direction: column; align-items: center; gap: 8px; color: #B7DBBF; opacity: .5; font-size: 14px; letter-spacing: 1.5px; text-transform: uppercase; text-decoration: none; }
 .story-scroll span { width: 1px; height: 48px; background: currentColor; }

@@ -8,7 +8,7 @@ import {
   ingredientByName,
   type FirestoreIngredient,
 } from '../services/ingredientService'
-import { Toast, useToast } from '../components/Toast'
+import { Toast, useToast } from '../components/feedback/Toast'
 import { Modal } from '../components/Modal'
 import { IngredientSearchModal } from '../components/IngredientSearchModal'
 import { trackAddRecipeModeSelected, trackAddRecipeCompleted, trackIngredientSearchOpened } from '../utils/analytics'
@@ -670,7 +670,7 @@ export function AddRecipePage() {
           {/* Step 1 */}
           <div>
             <h3 className="flex items-center gap-2.5 font-semibold text-[0.95rem] mb-3">
-              <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary text-primary-foreground text-xs flex items-center justify-center font-bold">1</span>
+              <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary text-primary-foreground text-sm flex items-center justify-center font-bold">1</span>
               {isKo ? '아래 프롬프트 복사하기' : 'Copy the prompt below'}
             </h3>
             <div className="add-recipe__prompt-box">
@@ -706,7 +706,7 @@ export function AddRecipePage() {
           {/* Step 2 */}
           <div>
             <h3 className="flex items-center gap-2.5 font-semibold text-[0.95rem] mb-3">
-              <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary text-primary-foreground text-xs flex items-center justify-center font-bold">2</span>
+              <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary text-primary-foreground text-sm flex items-center justify-center font-bold">2</span>
               {isKo ? (
                 <><a href="https://chatgpt.com" target="_blank" rel="noopener noreferrer" className="text-primary underline underline-offset-2">ChatGPT</a>{' / '}<a href="https://gemini.google.com" target="_blank" rel="noopener noreferrer" className="text-primary underline underline-offset-2">Gemini</a>{' 등 AI 웹사이트에 붙여넣기 — 아직 엔터키 누르지 말고 대기'}</>
               ) : (
@@ -723,7 +723,7 @@ export function AddRecipePage() {
           {/* Step 3 */}
           <div>
             <h3 className="flex items-center gap-2.5 font-semibold text-[0.95rem] mb-3">
-              <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary text-primary-foreground text-xs flex items-center justify-center font-bold">3</span>
+              <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary text-primary-foreground text-sm flex items-center justify-center font-bold">3</span>
               {isKo ? 'SNS 레시피에서 재료 적힌 부분 스크린샷 하기' : 'Screenshot the ingredients section of your SNS recipe'}
             </h3>
             <img
@@ -736,7 +736,7 @@ export function AddRecipePage() {
           {/* Step 4 */}
           <div>
             <h3 className="flex items-center gap-2.5 font-semibold text-[0.95rem] mb-3">
-              <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary text-primary-foreground text-xs flex items-center justify-center font-bold">4</span>
+              <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary text-primary-foreground text-sm flex items-center justify-center font-bold">4</span>
               {isKo
                 ? 'AI 웹사이트로 돌아가서 스크린샷 붙여넣고 엔터 누르기'
                 : 'Go back to the AI website, paste the screenshot, then press Enter'}
@@ -751,7 +751,7 @@ export function AddRecipePage() {
           {/* Step 5 */}
           <div>
             <h3 className="flex items-center gap-2.5 font-semibold text-[0.95rem] mb-3">
-              <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary text-primary-foreground text-xs flex items-center justify-center font-bold">5</span>
+              <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary text-primary-foreground text-sm flex items-center justify-center font-bold">5</span>
               {isKo
                 ? '이 웹사이트로 돌아와서 AI 답변 붙여넣기. 미리보기 버튼 클릭 → 내용 확인 후 \'레시피 추가\' 버튼 클릭'
                 : "Come back here and paste the AI response. Click Preview → confirm content → click 'Add Recipe'"}
@@ -822,7 +822,7 @@ export function AddRecipePage() {
                 </Button>
               ))}
             </div>
-            <p className="mt-2 text-xs text-muted-foreground">{isKo ? '선택하지 않으면 ‘기타’로 저장됩니다.' : 'Saved as “Other” if no tags are selected.'}</p>
+            <p className="mt-2 text-sm text-muted-foreground">{isKo ? '선택하지 않으면 ‘기타’로 저장됩니다.' : 'Saved as “Other” if no tags are selected.'}</p>
           </fieldset>
 
           <div className="edit-inline__link-field">
@@ -860,7 +860,7 @@ export function AddRecipePage() {
                       <TableRow key={i} style={{ background: row.isNew ? '#fffbeb' : undefined }}>
                         <TableCell>
                           <Input className="h-7 text-sm" value={row.name} onChange={(e) => handleRowNameChange(i, e.target.value)} />
-                          {row.isNew && <span style={{ display: 'block', fontSize: '0.75rem', color: '#b45309', fontWeight: 600, marginTop: '2px' }}>새 식재료</span>}
+                          {row.isNew && <span style={{ display: 'block', fontSize: '14px', color: '#b45309', fontWeight: 600, marginTop: '2px' }}>새 식재료</span>}
                         </TableCell>
                         <TableCell><Input type="number" className="h-7 w-20 text-sm" min={0} step={0.1} value={row.amount} onChange={(e) => handleRowAmountChange(i, e.target.value)} /></TableCell>
                         <TableCell style={{ textAlign: 'right' }}>
@@ -876,7 +876,7 @@ export function AddRecipePage() {
                   {tfoot('ko')}
                 </Table>
                 {resolvedRows.some((r) => r.isNew) && (
-                  <p style={{ fontSize: '0.85rem', color: '#b45309', margin: '0.5rem 0 0' }}>
+                  <p style={{ fontSize: '14px', color: '#b45309', margin: '0.5rem 0 0' }}>
                     노란 배경 행은 새로운 식재료입니다. 저장 시 데이터베이스에 추가됩니다.
                   </p>
                 )}
@@ -910,7 +910,7 @@ export function AddRecipePage() {
                         <TableRow key={i} style={{ background: resolvedRows[i]?.isNew ? '#fffbeb' : undefined }}>
                           <TableCell>
                             <Input className="h-7 text-sm" value={row.nameEn} onChange={(e) => setEnRows((prev) => prev.map((r, j) => j === i ? { ...r, nameEn: e.target.value } : r))} />
-                            {resolvedRows[i]?.isNew && <span style={{ display: 'block', fontSize: '0.75rem', color: '#b45309', fontWeight: 600, marginTop: '2px' }}>New</span>}
+                            {resolvedRows[i]?.isNew && <span style={{ display: 'block', fontSize: '14px', color: '#b45309', fontWeight: 600, marginTop: '2px' }}>New</span>}
                           </TableCell>
                           <TableCell><Input type="number" className="h-7 w-20 text-sm" min={0} step={0.1} value={fmt(row.amount)} onChange={(e) => setEnRows((prev) => prev.map((r, j) => j === i ? { ...r, amount: Number.parseFloat(e.target.value) || 0 } : r))} /></TableCell>
                           <TableCell style={{ textAlign: 'right' }}>

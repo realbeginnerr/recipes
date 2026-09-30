@@ -1,7 +1,7 @@
 .reference-header :is(a, button) { letter-spacing: -.04em; line-height: 1.5; font-weight: 500; }
 .reference-header { height: 64px; flex-shrink: 0; position: sticky; top: 0; z-index: 50; background: #fff; border-bottom: 1px solid #E5EAE9; }
 .reference-header-inner { height: 100%; display: flex; align-items: center; gap: 24px; }
-.reference-brand { flex-shrink: 0; font-size: 22px; font-weight: 500; color: #122B22; text-decoration: none; }
+.reference-header .reference-brand { flex-shrink: 0; font-family: var(--font-display); font-size: 22px; font-weight: 400; font-synthesis: none; color: #122B22; text-decoration: none; }
 .reference-desktop-nav { display: none; align-items: center; gap: 4px; }
 .reference-desktop-nav a { position: relative; padding: 4px 12px; font-size: 14px; font-weight: 500; color: #596B64; text-decoration: none; }
 .reference-desktop-nav a.is-active { color: #122B22; }
@@ -14,5 +14,10 @@
 .reference-mobile-nav a:not(.reference-request) { color: #596B64; font-size: 14px; padding: 4px 0; text-decoration: none; }
 .reference-mobile-nav a.is-active { color: #122B22; font-weight: 600; }
 .reference-mobile-nav .reference-request { height: 40px; margin-top: 4px; }
-@media (min-width: 768px) { .reference-desktop-nav, .reference-header-inner > .reference-request { display: flex; } }
+@media (min-width: 768px) {
+  .reference-header-inner { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); }
+  .reference-brand { justify-self: start; }
+  .reference-desktop-nav { display: flex; justify-self: center; }
+  .reference-header-inner > .reference-request { display: flex; justify-self: end; margin-left: 0; }
+}
 @media (min-width: 768px) { .reference-menu-toggle, .reference-mobile-nav { display: none; } }

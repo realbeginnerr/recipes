@@ -1,22 +1,35 @@
 ﻿.nutrition-detail { padding-top: 40px; padding-bottom: 96px; }
-.detail-back { display: inline-flex; font-size: 13px; color: #596B64; text-decoration: none; margin-bottom: 36px; }
-.detail-heading { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; border-bottom: 1px solid #E5EAE9; padding-bottom: 46px; margin-bottom: 56px; }
-.detail-heading h1 { font-family: var(--font-display); font-weight: 400; font-synthesis: none; font-size: clamp(28px, 4vw, 44px); margin: 0; line-height: 1.5; }
-.detail-source { display: inline-flex; align-items: center; gap: 6px; border: 1px solid #CBD4D2; border-radius: 6px; padding: 6px 12px; font-size: 13px; color: #255A46; text-decoration: none; }
+.detail-back { display: inline-flex; font-size: 14px; color: #596B64; text-decoration: none; margin-bottom: 36px; }
+.detail-layout { display: grid; grid-template-columns: minmax(0, 1fr); gap: 40px; }
+.detail-heading { display: flex; flex-direction: column; align-items: stretch; gap: 0; min-width: 0; }
+.detail-image-frame { position: relative; aspect-ratio: 4 / 3; overflow: hidden; border-radius: 12px; background: #E9EBE8; }
+.detail-image { display: block; width: 100%; height: 100%; object-fit: cover; }
+.detail-image-tags { display: flex; align-items: center; flex-wrap: nowrap; gap: 8px; height: 44px; min-height: 44px; margin: 0 0 14px; overflow-x: auto; }
+.detail-image-tags .catalog-category { flex-shrink: 0; margin-bottom: 0; }
+.detail-heading-content { display: grid; align-content: start; gap: 12px; min-width: 0; margin-top: 20px; }
+.detail-heading h1 { font-family: inherit; font-weight: 400; font-synthesis: none; font-size: clamp(24px, 3vw, 32px); margin: 0; line-height: 1.5; }
+.detail-heading-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.detail-source { display: inline-flex; align-items: center; gap: 6px; border: 1px solid #CBD4D2; border-radius: 6px; padding: 6px 12px; font-size: 14px; color: #255A46; text-decoration: none; }
 .detail-source-empty { border-style: dashed; color: #ACB5B2; }
-.detail-manage { font-size: 13px; }
-.detail-tables { display: grid; grid-template-columns: minmax(0, 1fr); gap: 64px; margin-bottom: 64px; }
+.detail-manage { font-size: 14px; }
+.detail-layout > .detail-section:last-child { margin-bottom: 64px; }
 .detail-section { min-width: 0; }
-@media (min-width: 1200px) {
-  .detail-tables { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px; align-items: start; }
+@media (min-width: 1024px) {
+  .detail-layout { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px; align-items: start; }
+  .detail-heading { grid-column: 1 / -1; }
+}
+@media (min-width: 1360px) {
+  .detail-layout { grid-template-columns: minmax(280px, .72fr) minmax(480px, 1.14fr) minmax(480px, 1.14fr); gap: 24px; }
+  .detail-heading { grid-column: auto; }
 }
 .nutrition-detail h2 { font-family: inherit; font-size: 16px; color: #122B22; font-weight: 500; letter-spacing: -.02em; margin: 0 0 14px; }
 .nutrition-detail [data-slot="select-trigger"] { max-width: 240px; }
-.detail-section-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 44px; margin-bottom: 14px; }
+.detail-section-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; height: 44px; min-height: 44px; margin-bottom: 14px; }
 .detail-section-heading h2 { margin: 0; }
-.detail-divisions { display: inline-flex; flex-shrink: 0; align-items: center; gap: 8px; font-size: 13px; color: #596B64; }
+.detail-divisions { display: inline-flex; flex-shrink: 0; align-items: center; gap: 8px; font-size: 14px; color: #596B64; }
 .detail-divisions input[type=number] { width: 52px; }
 .detail-divisions > span { color: #899591; }
 .detail-nutrition-summary { margin-top: 16px; }
 .detail-notes { margin-top: 32px; }
 .detail-notes p { margin: 0; max-width: 720px; font-size: 15px; color: #122B22; line-height: 1.75; letter-spacing: -.02em; white-space: pre-wrap; overflow-wrap: anywhere; }
+

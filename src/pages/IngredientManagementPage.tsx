@@ -269,10 +269,10 @@ export function IngredientsPage({ visibleIds }: { visibleIds?: string[] } = {}) 
           onValueChange={(vals) => { if (vals.length > 0) setFavTab(vals[0] as 'all' | 'favorites') }}
           className="gap-2"
         >
-          <ToggleGroupItem value="all" className="rounded-full border border-border h-auto px-[14px] py-1 text-[0.85rem] text-muted-foreground font-normal aria-pressed:border-primary aria-pressed:bg-[var(--accent-soft)] aria-pressed:text-primary aria-pressed:font-semibold ">
+          <ToggleGroupItem value="all" className="rounded-full border border-border h-auto px-[14px] py-1 text-sm text-muted-foreground font-normal aria-pressed:border-primary aria-pressed:bg-[var(--accent-soft)] aria-pressed:text-primary aria-pressed:font-semibold ">
             {isKo ? '전체' : 'All'}
           </ToggleGroupItem>
-          <ToggleGroupItem value="favorites" className="rounded-full border border-border h-auto px-[14px] py-1 text-[0.85rem] text-muted-foreground font-normal aria-pressed:border-primary aria-pressed:bg-[var(--accent-soft)] aria-pressed:text-primary aria-pressed:font-semibold ">
+          <ToggleGroupItem value="favorites" className="rounded-full border border-border h-auto px-[14px] py-1 text-sm text-muted-foreground font-normal aria-pressed:border-primary aria-pressed:bg-[var(--accent-soft)] aria-pressed:text-primary aria-pressed:font-semibold ">
             ★ {isKo ? '즐겨찾기' : 'Favorites'}
           </ToggleGroupItem>
         </ToggleGroup>
@@ -305,7 +305,7 @@ export function IngredientsPage({ visibleIds }: { visibleIds?: string[] } = {}) 
             <button
               type="button"
               onClick={() => navigate('/add-ingredient')}
-              style={{ fontSize: '0.85rem', color: 'var(--primary)', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 600, padding: '4px 0' }}
+              style={{ fontSize: '14px', color: 'var(--primary)', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 600, padding: '4px 0' }}
             >
               {isKo ? '+ 식재료 추가' : '+ Add Ingredient'}
             </button>
@@ -321,7 +321,7 @@ export function IngredientsPage({ visibleIds }: { visibleIds?: string[] } = {}) 
               <li key={r.id || i} className="ing-reports-panel__item">
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <span style={{ fontWeight: 600 }}>{r.ingredientName}</span>
-                  {r.note && <p style={{ margin: '2px 0 0', fontSize: '0.8rem', color: 'var(--muted-foreground)', whiteSpace: 'pre-wrap' }}>{r.note}</p>}
+                  {r.note && <p style={{ margin: '2px 0 0', fontSize: '14px', color: 'var(--muted-foreground)', whiteSpace: 'pre-wrap' }}>{r.note}</p>}
                 </div>
                 <span className="ing-reports-panel__date">{new Date(r.reportedAt).toLocaleDateString(isKo ? 'ko-KR' : 'en-US')}</span>
                 <Button type="button" variant="ghost" size="icon-sm" onClick={() => handleDismissReport(r)} title={isKo ? '해결됨' : 'Dismiss'}>✓</Button>
@@ -370,7 +370,7 @@ export function IngredientsPage({ visibleIds }: { visibleIds?: string[] } = {}) 
                       />
                       {isKo && (
                         <Input
-                          style={{ marginTop: '3px', opacity: 0.6, fontSize: '0.85rem' }}
+                          style={{ marginTop: '3px', opacity: 0.6, fontSize: '14px' }}
                           value={ing.name}
                           onChange={(e) => updateEditRow(ing.id, 'name', e.target.value)}
                           placeholder="English name"
@@ -507,7 +507,7 @@ export function IngredientsPage({ visibleIds }: { visibleIds?: string[] } = {}) 
                     <TableCell style={{ color: isAddedSugarIngredient(ing.nameKo) ? '#dc2626' : isRefinedCarb(ing.nameKo, ing.name, ing.isRefinedCarb) ? '#ea580c' : undefined }}>
                       {isKo && ing.nameKo ? ing.nameKo : toTitleCase(ing.name)}
                       {isKo && ing.name && (
-                        <span style={{ display: 'block', fontSize: '0.78rem', opacity: 0.5 }}>{toTitleCase(ing.name)}</span>
+                        <span style={{ display: 'block', fontSize: '14px', opacity: 0.5 }}>{toTitleCase(ing.name)}</span>
                       )}
                     </TableCell>
                     <TableCell style={{ textAlign: 'right' }}>{ing.baseAmount}</TableCell>

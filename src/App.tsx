@@ -1,16 +1,18 @@
+import { lazy } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { Layout } from './components/Layout'
 import { AddPagePasswordGate } from './components/AddPagePasswordGate'
-import { RecipePage } from './pages/RecipePage'
-import { AddRecipePage } from './pages/AddRecipePage'
-import { IngredientsPage } from './pages/IngredientsPage'
-import { IngredientsPage as IngredientManagementPage } from './pages/IngredientManagementPage'
-import { AddIngredientPage } from './pages/AddIngredientPage'
-import { SignupPage } from './pages/SignupPage'
-import { RecipeDetailPage } from './pages/RecipeDetailPage'
-import { RecipeDetailPage as RecipeManagementPage } from './pages/RecipeManagementPage'
-import { EatingOutPage } from './pages/EatingOutPage'
 import { AboutPage } from './pages/AboutPage'
+
+const RecipePage = lazy(() => import('./pages/RecipePage').then(module => ({ default: module.RecipePage })))
+const AddRecipePage = lazy(() => import('./pages/AddRecipePage').then(module => ({ default: module.AddRecipePage })))
+const IngredientsPage = lazy(() => import('./pages/IngredientsPage').then(module => ({ default: module.IngredientsPage })))
+const IngredientManagementPage = lazy(() => import('./pages/IngredientManagementPage').then(module => ({ default: module.IngredientsPage })))
+const AddIngredientPage = lazy(() => import('./pages/AddIngredientPage').then(module => ({ default: module.AddIngredientPage })))
+const SignupPage = lazy(() => import('./pages/SignupPage').then(module => ({ default: module.SignupPage })))
+const RecipeDetailPage = lazy(() => import('./pages/RecipeDetailPage').then(module => ({ default: module.RecipeDetailPage })))
+const RecipeManagementPage = lazy(() => import('./pages/RecipeManagementPage').then(module => ({ default: module.RecipeDetailPage })))
+const EatingOutPage = lazy(() => import('./pages/EatingOutPage').then(module => ({ default: module.EatingOutPage })))
 
 export function App() {
   return (
