@@ -10,7 +10,7 @@ import { ingredientPresentation } from '../data/ingredientPresentation'
 import { recipes as staticRecipes } from '../data/recipe'
 import {
   deleteIngredientFromFirestore,
-  ingredientByName,
+  getIngredientById,
   loadIngredientsFromFirestore,
   updateIngredientInFirestore,
   type FirestoreIngredient,
@@ -70,7 +70,7 @@ export function IngredientEditPage() {
     let cancelled = false
     loadIngredientsFromFirestore()
       .then(() => {
-        const ingredient = [...ingredientByName.values()].find((item) => item.id === id)
+        const ingredient = id ? getIngredientById(id) : undefined
         if (!cancelled && ingredient) setDraft(initialDraft(ingredient))
         if (!cancelled && !ingredient) setError(isKo ? '식재료를 찾을 수 없습니다.' : 'Ingredient not found.')
       })

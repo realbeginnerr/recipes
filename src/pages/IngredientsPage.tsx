@@ -6,7 +6,6 @@ import { LayoutGrid, List } from 'lucide-react'
 import { PageIntro, CatalogToolbar, CategoryFilter, SearchField } from '../components/catalog/CatalogControls'
 import { Button } from '@/components/ui/button'
 import { useEffect, useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
 import { useLanguage } from '../context/LanguageContext'
 import { useAdmin } from '../context/AdminContext'
 import { ingredients as ingredientCache } from '../data/ingredientCache'
@@ -109,7 +108,6 @@ export function IngredientsPage() {
       </div>
     </CatalogToolbar>
     <div className="catalog-container catalog-results" aria-busy={loading}>
-      {isAdmin && <p><Link to="/ingredients/manage">{ko ? '식재료 정보 관리' : 'Manage ingredient data'}</Link></p>}
       {!loading && <div className="catalog-count-row"><p className="catalog-count" role="status">{ko ? '식재료 ' : 'Ingredients '}<strong>{visible.length}{ko ? '개' : ''}</strong>{query && <span> · “{query}”</span>}</p><Button onClick={() => requestAccess('/add-ingredient')} variant="link" size="content" className="catalog-intro__subtle-action">{ko ? '식재료 추가' : 'Add ingredient'}</Button></div>}
       {error && <ContentState variant="inline" error title={ko ? '최신 정보를 불러오지 못했습니다. 저장된 정보를 표시합니다.' : 'Could not load the latest data. Showing available ingredients.'}><Button variant="ghost" size="content" onClick={() => setAttempt(value => value + 1)}>{ko ? '다시 시도' : 'Retry'}</Button></ContentState>}
       {visible.length === 0 ? <ContentState icon="⌕" title={ko ? '찾으시는 재료가 아직 없어요.' : 'We could not find that ingredient.'} description={ko ? '다른 이름으로 검색하거나, 철자를 확인해 보세요.' : 'Try another name or check the spelling.'}>{query.trim() && <Button type="button" variant="outline">{ko ? '이 식재료 추가해주세요' : 'Please add this ingredient'}</Button>}</ContentState> :

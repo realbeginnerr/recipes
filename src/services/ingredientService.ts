@@ -32,6 +32,7 @@ const COLLECTION = 'ingredients'
 
 // name(lowercase) 또는 nameKo → ingredient
 export const ingredientByName = new Map<string, FirestoreIngredient>()
+const ingredientByDocumentId = new Map<string, FirestoreIngredient>()
 
 let loaded = false
 
@@ -76,6 +77,11 @@ export async function deleteIngredientFromFirestore(id: string): Promise<void> {
     if (val.id === id) ingredientByName.delete(key)
   }
   removeCachedIngredient(id)
+  ingredientByDocumentId.delete(id)
+}
+
+export function getIngredientById(id: string): FirestoreIngredient | undefined {
+  return ingredientByDocumentId.get(id)
 }
 
 export function findIngredientByName(name: string): FirestoreIngredient | undefined {
@@ -89,6 +95,8 @@ function registerIngredient(ing: FirestoreIngredient) {
     return
   }
   const normalized = ing
+  ingredientByDocumentId.set(ing.id, normalized)
+  for (const legacyId of normalized.legacyIds ?? []) ingredientByDocumentId.set(legacyId, normalized)
   for (const [key, val] of ingredientByName.entries()) {
     if (val.id === ing.id) ingredientByName.delete(key)
   }

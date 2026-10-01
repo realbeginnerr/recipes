@@ -798,10 +798,22 @@ body {
 }
 
 .edit-inline__replace-cell {
-  cursor: pointer;
-  color: var(--primary);
+  min-width: max-content;
+}
+
+.edit-inline__replace-trigger {
+  display: inline-flex;
+  max-width: none;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 4px;
+  padding: 0;
+  color: inherit;
+  font: inherit;
+  text-align: left;
   text-decoration: underline;
   text-underline-offset: 2px;
+  white-space: nowrap;
 }
 
 .edit-inline__add {

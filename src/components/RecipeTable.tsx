@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react'
+import { ArrowLeftRight } from 'lucide-react'
 import { useLanguage } from '../context/LanguageContext'
 import { useAdmin } from '../context/AdminContext'
 import { useAddPageAccess } from './AddPageAccessProvider'
@@ -473,10 +474,19 @@ export function RecipeTable({
                     <TableCell
                       className="edit-inline__replace-cell"
                       style={{ fontWeight: isNew ? 700 : undefined, color: isAddedSugarIngredient(ingredient.nameKo) ? 'var(--destructive)' : isRefinedCarb(ingredient.nameKo, ingredient.name, ingredient.isRefinedCarb) ? 'var(--warning)' : undefined }}
-                      onClick={() => { setReplaceSide(false); setReplaceTargetIndex(index) }}
-                      title={language === 'ko' ? '클릭하여 식재료 교체' : 'Click to replace ingredient'}
                     >
-                      {getIngredientDisplayName(ingredient, language)}
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="content"
+                        className="edit-inline__replace-trigger"
+                        aria-label={language === 'ko' ? `${getIngredientDisplayName(ingredient, language)} 식재료 교체` : `Replace ${getIngredientDisplayName(ingredient, language)}`}
+                        title={language === 'ko' ? '클릭하여 식재료 교체' : 'Click to replace ingredient'}
+                        onClick={() => { setReplaceSide(false); setReplaceTargetIndex(index) }}
+                      >
+                        {getIngredientDisplayName(ingredient, language)}
+                        <ArrowLeftRight size={14} aria-hidden="true" />
+                      </Button>
                     </TableCell>
                     <TableCell>
                       <Input
@@ -665,12 +675,21 @@ export function RecipeTable({
                   <TableCell
                     className={!isRice && isEditing ? 'edit-inline__replace-cell' : undefined}
                     style={{ color: !isRice && ing ? (isAddedSugarIngredient(ing.nameKo) ? 'var(--destructive)' : isRefinedCarb(ing.nameKo, ing.name, ing.isRefinedCarb) ? 'var(--warning)' : undefined) : undefined }}
-                    onClick={!isRice && isEditing ? () => { setReplaceSide(true); setReplaceTargetIndex(index) } : undefined}
-                    title={!isRice && isEditing ? (language === 'ko' ? '클릭하여 식재료 교체' : 'Click to replace ingredient') : undefined}
                   >
                     {isRice
                       ? (language === 'ko' ? '잡곡밥 (쌀:잡곡=2:1)' : 'Multigrain rice (rice:grains=2:1)')
-                      : getIngredientDisplayName(ing!, language)}
+                      : isEditing ? <Button
+                        type="button"
+                        variant="ghost"
+                        size="content"
+                        className="edit-inline__replace-trigger"
+                        aria-label={language === 'ko' ? `${getIngredientDisplayName(ing!, language)} 식재료 교체` : `Replace ${getIngredientDisplayName(ing!, language)}`}
+                        title={language === 'ko' ? '클릭하여 식재료 교체' : 'Click to replace ingredient'}
+                        onClick={() => { setReplaceSide(true); setReplaceTargetIndex(index) }}
+                      >
+                        {getIngredientDisplayName(ing!, language)}
+                        <ArrowLeftRight size={14} aria-hidden="true" />
+                      </Button> : getIngredientDisplayName(ing!, language)}
                   </TableCell>
                   <TableCell>
                     {isEditing ? (
