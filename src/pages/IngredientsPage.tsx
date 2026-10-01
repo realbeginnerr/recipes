@@ -9,18 +9,17 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useLanguage } from '../context/LanguageContext'
 import { useAdmin } from '../context/AdminContext'
-import { ingredientById } from '../data/ingredients'
+import { ingredients as ingredientCache } from '../data/ingredientCache'
 import { recipes as staticRecipes } from '../data/recipe'
 import { ingredientPresentation } from '../data/ingredientPresentation'
 import { ingredientByName, loadIngredientsFromFirestore } from '../services/ingredientService'
-import { loadRecipesFromFirestore, convertToRecipe } from '../services/recipeService'
+import { loadRecipesFromFirestore, mergeStaticAndFirestoreRecipes } from '../services/recipeService'
 import type { Ingredient, Recipe } from '../types'
 import './RecipePage.css'
 import './IngredientsPage.css'
 import { recipeContainsIngredient } from '../utils/recipeIngredients'
 import { ingredientCategory } from '../utils/ingredientCategory'
 import { loadFavoriteIngredientIds } from '../utils/ingredientFavorites'
-import { retiredIngredientIds } from '../data/ingredientCatalogOverrides'
 
 const categories = ['전체', '탄수화물', '단백질', '지방', '채소', '과일', '기타']
 const filterOptions = ['전체', '즐겨찾기', ...categories.slice(1)]
@@ -30,7 +29,8 @@ function presentation(ingredient: Ingredient) {
   const stored = ingredientByName.get(name) ?? ingredientByName.get(ingredient.name.toLowerCase())
   const reference = ingredientPresentation[name] ?? Object.entries(ingredientPresentation).find(([key]) => name.includes(key))?.[1]
   const category = ingredientCategory(ingredient, stored?.category, reference?.category)
-  const image = reference?.preferImage ? reference.image : stored?.imageUrl || reference?.image
+  const hasImageOverride = stored && Object.prototype.hasOwnProperty.call(stored, 'imageUrl')
+  const image = hasImageOverride ? stored.imageUrl || undefined : reference?.image
   return { category, image, createdAt: stored?.createdAt ?? 0 }
 }
 
@@ -39,7 +39,7 @@ export function IngredientsPage() {
   const { language } = useLanguage()
   const { isAdmin } = useAdmin()
   const ko = language === 'ko'
-  const [ingredients, setIngredients] = useState(() => [...ingredientById.values()].filter(ingredient => !retiredIngredientIds.has(ingredient.id)))
+  const [ingredients, setIngredients] = useState<Ingredient[]>([])
   const [recipes, setRecipes] = useState<Recipe[]>(staticRecipes)
   const [query, setQuery] = useState('')
   const [category, setCategory] = useState<string[]>([])
@@ -71,11 +71,11 @@ export function IngredientsPage() {
       try {
         await loadIngredientsFromFirestore()
         if (!cancelled) {
-          const registeredIds = new Set([...ingredientByName.values()].map(ingredient => ingredient.id))
-          setIngredients([...ingredientById.values()].filter(ingredient => !retiredIngredientIds.has(ingredient.id) && (registeredIds.size === 0 || registeredIds.has(ingredient.id))))
+          setIngredients([...ingredientCache])
+          setFavorites(loadFavoriteIngredientIds())
         }
         const docs = await loadRecipesFromFirestore()
-        if (!cancelled) setRecipes([...staticRecipes, ...docs.map(convertToRecipe)])
+        if (!cancelled) setRecipes(mergeStaticAndFirestoreRecipes(staticRecipes, docs))
       } catch { if (!cancelled) setError(true) }
       finally { if (!cancelled) setLoading(false) }
     }
@@ -112,11 +112,11 @@ export function IngredientsPage() {
       {isAdmin && <p><Link to="/ingredients/manage">{ko ? '식재료 정보 관리' : 'Manage ingredient data'}</Link></p>}
       {!loading && <div className="catalog-count-row"><p className="catalog-count" role="status">{ko ? '식재료 ' : 'Ingredients '}<strong>{visible.length}{ko ? '개' : ''}</strong>{query && <span> · “{query}”</span>}</p><Button onClick={() => requestAccess('/add-ingredient')} variant="link" size="content" className="catalog-intro__subtle-action">{ko ? '식재료 추가' : 'Add ingredient'}</Button></div>}
       {error && <ContentState variant="inline" error title={ko ? '최신 정보를 불러오지 못했습니다. 저장된 정보를 표시합니다.' : 'Could not load the latest data. Showing available ingredients.'}><Button variant="ghost" size="content" onClick={() => setAttempt(value => value + 1)}>{ko ? '다시 시도' : 'Retry'}</Button></ContentState>}
-      {visible.length === 0 ? <ContentState icon="⌕" title={ko ? '찾으시는 재료가 아직 없어요.' : 'We could not find that ingredient.'} description={ko ? '다른 이름으로 검색하거나, 철자를 확인해 보세요.' : 'Try another name or check the spelling.'}></ContentState> :
+      {visible.length === 0 ? <ContentState icon="⌕" title={ko ? '찾으시는 재료가 아직 없어요.' : 'We could not find that ingredient.'} description={ko ? '다른 이름으로 검색하거나, 철자를 확인해 보세요.' : 'Try another name or check the spelling.'}>{query.trim() && <Button type="button" variant="outline">{ko ? '이 식재료 추가해주세요' : 'Please add this ingredient'}</Button>}</ContentState> :
       view === 'list' ? <IngredientTable visibleIds={visible.map(ingredient => ingredient.id)} /> : <div className="ingredient-grid">{visible.map(ingredient => {
         const related = recipes.filter(recipe => !recipe.hidden && recipeContainsIngredient(recipe, ingredient.id))
         const details = presentation(ingredient)
-        return <IngredientCard key={ingredient.id} ingredient={ingredient} image={details.image} category={ko ? details.category : english[details.category]} related={related} />
+        return <IngredientCard key={ingredient.id} ingredient={ingredient} image={details.image} category={ko ? details.category : english[details.category]} related={related} onEdit={isAdmin ? () => requestAccess(`/ingredient/${ingredient.id}/edit`) : undefined} />
       })}</div>}
     </div>
   </section>

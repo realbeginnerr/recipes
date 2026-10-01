@@ -1,9 +1,22 @@
 import { readFile, writeFile } from 'node:fs/promises'
 import { createHash } from 'node:crypto'
+import { execFileSync } from 'node:child_process'
+import { resolve } from 'node:path'
 
 const base = 'https://firestore.googleapis.com/v1/projects/recipes-5a663/databases/(default)/documents'
 const args = process.argv.slice(2)
 const apply = args.includes('--apply')
+const inputOption = args.find(arg => arg.startsWith('--input='))
+if (!inputOption) throw new Error('Pass the source CSV with --input=<path>')
+const inputPath = resolve(inputOption.slice('--input='.length))
+const reportOption = args.find(arg => arg.startsWith('--report='))
+const reportPath = reportOption ? resolve(reportOption.slice('--report='.length)) : null
+const accessToken = execFileSync('powershell.exe', [
+  '-NoProfile',
+  '-NonInteractive',
+  '-Command',
+  'gcloud auth print-access-token',
+], { encoding: 'utf8' }).trim()
 const creamOption = args.find(arg => arg.startsWith('--cream-pack-grams='))
 const creamGrams = creamOption ? Number(creamOption.split('=')[1]) : 430
 if (creamGrams !== undefined && (!Number.isFinite(creamGrams) || creamGrams <= 0)) throw new Error('Invalid cream package weight')
@@ -40,11 +53,15 @@ const aliases = {
   '후추': '후추가루', '참깨': '깨 (참깨. 통깨)', '통깨': '깨 (참깨. 통깨)',
 }
 async function request(url, options) {
-  const response = await fetch(url, { ...options, signal: AbortSignal.timeout(30000) })
+  const response = await fetch(url, {
+    ...options,
+    headers: { ...options?.headers, Authorization: `Bearer ${accessToken}` },
+    signal: AbortSignal.timeout(30000),
+  })
   if (!response.ok) throw new Error(`Firestore ${response.status}: ${await response.text()}`)
   return response.json()
 }
-const csv = parseCsv(await readFile(new URL('ingredients-import.csv', import.meta.url), 'utf8'))
+const csv = parseCsv(await readFile(inputPath, 'utf8'))
 const headers = csv.shift()
 const expected = ['', '이름순', '재료명', 'g', 'T', 't', 'cup', '개, 장', '병, 캔, 팩', '탄', '단', '지']
 if (JSON.stringify(headers) !== JSON.stringify(expected)) throw new Error('Unexpected CSV columns')
@@ -101,8 +118,8 @@ for (const row of unique.values()) {
   }
 }
 const report = { csvRows: csv.length, uniqueRows: unique.size, duplicates, updates: changes.filter(c => c.action === 'update').length, creates: changes.filter(c => c.action === 'create').length, pending, retained: documents.filter(doc => !matched.has(doc.name)).map(doc => doc.fields.nameKo?.stringValue), changes }
-await writeFile(new URL('ingredients-import-report.json', import.meta.url), JSON.stringify(report, null, 2))
 console.log(JSON.stringify({ ...report, changes: undefined }, null, 2))
+if (reportPath) await writeFile(reportPath, JSON.stringify(report, null, 2))
 if (apply) {
   if (pending.length && !args.includes('--skip-pending')) throw new Error('Unresolved package weight; no changes applied')
   if (writes.length > 500) throw new Error('Too many writes for one atomic commit')

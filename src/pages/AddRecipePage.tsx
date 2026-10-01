@@ -12,7 +12,7 @@ import { Toast, useToast } from '../components/feedback/Toast'
 import { Modal } from '../components/Modal'
 import { IngredientSearchModal } from '../components/IngredientSearchModal'
 import { trackAddRecipeModeSelected, trackAddRecipeCompleted, trackIngredientSearchOpened } from '../utils/analytics'
-import { ingredientById } from '../data/ingredients'
+import { ingredientById } from '../data/ingredientCache'
 import type { Ingredient } from '../types'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
@@ -303,7 +303,7 @@ export function AddRecipePage() {
     try {
       await loadIngredientsFromFirestore()
       const recipes = await loadRecipesFromFirestore()
-      setSavedRecipes(recipes)
+      setSavedRecipes(recipes.filter((recipe) => !recipe.deleted))
       setShowRecipeList(true)
       setSelectedRecipeIds(new Set())
     } finally {
@@ -471,7 +471,15 @@ export function AddRecipePage() {
       setResolved(false)
     } catch (err) {
       console.error(err)
-      showToast(isKo ? '저장 실패. 다시 시도해주세요.' : 'Save failed. Try again.', 'error')
+      const code = typeof err === 'object' && err !== null && 'code' in err
+        ? String(err.code)
+        : ''
+      const message = code === 'permission-denied'
+        ? (isKo
+            ? 'Firestore 쓰기 권한이 없습니다. 관리자 이메일과 Firestore 보안 규칙을 확인해주세요.'
+            : 'Firestore denied the write. Check the administrator email and Firestore security rules.')
+        : (isKo ? `저장 실패${code ? ` (${code})` : ''}. 다시 시도해주세요.` : `Save failed${code ? ` (${code})` : ''}. Try again.`)
+      showToast(message, 'error')
     } finally {
       setSaving(false)
     }

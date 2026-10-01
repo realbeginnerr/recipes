@@ -1,8 +1,8 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef } from 'react'
 import { useLanguage } from '../context/LanguageContext'
 import { useAdmin } from '../context/AdminContext'
 import { useAddPageAccess } from './AddPageAccessProvider'
-import { ingredientById } from '../data/ingredients'
+import { ingredientById } from '../data/ingredientCache'
 import { IngredientSearchModal } from './IngredientSearchModal'
 import { Modal } from './Modal'
 import { Table, TableHeader, TableBody, TableFooter, TableRow, TableHead, TableCell } from '@/components/ui/table'
@@ -89,7 +89,6 @@ export function RecipeTable({
   const [isAddSideModalOpen, setIsAddSideModalOpen] = useState(false)
   const [replaceTargetIndex, setReplaceTargetIndex] = useState<number | null>(null)
   const [replaceSide, setReplaceSide] = useState(false)
-  const [showCancelConfirm, setShowCancelConfirm] = useState(false)
   const dragItemIndex = useRef<number | null>(null)
   const dragSideItemIndex = useRef<number | null>(null)
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null)
@@ -97,18 +96,6 @@ export function RecipeTable({
   const [isGuestSaveModalOpen, setIsGuestSaveModalOpen] = useState(false)
   const [isRecommendedInfoOpen, setIsRecommendedInfoOpen] = useState(false)
   const [newlyAddedIds, setNewlyAddedIds] = useState<Set<string>>(new Set())
-  const sectionRef = useRef<HTMLElement>(null)
-
-  useEffect(() => {
-    if (!isEditing) return
-    function handleMouseDown(e: MouseEvent) {
-      if (sectionRef.current && !sectionRef.current.contains(e.target as Node)) {
-        setShowCancelConfirm(true)
-      }
-    }
-    document.addEventListener('mousedown', handleMouseDown)
-    return () => document.removeEventListener('mousedown', handleMouseDown)
-  }, [isEditing])
 
   function startEditing() {
     if (isEditing) return
@@ -288,7 +275,7 @@ export function RecipeTable({
 
 
   return (
-    <section className="recipe-block" ref={sectionRef} id={recipe.id}>
+    <section className="recipe-block" id={recipe.id}>
       <div className="recipe-block__heading-row">
         <div className="recipe-block__title-group">
           {isAdmin && <Button
@@ -318,16 +305,22 @@ export function RecipeTable({
           </Button>}
           {isEditing ? (
             <div className="recipe-block__title-edit">
-              <Input
-                value={editNameKo}
-                onChange={(e) => setEditNameKo(e.target.value)}
-                placeholder="한글 이름"
-              />
-              <Input
-                value={editName}
-                onChange={(e) => setEditName(e.target.value)}
-                placeholder="English name"
-              />
+              <div className="recipe-block__title-edit-field">
+                <label htmlFor={`recipe-name-ko-${recipe.id}`}>{language === 'ko' ? '한글 이름' : 'Korean name'}</label>
+                <Input
+                  id={`recipe-name-ko-${recipe.id}`}
+                  value={editNameKo}
+                  onChange={(e) => setEditNameKo(e.target.value)}
+                />
+              </div>
+              <div className="recipe-block__title-edit-field">
+                <label htmlFor={`recipe-name-en-${recipe.id}`}>{language === 'ko' ? '영문 이름' : 'English name'}</label>
+                <Input
+                  id={`recipe-name-en-${recipe.id}`}
+                  value={editName}
+                  onChange={(e) => setEditName(e.target.value)}
+                />
+              </div>
             </div>
           ) : (
             <h2 className="recipe-block__heading">
@@ -377,6 +370,21 @@ export function RecipeTable({
         <div className="recipe-block__edit-actions">
           {isEditing && (
             <>
+              {isAdmin && onDeleteRecipe && (
+                <Button
+                  type="button"
+                  variant="destructive"
+                  size="sm"
+                  onClick={() => {
+                    const msg = language === 'ko'
+                      ? `'${getRecipeDisplayName(activeRecipe, language)}' 레시피를 삭제하시겠습니까?\n삭제된 레시피는 복구할 수 없습니다.`
+                      : `Delete '${getRecipeDisplayName(activeRecipe, language)}'?\nThis action cannot be undone.`
+                    if (window.confirm(msg)) void onDeleteRecipe(activeRecipe.id)
+                  }}
+                >
+                  {language === 'ko' ? '삭제' : 'Delete'}
+                </Button>
+              )}
               <Button type="button" variant="outline" size="sm" onClick={handleCancel}>
                 {language === 'ko' ? '취소' : 'Cancel'}
               </Button>
@@ -833,15 +841,6 @@ export function RecipeTable({
           ? '로그인하지 않은 상태에서는 변경 사항이 저장되지 않습니다. 새로고침하면 원래대로 돌아갑니다.'
           : 'Changes are not saved unless you are logged in. Refreshing the page will revert them.'}
         actions={[{ label: language === 'ko' ? '확인' : 'OK', onClick: () => setIsGuestSaveModalOpen(false) }]}
-      />
-
-      <Modal
-        isOpen={showCancelConfirm}
-        message={language === 'ko' ? '계속 수정하시겠습니까?' : 'Do you want to continue editing?'}
-        actions={[
-          { label: language === 'ko' ? '계속 수정' : 'Keep editing', variant: 'ghost', onClick: () => setShowCancelConfirm(false) },
-          { label: language === 'ko' ? '저장 안 하고 나가기' : 'Leave without saving', onClick: () => { setShowCancelConfirm(false); handleCancel() } },
-        ]}
       />
 
       <Modal

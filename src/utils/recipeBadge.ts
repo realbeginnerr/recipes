@@ -1,5 +1,5 @@
 import { isRefinedCarb, isAddedSugarIngredient } from '../data/refinedCarbs'
-import { ingredientById } from '../data/ingredients'
+import { ingredientById } from '../data/ingredientCache'
 import { amountToGrams, calculateMacros } from './nutrition'
 import type { Recipe } from '../types'
 

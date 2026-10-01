@@ -1,7 +1,6 @@
 import {
   collection,
   addDoc,
-  deleteDoc,
   doc,
   getDocs,
   orderBy,
@@ -21,6 +20,7 @@ export type FirestoreRecipeItem = {
 
 export type FirestoreRecipe = {
   categories?: RecipeCategory[]
+  deleted?: boolean
   id?: string
   name: string
   nameKo: string
@@ -73,7 +73,7 @@ export async function updateRecipeInFirestore(recipe: Recipe): Promise<void> {
 }
 
 export async function deleteRecipeFromFirestore(id: string): Promise<void> {
-  await deleteDoc(doc(db, COLLECTION, id))
+  await setDoc(doc(db, COLLECTION, id), { deleted: true }, { merge: true })
 }
 
 export async function loadRecipesFromFirestore(): Promise<FirestoreRecipe[]> {
@@ -113,4 +113,27 @@ export function convertToRecipe(fs: FirestoreRecipe): Recipe {
       defaultUnit: item.unit,
     })),
   }
+}
+
+export function mergeStaticAndFirestoreRecipes(
+  staticRecipes: Recipe[],
+  firestoreRecipes: FirestoreRecipe[],
+): Recipe[] {
+  const merged = [...staticRecipes]
+  for (const firestoreRecipe of firestoreRecipes) {
+    const duplicateIndex = merged.findIndex((existing) =>
+      existing.id === firestoreRecipe.id || (
+        existing.name.toLocaleLowerCase() === firestoreRecipe.name.toLocaleLowerCase() &&
+        existing.nameKo.toLocaleLowerCase() === firestoreRecipe.nameKo.toLocaleLowerCase()
+      ),
+    )
+    if (firestoreRecipe.deleted) {
+      if (duplicateIndex !== -1) merged.splice(duplicateIndex, 1)
+      continue
+    }
+    const recipe = convertToRecipe(firestoreRecipe)
+    if (duplicateIndex === -1) merged.push(recipe)
+    else merged[duplicateIndex] = recipe
+  }
+  return merged
 }

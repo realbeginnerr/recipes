@@ -1,7 +1,7 @@
-import { ingredientById } from '../data/ingredients'
+import { ingredientById } from '../data/ingredientCache'
 import { recipes } from '../data/recipe'
 import type { Language } from '../i18n/translations'
-import type { RecipeRowState } from '../types'
+import type { Recipe, RecipeRowState } from '../types'
 import { convertUnit, roundToOne } from './nutrition'
 import { getPreferredUnit } from './unitPreference'
 
@@ -32,9 +32,9 @@ function rowWithPreferredUnit(
   }
 }
 
-export function buildInitialRecipeStates(language: Language): RecipeStates {
+export function buildInitialRecipeStates(language: Language, sourceRecipes: Recipe[] = recipes): RecipeStates {
   return Object.fromEntries(
-    recipes.map((recipe) => [
+    sourceRecipes.map((recipe) => [
       recipe.id,
       recipe.items.map((item) =>
         rowWithPreferredUnit(

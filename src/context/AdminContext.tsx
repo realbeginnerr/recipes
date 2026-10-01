@@ -1,40 +1,58 @@
-import { createContext, useContext, useState } from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
+import { GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signOut } from 'firebase/auth'
+import { auth } from '../firebase'
 
-const ADMIN_PIN_HASH = import.meta.env.VITE_ADMIN_PIN_HASH as string
-const SESSION_KEY = 'admin_auth'
-
-async function hashPin(pin: string): Promise<string> {
-  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(pin))
-  return Array.from(new Uint8Array(buf)).map((b) => b.toString(16).padStart(2, '0')).join('')
-}
+const ADMIN_EMAIL = 'hijmjo@gmail.com'
+type AdminLoginError = 'not-admin' | 'provider-disabled' | 'unauthorized-domain' | 'popup-blocked' | 'popup-closed' | 'failed'
+type AdminLoginResult = { ok: true } | { ok: false; reason: AdminLoginError }
 
 type AdminContextType = {
   isAdmin: boolean
-  login: (pin: string) => Promise<boolean>
-  logout: () => void
+  login: () => Promise<AdminLoginResult>
+  logout: () => Promise<void>
 }
 
 const AdminContext = createContext<AdminContextType>({
   isAdmin: false,
-  login: async () => false,
-  logout: () => {},
+  login: async () => ({ ok: false, reason: 'failed' }),
+  logout: async () => {},
 })
 
 export function AdminProvider({ children }: { children: React.ReactNode }) {
-  const [isAdmin, setIsAdmin] = useState(() => sessionStorage.getItem(SESSION_KEY) === '1')
+  const [isAdmin, setIsAdmin] = useState(false)
 
-  async function login(pin: string): Promise<boolean> {
-    const hashed = await hashPin(pin)
-    if (hashed === ADMIN_PIN_HASH) {
-      sessionStorage.setItem(SESSION_KEY, '1')
+  useEffect(() => onAuthStateChanged(auth, (user) => {
+    setIsAdmin(user?.email?.toLowerCase() === ADMIN_EMAIL && user.emailVerified)
+  }), [])
+
+  async function login(): Promise<AdminLoginResult> {
+    const provider = new GoogleAuthProvider()
+    provider.setCustomParameters({ prompt: 'select_account' })
+    try {
+      const result = await signInWithPopup(auth, provider)
+      const isAuthorized = result.user.email?.toLowerCase() === ADMIN_EMAIL && result.user.emailVerified
+      if (!isAuthorized) {
+        await signOut(auth)
+        setIsAdmin(false)
+        return { ok: false, reason: 'not-admin' }
+      }
       setIsAdmin(true)
-      return true
+      return { ok: true }
+    } catch (error) {
+      const code = (error as { code?: string }).code
+      console.error('Firebase Google sign-in failed:', code ?? error)
+      if (code === 'auth/operation-not-allowed') return { ok: false, reason: 'provider-disabled' }
+      if (code === 'auth/unauthorized-domain') return { ok: false, reason: 'unauthorized-domain' }
+      if (code === 'auth/popup-blocked') return { ok: false, reason: 'popup-blocked' }
+      if (code === 'auth/popup-closed-by-user' || code === 'auth/cancelled-popup-request') {
+        return { ok: false, reason: 'popup-closed' }
+      }
+      return { ok: false, reason: 'failed' }
     }
-    return false
   }
 
-  function logout() {
-    sessionStorage.removeItem(SESSION_KEY)
+  async function logout(): Promise<void> {
+    await signOut(auth)
     setIsAdmin(false)
   }
 

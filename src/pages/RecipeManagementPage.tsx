@@ -10,8 +10,8 @@ import {
   type RecipeStates,
 } from '../utils/recipeState'
 import { convertUnit, roundToOne } from '../utils/nutrition'
-import { ingredientById } from '../data/ingredients'
-import { loadRecipesFromFirestore, convertToRecipe, deleteRecipeFromFirestore, updateRecipeInFirestore } from '../services/recipeService'
+import { ingredientById } from '../data/ingredientCache'
+import { loadRecipesFromFirestore, mergeStaticAndFirestoreRecipes, deleteRecipeFromFirestore, updateRecipeInFirestore } from '../services/recipeService'
 import { loadIngredientsFromFirestore } from '../services/ingredientService'
 import type { Recipe } from '../types'
 import { Button } from '@/components/ui/button'
@@ -37,21 +37,9 @@ export function RecipeDetailPage() {
       try {
         await loadIngredientsFromFirestore()
         const fsDocs = await loadRecipesFromFirestore()
-        const converted = fsDocs.map(convertToRecipe)
-        setRecipes([...staticRecipes, ...converted])
-        setRecipeStates((current) => {
-          const extra: RecipeStates = {}
-          for (const r of converted) {
-            if (!current[r.id]) {
-              extra[r.id] = r.items.map((item) => ({
-                ingredientId: item.ingredientId,
-                amount: item.defaultAmount,
-                unit: item.defaultUnit,
-              }))
-            }
-          }
-          return { ...current, ...extra }
-        })
+        const merged = mergeStaticAndFirestoreRecipes(staticRecipes, fsDocs)
+        setRecipes(merged)
+        setRecipeStates(buildInitialRecipeStates(language, merged))
       } finally {
         setLoading(false)
       }

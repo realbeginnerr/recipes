@@ -1,4 +1,4 @@
-import { ingredientById } from '../data/ingredients'
+import { ingredientById } from '../data/ingredientCache'
 import type { Recipe, RecipeItem } from '../types'
 import { amountToGrams, calculateMacros } from './nutrition'
 

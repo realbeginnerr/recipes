@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ingredientById, ingredients } from '../data/ingredients'
+import { ingredientById, ingredients } from '../data/ingredientCache'
 import { useLanguage } from '../context/LanguageContext'
 import { getIngredientDisplayName } from '../utils/displayNames'
 import type { Recipe, RecipeItem } from '../types'

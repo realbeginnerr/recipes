@@ -1,3 +1,51 @@
 import type { Recipe } from '../types'
 
-export const recipes: Recipe[] = []
+export const recipes: Recipe[] = [
+  {
+    id: 'pasta-salad',
+    name: 'Pasta salad',
+    nameKo: '파스타 샐러드',
+    imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9r9hfDO-2-iynNp4ilTRD9Uux1Ocm1XP-YLnAg68RFQ&s=10',
+    link: 'https://www.youtube.com/shorts/7S_QuVnwdPk',
+    memo: '마늘은 맛보면서 조금씩 넣기. 은근 맛과 향이 강함. 식초랑 레몬즙도 맛보면서 조금씩 넣기. 너무 많이 넣으면 속쓰림. 알룰로스도 조금씩 넣기. 알룰로스도 건강에 정말 아무 영향없는지 아직 확실하지 않다고 함.',
+    tasteRating: 4,
+    createdAt: Date.now(),
+    categories: ['양식'],
+    divisionCount: 4,
+    items: [
+      { ingredientId: 'shrimp', defaultAmount: 200, defaultUnit: 'g' },
+      { ingredientId: 'chicken-breast', defaultAmount: 200, defaultUnit: 'g' },
+      { ingredientId: 'onion', defaultAmount: 0.5, defaultUnit: 'piece' },
+      { ingredientId: 'garlic', defaultAmount: 1, defaultUnit: 'T' },
+      { ingredientId: 'LgyZEeNl6vJSPLCn0bfj', defaultAmount: 4, defaultUnit: 'T' },
+      { ingredientId: 'allulose', defaultAmount: 8, defaultUnit: 'T' },
+      { ingredientId: 'soy-sauce', defaultAmount: 4, defaultUnit: 'T' },
+      { ingredientId: 'vinegar', defaultAmount: 4, defaultUnit: 'T' },
+      { ingredientId: 'lemon-juice', defaultAmount: 2, defaultUnit: 'T' },
+      { ingredientId: 'black-pepper', defaultAmount: 0.1, defaultUnit: 't' },
+      { ingredientId: 'cucumber', defaultAmount: 2, defaultUnit: 'piece' },
+      { ingredientId: 'tomato', defaultAmount: 2, defaultUnit: 'piece' },
+      { ingredientId: 'spaghetti', defaultAmount: 65, defaultUnit: 'g' },
+    ],
+  },
+  {
+    id: 'jjajang-bap',
+    name: 'Jjajang',
+    nameKo: '짜장밥',
+    imageUrl: 'https://i.namu.wiki/i/ryL_k5UyAjeAk5U7EdX1Vg8epBQdeABCBokawB1fNyblLYPGMMzggdcp9KuXIxEsQ8k0x3LRMP7V6k8Tqt9G1Q.webp',
+    link: 'https://www.instagram.com/reel/C_y7SEFCk8w/?igsh=aHZrcHhoM3J6ZGR0',
+    memo: '새우를 넣으면 식감이 훨씬 좋고, 돼지고기를 넣어 든든함을 더했다. 원본보다 짜장가루 양을 줄여서 짜게 느껴지지 않도록 했다. 양파는 적게 쓰고 깍둑썰기로 보기에 좋게 했다. 채썬 오이를 고명으로 올려 색감을 보완하고, 삶은 계란을 반으로 잘라 올리면 건강하고 간편하다.',
+    tasteRating: 4,
+    createdAt: Date.now(),
+    categories: ['한식'],
+    items: [
+      { ingredientId: 'zucchini', defaultAmount: 1, defaultUnit: 'piece' },
+      { ingredientId: 'pork', defaultAmount: 350, defaultUnit: 'g' },
+      { ingredientId: 'shrimp', defaultAmount: 150, defaultUnit: 'g' },
+      { ingredientId: 'onion', defaultAmount: 2, defaultUnit: 'piece' },
+      { ingredientId: 'ginger-powder', defaultAmount: 1, defaultUnit: 'T' },
+      { ingredientId: 'jjajang-powder', defaultAmount: 65, defaultUnit: 'g' },
+      { ingredientId: 'LgyZEeNl6vJSPLCn0bfj', defaultAmount: 45, defaultUnit: 'g' },
+    ],
+  },
+]

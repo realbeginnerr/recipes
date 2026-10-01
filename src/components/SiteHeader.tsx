@@ -5,8 +5,6 @@ import { useLanguage } from '../context/LanguageContext'
 import { useSearch } from '../context/SearchContext'
 import './SiteHeader.css'
 
-const recipeRequestUrl = 'https://www.instagram.com/healthierrecipe?stkn=MWRzMTVmNW1iMjlqdA%3D%3D&utm_source=qr'
-
 export function SiteHeader() {
   const { pathname } = useLocation()
   const { language } = useLanguage()
@@ -27,9 +25,9 @@ export function SiteHeader() {
       <div className="reference-container reference-header-inner">
         <Link className="reference-brand" to="/">T's Recipe</Link>
         <nav className="reference-desktop-nav" aria-label={ko ? '주 메뉴' : 'Main navigation'}>{navLinks}</nav>
-        <Button nativeButton={false} render={<a href={recipeRequestUrl} target="_blank" rel="noopener noreferrer" />} size="header" className="reference-request">{ko ? '레시피 요청 DM' : 'Request a recipe'}</Button>
+        <Button type="button" size="header" className="reference-request">{ko ? '레시피 요청 DM' : 'Request a recipe'}</Button>
         <Button variant="ghost" size="menu" ref={menuButton} className="reference-menu-toggle" aria-expanded={menuOpen} aria-controls="mobile-navigation" aria-label={ko ? (menuOpen ? '메뉴 닫기' : '메뉴 열기') : 'Toggle menu'} onClick={() => setMenuOpen(value => !value)}><span /><span /><span /></Button>
       </div>
-      {menuOpen && <nav className="reference-mobile-nav" id="mobile-navigation" aria-label={ko ? '모바일 메뉴' : 'Mobile navigation'}>{navLinks}<Button nativeButton={false} render={<a href={recipeRequestUrl} target="_blank" rel="noopener noreferrer" />} size="header" className="reference-request">{ko ? '레시피 요청 DM' : 'Request a recipe'}</Button></nav>}
+      {menuOpen && <nav className="reference-mobile-nav" id="mobile-navigation" aria-label={ko ? '모바일 메뉴' : 'Mobile navigation'}>{navLinks}<Button type="button" size="header" className="reference-request">{ko ? '레시피 요청 DM' : 'Request a recipe'}</Button></nav>}
     </header>
 }

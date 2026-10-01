@@ -11,10 +11,10 @@ import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { useLanguage } from '../context/LanguageContext'
 import { useAdmin } from '../context/AdminContext'
-import { ingredientById } from '../data/ingredients'
+import { ingredientById } from '../data/ingredientCache'
 import { recipes as staticRecipes } from '../data/recipe'
 import { loadIngredientsFromFirestore } from '../services/ingredientService'
-import { loadRecipesFromFirestore, convertToRecipe } from '../services/recipeService'
+import { loadRecipesFromFirestore, mergeStaticAndFirestoreRecipes } from '../services/recipeService'
 import { amountToGrams, calculateMacros, convertUnit } from '../utils/nutrition'
 import { resolveRecipeImage } from '../utils/recipeImage'
 import { categoryEnglish, getRecipeCategories } from '../utils/recipeCategory'
@@ -126,7 +126,7 @@ export function RecipeDetailPage() {
       try {
         await loadIngredientsFromFirestore()
         const docs = await loadRecipesFromFirestore()
-        if (!cancelled) setRecipes([...staticRecipes, ...docs.map(convertToRecipe)])
+        if (!cancelled) setRecipes(mergeStaticAndFirestoreRecipes(staticRecipes, docs))
       } catch { if (!cancelled) setError(true) }
       finally { if (!cancelled) setLoading(false) }
     }

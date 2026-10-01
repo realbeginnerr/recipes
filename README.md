@@ -28,5 +28,6 @@ npm run preview
 
 ## Data
 
-- `src/data/ingredients.ts` — single source of truth for nutrition, units, and conversions
+- Firestore `ingredients` collection — single source of truth for nutrition, units, conversions, and ingredient image URLs
 - `src/data/recipe.ts` — recipe lines reference `ingredientId` only (no duplicated macros)
+- `scripts/import-ingredients.mjs --input=<path>` — one-time CSV migration utility; preview by default, pass `--apply` to write to Firestore

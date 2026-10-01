@@ -539,6 +539,18 @@ body {
   gap: 4px;
 }
 
+.recipe-block__title-edit-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.recipe-block__title-edit-field label {
+  color: var(--muted-foreground);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
 .recipe-block__title-input {
   font-size: 1rem;
   font-weight: 600;

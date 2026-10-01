@@ -11,8 +11,8 @@ import { RecipeGrid } from '../components/recipe/RecipeGrid'
 import { recipes as staticRecipes } from '../data/recipe'
 import { recipeMatchesSearch } from '../utils/search'
 import { recipeContainsIngredient } from '../utils/recipeIngredients'
-import { ingredientById } from '../data/ingredients'
-import { loadRecipesFromFirestore, convertToRecipe } from '../services/recipeService'
+import { ingredientById } from '../data/ingredientCache'
+import { loadRecipesFromFirestore, mergeStaticAndFirestoreRecipes } from '../services/recipeService'
 import { loadIngredientsFromFirestore } from '../services/ingredientService'
 import { recipeCategories, categoryEnglish, getRecipeCategories, type RecipeCategory } from '../utils/recipeCategory'
 import type { Recipe } from '../types'
@@ -46,7 +46,7 @@ export function RecipePage() {
       try {
         await loadIngredientsFromFirestore()
         const docs = await loadRecipesFromFirestore()
-        if (!cancelled) setRecipes([...staticRecipes, ...docs.map(convertToRecipe)])
+        if (!cancelled) setRecipes(mergeStaticAndFirestoreRecipes(staticRecipes, docs))
       } catch {
         if (!cancelled) setLoadFailed(true)
       } finally {
@@ -108,7 +108,7 @@ export function RecipePage() {
       {!loading && <div className="catalog-count-row"><p className="catalog-count" role="status">{ko ? '레시피 ' : 'Recipes '}<strong>{visibleRecipes.length}{ko ? '개' : ''}</strong>{appliedSearch && <span> · “{appliedSearch}”</span>}</p><Button onClick={() => requestAccess('/add-recipe')} variant="link" size="content" className="catalog-intro__subtle-action">{ko ? '레시피 추가' : 'Add recipe'}</Button></div>}
       {loadFailed ? <ContentState error title={ko ? '레시피를 불러오지 못했습니다' : 'Unable to load recipes'}><Button className="catalog-primary" onClick={() => setLoadAttempt(n => n + 1)}>{ko ? '다시 시도' : 'Try again'}</Button></ContentState>
         : loading ? <LoadingState skeleton label={ko ? '레시피 불러오는 중' : 'Loading recipes'} />
-        : visibleRecipes.length === 0 ? <ContentState icon="🥗" title={ko ? '조건에 맞는 레시피가 없어요' : 'No recipes match your selection'} description={ko ? '필터를 조정해보세요.' : 'Try adjusting your filters.'}><Button className="catalog-primary" onClick={() => { setCategory([]); setSearchParams({}); resetHome() }}>{ko ? '필터 초기화' : 'Reset filters'}</Button></ContentState>
+        : visibleRecipes.length === 0 ? <ContentState icon="🥗" title={ko ? '조건에 맞는 레시피가 없어요' : 'No recipes match your selection'} description={ko ? '필터를 조정해보세요.' : 'Try adjusting your filters.'}><div className="flex flex-wrap items-center justify-center gap-2">{appliedSearch.trim() && <Button type="button" variant="outline">{ko ? '이 레시피 추가해주세요' : 'Please add this recipe'}</Button>}<Button className="catalog-primary" onClick={() => { setCategory([]); setSearchParams({}); resetHome() }}>{ko ? '필터 초기화' : 'Reset filters'}</Button></div></ContentState>
         : <><RecipeGrid recipes={visibleRecipes.slice(0, limit)} /><div className="catalog-end" ref={sentinel}>{hasMore ? <Button variant="ghost" size="content" type="button" onClick={() => setLimit(n => n + 8)}>{ko ? '레시피 더 보기' : 'Load more recipes'}</Button> : <span>🎉 {ko ? '내가 만들어본 레시피 끝!' : 'You’ve seen all the recipes!'}</span>}</div></>}
     </div>
   </section>

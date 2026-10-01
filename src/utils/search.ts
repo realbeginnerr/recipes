@@ -1,6 +1,6 @@
 import type { Ingredient } from '../types'
 import type { Recipe } from '../types'
-import { ingredientById } from '../data/ingredients'
+import { ingredientById } from '../data/ingredientCache'
 
 export function ingredientMatchesSearch(
   ingredient: Ingredient,

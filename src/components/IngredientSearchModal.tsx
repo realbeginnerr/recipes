@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useLanguage } from '../context/LanguageContext'
-import { ingredientById } from '../data/ingredients'
+import { ingredientById, ingredients } from '../data/ingredientCache'
+import { loadIngredientsFromFirestore } from '../services/ingredientService'
 import { getIngredientDisplayName } from '../utils/displayNames'
 import { loadFavoriteIngredientIds, saveFavoriteIngredientIds } from '../utils/ingredientFavorites'
 import type { Ingredient } from '../types'
@@ -38,8 +39,21 @@ export function IngredientSearchModal({
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
   const [tab, setTab] = useState<'all' | 'favorites'>('all')
   const [favorites, setFavorites] = useState<Set<string>>(loadFavoriteIngredientIds)
+  const [loadingIngredients, setLoadingIngredients] = useState(false)
 
-  const allIngredients = Array.from(ingredientById.values())
+  useEffect(() => {
+    if (!isOpen) return
+    let cancelled = false
+    setLoadingIngredients(true)
+    loadIngredientsFromFirestore()
+      .catch(console.error)
+      .finally(() => {
+        if (!cancelled) setLoadingIngredients(false)
+      })
+    return () => { cancelled = true }
+  }, [isOpen])
+
+  const allIngredients = ingredients
 
   const visibleIngredients = allIngredients.filter((ingredient) => {
     const displayName = getIngredientDisplayName(ingredient, language).toLowerCase()
@@ -133,7 +147,9 @@ export function IngredientSearchModal({
         </div>
 
         <ScrollArea className="flex-1 px-6 min-h-0">
-          {visibleIngredients.length === 0 ? (
+          {loadingIngredients ? (
+            <p className="py-4 text-center text-sm text-muted-foreground">{language === 'ko' ? '식재료 불러오는 중...' : 'Loading ingredients...'}</p>
+          ) : visibleIngredients.length === 0 ? (
             <div className="text-center py-4">
               <p style={{ color: 'var(--muted-foreground)', marginBottom: '0.75rem', fontSize: '0.9rem' }}>
                 {tab === 'favorites'
