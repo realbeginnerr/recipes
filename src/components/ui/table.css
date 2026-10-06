@@ -1,0 +1,26 @@
+/* Shared table UI: recipe detail is the site's default table appearance. */
+:root {
+  --table-border: var(--border-soft, #E5EAE9);
+  --table-header-background: var(--surface-soft, #F6F5F1);
+  --table-row-background: var(--background, #FFFFFF);
+  --table-row-alternate-background: #FAFAF8;
+  --table-header-color: var(--text-body, #596B64);
+  --table-text-color: #122B22;
+  --table-numeric-color: var(--text-strong, #364B43);
+  --table-cell-padding: 10px 14px;
+  --table-row-height: 56px;
+  --table-total-background: var(--surface-soft, #F6F5F1);
+  --table-total-font-size: 15px;
+  --table-total-font-weight: 700;
+}
+.site-table-frame { min-width: 0; max-width: 100%; overflow-x: auto; border: 1px solid var(--table-border); border-radius: var(--radius-md, 8px); }
+.site-table.site-table { width: 100%; table-layout: fixed; border-collapse: collapse; }
+.site-table.site-table tr { height: var(--table-row-height); border: 0; }
+.site-table.site-table :is(th, td) { padding: var(--table-cell-padding); font-size: 14px; white-space: normal; overflow-wrap: anywhere; vertical-align: middle; text-align: left; border-bottom: 0; }
+.site-table.site-table thead th { font-weight: 500; letter-spacing: .4px; color: var(--table-header-color); background: var(--table-header-background); border-bottom: 1px solid var(--table-border); }
+.site-table.site-table tbody :is(th, td) { background: var(--table-row-background); color: var(--table-text-color); }
+.site-table.site-table tbody tr:nth-child(even) > :is(th, td) { background: var(--table-row-alternate-background); }
+.site-table.site-table td.numeric { font-family: var(--font-numeric); font-variant-numeric: tabular-nums; letter-spacing: 0; color: var(--table-numeric-color); }
+.site-table.site-table td.muted { color: var(--muted-foreground); }
+.site-table.site-table tr.table-row--total > :is(th, td) { background: var(--table-total-background); color: var(--table-text-color); font-size: var(--table-total-font-size); font-weight: var(--table-total-font-weight); border-top: 1px solid var(--table-border); border-bottom: 0; }
+.ingredient-conversion-table .site-table-frame { border: 0; border-radius: 0; }

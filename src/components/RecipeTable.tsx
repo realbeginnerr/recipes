@@ -1,8 +1,10 @@
-import { useState, useRef } from 'react'
-import { ArrowLeftRight } from 'lucide-react'
+import { useEffect, useState, useRef } from 'react'
+import { ArrowLeftRight, ImagePlus } from 'lucide-react'
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
 import { useLanguage } from '../context/LanguageContext'
 import { useAdmin } from '../context/AdminContext'
 import { useAddPageAccess } from './AddPageAccessProvider'
+import { storage } from '../firebase'
 import { ingredientById } from '../data/ingredientCache'
 import { IngredientSearchModal } from './IngredientSearchModal'
 import { Modal } from './Modal'
@@ -24,6 +26,8 @@ import { ingredientMatchesSearch } from '../utils/search'
 import { getRecipeBadge } from '../utils/recipeBadge'
 import { RecipeBadge, MacroBadge } from './recipe/RecipeBadge'
 import { StarRating } from './recipe/StarRating'
+import { formatTableNumber } from '../utils/numberFormatting'
+import { Toast, useToast } from './feedback/Toast'
 
 type RecipeTableProps = {
   defaultEditing?: boolean
@@ -66,12 +70,13 @@ export function RecipeTable({
   const { approvedPath } = useAddPageAccess()
   const canSave = isAdmin || approvedPath === `/recipe/${recipe.id}/edit`
   const [isSaving, setIsSaving] = useState(false)
-  const [saveError, setSaveError] = useState(false)
-  const [saveErrorCode, setSaveErrorCode] = useState('')
+  const { toast, showToast, closeToast } = useToast()
   const [localRecipe, setLocalRecipe] = useState(recipe)
   const activeRecipe = localRecipe
   const [isEditing, setIsEditing] = useState(defaultEditing)
   const [editImageUrl, setEditImageUrl] = useState(activeRecipe.imageUrl)
+  const [imageFile, setImageFile] = useState<File | null>(null)
+  const [imagePreviewUrl, setImagePreviewUrl] = useState('')
   const [editLink, setEditLink] = useState(activeRecipe.link ?? '')
   const [editItems, setEditItems] = useState<RecipeItem[]>(() => activeRecipe.items.map(item => {
     const row = defaultEditing ? rows.find(value => value.ingredientId === item.ingredientId) : undefined
@@ -97,10 +102,22 @@ export function RecipeTable({
   const [isGuestSaveModalOpen, setIsGuestSaveModalOpen] = useState(false)
   const [isRecommendedInfoOpen, setIsRecommendedInfoOpen] = useState(false)
   const [newlyAddedIds, setNewlyAddedIds] = useState<Set<string>>(new Set())
+  const imageInputRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    if (!imageFile) {
+      setImagePreviewUrl('')
+      return
+    }
+    const objectUrl = URL.createObjectURL(imageFile)
+    setImagePreviewUrl(objectUrl)
+    return () => URL.revokeObjectURL(objectUrl)
+  }, [imageFile])
 
   function startEditing() {
     if (isEditing) return
     setEditImageUrl(activeRecipe.imageUrl)
+    setImageFile(null)
     setEditLink(activeRecipe.link ?? '')
     const regularItems = activeRecipe.items.map((item) => {
       const row = rows?.find((r) => r.ingredientId === item.ingredientId)
@@ -117,6 +134,8 @@ export function RecipeTable({
 
   function handleCancel() {
     setDivisionInput(String(activeRecipe.divisionCount ?? divisionCount))
+    setEditImageUrl(activeRecipe.imageUrl)
+    setImageFile(null)
     setNewlyAddedIds(new Set())
     setIsEditing(false)
   }
@@ -134,14 +153,56 @@ export function RecipeTable({
     const updated = { ...activeRecipe, name: editName.trim() || activeRecipe.name, nameKo: editNameKo.trim() || activeRecipe.nameKo, imageUrl: editImageUrl, link: editLink, items: editItems, sideItems: editSideItems, memo: editMemo, tasteRating: editTasteRating, divisionCount: validDivision }
     if (canSave) {
       setIsSaving(true)
-      setSaveError(false)
+      showToast(
+        imageFile
+          ? (language === 'ko' ? '사진을 업로드하고 저장하는 중입니다...' : 'Uploading and saving the photo...')
+          : (language === 'ko' ? '레시피를 저장하는 중입니다...' : 'Saving the recipe...'),
+        'info',
+      )
       try {
+        if (imageFile) {
+          const safeFileName = imageFile.name.replace(/[^\w.-]/g, '_')
+          const imageRef = ref(storage, `recipes/${activeRecipe.id}/${Date.now()}-${safeFileName}`)
+          // A missing bucket can fail browser preflight and leave the SDK retrying.
+          // Check that endpoint before starting an upload; this writes no data.
+          try {
+            const response = await fetch(
+              `https://firebasestorage.googleapis.com/v0/b/${encodeURIComponent(imageRef.bucket)}/o`,
+              { method: 'OPTIONS', signal: AbortSignal.timeout(15_000) },
+            )
+            if (response.status === 404) {
+              throw Object.assign(new Error(`Storage bucket unavailable: ${imageRef.bucket}`), { code: 'storage/bucket-not-found' })
+            }
+          } catch (error) {
+            if (error && typeof error === 'object' && 'code' in error && error.code === 'storage/bucket-not-found') throw error
+            throw Object.assign(new Error('Storage endpoint could not be reached', { cause: error }), { code: 'storage/network-unavailable' })
+          }
+          const uploadedImage = await uploadBytes(imageRef, imageFile, { contentType: imageFile.type })
+          updated.imageUrl = await getDownloadURL(uploadedImage.ref)
+        }
+        showToast(language === 'ko' ? '레시피를 데이터베이스에 저장하는 중입니다...' : 'Saving the recipe to the database...', 'info')
         await onSaveRecipe(updated)
+        showToast(imageFile
+          ? (language === 'ko' ? '사진이 교체되고 레시피가 저장되었습니다.' : 'Photo replaced and recipe saved.')
+          : (language === 'ko' ? '레시피가 저장되었습니다.' : 'Recipe saved.'), 'success')
       } catch (error) {
         const code = error && typeof error === 'object' && 'code' in error ? String(error.code) : 'unknown'
-        setSaveErrorCode(code)
         console.error('Recipe save failed', error)
-        setSaveError(true)
+        const detail = code === 'storage/bucket-not-found'
+          ? language === 'ko' ? ' 사진 저장소를 찾을 수 없습니다. Firebase Console의 Storage에서 저장소 생성 여부와 설정된 버킷 주소를 확인해 주세요.' : ' Photo storage was not found. Check the bucket setup and address in Firebase Console.'
+          : code === 'storage/network-unavailable' || code === 'storage/retry-limit-exceeded'
+            ? language === 'ko' ? ' 사진 저장소에 연결하지 못했거나 업로드 제한 시간을 초과했습니다.' : ' Photo storage could not be reached or the upload timed out.'
+          : code === 'storage/unauthorized'
+          ? language === 'ko' ? ' 사진 업로드 권한이 없습니다.' : ' Firebase Storage denied the image upload.'
+          : code === 'permission-denied'
+            ? language === 'ko' ? ' 데이터베이스 저장 권한이 거부되었습니다.' : ' Database permission was denied.'
+            : code === 'unavailable'
+              ? language === 'ko' ? ' 서버에 연결할 수 없습니다.' : ' The server is unavailable.'
+              : ''
+        const message = language === 'ko'
+          ? `레시피 저장에 실패했습니다.${detail} 다시 시도해 주세요. (오류 코드: ${code})`
+          : `Unable to save the recipe.${detail} Please try again. (Error code: ${code})`
+        showToast(message, 'error')
         return
       } finally {
         setIsSaving(false)
@@ -150,6 +211,8 @@ export function RecipeTable({
       setIsGuestSaveModalOpen(true)
     }
     setLocalRecipe(updated)
+    setEditImageUrl(updated.imageUrl)
+    setImageFile(null)
     setNewlyAddedIds(new Set())
     setIsEditing(false)
   }
@@ -386,11 +449,11 @@ export function RecipeTable({
                   {language === 'ko' ? '삭제' : 'Delete'}
                 </Button>
               )}
-              <Button type="button" variant="outline" size="sm" onClick={handleCancel}>
+              <Button type="button" variant="outline" size="sm" onClick={handleCancel} disabled={isSaving}>
                 {language === 'ko' ? '취소' : 'Cancel'}
               </Button>
-              <Button type="button" size="sm" onClick={handleSave}>
-                {language === 'ko' ? '저장' : 'Save'}
+              <Button type="button" size="sm" onClick={handleSave} disabled={isSaving}>
+                {isSaving ? (language === 'ko' ? '저장 중...' : 'Saving...') : (language === 'ko' ? '저장' : 'Save')}
               </Button>
             </>
           )}
@@ -413,6 +476,45 @@ export function RecipeTable({
             onChange={(e) => setEditLink(e.target.value)}
             placeholder="https://..."
           />
+        </div>
+      )}
+
+      {!isCollapsed && isEditing && (
+        <div className="edit-inline__image-field">
+          <label className="edit-inline__link-label">
+            {language === 'ko' ? '레시피 사진' : 'Recipe photo'}
+          </label>
+          <div className="edit-inline__image-controls">
+            <Button type="button" variant="outline" size="sm" onClick={() => imageInputRef.current?.click()} disabled={isSaving}>
+              <ImagePlus aria-hidden="true" />
+              {language === 'ko' ? '기기에서 사진 선택' : 'Choose photo'}
+            </Button>
+            {(imageFile || editImageUrl) && <Button type="button" variant="ghost" size="sm" onClick={() => { setImageFile(null); setEditImageUrl('') }} disabled={isSaving}>
+              {language === 'ko' ? '사진 제거' : 'Remove photo'}
+            </Button>}
+            <input
+              ref={imageInputRef}
+              className="edit-inline__image-input"
+              type="file"
+              accept="image/*"
+              onChange={(event) => {
+                const file = event.target.files?.[0]
+                if (!file) return
+                if (!file.type.startsWith('image/') || file.size > 10 * 1024 * 1024) {
+                  showToast(
+                    language === 'ko' ? '10MB 이하의 이미지 파일을 선택해 주세요.' : 'Choose an image under 10 MB.',
+                    'error',
+                  )
+                  event.target.value = ''
+                  return
+                }
+                setImageFile(file)
+                event.target.value = ''
+              }}
+            />
+            {imageFile && <span className="edit-inline__image-filename">{imageFile.name}</span>}
+          </div>
+          {(imagePreviewUrl || editImageUrl) && <img className="edit-inline__image-preview" src={imagePreviewUrl || editImageUrl} alt={language === 'ko' ? '레시피 사진 미리보기' : 'Recipe photo preview'} />}
         </div>
       )}
 
@@ -770,11 +872,13 @@ export function RecipeTable({
               const carbs = totals.carbs / effectiveDivision + sideTotals.carbs
               const protein = totals.protein / effectiveDivision + sideTotals.protein
               const fat = totals.fat / effectiveDivision + sideTotals.fat
-              const kcal = Math.round(carbs * 4 + protein * 4 + fat * 9)
+              const kcal = formatTableNumber(Math.round(carbs * 4 + protein * 4 + fat * 9), 0, 0)
               const dc = recommended.carbs - carbs
               const dp = recommended.protein - protein
               const df = recommended.fat - fat
-              const fmt = (d: number) => d > 0 ? `(+${Math.round(d)})` : `(${Math.round(d)})`
+              const fmt = (d: number) => d > 0
+                ? `(+${formatTableNumber(Math.round(d), 0, 0)})`
+                : `(${formatTableNumber(Math.round(d), 0, 0)})`
               const show = (d: number) => Math.abs(d) > 3
               const renderCell = (value: number, target: number, delta: number) => {
                 const color = macroColor(value, target)
@@ -802,7 +906,7 @@ export function RecipeTable({
               <TableCell colSpan={3}>
                 <strong>
                   {t.recommendedPerMeal}{' '}
-                  <span className="recipe-table__kcal">(kcal: {Math.round(75 * 4 + 33 * 4 + 22 * 9)})</span>
+                  <span className="recipe-table__kcal">(kcal: {formatTableNumber(Math.round(75 * 4 + 33 * 4 + 22 * 9), 0, 0)})</span>
                   <Button
                     type="button"
                     variant="ghost"
@@ -845,14 +949,7 @@ export function RecipeTable({
         )}
       />
 
-      <Modal
-        isOpen={saveError}
-        onClose={() => setSaveError(false)}
-        message={language === 'ko'
-          ? `변경 사항을 저장하지 못했습니다.${saveErrorCode === 'permission-denied' ? ' 데이터베이스 저장 권한이 거부되었습니다.' : saveErrorCode === 'unavailable' ? ' 서버에 연결할 수 없습니다. 연결 상태를 확인하고 다시 시도해 주세요.' : ' 다시 시도해 주세요.'} (오류 코드: ${saveErrorCode})`
-          : `Unable to save changes. Please try again. (Error code: ${saveErrorCode})`}
-        actions={[{ label: language === 'ko' ? '확인' : 'OK', onClick: () => setSaveError(false) }]}
-      />
+      {toast && <Toast message={toast.message} type={toast.type} onClose={closeToast} duration={toast.type === 'info' ? 0 : 5000} />}
       <Modal
         isOpen={isGuestSaveModalOpen}
         onClose={() => setIsGuestSaveModalOpen(false)}
@@ -896,11 +993,11 @@ export function RecipeTable({
             </Button>
           </div>
           <div className="edit-bottom-bar__actions">
-            <Button type="button" variant="outline" size="sm" onClick={handleCancel}>
+            <Button type="button" variant="outline" size="sm" onClick={handleCancel} disabled={isSaving}>
               {language === 'ko' ? '취소' : 'Cancel'}
             </Button>
-            <Button type="button" size="sm" onClick={handleSave}>
-              {language === 'ko' ? '저장' : 'Save'}
+            <Button type="button" size="sm" onClick={handleSave} disabled={isSaving}>
+              {isSaving ? (language === 'ko' ? '저장 중...' : 'Saving...') : (language === 'ko' ? '저장' : 'Save')}
             </Button>
           </div>
         </div>

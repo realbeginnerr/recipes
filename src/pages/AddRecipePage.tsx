@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useLanguage } from '../context/LanguageContext'
 import { saveRecipeToFirestore, loadRecipesFromFirestore, type FirestoreRecipe } from '../services/recipeService'
 import {
@@ -21,6 +22,7 @@ import { UnitSelect } from '../components/UnitSelect'
 import { Table, TableHeader, TableBody, TableFooter, TableRow, TableHead, TableCell } from '@/components/ui/table'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { recipeCategories, categoryEnglish, type RecipeCategory } from '../utils/recipeCategory'
+import { formatTableNumber } from '../utils/numberFormatting'
 
 type ParsedRow = {
   name: string
@@ -89,7 +91,7 @@ function scaledMacros(
 }
 
 function fmt(n: number): string {
-  return (Math.round(n * 10) / 10).toFixed(1)
+  return formatTableNumber(Math.round(n * 10) / 10, 1, 1)
 }
 
 const RECOMMENDED = { carbs: 75, protein: 33, fat: 22 }
@@ -139,6 +141,7 @@ async function translateKoToEn(text: string): Promise<string> {
 }
 
 export function AddRecipePage() {
+  const navigate = useNavigate()
   const { language } = useLanguage()
   const isKo = language === 'ko'
 
@@ -632,6 +635,7 @@ export function AddRecipePage() {
   if (mode === 'select') {
     return (
       <section className="page">
+        <Button type="button" variant="ghost" size="sm" onClick={() => navigate('/recipes')}>{isKo ? '← 뒤로' : '← Back'}</Button>
         <h2 className="page__heading">{isKo ? '레시피 추가' : 'Add Recipe'}</h2>
         <p className="add-recipe__select-subtitle">
           {isKo ? '어떤 방식으로 레시피를 추가하시겠어요?' : 'How would you like to add a recipe?'}
@@ -662,6 +666,7 @@ export function AddRecipePage() {
 
   return (
     <section className="page">
+      <Button type="button" variant="ghost" size="sm" onClick={() => navigate('/recipes')}>{isKo ? '← 뒤로' : '← Back'}</Button>
       <div className="add-recipe__mode-header">
         <Button type="button" variant="ghost" size="sm" onClick={() => setMode('select')}>
           ← {isKo ? '뒤로' : 'Back'}
@@ -854,7 +859,7 @@ export function AddRecipePage() {
                     <TableRow>
                       <TableHead>식재료</TableHead>
                       <TableHead>양</TableHead>
-                      <TableHead style={{ textAlign: 'right' }}>단위</TableHead>
+                      <TableHead>단위</TableHead>
                       <TableHead>탄수화물</TableHead>
                       <TableHead>단백질</TableHead>
                       <TableHead>지방</TableHead>
@@ -871,7 +876,7 @@ export function AddRecipePage() {
                           {row.isNew && <span style={{ display: 'block', fontSize: '14px', color: '#b45309', fontWeight: 600, marginTop: '2px' }}>새 식재료</span>}
                         </TableCell>
                         <TableCell><Input type="number" className="h-7 w-20 text-sm" min={0} step={0.1} value={row.amount} onChange={(e) => handleRowAmountChange(i, e.target.value)} /></TableCell>
-                        <TableCell style={{ textAlign: 'right' }}>
+                        <TableCell>
                           <UnitSelect value={row.unit} onValueChange={(v) => handleRowUnitChange(i, v)} language="ko" />
                         </TableCell>
                         <TableCell className="macro">{fmt(row.displayCarbs)}</TableCell>
@@ -904,7 +909,7 @@ export function AddRecipePage() {
                       <TableRow>
                         <TableHead>Ingredient</TableHead>
                         <TableHead>Amount</TableHead>
-                        <TableHead style={{ textAlign: 'right' }}>Unit</TableHead>
+                        <TableHead>Unit</TableHead>
                         <TableHead>Carbs</TableHead>
                         <TableHead>Protein</TableHead>
                         <TableHead>Fat</TableHead>
@@ -920,8 +925,8 @@ export function AddRecipePage() {
                             <Input className="h-7 text-sm" value={row.nameEn} onChange={(e) => setEnRows((prev) => prev.map((r, j) => j === i ? { ...r, nameEn: e.target.value } : r))} />
                             {resolvedRows[i]?.isNew && <span style={{ display: 'block', fontSize: '14px', color: '#b45309', fontWeight: 600, marginTop: '2px' }}>New</span>}
                           </TableCell>
-                          <TableCell><Input type="number" className="h-7 w-20 text-sm" min={0} step={0.1} value={fmt(row.amount)} onChange={(e) => setEnRows((prev) => prev.map((r, j) => j === i ? { ...r, amount: Number.parseFloat(e.target.value) || 0 } : r))} /></TableCell>
-                          <TableCell style={{ textAlign: 'right' }}>
+                          <TableCell><Input type="number" className="h-7 w-20 text-sm" min={0} step={0.1} value={row.amount.toFixed(1)} onChange={(e) => setEnRows((prev) => prev.map((r, j) => j === i ? { ...r, amount: Number.parseFloat(e.target.value) || 0 } : r))} /></TableCell>
+                          <TableCell>
                             <UnitSelect value={row.unit} onValueChange={(v) => setEnRows((prev) => prev.map((r, j) => j === i ? { ...r, unit: v } : r))} language="en" />
                           </TableCell>
                           <TableCell className="macro">{fmt(resolvedRows[i]?.displayCarbs ?? 0)}</TableCell>

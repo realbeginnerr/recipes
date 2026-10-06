@@ -8,21 +8,25 @@ type AdminLoginResult = { ok: true } | { ok: false; reason: AdminLoginError }
 
 type AdminContextType = {
   isAdmin: boolean
+  authReady: boolean
   login: () => Promise<AdminLoginResult>
   logout: () => Promise<void>
 }
 
 const AdminContext = createContext<AdminContextType>({
   isAdmin: false,
+  authReady: false,
   login: async () => ({ ok: false, reason: 'failed' }),
   logout: async () => {},
 })
 
 export function AdminProvider({ children }: { children: React.ReactNode }) {
   const [isAdmin, setIsAdmin] = useState(false)
+  const [authReady, setAuthReady] = useState(false)
 
   useEffect(() => onAuthStateChanged(auth, (user) => {
     setIsAdmin(user?.email?.toLowerCase() === ADMIN_EMAIL && user.emailVerified)
+    setAuthReady(true)
   }), [])
 
   async function login(): Promise<AdminLoginResult> {
@@ -57,7 +61,7 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <AdminContext.Provider value={{ isAdmin, login, logout }}>
+    <AdminContext.Provider value={{ isAdmin, authReady, login, logout }}>
       {children}
     </AdminContext.Provider>
   )

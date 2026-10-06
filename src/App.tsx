@@ -5,6 +5,7 @@ import { AddPagePasswordGate } from './components/AddPagePasswordGate'
 import { AboutPage } from './pages/AboutPage'
 
 const RecipePage = lazy(() => import('./pages/RecipePage').then(module => ({ default: module.RecipePage })))
+const RecipeRoulettePage = lazy(() => import('./pages/RecipeRoulettePage').then(module => ({ default: module.RecipeRoulettePage })))
 const AddRecipePage = lazy(() => import('./pages/AddRecipePage').then(module => ({ default: module.AddRecipePage })))
 const IngredientsPage = lazy(() => import('./pages/IngredientsPage').then(module => ({ default: module.IngredientsPage })))
 const IngredientManagementPage = lazy(() => import('./pages/IngredientManagementPage').then(module => ({ default: module.IngredientsPage })))
@@ -21,6 +22,7 @@ export function App() {
       <Route element={<Layout />}>
         <Route index element={<AboutPage />} />
         <Route path="recipes" element={<RecipePage />} />
+        <Route path="recipe-roulette" element={<RecipeRoulettePage />} />
         <Route path="eating-out" element={<EatingOutPage />} />
         <Route path="about" element={<Navigate to="/" replace />} />
         <Route path="add-recipe" element={<AddPagePasswordGate key="add-recipe"><AddRecipePage /></AddPagePasswordGate>} />

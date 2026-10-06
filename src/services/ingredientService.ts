@@ -3,6 +3,7 @@ import { db } from '../firebase'
 import { cacheIngredient, removeCachedIngredient } from '../data/ingredientCache'
 import { canonicalIngredientId } from '../data/ingredientCatalogOverrides'
 import type { Ingredient } from '../types'
+import { ingredientPresentation } from '../data/ingredientPresentation'
 
 export type FirestoreIngredient = {
   id: string
@@ -21,6 +22,7 @@ export type FirestoreIngredient = {
   category?: string
   createdAt?: number
   gramsPerTbsp?: number
+  conversionGrams?: number
   gramsPerTsp?: number
   gramsPerCup?: number
   gramsPerEach?: number
@@ -54,11 +56,16 @@ export async function loadIngredientsFromFirestore(): Promise<void> {
 export async function saveIngredientToFirestore(
   ing: Omit<FirestoreIngredient, 'id'>
 ): Promise<string> {
+  ing = { ...ing, imageUrl: ing.imageUrl ?? defaultIngredientImage(ing.nameKo || ing.name) }
   const clean = Object.fromEntries(Object.entries(ing).filter(([, v]) => v !== undefined))
   const docRef = await addDoc(collection(db, COLLECTION), clean)
   const saved: FirestoreIngredient = { id: docRef.id, ...ing }
   registerIngredient(saved)
   return docRef.id
+}
+
+function defaultIngredientImage(name: string): string {
+  return (ingredientPresentation[name] ?? Object.entries(ingredientPresentation).find(([key]) => name.includes(key))?.[1])?.image ?? ''
 }
 
 export async function updateIngredientInFirestore(
@@ -187,4 +194,3 @@ function buildAllowedUnits(ing: Pick<FirestoreIngredient, 'baseUnit' | 'gramsPer
   if (ing.gramsPerPack && !units.includes('팩')) units.push('팩')
   return units
 }
-

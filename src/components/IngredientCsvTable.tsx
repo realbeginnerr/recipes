@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { ArrowDown, ArrowUp, ArrowUpDown } from 'lucide-react'
 import { useLanguage } from '../context/LanguageContext'
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from './ui/table'
+import { formatTableNumber } from '../utils/numberFormatting'
 
 function baseGrams(ingredient: FirestoreIngredient): number | undefined {
   const units: Record<string, number | undefined> = {
@@ -19,7 +20,7 @@ function baseGrams(ingredient: FirestoreIngredient): number | undefined {
 }
 
 function format(value: number | undefined) {
-  return value !== undefined && Number.isFinite(value) ? Number(value.toFixed(3)).toString() : 'N/A'
+  return value !== undefined && Number.isFinite(value) ? formatTableNumber(Number(value.toFixed(3))) : 'N/A'
 }
 
 export function IngredientCsvTable({ ingredients }: { ingredients: FirestoreIngredient[] }) {
@@ -51,7 +52,7 @@ export function IngredientCsvTable({ ingredients }: { ingredients: FirestoreIngr
     ? ['재료명', 'g', 'T', 't', 'cup', '개, 장', '병, 캔, 팩', '탄수화물(g)', '단백질(g)', '지방(g)']
     : ['Ingredient', 'g', 'T', 't', 'cup', 'Pieces, sheets', 'Bottles, cans, packs', 'Carbs (g)', 'Protein (g)', 'Fat (g)']
   return <div className="table-container table-container--sticky-header ingredient-csv-table">
-    <Table className="data-table">
+    <Table className="data-table" style={{ minWidth: headings.length * 120 }}>
       <TableHeader><TableRow>{headings.map((heading, column) => {
         const active = sort.column === column
         const Icon = active ? (sort.ascending ? ArrowUp : ArrowDown) : ArrowUpDown
@@ -65,11 +66,8 @@ export function IngredientCsvTable({ ingredients }: { ingredients: FirestoreIngr
         </TableHead>
       })}</TableRow></TableHeader>
       <TableBody>{rows.map(({ ingredient, name, values }) => {
-        const grams = values[0]
         return <TableRow key={ingredient.id}>
-          <TableCell>{name}
-            {grams === undefined && <span className="block text-sm text-muted-foreground">{ingredient.baseAmount} {ingredient.baseUnit}</span>}
-          </TableCell>
+          <TableCell>{name}</TableCell>
           {values.map((value, index) => {
             const display = format(value)
             return <TableCell key={index}>{display === 'N/A' ? <span className="text-[#CDD2CF]">{display}</span> : display}</TableCell>

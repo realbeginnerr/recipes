@@ -11,3 +11,4 @@
 .catalog-macros strong { font-family: var(--font-numeric); font-variant-numeric: tabular-nums; font-size: 16px; font-weight: 400; letter-spacing: 0; line-height: 1; }
 .catalog-macros span { font-size: 14px; font-weight: 500; margin-top: 6px; opacity: .8; }
 .catalog-macros--recipe strong { font-size: 20px; }
+.catalog-macros .macro-label-short { display: none; }

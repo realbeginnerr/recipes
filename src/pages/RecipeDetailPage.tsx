@@ -4,11 +4,11 @@ import { NutritionSummary } from '../components/NutritionSummary'
 import { QuantityUnitCells } from '../components/QuantityUnitCells'
 import { FoodImage } from '../components/FoodImage'
 import { ContentState, LoadingState } from '../components/feedback/ContentState'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
+import { BackLink } from '../components/BackLink'
 import { useLanguage } from '../context/LanguageContext'
 import { useAdmin } from '../context/AdminContext'
 import { ingredientById } from '../data/ingredientCache'
@@ -21,6 +21,7 @@ import { categoryEnglish, getRecipeCategories } from '../utils/recipeCategory'
 import type { Ingredient, Recipe, RecipeRowState } from '../types'
 import '../components/catalog/CatalogControls.css'
 import './RecipeDetailPage.css'
+import '../components/RecipeTitle.css'
 
 type Macros = { carbs: number; protein: number; fat: number }
 const zero = (): Macros => ({ carbs: 0, protein: 0, fat: 0 })
@@ -52,7 +53,6 @@ function RecipeNutrition({ recipe }: { recipe: Recipe }) {
   const total = sum(macros)
   const portion = { carbs: total.carbs / divisions, protein: total.protein / divisions, fat: total.fat / divisions }
   const meal = sum([portion, ...sides.map(macrosFor)])
-  const staples = [...ingredientById.values()].filter(ingredient => /밥|통밀빵|고구마|오트밀|rice|whole wheat bread|oatmeal/i.test(`${ingredient.nameKo} ${ingredient.name}`) && !/flour|crumb|cake/i.test(ingredient.name))
   const label = (ingredient: Ingredient | undefined, fallback: string) => ingredient ? (ko ? ingredient.nameKo ?? ingredient.name : ingredient.name) : fallback
   function updateRow(index: number, field: 'amount' | 'unit', value: string, side = false) {
     const update = side ? setSides : setRows
@@ -71,7 +71,7 @@ function RecipeNutrition({ recipe }: { recipe: Recipe }) {
 
   return <article className="nutrition-detail reference-container" lang={language}>
     <div className="detail-topbar">
-      <Link className="detail-back" to="/recipes">{ko ? '← 뒤로가기' : '← All recipes'}</Link>
+      <BackLink />
       <Button onClick={() => requestAccess(`/recipe/${recipe.id}/edit`)} variant="link" size="content" className="catalog-intro__subtle-action">{ko ? '레시피 수정' : 'Edit recipe'}</Button>
     </div>
     <div className="detail-layout">
@@ -81,7 +81,7 @@ function RecipeNutrition({ recipe }: { recipe: Recipe }) {
         </div>
         <div className="detail-image-frame"><FoodImage src={resolveRecipeImage(recipe)} alt={name} className="detail-image" /></div>
         <div className="detail-heading-content">
-          <h1>{name}</h1>
+          <h1 className="recipe-detail-title">{name}</h1>
           <div className="detail-heading-actions">
             {recipe.link ? <a className="detail-source" href={recipe.link} target="_blank" rel="noopener noreferrer">↗ {ko ? (/instagram/.test(recipe.link) ? '인스타그램 원본 레시피' : /youtu/.test(recipe.link) ? '원본 레시피' : '원본 레시피') : 'Original recipe'}</a> : <span className="detail-source detail-source-empty">↗ {ko ? '원본 레시피 링크' : 'Original recipe link'}</span>}
           </div>
@@ -100,8 +100,7 @@ function RecipeNutrition({ recipe }: { recipe: Recipe }) {
         <tr><td>{ko ? '전체 재료 합계' : 'All ingredients total'}</td><td className="numeric">1/{divisions}</td><td className="muted">{ko ? '분량' : 'batch'}</td><MacroCells values={portion} /></tr>
         {sides.map((row, index) => {
           const current = ingredientFor(row.ingredientId)
-          const choices = [...new Map([...(current ? [current] : []), ...staples].map(ingredient => [ingredient.id, ingredient])).values()]
-          return <tr className="detail-staple" key={index}><td><Select value={current?.id ?? row.ingredientId} items={choices.map(ingredient => ({ value: ingredient.id, label: label(ingredient, ingredient.id) }))} onValueChange={id => { const selected = id ? ingredientFor(id) : undefined; if (selected) setSides(values => values.map((value, i) => i === index ? {ingredientId: selected.id, amount: selected.baseAmount, unit: selected.baseUnit} : value)) }}><SelectTrigger size="quantity" aria-label={ko ? '주식 선택' : 'Choose staple'}><SelectValue /></SelectTrigger><SelectContent>{choices.map(ingredient => <SelectItem key={ingredient.id} value={ingredient.id}>{label(ingredient, ingredient.id)}</SelectItem>)}</SelectContent></Select></td>{quantityCells(row, index, true)}<MacroCells values={macrosFor(row)} /></tr>
+          return <tr key={index}><td>{label(current, row.ingredientId)}</td>{quantityCells(row, index, true)}<MacroCells values={macrosFor(row)} /></tr>
         })}
       </NutritionTable>
       <TableNutritionSummary total={meal} />
@@ -135,6 +134,6 @@ export function RecipeDetailPage() {
   }, [attempt])
   const recipe = recipes.find(value => value.id === id && (isAdmin || !value.hidden))
   if (loading) return <LoadingState label={language === 'ko' ? '불러오는 중...' : 'Loading...'} />
-  if (!recipe) return <ContentState variant="detail" error={error} title={language === 'ko' ? (error ? '레시피를 불러오지 못했습니다.' : '레시피를 찾을 수 없습니다.') : 'Recipe unavailable.'}>{error && <Button variant="ghost" size="content" onClick={() => setAttempt(value => value + 1)}>{language === 'ko' ? '다시 시도' : 'Retry'}</Button>}<Link to="/recipes">{language === 'ko' ? '뒤로가기' : 'All recipes'}</Link></ContentState>
+  if (!recipe) return <ContentState variant="detail" error={error} title={language === 'ko' ? (error ? '레시피를 불러오지 못했습니다.' : '레시피를 찾을 수 없습니다.') : 'Recipe unavailable.'}>{error && <Button variant="ghost" size="content" onClick={() => setAttempt(value => value + 1)}>{language === 'ko' ? '다시 시도' : 'Retry'}</Button>}<BackLink /></ContentState>
   return <RecipeNutrition key={recipe.id} recipe={recipe} />
 }

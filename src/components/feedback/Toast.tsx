@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { Button } from '@/components/ui/button'
 
-type ToastType = 'success' | 'error'
+type ToastType = 'success' | 'error' | 'info'
 
 type ToastProps = {
   message: string
@@ -14,41 +15,48 @@ export function Toast({ message, type, onClose, duration = 3000 }: ToastProps) {
   const [visible, setVisible] = useState(false)
 
   useEffect(() => {
-    requestAnimationFrame(() => setVisible(true))
+    const frame = requestAnimationFrame(() => setVisible(true))
+    if (duration === 0) return () => cancelAnimationFrame(frame)
+    let closeTimer: ReturnType<typeof setTimeout> | undefined
     const timer = setTimeout(() => {
       setVisible(false)
-      setTimeout(onClose, 300)
+      closeTimer = setTimeout(onClose, 300)
     }, duration)
-    return () => clearTimeout(timer)
-  }, [duration, onClose])
+    return () => {
+      cancelAnimationFrame(frame)
+      clearTimeout(timer)
+      clearTimeout(closeTimer)
+    }
+  }, [duration, onClose, message, type])
 
-  return (
-    <div className={`toast toast--${type} ${visible ? 'toast--visible' : ''}`}>
+  return createPortal(
+    <div role={type === 'error' ? 'alert' : 'status'} className={`toast toast--${type} ${visible ? 'toast--visible' : ''}`}>
       <span className="toast__message">{message}</span>
       <Button
         type="button"
         variant="ghost"
         size="icon-sm"
         className="toast__close"
-        onClick={() => { setVisible(false); setTimeout(onClose, 300) }}
+        onClick={onClose}
         aria-label="Close"
       >
         ✕
       </Button>
-    </div>
+    </div>,
+    document.body,
   )
 }
 
 export function useToast() {
   const [toast, setToast] = useState<{ message: string; type: ToastType } | null>(null)
 
-  function showToast(message: string, type: ToastType) {
+  const showToast = useCallback((message: string, type: ToastType) => {
     setToast({ message, type })
-  }
+  }, [])
 
-  function closeToast() {
+  const closeToast = useCallback(() => {
     setToast(null)
-  }
+  }, [])
 
   return { toast, showToast, closeToast }
 }

@@ -25,6 +25,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 import { isRefinedCarb, isAddedSugarIngredient } from '../data/refinedCarbs'
 import { loadFavoriteIngredientIds, saveFavoriteIngredientIds } from '../utils/ingredientFavorites'
+import { formatTableNumber } from '../utils/numberFormatting'
 
 function dedupeIngredients(isKo: boolean, order: 'alpha-asc' | 'alpha-desc' = 'alpha-asc'): FirestoreIngredient[] {
   const seen = new Set<string>()
@@ -341,21 +342,21 @@ export function IngredientsPage({ visibleIds }: { visibleIds?: string[] } = {}) 
         </div>
       ) : (
         <div className="table-container table-container--sticky-header">
-          <Table className="data-table">
+          <Table className="data-table" style={{ minWidth: 13 * 144 }}>
             <TableHeader>
               <TableRow>
                 <TableHead>{isKo ? '식재료' : 'Ingredient'}</TableHead>
-                <TableHead style={{ textAlign: 'right' }}>{isKo ? '양' : 'Amount'}</TableHead>
-                <TableHead style={{ textAlign: 'right' }}>{isKo ? '단위' : 'Unit'}</TableHead>
+                <TableHead>{isKo ? '양' : 'Amount'}</TableHead>
+                <TableHead>{isKo ? '단위' : 'Unit'}</TableHead>
                 <TableHead>{isKo ? '탄수화물' : 'Carbs'}</TableHead>
                 <TableHead>{isKo ? '단백질' : 'Protein'}</TableHead>
                 <TableHead>{isKo ? '지방' : 'Fat'}</TableHead>
-                <TableHead style={{ textAlign: 'center' }}>1T=?g</TableHead>
-                <TableHead style={{ textAlign: 'center' }}>1t=?g</TableHead>
-                <TableHead style={{ textAlign: 'center' }}>1컵=?g</TableHead>
-                <TableHead style={{ textAlign: 'center' }}>1개=?g</TableHead>
-                <TableHead style={{ textAlign: 'center' }}>1캔=?g</TableHead>
-                <TableHead style={{ textAlign: 'center' }}>1팩=?g</TableHead>
+                <TableHead>1T=?g</TableHead>
+                <TableHead>1t=?g</TableHead>
+                <TableHead>1컵=?g</TableHead>
+                <TableHead>1개=?g</TableHead>
+                <TableHead>1캔=?g</TableHead>
+                <TableHead>1팩=?g</TableHead>
                 <TableHead />
               </TableRow>
             </TableHeader>
@@ -378,7 +379,7 @@ export function IngredientsPage({ visibleIds }: { visibleIds?: string[] } = {}) 
                         />
                       )}
                     </TableCell>
-                    <TableCell style={{ textAlign: 'right' }}>
+                    <TableCell>
                       <Input
                         type="number"
                         className="w-16"
@@ -388,7 +389,7 @@ export function IngredientsPage({ visibleIds }: { visibleIds?: string[] } = {}) 
                         onChange={(e) => updateEditRow(ing.id, 'baseAmount', Number.parseFloat(e.target.value) || 0)}
                       />
                     </TableCell>
-                    <TableCell style={{ textAlign: 'right' }}>
+                    <TableCell>
                       <UnitSelect
                         value={ing.baseUnit}
                         onValueChange={(v) => updateEditRow(ing.id, 'baseUnit', v)}
@@ -426,7 +427,7 @@ export function IngredientsPage({ visibleIds }: { visibleIds?: string[] } = {}) 
                         onChange={(e) => updateEditRow(ing.id, 'fat', Number.parseFloat(e.target.value) || 0)}
                       />
                     </TableCell>
-                    <TableCell style={{ textAlign: 'center' }}>
+                    <TableCell>
                       <Input
                         type="number"
                         className="w-16"
@@ -437,7 +438,7 @@ export function IngredientsPage({ visibleIds }: { visibleIds?: string[] } = {}) 
                         onChange={(e) => updateEditRow(ing.id, 'gramsPerTbsp', e.target.value === '' ? undefined : Number.parseFloat(e.target.value))}
                       />
                     </TableCell>
-                    <TableCell style={{ textAlign: 'center' }}>
+                    <TableCell>
                       <Input
                         type="number"
                         className="w-16"
@@ -448,7 +449,7 @@ export function IngredientsPage({ visibleIds }: { visibleIds?: string[] } = {}) 
                         onChange={(e) => updateEditRow(ing.id, 'gramsPerTsp', e.target.value === '' ? undefined : Number.parseFloat(e.target.value))}
                       />
                     </TableCell>
-                    <TableCell style={{ textAlign: 'center' }}>
+                    <TableCell>
                       <Input
                         type="number"
                         className="w-16"
@@ -459,7 +460,7 @@ export function IngredientsPage({ visibleIds }: { visibleIds?: string[] } = {}) 
                         onChange={(e) => updateEditRow(ing.id, 'gramsPerCup', e.target.value === '' ? undefined : Number.parseFloat(e.target.value))}
                       />
                     </TableCell>
-                    <TableCell style={{ textAlign: 'center' }}>
+                    <TableCell>
                       <Input
                         type="number"
                         className="w-16"
@@ -470,7 +471,7 @@ export function IngredientsPage({ visibleIds }: { visibleIds?: string[] } = {}) 
                         onChange={(e) => updateEditRow(ing.id, 'gramsPerEach', e.target.value === '' ? undefined : Number.parseFloat(e.target.value))}
                       />
                     </TableCell>
-                    <TableCell style={{ textAlign: 'center' }}>
+                    <TableCell>
                       <Input
                         type="number"
                         className="w-16"
@@ -481,7 +482,7 @@ export function IngredientsPage({ visibleIds }: { visibleIds?: string[] } = {}) 
                         onChange={(e) => updateEditRow(ing.id, 'gramsPerCan', e.target.value === '' ? undefined : Number.parseFloat(e.target.value))}
                       />
                     </TableCell>
-                    <TableCell style={{ textAlign: 'center' }}>
+                    <TableCell>
                       <Input
                         type="number"
                         className="w-16"
@@ -511,17 +512,17 @@ export function IngredientsPage({ visibleIds }: { visibleIds?: string[] } = {}) 
                         <span style={{ display: 'block', fontSize: '14px', opacity: 0.5 }}>{toTitleCase(ing.name)}</span>
                       )}
                     </TableCell>
-                    <TableCell style={{ textAlign: 'right' }}>{ing.baseAmount}</TableCell>
-                    <TableCell style={{ textAlign: 'right' }}>{ing.baseUnit}</TableCell>
-                    <TableCell>{Number(ing.carbs).toFixed(1)}</TableCell>
-                    <TableCell>{Number(ing.protein).toFixed(1)}</TableCell>
-                    <TableCell>{Number(ing.fat).toFixed(1)}</TableCell>
-                    <TableCell style={{ textAlign: 'center' }}>{ing.gramsPerTbsp ?? '-'}</TableCell>
-                    <TableCell style={{ textAlign: 'center' }}>{ing.gramsPerTsp ?? '-'}</TableCell>
-                    <TableCell style={{ textAlign: 'center' }}>{ing.gramsPerCup ?? '-'}</TableCell>
-                    <TableCell style={{ textAlign: 'center' }}>{ing.gramsPerEach ?? '-'}</TableCell>
-                    <TableCell style={{ textAlign: 'center' }}>{ing.gramsPerCan ?? '-'}</TableCell>
-                    <TableCell style={{ textAlign: 'center' }}>{ing.gramsPerPack ?? '-'}</TableCell>
+                    <TableCell>{formatTableNumber(ing.baseAmount)}</TableCell>
+                    <TableCell>{ing.baseUnit}</TableCell>
+                    <TableCell>{formatTableNumber(Number(ing.carbs), 1, 1)}</TableCell>
+                    <TableCell>{formatTableNumber(Number(ing.protein), 1, 1)}</TableCell>
+                    <TableCell>{formatTableNumber(Number(ing.fat), 1, 1)}</TableCell>
+                    <TableCell>{ing.gramsPerTbsp === undefined ? '-' : formatTableNumber(ing.gramsPerTbsp)}</TableCell>
+                    <TableCell>{ing.gramsPerTsp === undefined ? '-' : formatTableNumber(ing.gramsPerTsp)}</TableCell>
+                    <TableCell>{ing.gramsPerCup === undefined ? '-' : formatTableNumber(ing.gramsPerCup)}</TableCell>
+                    <TableCell>{ing.gramsPerEach === undefined ? '-' : formatTableNumber(ing.gramsPerEach)}</TableCell>
+                    <TableCell>{ing.gramsPerCan === undefined ? '-' : formatTableNumber(ing.gramsPerCan)}</TableCell>
+                    <TableCell>{ing.gramsPerPack === undefined ? '-' : formatTableNumber(ing.gramsPerPack)}</TableCell>
                     <TableCell style={{ textAlign: 'center', whiteSpace: 'nowrap' }}>
                       <Button
                         type="button"
@@ -561,7 +562,7 @@ export function IngredientsPage({ visibleIds }: { visibleIds?: string[] } = {}) 
                       onChange={(e) => setNewRow((p) => ({ ...p, nameKo: e.target.value, name: e.target.value }))}
                     />
                   </TableCell>
-                  <TableCell style={{ textAlign: 'right' }}>
+                  <TableCell>
                     <Input
                       type="number"
                       className="w-16"
@@ -570,7 +571,7 @@ export function IngredientsPage({ visibleIds }: { visibleIds?: string[] } = {}) 
                       onChange={(e) => setNewRow((p) => ({ ...p, baseAmount: e.target.value }))}
                     />
                   </TableCell>
-                  <TableCell style={{ textAlign: 'right' }}>
+                  <TableCell>
                     <UnitSelect
                       value={newRow.baseUnit}
                       onValueChange={(v) => setNewRow((p) => ({ ...p, baseUnit: v }))}

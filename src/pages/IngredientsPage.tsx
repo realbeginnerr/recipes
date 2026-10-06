@@ -7,7 +7,6 @@ import { PageIntro, CatalogToolbar, CategoryFilter, SearchField } from '../compo
 import { Button } from '@/components/ui/button'
 import { useEffect, useMemo, useState } from 'react'
 import { useLanguage } from '../context/LanguageContext'
-import { useAdmin } from '../context/AdminContext'
 import { ingredients as ingredientCache } from '../data/ingredientCache'
 import { recipes as staticRecipes } from '../data/recipe'
 import { ingredientPresentation } from '../data/ingredientPresentation'
@@ -36,7 +35,6 @@ function presentation(ingredient: Ingredient) {
 export function IngredientsPage() {
   const { requestAccess } = useAddPageAccess()
   const { language } = useLanguage()
-  const { isAdmin } = useAdmin()
   const ko = language === 'ko'
   const [ingredients, setIngredients] = useState<Ingredient[]>([])
   const [recipes, setRecipes] = useState<Recipe[]>(staticRecipes)
@@ -114,7 +112,7 @@ export function IngredientsPage() {
       view === 'list' ? <IngredientTable visibleIds={visible.map(ingredient => ingredient.id)} /> : <div className="ingredient-grid">{visible.map(ingredient => {
         const related = recipes.filter(recipe => !recipe.hidden && recipeContainsIngredient(recipe, ingredient.id))
         const details = presentation(ingredient)
-        return <IngredientCard key={ingredient.id} ingredient={ingredient} image={details.image} category={ko ? details.category : english[details.category]} related={related} onEdit={isAdmin ? () => requestAccess(`/ingredient/${ingredient.id}/edit`) : undefined} />
+        return <IngredientCard key={ingredient.id} ingredient={ingredient} image={details.image} category={ko ? details.category : english[details.category]} related={related} onEdit={() => requestAccess(`/ingredient/${ingredient.id}/edit`)} />
       })}</div>}
     </div>
   </section>

@@ -1,5 +1,5 @@
 .reference-header :is(a, button) { letter-spacing: -.04em; line-height: 1.5; font-weight: 500; }
-.reference-header { height: 64px; flex-shrink: 0; position: sticky; top: 0; z-index: 50; background: #fff; border-bottom: 1px solid #E5EAE9; }
+.reference-header { height: 64px; flex-shrink: 0; position: sticky; top: 0; z-index: 50; background: rgb(255 255 255 / 90%); border-bottom: 1px solid #E5EAE9; }
 .reference-header-inner { height: 100%; display: flex; align-items: center; gap: 24px; }
 .reference-header .reference-brand { flex-shrink: 0; font-family: var(--font-display); font-size: 22px; font-weight: 400; font-synthesis: none; color: #122B22; text-decoration: none; }
 .reference-desktop-nav { display: none; align-items: center; gap: 4px; }

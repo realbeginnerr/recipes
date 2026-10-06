@@ -1,16 +1,21 @@
 import * as React from "react"
 
 import { cn } from "@/lib/utils"
+import { useIngredientColumnWidth } from '../useIngredientColumnWidth'
+import './table.css'
 
-function Table({ className, ...props }: React.ComponentProps<"table">) {
+function Table({ className, ref: forwardedRef, ...props }: React.ComponentProps<"table">) {
+  const tableRef = useIngredientColumnWidth()
+  React.useImperativeHandle(forwardedRef, () => tableRef.current!)
   return (
     <div
       data-slot="table-container"
-      className="relative w-full overflow-x-auto"
+      className="site-table-frame relative w-full min-w-0 overflow-x-auto"
     >
       <table
         data-slot="table"
-        className={cn("w-full caption-bottom text-sm", className)}
+        ref={tableRef}
+        className={cn("site-table w-full table-fixed caption-bottom text-sm", className)}
         {...props}
       />
     </div>
@@ -50,12 +55,13 @@ function TableFooter({ className, ...props }: React.ComponentProps<"tfoot">) {
   )
 }
 
-function TableRow({ className, ...props }: React.ComponentProps<"tr">) {
+function TableRow({ className, tone = 'default', ...props }: React.ComponentProps<"tr"> & { tone?: 'default' | 'total' }) {
   return (
     <tr
       data-slot="table-row"
       className={cn(
         "border-b transition-colors  has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted",
+        (tone === 'total' || className?.split(' ').includes('recipe-table__total')) && 'table-row--total',
         className
       )}
       {...props}
@@ -68,7 +74,7 @@ function TableHead({ className, ...props }: React.ComponentProps<"th">) {
     <th
       data-slot="table-head"
       className={cn(
-        "h-10 px-2 text-left align-middle font-medium whitespace-nowrap text-foreground [&:has([role=checkbox])]:pr-0",
+        "h-10 px-2 text-left align-middle font-medium whitespace-normal break-words text-foreground [&:has([role=checkbox])]:pr-0",
         className
       )}
       {...props}
@@ -76,16 +82,16 @@ function TableHead({ className, ...props }: React.ComponentProps<"th">) {
   )
 }
 
-function TableCell({ className, ...props }: React.ComponentProps<"td">) {
+function TableCell({ className, children, ...props }: React.ComponentProps<"td">) {
   return (
     <td
       data-slot="table-cell"
       className={cn(
-        "p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0",
+        "p-2 align-middle whitespace-normal break-words [&:has([role=checkbox])]:pr-0",
         className
       )}
       {...props}
-    />
+    ><div className="table-cell-content">{children}</div></td>
   )
 }
 

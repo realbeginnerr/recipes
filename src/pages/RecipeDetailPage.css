@@ -1,7 +1,6 @@
 ﻿.nutrition-detail { padding-top: 40px; padding-bottom: 96px; }
 .detail-topbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 36px; }
 .detail-topbar .catalog-intro__subtle-action { margin: 0; flex-shrink: 0; }
-.detail-back { display: inline-flex; font-size: 14px; color: #596B64; text-decoration: none; }
 .detail-layout { display: grid; grid-template-columns: minmax(0, 1fr); gap: 40px; }
 .detail-heading { display: flex; flex-direction: column; align-items: stretch; gap: 0; min-width: 0; }
 .detail-image-frame { position: relative; aspect-ratio: 4 / 3; overflow: hidden; border-radius: 12px; background: #E9EBE8; }
@@ -9,7 +8,6 @@
 .detail-image-tags { display: flex; align-items: center; flex-wrap: nowrap; gap: 8px; height: 44px; min-height: 44px; margin: 0 0 14px; overflow-x: auto; }
 .detail-image-tags .catalog-category { flex-shrink: 0; margin-bottom: 0; }
 .detail-heading-content { display: grid; align-content: start; gap: 12px; min-width: 0; margin-top: 20px; }
-.detail-heading h1 { font-family: inherit; font-weight: 400; font-synthesis: none; font-size: clamp(24px, 3vw, 32px); margin: 0; line-height: 1.5; }
 .detail-heading-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
 .detail-source { display: inline-flex; align-items: center; gap: 6px; border: 1px solid #CBD4D2; border-radius: 6px; padding: 6px 12px; font-size: 14px; color: #255A46; text-decoration: none; }
 .detail-source-empty { border-style: dashed; color: #ACB5B2; }

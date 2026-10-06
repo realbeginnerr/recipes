@@ -1,0 +1,10 @@
+.recipe-detail-title {
+  font-family: 'Pretendard Variable', 'Inter', sans-serif;
+  color: #122B22;
+  font-weight: 400;
+  font-synthesis: none;
+  font-size: clamp(24px, 3vw, 32px);
+  margin: 0;
+  line-height: 1.5;
+}
+[lang="en"] .recipe-detail-title { font-family: 'Inter', sans-serif; }

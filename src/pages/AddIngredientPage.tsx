@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useLanguage } from '../context/LanguageContext'
 import { saveIngredientToFirestore } from '../services/ingredientService'
 import { Toast, useToast } from '../components/feedback/Toast'
@@ -7,6 +8,7 @@ import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { UnitSelect } from '../components/UnitSelect'
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table'
+import { formatTableNumber } from '../utils/numberFormatting'
 
 const KO_TO_EN_UNIT: Record<string, string> = {
   g: 'oz', ml: 'oz', '컵': 'cup', '개': 'each', '캔': 'can', '팩': 'pack', '꼬집': 'pinch',
@@ -25,7 +27,7 @@ function toEnAmount(amount: number, unit: string): number {
   if (unit === 'ml') return amount / 29.5735
   return amount
 }
-function fmt(n: number): string { return (Math.round(n * 10) / 10).toFixed(1) }
+function fmt(n: number): string { return formatTableNumber(Math.round(n * 10) / 10, 1, 1) }
 
 async function translateKoToEn(text: string): Promise<string> {
   try {
@@ -57,6 +59,7 @@ const AI_PROMPT = `아래 식재료들의 영양 정보를 알려줘.
 [여기에 식재료 목록 입력]`
 
 export function AddIngredientPage() {
+  const navigate = useNavigate()
   const { language } = useLanguage()
   const isKo = language === 'ko'
   const { toast, showToast, closeToast } = useToast()
@@ -138,6 +141,7 @@ export function AddIngredientPage() {
   if (mode === 'select') {
     return (
       <section className="page">
+        <Button type="button" variant="ghost" size="sm" onClick={() => navigate('/ingredients')}>{isKo ? '← 뒤로' : '← Back'}</Button>
         <h2 className="page__heading">{isKo ? '식재료 추가' : 'Add Ingredient'}</h2>
         <p style={{ color: 'var(--muted-foreground)', marginBottom: '2rem' }}>
           {isKo ? '식재료를 어떻게 추가할까요?' : 'How would you like to add ingredients?'}
@@ -171,6 +175,7 @@ export function AddIngredientPage() {
   if (mode === 'ai') {
     return (
       <section className="page">
+        <Button type="button" variant="ghost" size="sm" onClick={() => navigate('/ingredients')}>{isKo ? '← 뒤로' : '← Back'}</Button>
         <div className="add-recipe__mode-header">
           <Button type="button" variant="ghost" size="sm" onClick={() => { setMode('select'); setAiResolved(false); setPastedText(''); setAiRows([]); setDataError('') }}>
             ← {isKo ? '뒤로' : 'Back'}
@@ -217,7 +222,7 @@ export function AddIngredientPage() {
             <Table className="data-table recipe-table">
               <TableHeader>
                 <TableRow>
-                  <TableHead>식재료</TableHead><TableHead>양</TableHead><TableHead style={{ textAlign: 'right' }}>단위</TableHead><TableHead>탄수화물</TableHead><TableHead>단백질</TableHead><TableHead>지방</TableHead><TableHead className="edit-inline__delete-cell"><Button type="button" variant="ghost" size="icon-sm" title="전체 삭제" onClick={() => setAiRows([])}>✕</Button></TableHead>
+                  <TableHead>식재료</TableHead><TableHead>양</TableHead><TableHead>단위</TableHead><TableHead>탄수화물</TableHead><TableHead>단백질</TableHead><TableHead>지방</TableHead><TableHead className="edit-inline__delete-cell"><Button type="button" variant="ghost" size="icon-sm" title="전체 삭제" onClick={() => setAiRows([])}>✕</Button></TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -225,7 +230,7 @@ export function AddIngredientPage() {
                   <TableRow key={i}>
                     <TableCell><Input className="h-7 text-sm" value={row.nameKo} onChange={(e) => handleAiRowChange(i, 'nameKo', e.target.value)} /></TableCell>
                     <TableCell><Input type="number" className="h-7 w-20 text-sm" min={0} step={0.1} value={row.amount} onChange={(e) => handleAiRowChange(i, 'amount', e.target.value)} /></TableCell>
-                    <TableCell style={{ textAlign: 'right' }}><UnitSelect value={row.unit} onValueChange={(v) => handleAiRowChange(i, 'unit', v)} language="ko" /></TableCell>
+                    <TableCell><UnitSelect value={row.unit} onValueChange={(v) => handleAiRowChange(i, 'unit', v)} language="ko" /></TableCell>
                     <TableCell><Input type="number" className="h-7 w-20 text-sm" min={0} step={0.1} value={row.carbs} onChange={(e) => handleAiRowChange(i, 'carbs', e.target.value)} /></TableCell>
                     <TableCell><Input type="number" className="h-7 w-20 text-sm" min={0} step={0.1} value={row.protein} onChange={(e) => handleAiRowChange(i, 'protein', e.target.value)} /></TableCell>
                     <TableCell><Input type="number" className="h-7 w-20 text-sm" min={0} step={0.1} value={row.fat} onChange={(e) => handleAiRowChange(i, 'fat', e.target.value)} /></TableCell>
@@ -240,15 +245,15 @@ export function AddIngredientPage() {
               <Table className="data-table recipe-table">
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Ingredient</TableHead><TableHead>Amount</TableHead><TableHead style={{ textAlign: 'right' }}>Unit</TableHead><TableHead>Carbs</TableHead><TableHead>Protein</TableHead><TableHead>Fat</TableHead><TableHead />
+                    <TableHead>Ingredient</TableHead><TableHead>Amount</TableHead><TableHead>Unit</TableHead><TableHead>Carbs</TableHead><TableHead>Protein</TableHead><TableHead>Fat</TableHead><TableHead />
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {aiRows.map((row, i) => (
                     <TableRow key={i}>
                       <TableCell><Input className="h-7 text-sm" value={row.nameEn} onChange={(e) => handleAiRowChange(i, 'nameEn', e.target.value)} /></TableCell>
-                      <TableCell><Input type="number" className="h-7 w-20 text-sm" min={0} step={0.1} value={fmt(row.enAmount)} onChange={(e) => handleAiRowChange(i, 'enAmount', Number.parseFloat(e.target.value) || 0)} /></TableCell>
-                      <TableCell style={{ textAlign: 'right' }}><UnitSelect value={row.enUnit} onValueChange={(v) => handleAiRowChange(i, 'enUnit', v)} language="en" /></TableCell>
+                      <TableCell><Input type="number" className="h-7 w-20 text-sm" min={0} step={0.1} value={row.enAmount.toFixed(1)} onChange={(e) => handleAiRowChange(i, 'enAmount', Number.parseFloat(e.target.value) || 0)} /></TableCell>
+                      <TableCell><UnitSelect value={row.enUnit} onValueChange={(v) => handleAiRowChange(i, 'enUnit', v)} language="en" /></TableCell>
                       <TableCell>{fmt(Number.parseFloat(row.carbs) || 0)}</TableCell>
                       <TableCell>{fmt(Number.parseFloat(row.protein) || 0)}</TableCell>
                       <TableCell>{fmt(Number.parseFloat(row.fat) || 0)}</TableCell>
@@ -273,6 +278,7 @@ export function AddIngredientPage() {
   // 직접 입력 모드
   return (
     <section className="page">
+      <Button type="button" variant="ghost" size="sm" onClick={() => navigate('/ingredients')}>{isKo ? '← 뒤로' : '← Back'}</Button>
       <div className="add-recipe__mode-header">
         <Button type="button" variant="ghost" size="sm" onClick={() => { setMode('select'); setManualRows([{ ...EMPTY_MANUAL }]) }}>
           ← {isKo ? '뒤로' : 'Back'}
@@ -285,7 +291,7 @@ export function AddIngredientPage() {
           <TableRow>
             <TableHead>{isKo ? '식재료명' : 'Name'}</TableHead>
             <TableHead>{isKo ? '기준량' : 'Amount'}</TableHead>
-            <TableHead style={{ textAlign: 'right' }}>{isKo ? '단위' : 'Unit'}</TableHead>
+            <TableHead>{isKo ? '단위' : 'Unit'}</TableHead>
             <TableHead>{isKo ? '탄수화물' : 'Carbs'}</TableHead>
             <TableHead>{isKo ? '단백질' : 'Protein'}</TableHead>
             <TableHead>{isKo ? '지방' : 'Fat'}</TableHead>
@@ -297,7 +303,7 @@ export function AddIngredientPage() {
             <TableRow key={i}>
               <TableCell><Input className="h-7 text-sm" value={row.nameKo} placeholder={isKo ? '닭가슴살' : 'Chicken breast'} onChange={(e) => handleManualRowChange(i, 'nameKo', e.target.value)} /></TableCell>
               <TableCell><Input type="number" className="h-7 w-20 text-sm" min={0} step={0.1} value={row.amount} onChange={(e) => handleManualRowChange(i, 'amount', e.target.value)} /></TableCell>
-              <TableCell style={{ textAlign: 'right' }}><UnitSelect value={row.unit} onValueChange={(v) => handleManualRowChange(i, 'unit', v)} language="ko" /></TableCell>
+              <TableCell><UnitSelect value={row.unit} onValueChange={(v) => handleManualRowChange(i, 'unit', v)} language="ko" /></TableCell>
               <TableCell><Input type="number" className="h-7 w-20 text-sm" min={0} step={0.1} placeholder="0" value={row.carbs} onChange={(e) => handleManualRowChange(i, 'carbs', e.target.value)} /></TableCell>
               <TableCell><Input type="number" className="h-7 w-20 text-sm" min={0} step={0.1} placeholder="0" value={row.protein} onChange={(e) => handleManualRowChange(i, 'protein', e.target.value)} /></TableCell>
               <TableCell><Input type="number" className="h-7 w-20 text-sm" min={0} step={0.1} placeholder="0" value={row.fat} onChange={(e) => handleManualRowChange(i, 'fat', e.target.value)} /></TableCell>

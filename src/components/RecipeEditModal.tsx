@@ -100,7 +100,7 @@ export function RecipeEditModal({ recipe, onSave, onClose }: Props) {
 
           <section className="space-y-2">
             <label className="text-sm font-medium">{t.colIngredient}</label>
-            <Table className="edit-modal__table">
+            <Table className="edit-modal__table min-w-[600px]">
               <TableHeader>
                 <TableRow>
                   <TableHead>식재료</TableHead>
@@ -134,7 +134,7 @@ export function RecipeEditModal({ recipe, onSave, onClose }: Props) {
                           options={ing.allowedUnits}
                         />
                       </TableCell>
-                      <TableCell>
+                      <TableCell className="text-center">
                         <Button
                           type="button"
                           variant="ghost"

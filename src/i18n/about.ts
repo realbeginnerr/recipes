@@ -5,7 +5,7 @@ export const aboutCopy = {
     "heroFirst": "",
     "heroLast": "\"그동안 나를 지켜주느라 정말 애썼어.\"",
     "introFirst": "그동안 나를 지켜준 나 자신에게 해주고 싶은 말.",
-    "introLast": "진짜 고마워. 그리고 그동안 제대로 챙겨주지 못해서 미안해.",
+    "introLast": "진짜 고마워. 그리고 그동안 제대로 챙겨주지 못해서 미안.",
     "tableAlt": "밥상",
     "storyLabel": "나를 아낀다는 것",
     "storyTitleFirst": "지금부터라도 잘 챙겨줄게",

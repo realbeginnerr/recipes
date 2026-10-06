@@ -1,7 +1,13 @@
 ﻿.ingredient-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 256px), 1fr)); gap: 16px; }
 @media (min-width: 768px) { .ingredient-grid { gap: 20px; } }
+@media (max-width: 767px) {
+  .ingredient-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .ingredient-grid .ingredient-card-body { padding: 12px; }
+  .ingredient-grid .catalog-macros span { width: 100%; text-align: center; }
+  .ingredient-grid .catalog-macros .macro-label-full { display: none; }
+  .ingredient-grid .catalog-macros .macro-label-short { display: block; }
+}
 .ingredient-csv-table > [data-slot="table-container"] { overflow: visible; }
 .ingredient-csv-table .data-table thead { position: sticky; top: 0; z-index: 3; }
-.ingredient-csv-table .data-table th { background: var(--card); box-shadow: inset 0 -1px 0 var(--border); }
 .ingredient-csv-table .data-table :is(th, td) { font-weight: 400; }
 .ingredient-csv-table .data-table :is(th, td):nth-child(n+8) { font-weight: 700; }

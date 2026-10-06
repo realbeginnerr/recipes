@@ -7,7 +7,7 @@ type Macros = Pick<Ingredient, 'carbs' | 'protein' | 'fat'>
 export function MacroSummary({ macros: { carbs, protein, fat }, variant = 'default' }: { macros: Macros; variant?: 'default' | 'recipe' }) {
   const { language } = useLanguage()
   return <div className={`catalog-macros${variant === 'recipe' ? ' catalog-macros--recipe' : ''}`}>
-    {[[carbs, language === 'ko' ? '탄수화물' : 'Carbs'], [protein, language === 'ko' ? '단백질' : 'Protein'], [fat, language === 'ko' ? '지방' : 'Fat']].map(([value, label]) => <div key={label}><strong>{Math.round(Number(value))}{variant !== 'recipe' && 'g'}</strong><span>{label}</span></div>)}
+    {[[carbs, language === 'ko' ? '탄수화물' : 'Carbs'], [protein, language === 'ko' ? '단백질' : 'Protein'], [fat, language === 'ko' ? '지방' : 'Fat']].map(([value, label], index) => <div key={label}><strong>{Math.round(Number(value))}{variant !== 'recipe' && 'g'}</strong><span className="macro-label-full">{label}</span><span className="macro-label-short" aria-label={String(label)}>{language === 'ko' ? ['탄', '단', '지'][index] : ['C', 'P', 'F'][index]}</span></div>)}
   </div>
 }
 

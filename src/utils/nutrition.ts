@@ -1,4 +1,5 @@
 import type { Ingredient } from '../types'
+import { formatTableNumber } from './numberFormatting'
 
 export function convertUnit(
   amount: number,
@@ -53,5 +54,5 @@ export function formatAmount(value: number): string {
 
 export function formatMacro(value: number): string {
   if (Number.isNaN(value) || !Number.isFinite(value)) return '0.0'
-  return (Math.round(value * 10) / 10).toFixed(1)
+  return formatTableNumber(Math.round(value * 10) / 10, 1, 1)
 }

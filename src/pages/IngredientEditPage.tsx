@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table'
 import { FoodImage } from '../components/FoodImage'
 import { LoadingState } from '../components/feedback/ContentState'
 import { UnitSelect } from '../components/UnitSelect'
@@ -23,12 +24,12 @@ type ConversionField = 'gramsPerTbsp' | 'gramsPerTsp' | 'gramsPerCup' | 'gramsPe
 
 const UNIT_OPTIONS = ['g', 'ml', 'oz', 'lbs', 'T', 't', '컵', '개', '캔', '팩', '꼬집']
 const CONVERSION_FIELDS: { key: ConversionField; labelKo: string; labelEn: string }[] = [
-  { key: 'gramsPerTbsp', labelKo: '1T (g)', labelEn: '1 tbsp (g)' },
-  { key: 'gramsPerTsp', labelKo: '1t (g)', labelEn: '1 tsp (g)' },
-  { key: 'gramsPerCup', labelKo: '1컵 (g)', labelEn: '1 cup (g)' },
-  { key: 'gramsPerEach', labelKo: '1개 (g)', labelEn: '1 each (g)' },
-  { key: 'gramsPerCan', labelKo: '1캔 (g)', labelEn: '1 can (g)' },
-  { key: 'gramsPerPack', labelKo: '1팩 (g)', labelEn: '1 pack (g)' },
+  { key: 'gramsPerTbsp', labelKo: 'T', labelEn: 'tbsp' },
+  { key: 'gramsPerTsp', labelKo: 't', labelEn: 'tsp' },
+  { key: 'gramsPerCup', labelKo: '컵', labelEn: 'cup' },
+  { key: 'gramsPerEach', labelKo: '개', labelEn: 'each' },
+  { key: 'gramsPerCan', labelKo: '캔', labelEn: 'can' },
+  { key: 'gramsPerPack', labelKo: '팩', labelEn: 'pack' },
 ]
 
 function initialDraft(ingredient: FirestoreIngredient): IngredientDraft {
@@ -65,13 +66,22 @@ export function IngredientEditPage() {
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
+  const [conversionGrams, setConversionGrams] = useState('100')
+  const [conversionAmounts, setConversionAmounts] = useState<Partial<Record<ConversionField, string>>>({})
 
   useEffect(() => {
     let cancelled = false
     loadIngredientsFromFirestore()
       .then(() => {
         const ingredient = id ? getIngredientById(id) : undefined
-        if (!cancelled && ingredient) setDraft(initialDraft(ingredient))
+        if (!cancelled && ingredient) {
+          setDraft(initialDraft(ingredient))
+          const grams = ingredient.conversionGrams ?? (ingredient.baseUnit === 'g' ? ingredient.baseAmount : 100)
+          setConversionGrams(String(grams))
+          setConversionAmounts(Object.fromEntries(CONVERSION_FIELDS.map(({ key }) => [key,
+            ingredient[key] && ingredient[key] > 0 ? String(Number((grams / ingredient[key]!).toPrecision(12))) : '',
+          ])))
+        }
         if (!cancelled && !ingredient) setError(isKo ? '식재료를 찾을 수 없습니다.' : 'Ingredient not found.')
       })
       .catch(() => {
@@ -93,8 +103,7 @@ export function IngredientEditPage() {
   }
 
   function updateConversion(field: ConversionField, value: string) {
-    const amount = value === '' ? undefined : Number(value)
-    setDraft((current) => current ? { ...current, [field]: amount !== undefined && Number.isFinite(amount) ? amount : undefined } : current)
+    setConversionAmounts(current => ({ ...current, [field]: value }))
   }
 
   async function handleSave(event: React.FormEvent<HTMLFormElement>) {
@@ -110,7 +119,7 @@ export function IngredientEditPage() {
     }
     if (draft.imageUrl?.trim()) {
       try {
-        new URL(draft.imageUrl.trim())
+        new URL(draft.imageUrl.trim(), window.location.origin)
       } catch {
         setError(isKo ? '올바른 사진 URL을 입력해주세요.' : 'Enter a valid image URL.')
         return
@@ -120,8 +129,18 @@ export function IngredientEditPage() {
     setSaving(true)
     setError('')
     try {
+      const grams = Number(conversionGrams)
+      if (!Number.isFinite(grams) || grams <= 0 || Object.values(conversionAmounts).some(value => value !== '' && (!Number.isFinite(Number(value)) || Number(value) <= 0))) {
+        setError(isKo ? '단위 환산 값은 0보다 커야 합니다.' : 'Conversion values must be above zero.')
+        return
+      }
+      const conversions = Object.fromEntries(CONVERSION_FIELDS.map(({ key }) => [key,
+        conversionAmounts[key] ? grams / Number(conversionAmounts[key]) : undefined,
+      ]))
       await updateIngredientInFirestore(id, {
         ...draft,
+        ...conversions,
+        conversionGrams: grams,
         name: draft.name.trim(),
         nameKo: draft.nameKo.trim(),
         ...(draft.imageUrl !== undefined ? { imageUrl: draft.imageUrl.trim() } : {}),
@@ -211,14 +230,29 @@ export function IngredientEditPage() {
         </div>
       </fieldset>
 
-      <fieldset className="flex flex-col gap-3">
+      <fieldset className="flex min-w-0 flex-col gap-3">
         <legend className="text-sm font-semibold">{isKo ? '단위 환산 (선택)' : 'Unit conversions (optional)'}</legend>
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
-          {CONVERSION_FIELDS.map(({ key, labelKo, labelEn }) => <div key={key} className="flex flex-col gap-2">
-            <label htmlFor={`ingredient-${key}`} className="text-sm font-medium">{isKo ? labelKo : labelEn}</label>
-            <Input id={`ingredient-${key}`} type="number" min="0" step="any" value={draft[key] ?? ''} onChange={(event) => updateConversion(key, event.target.value)} />
-          </div>)}
+        <div className="ingredient-conversion-table min-w-0 border">
+          <Table className="min-w-[700px] table-fixed" aria-label={isKo ? '단위 환산 (선택)' : 'Unit conversions (optional)'}>
+            <TableHeader className="bg-muted/50">
+              <TableRow>
+                <TableHead scope="col"><label htmlFor="ingredient-conversion-grams">g</label></TableHead>
+                {CONVERSION_FIELDS.map(({ key, labelKo, labelEn }) => <TableHead key={key} scope="col">
+                  <label htmlFor={`ingredient-${key}`}>{isKo ? labelKo : labelEn}</label>
+                </TableHead>)}
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              <TableRow>
+                <TableCell><Input id="ingredient-conversion-grams" type="number" min="0" step="any" required value={conversionGrams} onChange={event => setConversionGrams(event.target.value)} /></TableCell>
+                {CONVERSION_FIELDS.map(({ key }) => <TableCell key={key}>
+                  <Input id={`ingredient-${key}`} type="number" min="0" step="any" value={conversionAmounts[key] ?? ''} onChange={(event) => updateConversion(key, event.target.value)} />
+                </TableCell>)}
+              </TableRow>
+            </TableBody>
+          </Table>
         </div>
+        <p className="text-sm text-muted-foreground">{isKo ? '각 열은 같은 양입니다. 예: g = 100, 컵 = 1이면 1컵은 100g입니다.' : 'Each column represents the same amount. For example, g = 100 and cup = 1 means 1 cup weighs 100g.'}</p>
       </fieldset>
 
       <fieldset className="flex flex-col gap-3">

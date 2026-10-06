@@ -2,7 +2,7 @@ import { FoodImage } from '../FoodImage'
 import { MacroSummary } from '../MacroDisplay'
 import { NutritionSummary } from '../NutritionSummary'
 import { StarRating } from './StarRating'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import type { Recipe } from '../../types'
 
 import { resolveRecipeImage } from '../../utils/recipeImage'
@@ -11,7 +11,7 @@ import { trackRecipeView } from '../../utils/analytics'
 import { recipeMealMacros } from '../../utils/recipeNutrition'
 import { categoryEnglish, getRecipeCategories } from '../../utils/recipeCategory'
 
-function RecipeCard({ recipe }: { recipe: Recipe }) {
+export function RecipeCard({ recipe, openInNewTab = false }: { recipe: Recipe; openInNewTab?: boolean }) {
   const navigate = useNavigate()
   const { language } = useLanguage()
   const name = language === 'ko' ? recipe.nameKo : recipe.name
@@ -24,15 +24,7 @@ function RecipeCard({ recipe }: { recipe: Recipe }) {
     navigate(`/recipe/${recipe.id}`)
   }
 
-  return (
-    <article
-      className="recipe-card"
-      onClick={handleClick}
-      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleClick() } }}
-      role="button"
-      tabIndex={0}
-      aria-label={name}
-    >
+  const content = <>
       <div className="recipe-card__image-wrap">
         <FoodImage src={imageUrl} alt={name} className="recipe-card__image" empty={<div className="recipe-card__placeholder">
             <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -50,8 +42,11 @@ function RecipeCard({ recipe }: { recipe: Recipe }) {
         <MacroSummary macros={{ carbs, protein, fat }} variant="recipe" />
         <NutritionSummary carbs={carbs} protein={protein} fat={fat} perMeal />
       </div>
-    </article>
-  )
+    </>
+  if (openInNewTab) return <Link className="recipe-card" to={`/recipe/${encodeURIComponent(recipe.id)}`} target="_blank" rel="noopener noreferrer" aria-label={`${name} (${language === 'ko' ? '새 탭에서 열기' : 'opens in a new tab'})`} onClick={() => trackRecipeView(recipe.nameKo, recipe.name)}>{content}</Link>
+  return <article className="recipe-card" onClick={handleClick}
+    onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleClick() } }}
+    role="button" tabIndex={0} aria-label={name}>{content}</article>
 }
 
 export function RecipeGrid({ recipes }: { recipes: Recipe[] }) {
