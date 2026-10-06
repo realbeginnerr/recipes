@@ -10,7 +10,7 @@ import './CatalogControls.css'
 type Option<T extends string> = { value: T; label: string }
 
 export function PageIntro({ title, description, action, titleImage }: {
-  title: string
+  title: ReactNode
   description: string
   action?: { to: string; label: string; subtle?: boolean }
   titleImage?: { src: string; alt: string }

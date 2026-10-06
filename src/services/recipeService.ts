@@ -25,6 +25,7 @@ export type FirestoreRecipe = {
   name: string
   nameKo: string
   imageUrl: string
+  imageUrls?: string[]
   link?: string
   memo: string
   tasteRating: number
@@ -96,6 +97,7 @@ export function convertToRecipe(fs: FirestoreRecipe): Recipe {
     name: fs.name,
     nameKo: fs.nameKo || fs.name,
     imageUrl: fs.imageUrl || '',
+    imageUrls: fs.imageUrls,
     memo: fs.memo,
     tasteRating: fs.tasteRating,
     divisionCount: fs.divisionCount,

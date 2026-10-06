@@ -6,7 +6,9 @@ import { FoodImage } from '../components/FoodImage'
 import { ContentState, LoadingState } from '../components/feedback/ContentState'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { Dialog as ImageDialog } from '@base-ui/react/dialog'
+import { X } from 'lucide-react'
 import { useParams } from 'react-router-dom'
 import { BackLink } from '../components/BackLink'
 import { useLanguage } from '../context/LanguageContext'
@@ -37,6 +39,55 @@ function amount(value: string) { const parsed = Number(value); return Number.isF
 function TableNutritionSummary({ total }: { total: Macros }) {
   return <div className="detail-nutrition-summary">
     <NutritionSummary {...total} />
+  </div>
+}
+
+function RecipeImageGallery({ recipe, name, ko }: { recipe: Recipe; name: string; ko: boolean }) {
+  const primary = resolveRecipeImage(recipe)
+  // Temporary gallery preview: repeat the current Jjajang image five times.
+  const images = (recipe.nameKo === '짜장밥' && primary
+    ? Array<string>(5).fill(primary)
+    : [...new Set([primary, ...(recipe.imageUrls ?? [])].filter(url => typeof url === 'string' && url.trim()))]).slice(0, 5)
+  const [selected, setSelected] = useState(0)
+  const [open, setOpen] = useState(false)
+  const touchStart = useRef<{ x: number; y: number } | null>(null)
+  useEffect(() => {
+    const query = window.matchMedia('(max-width: 767px)')
+    const closeOnDesktop = () => { if (!query.matches) setOpen(false) }
+    query.addEventListener('change', closeOnDesktop)
+    return () => query.removeEventListener('change', closeOnDesktop)
+  }, [])
+  const activeIndex = selected < images.length ? selected : 0
+  const active = images[activeIndex]
+  const step = (direction: number) => setSelected(Math.max(0, Math.min(images.length - 1, activeIndex + direction)))
+  return <div className="detail-gallery">
+    <div className="detail-image-frame detail-gallery-desktop"><FoodImage src={active} alt={name} className="detail-image" /></div>
+    <ImageDialog.Root open={open} onOpenChange={setOpen}>
+      <ImageDialog.Trigger className="detail-image-frame detail-gallery-mobile" disabled={!active} aria-label={ko ? `${name} 이미지 크게 보기` : `Enlarge ${name} image`}><FoodImage src={active} alt={name} className="detail-image" /></ImageDialog.Trigger>
+      <ImageDialog.Portal>
+        <ImageDialog.Backdrop className="detail-lightbox-backdrop" />
+        <ImageDialog.Popup className="detail-lightbox" onKeyDown={event => {
+          if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') { event.preventDefault(); step(event.key === 'ArrowLeft' ? -1 : 1) }
+        }}>
+          <div className="detail-lightbox-topbar"><ImageDialog.Title className="detail-lightbox-title">{name}</ImageDialog.Title><ImageDialog.Close className="detail-lightbox-close" aria-label={ko ? '이미지 닫기' : 'Close image'}><X size={24} aria-hidden="true" /></ImageDialog.Close></div>
+          <ImageDialog.Description className="sr-only">{ko ? '이미지를 좌우로 밀거나 아래 썸네일을 눌러 다른 이미지를 볼 수 있습니다.' : 'Swipe left or right, or select a thumbnail to view another image.'}</ImageDialog.Description>
+          <div className="detail-lightbox-image" onTouchStart={event => {
+            touchStart.current = event.touches.length === 1 ? { x: event.touches[0].clientX, y: event.touches[0].clientY } : null
+          }} onTouchCancel={() => { touchStart.current = null }} onTouchEnd={event => {
+            const start = touchStart.current
+            touchStart.current = null
+            if (!start || !event.changedTouches[0]) return
+            const dx = event.changedTouches[0].clientX - start.x
+            const dy = event.changedTouches[0].clientY - start.y
+            if (Math.abs(dx) >= 40 && Math.abs(dx) > Math.abs(dy)) step(dx < 0 ? 1 : -1)
+          }}><FoodImage src={active} alt={name} /></div>
+          <div className="detail-lightbox-footer"><p className="detail-lightbox-counter" aria-live="polite">{activeIndex + 1} / {images.length}</p><div className="detail-image-thumbnails" role="group" aria-label={ko ? '레시피 이미지 선택' : 'Choose recipe image'}>{images.map((src, index) => <button key={`${src}-${index}`} type="button" className="detail-image-thumbnail" aria-pressed={activeIndex === index} aria-label={ko ? `이미지 ${index + 1} 보기` : `View image ${index + 1}`} onClick={() => setSelected(index)}><FoodImage src={src} alt="" /></button>)}</div></div>
+        </ImageDialog.Popup>
+      </ImageDialog.Portal>
+    </ImageDialog.Root>
+    {images.length > 0 && <div className="detail-image-thumbnails" role="group" aria-label={ko ? '레시피 이미지 선택' : 'Choose recipe image'}>
+      {images.map((src, index) => <button key={`${src}-${index}`} type="button" className="detail-image-thumbnail" aria-pressed={activeIndex === index} aria-label={ko ? `${name} 이미지 ${index + 1} 보기` : `View ${name} image ${index + 1}`} onClick={() => setSelected(index)}><FoodImage src={src} alt="" /></button>)}
+    </div>}
   </div>
 }
 
@@ -79,7 +130,7 @@ function RecipeNutrition({ recipe }: { recipe: Recipe }) {
         <div className="catalog-card-categories detail-image-tags" role="group" aria-label={ko ? '레시피 분류' : 'Recipe categories'}>
           {getRecipeCategories(recipe).map(category => <span key={category} className="catalog-category">{ko ? category : categoryEnglish[category]}</span>)}
         </div>
-        <div className="detail-image-frame"><FoodImage src={resolveRecipeImage(recipe)} alt={name} className="detail-image" /></div>
+        <RecipeImageGallery recipe={recipe} name={name} ko={ko} />
         <div className="detail-heading-content">
           <h1 className="recipe-detail-title">{name}</h1>
           <div className="detail-heading-actions">

@@ -27,6 +27,7 @@ export type Recipe = {
   name: string
   nameKo: string
   imageUrl: string
+  imageUrls?: string[]
   items: RecipeItem[]
   sideItems?: RecipeItem[]
   memo?: string

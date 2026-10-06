@@ -19,6 +19,7 @@
   "dependencies": {
     "@amplitude/analytics-browser": "^2.44.5",
     "@base-ui/react": "^1.6.0",
+    "@carbon/react": "^1.117.0",
     "@fontsource-variable/geist": "^5.2.9",
     "@tailwindcss/vite": "^4.3.2",
     "class-variance-authority": "^0.7.1",

@@ -2,6 +2,7 @@ import { useAddPageAccess } from '../components/AddPageAccessProvider'
 import { ContentState } from '../components/feedback/ContentState'
 import { IngredientCard } from '../components/ingredient/IngredientCard'
 import { IngredientsPage as IngredientTable } from './IngredientManagementPage'
+import { ContentSwitcher, Switch } from '@carbon/react'
 import { LayoutGrid, List } from 'lucide-react'
 import { PageIntro, CatalogToolbar, CategoryFilter, SearchField } from '../components/catalog/CatalogControls'
 import { Button } from '@/components/ui/button'
@@ -15,6 +16,7 @@ import { loadRecipesFromFirestore, mergeStaticAndFirestoreRecipes } from '../ser
 import type { Ingredient, Recipe } from '../types'
 import './RecipePage.css'
 import './IngredientsPage.css'
+import './IngredientViewSwitcher.scss'
 import { recipeContainsIngredient } from '../utils/recipeIngredients'
 import { ingredientCategory } from '../utils/ingredientCategory'
 import { loadFavoriteIngredientIds } from '../utils/ingredientFavorites'
@@ -90,7 +92,7 @@ export function IngredientsPage() {
 
   return <section className="recipe-catalog ingredient-catalog" lang={language}>
     <PageIntro
-      title={ko ? '식재료 정보는 다 여기에' : 'Organizing ingredient info is a chore.. But it has to be done..'}
+      title={ko ? <>식재료 정보는<span className="ingredient-title-second-line"> 다 여기에</span></> : 'Organizing ingredient info is a chore.. But it has to be done..'}
       description={ko ? '' : 'Search ingredients to find their nutrition and recipes that use them.'}
       titleImage={{ src: `${import.meta.env.BASE_URL}images/라마얼굴만동동 (안경).png`, alt: ko ? '안경 쓴 라마 얼굴' : 'Llama face with glasses' }}
     />
@@ -100,12 +102,14 @@ export function IngredientsPage() {
         setCategory(value === '전체' ? [] : [value])
       }} />
       <SearchField label={ko ? '식재료 검색' : 'Search ingredients'} value={query} onValueChange={setQuery} />
-      <div className="flex shrink-0 gap-1" role="group" aria-label={ko ? '레이아웃 보기' : 'Layout view'}>
-        <Button type="button" variant="filter" size="icon" aria-pressed={view === 'grid'} aria-label={ko ? '그리드 모드' : 'Grid view'} title={ko ? '그리드 모드' : 'Grid view'} onClick={() => changeView('grid')}><LayoutGrid aria-hidden="true" /></Button>
-        <Button type="button" variant="filter" size="icon" aria-pressed={view === 'list'} aria-label={ko ? '리스트 모드' : 'List view'} title={ko ? '리스트 모드' : 'List view'} onClick={() => changeView('list')}><List aria-hidden="true" /></Button>
-      </div>
+      <ContentSwitcher className="ingredient-view-switcher" size="sm" aria-label={ko ? '식재료 보기 방식' : 'Ingredient view'} selectedIndex={view === 'grid' ? 0 : 1} onChange={({ name }) => {
+        if (name === 'grid' || name === 'list') changeView(name)
+      }}>
+        <Switch name="grid" aria-label={ko ? '그리드 보기' : 'Grid view'} title={ko ? '그리드 보기' : 'Grid view'} id="ingredient-view-grid" aria-controls="ingredient-view-panel"><LayoutGrid aria-hidden="true" /></Switch>
+        <Switch name="list" aria-label={ko ? '목록 보기' : 'List view'} title={ko ? '목록 보기' : 'List view'} id="ingredient-view-list" aria-controls="ingredient-view-panel"><List aria-hidden="true" /></Switch>
+      </ContentSwitcher>
     </CatalogToolbar>
-    <div className="catalog-container catalog-results" aria-busy={loading}>
+    <div className="catalog-container catalog-results" id="ingredient-view-panel" role="tabpanel" aria-labelledby={`ingredient-view-${view}`} aria-busy={loading} tabIndex={0}>
       {!loading && <div className="catalog-count-row"><p className="catalog-count" role="status">{ko ? '식재료 ' : 'Ingredients '}<strong>{visible.length}{ko ? '개' : ''}</strong>{query && <span> · “{query}”</span>}</p><Button onClick={() => requestAccess('/add-ingredient')} variant="link" size="content" className="catalog-intro__subtle-action">{ko ? '식재료 추가' : 'Add ingredient'}</Button></div>}
       {error && <ContentState variant="inline" error title={ko ? '최신 정보를 불러오지 못했습니다. 저장된 정보를 표시합니다.' : 'Could not load the latest data. Showing available ingredients.'}><Button variant="ghost" size="content" onClick={() => setAttempt(value => value + 1)}>{ko ? '다시 시도' : 'Retry'}</Button></ContentState>}
       {visible.length === 0 ? <ContentState icon="⌕" title={ko ? '찾으시는 재료가 아직 없어요.' : 'We could not find that ingredient.'} description={ko ? '다른 이름으로 검색하거나, 철자를 확인해 보세요.' : 'Try another name or check the spelling.'}>{query.trim() && <Button type="button" variant="outline">{ko ? '이 식재료 추가해주세요' : 'Please add this ingredient'}</Button>}</ContentState> :

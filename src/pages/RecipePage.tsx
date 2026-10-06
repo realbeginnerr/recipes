@@ -85,7 +85,7 @@ export function RecipePage() {
 
   return <section className="recipe-catalog recipe-list-catalog" lang={language}>
     <PageIntro
-      title={ko ? '다음주엔 뭘 해줄까?' : 'Gotta eat something tasty tomorrow too'}
+      title={ko ? <>다음주엔<span className="recipe-list-title-second-line"> 뭘 해줄까?</span></> : 'Gotta eat something tasty tomorrow too'}
       description={ko ? '' : 'Find the recipe you’re craving with categories and search.'}
       titleImage={{ src: `${import.meta.env.BASE_URL}images/라마얼굴만동동 (윙크).png`, alt: ko ? '윙크하는 라마 얼굴' : 'Winking llama face' }}
     />

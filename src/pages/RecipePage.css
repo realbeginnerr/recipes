@@ -36,6 +36,14 @@
 @media (min-width: 1440px) { .recipe-catalog .recipe-grid, .catalog-skeletons { grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); } }
 
 @media (max-width: 767px) {
+  .recipe-list-catalog .catalog-intro,
+  .recipe-list-catalog .catalog-intro__inner > div,
+  .recipe-list-catalog .catalog-intro__title-image { min-height: 120px; }
+  .recipe-list-catalog .catalog-intro__title-with-image h1 { padding-block: 12px; }
+  .recipe-list-catalog:lang(ko) .catalog-intro__inner > div { grid-template-columns: minmax(0, 1fr) clamp(96px, 30vw, 160px); }
+  .recipe-list-catalog:lang(ko) .catalog-intro__title-image { width: 100%; }
+  .recipe-list-catalog:lang(ko) .catalog-intro__title-with-image h1 { font-size: clamp(24px, 6vw, 32px); white-space: nowrap; }
+  .recipe-list-title-second-line { display: block; }
   .recipe-list-catalog .recipe-grid,
   .recipe-list-catalog .catalog-skeletons { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
   .recipe-list-catalog .recipe-card__footer { padding: 12px; }

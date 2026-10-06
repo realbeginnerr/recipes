@@ -6,6 +6,14 @@ import path from 'path'
 export default defineConfig({
   base: '/recipes/',
   plugins: [react(), tailwindcss()],
+  css: {
+    preprocessorOptions: {
+      scss: {
+        // Carbon's Sass dependencies still use deprecated syntax.
+        quietDeps: true,
+      },
+    },
+  },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
