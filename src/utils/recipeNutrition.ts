@@ -5,7 +5,7 @@ import { amountToGrams, calculateMacros } from './nutrition'
 export function recipeMealMacros(recipe: Recipe) {
   const totals = { carbs: 0, protein: 0, fat: 0 }
   const divisions = Math.max(1, recipe.divisionCount ?? 4)
-  const sides: RecipeItem[] = recipe.sideItems?.length ? recipe.sideItems : [{ ingredientId: 'multigrain-rice', defaultAmount: 150, defaultUnit: 'g' }]
+  const sides: RecipeItem[] = recipe.sideItems ?? []
   for (const [items, divisor] of [[recipe.items, divisions], [sides, 1]] as const) {
     for (const item of items) {
       const ingredient = ingredientById.get(item.ingredientId === '__multigrain_rice__' ? 'multigrain-rice' : item.ingredientId)

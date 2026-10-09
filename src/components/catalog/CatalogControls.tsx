@@ -9,13 +9,16 @@ import './CatalogControls.css'
 
 type Option<T extends string> = { value: T; label: string }
 
-export function PageIntro({ title, description, action, titleImage }: {
+export function PageIntro({ title, description, action, titleImage, backgroundImage }: {
   title: ReactNode
   description: string
   action?: { to: string; label: string; subtle?: boolean }
   titleImage?: { src: string; alt: string }
+  backgroundImage?: string
 }) {
-  return <header className="catalog-intro"><div className="catalog-container catalog-intro__inner">
+  return <header className={`catalog-intro${backgroundImage ? ' catalog-intro--photo' : ''}`}>
+    {backgroundImage && <div className="catalog-intro__background" aria-hidden="true" style={{ backgroundImage: `linear-gradient(rgb(0 0 0 / 30%), rgb(0 0 0 / 30%)), url("${backgroundImage}")` }} />}
+    <div className="catalog-container catalog-intro__inner">
     <div>{titleImage ? <div className="catalog-intro__title-with-image"><h1>{title}</h1><img className="catalog-intro__title-image" src={titleImage.src} alt={titleImage.alt} /></div> : <h1>{title}</h1>}{description && <p>{description}</p>}</div>
     {action && <Button nativeButton={false} render={<Link to={action.to} />} variant={action.subtle ? 'link' : 'default'} className={action.subtle ? 'catalog-intro__subtle-action' : 'catalog-primary'}>{!action.subtle && <span aria-hidden="true">＋</span>}{action.label}</Button>}
   </div></header>

@@ -15,7 +15,7 @@ import { useLanguage } from '../context/LanguageContext'
 import { useAdmin } from '../context/AdminContext'
 import { ingredientById } from '../data/ingredientCache'
 import { recipes as staticRecipes } from '../data/recipe'
-import { loadIngredientsFromFirestore } from '../services/ingredientService'
+import { getIngredientById, loadIngredientsFromFirestore } from '../services/ingredientService'
 import { loadRecipesFromFirestore, mergeStaticAndFirestoreRecipes } from '../services/recipeService'
 import { amountToGrams, calculateMacros, convertUnit } from '../utils/nutrition'
 import { resolveRecipeImage } from '../utils/recipeImage'
@@ -44,10 +44,7 @@ function TableNutritionSummary({ total }: { total: Macros }) {
 
 function RecipeImageGallery({ recipe, name, ko }: { recipe: Recipe; name: string; ko: boolean }) {
   const primary = resolveRecipeImage(recipe)
-  // Temporary gallery preview: repeat the current Jjajang image five times.
-  const images = (recipe.nameKo === '짜장밥' && primary
-    ? Array<string>(5).fill(primary)
-    : [...new Set([primary, ...(recipe.imageUrls ?? [])].filter(url => typeof url === 'string' && url.trim()))]).slice(0, 5)
+  const images = [...new Set([primary, ...(recipe.imageUrls ?? [])].filter(url => typeof url === 'string' && url.trim()))].slice(0, 5)
   const [selected, setSelected] = useState(0)
   const [open, setOpen] = useState(false)
   const touchStart = useRef<{ x: number; y: number } | null>(null)
@@ -101,6 +98,16 @@ function RecipeNutrition({ recipe }: { recipe: Recipe }) {
   const [sides, setSides] = useState<RecipeRowState[]>(() => (recipe.sideItems ?? []).map(item => ({ ingredientId: item.ingredientId, amount: item.defaultAmount, unit: item.defaultUnit })))
   const [memo] = useState(() => { try { return localStorage.getItem(`recipe-note:${recipe.id}`) ?? recipe.memo ?? '' } catch { return recipe.memo ?? '' } })
   const macros = rows.map(macrosFor)
+  const storageGroups = (['냉장실', '냉동실', '실온보관', ''] as const).map(location => ({
+    location,
+    entries: rows.map((row, index) => ({ row, index })).filter(({ row }) => {
+      const stored = getIngredientById(row.ingredientId)?.storageLocation
+      const assigned = stored && ['냉장실', '냉동실', '실온보관'].includes(stored) ? stored : ''
+      return assigned === location
+    }),
+  })).filter(group => group.entries.length > 0)
+  const storageLabels = { 냉장실: 'Fridge', 냉동실: 'Freezer', 실온보관: 'Room temperature', '': 'Unspecified' }
+  const storageIcons = { 냉장실: '🗄️', 냉동실: '❄️', 실온보관: '🧂', '': '❓' }
   const total = sum(macros)
   const portion = { carbs: total.carbs / divisions, protein: total.protein / divisions, fat: total.fat / divisions }
   const meal = sum([portion, ...sides.map(macrosFor)])
@@ -139,7 +146,10 @@ function RecipeNutrition({ recipe }: { recipe: Recipe }) {
         </div>
       </header>
       <section className="detail-section" aria-labelledby="whole-recipe-title"><div className="detail-section-heading"><h2 id="whole-recipe-title">{ko ? '전체 재료' : 'All ingredients'}</h2></div>
-      <NutritionTable total={total} labelledBy="whole-recipe-title">{rows.map((row, index) => <tr key={`${row.ingredientId}-${index}`}><td>{label(ingredientFor(row.ingredientId), row.ingredientId)}</td>{quantityCells(row, index)}<MacroCells values={macros[index]} /></tr>)}</NutritionTable>
+      <NutritionTable total={total} labelledBy="whole-recipe-title">{storageGroups.flatMap(({ location, entries }) => [
+        <tr key={`storage-${location}`} className="detail-storage-group"><th colSpan={6}><span className="detail-storage-icon" aria-hidden="true">{storageIcons[location]}</span>{ko ? location || '미지정' : storageLabels[location]}</th></tr>,
+        ...entries.map(({ row, index }) => <tr key={`${row.ingredientId}-${index}`}><td>{label(ingredientFor(row.ingredientId), row.ingredientId)}</td>{quantityCells(row, index)}<MacroCells values={macros[index]} /></tr>),
+      ])}</NutritionTable>
       <TableNutritionSummary total={total} />
       </section>
       <section className="detail-section" aria-labelledby="meal-title">

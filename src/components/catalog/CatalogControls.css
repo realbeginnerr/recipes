@@ -1,4 +1,7 @@
 .catalog-intro { background: #F6F5F1; padding: 48px 0 40px; }
+.catalog-intro--photo { position: relative; isolation: isolate; overflow: hidden; background: #391A0A; }
+.catalog-intro__background { position: absolute; z-index: -1; inset: -24px; background-size: cover; background-position: center; background-repeat: no-repeat; filter: blur(5px); }
+.catalog-intro.catalog-intro--photo h1, .catalog-intro.catalog-intro--photo p { color: #FFFFFF; }
 .catalog-intro__inner { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; text-align: center; }
 .catalog-intro h1 { font-family: var(--font-display); font-weight: 400; font-synthesis: none; font-size: clamp(28px, 4vw, 30px); line-height: 1.5; margin: 0 0 8px; }
 .catalog-intro__title-with-image { display: flex; align-items: center; justify-content: center; gap: 12px; }

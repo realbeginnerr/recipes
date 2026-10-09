@@ -18,5 +18,6 @@ const localImageMap: Record<string, string> = {
 
 export function resolveRecipeImage(recipe: Recipe): string {
   if (recipe.imageUrl) return recipe.imageUrl
+  if (recipe.imageUrls !== undefined) return recipe.imageUrls.find(url => url.trim()) ?? ''
   return localImageMap[recipe.nameKo] ?? ''
 }

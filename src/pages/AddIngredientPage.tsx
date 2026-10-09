@@ -9,6 +9,19 @@ import { Textarea } from '@/components/ui/textarea'
 import { UnitSelect } from '../components/UnitSelect'
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table'
 import { formatTableNumber } from '../utils/numberFormatting'
+import type { IngredientCategory } from '../utils/ingredientCategory'
+import type { FirestoreIngredient } from '../services/ingredientService'
+
+const CATEGORY_OPTIONS = [
+  ['', '자동 분류', 'Automatic'], ['탄수화물', '탄수화물', 'Carbs'],
+  ['단백질', '단백질', 'Protein'], ['지방', '지방', 'Fats'],
+  ['채소', '채소', 'Vegetables'], ['과일', '과일', 'Fruit'],
+  ['음료', '음료', 'Drinks'], ['기타', '기타', 'Other'],
+] as const
+const STORAGE_OPTIONS = [
+  ['', '미지정', 'Unspecified'], ['냉장실', '냉장실', 'Fridge'],
+  ['냉동실', '냉동실', 'Freezer'], ['실온보관', '실온보관', 'Room temperature'],
+] as const
 
 const KO_TO_EN_UNIT: Record<string, string> = {
   g: 'oz', ml: 'oz', '컵': 'cup', '개': 'each', '캔': 'can', '팩': 'pack', '꼬집': 'pinch',
@@ -47,9 +60,12 @@ type AiRow = {
 type ManualRow = {
   nameKo: string; amount: string; unit: string
   carbs: string; protein: string; fat: string
+  imageUrl: string
+  category: IngredientCategory | ''
+  storageLocation: NonNullable<FirestoreIngredient['storageLocation']>
 }
 
-const EMPTY_MANUAL: ManualRow = { nameKo: '', amount: '100', unit: 'g', carbs: '', protein: '', fat: '' }
+const EMPTY_MANUAL: ManualRow = { nameKo: '', amount: '100', unit: 'g', carbs: '', protein: '', fat: '', imageUrl: '', category: '', storageLocation: '' }
 
 const AI_PROMPT = `아래 식재료들의 영양 정보를 알려줘.
 형식: 식재료명(한글)/기준량/단위/탄수화물(g)/단백질(g)/지방(g)
@@ -121,11 +137,18 @@ export function AddIngredientPage() {
   async function handleSaveManual() {
     const valid = manualRows.filter((r) => r.nameKo.trim() && r.carbs && r.protein && r.fat)
     if (valid.length === 0) { showToast(isKo ? '입력 내용을 확인해주세요.' : 'Check your input.', 'error'); return }
+    if (valid.some(row => {
+      if (!row.imageUrl.trim()) return false
+      try { return !['http:', 'https:'].includes(new URL(row.imageUrl.trim()).protocol) } catch { return true }
+    })) {
+      showToast(isKo ? '이미지 링크는 http 또는 https URL로 입력해주세요.' : 'Enter an http or https image URL.', 'error')
+      return
+    }
     setSaving(true)
     try {
       for (const row of valid) {
         const nameEn = await translateKoToEn(row.nameKo)
-        await saveIngredientToFirestore({ name: nameEn.toLowerCase(), nameKo: row.nameKo, baseAmount: Number.parseFloat(row.amount) || 100, baseUnit: row.unit || 'g', carbs: Number.parseFloat(row.carbs) || 0, protein: Number.parseFloat(row.protein) || 0, fat: Number.parseFloat(row.fat) || 0 })
+        await saveIngredientToFirestore({ name: nameEn.toLowerCase(), nameKo: row.nameKo, baseAmount: Number.parseFloat(row.amount) || 100, baseUnit: row.unit || 'g', carbs: Number.parseFloat(row.carbs) || 0, protein: Number.parseFloat(row.protein) || 0, fat: Number.parseFloat(row.fat) || 0, ...(row.imageUrl.trim() ? { imageUrl: row.imageUrl.trim() } : {}), ...(row.category ? { category: row.category } : {}), storageLocation: row.storageLocation })
       }
       showToast(isKo ? '저장되었습니다.' : 'Saved!', 'success')
       setManualRows([{ ...EMPTY_MANUAL }])
@@ -295,6 +318,9 @@ export function AddIngredientPage() {
             <TableHead>{isKo ? '탄수화물' : 'Carbs'}</TableHead>
             <TableHead>{isKo ? '단백질' : 'Protein'}</TableHead>
             <TableHead>{isKo ? '지방' : 'Fat'}</TableHead>
+            <TableHead>{isKo ? '이미지 링크 (선택)' : 'Image URL (optional)'}</TableHead>
+            <TableHead>{isKo ? '분류 태그' : 'Category'}</TableHead>
+            <TableHead>{isKo ? '보관 장소' : 'Storage location'}</TableHead>
             <TableHead />
           </TableRow>
         </TableHeader>
@@ -307,6 +333,17 @@ export function AddIngredientPage() {
               <TableCell><Input type="number" className="h-7 w-20 text-sm" min={0} step={0.1} placeholder="0" value={row.carbs} onChange={(e) => handleManualRowChange(i, 'carbs', e.target.value)} /></TableCell>
               <TableCell><Input type="number" className="h-7 w-20 text-sm" min={0} step={0.1} placeholder="0" value={row.protein} onChange={(e) => handleManualRowChange(i, 'protein', e.target.value)} /></TableCell>
               <TableCell><Input type="number" className="h-7 w-20 text-sm" min={0} step={0.1} placeholder="0" value={row.fat} onChange={(e) => handleManualRowChange(i, 'fat', e.target.value)} /></TableCell>
+              <TableCell><Input type="url" className="h-7 min-w-48 text-sm" aria-label={isKo ? `${i + 1}번째 식재료 이미지 링크` : `Ingredient ${i + 1} image URL`} value={row.imageUrl} placeholder="https://..." onChange={(e) => handleManualRowChange(i, 'imageUrl', e.target.value)} /></TableCell>
+              <TableCell>
+                <div className="flex min-w-64 flex-wrap gap-2" role="group" aria-label={isKo ? `${i + 1}번째 식재료 분류` : `Ingredient ${i + 1} category`}>
+                  {CATEGORY_OPTIONS.map(([value, ko, en]) => <Button key={value} type="button" variant="filter" size="compact" aria-pressed={row.category === value} disabled={saving} onClick={() => handleManualRowChange(i, 'category', value)}>{isKo ? ko : en}</Button>)}
+                </div>
+              </TableCell>
+              <TableCell>
+                <div className="flex min-w-56 flex-wrap gap-2" role="group" aria-label={isKo ? `${i + 1}번째 식재료 보관 장소` : `Ingredient ${i + 1} storage location`}>
+                  {STORAGE_OPTIONS.map(([value, ko, en]) => <Button key={value} type="button" variant="filter" size="compact" aria-pressed={row.storageLocation === value} disabled={saving} onClick={() => handleManualRowChange(i, 'storageLocation', value)}>{isKo ? ko : en}</Button>)}
+                </div>
+              </TableCell>
               <TableCell className="edit-inline__delete-cell">
                 {manualRows.length > 1 && <Button type="button" variant="ghost" size="icon-sm" className="text-muted-foreground  " onClick={() => setManualRows((p) => p.filter((_, j) => j !== i))}>✕</Button>}
               </TableCell>

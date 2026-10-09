@@ -150,6 +150,7 @@ export function AddRecipePage() {
   const [recipeName, setRecipeName] = useState('')
   const [recipeNameKo, setRecipeNameKo] = useState('')
   const [recipeLink, setRecipeLink] = useState('')
+  const [recipeImageUrl, setRecipeImageUrl] = useState('')
   const [categories, setCategories] = useState<RecipeCategory[]>([])
   const [pastedText, setPastedText] = useState('')
   const [resolvedRows, setResolvedRows] = useState<ResolvedRow[]>([])
@@ -416,6 +417,14 @@ export function AddRecipePage() {
     if (!recipeName.trim()) { setNameError(isKo ? '레시피 이름(영문)을 입력해주세요.' : 'Please enter a recipe name (EN).'); hasNameError = true } else setNameError('')
     if (!recipeNameKo.trim()) { setNameKoError(isKo ? '레시피 이름(한글)을 입력해주세요.' : 'Please enter a recipe name (KO).'); hasNameError = true } else setNameKoError('')
     if (hasNameError) return
+    if (recipeImageUrl.trim()) {
+      try {
+        if (!['http:', 'https:'].includes(new URL(recipeImageUrl.trim()).protocol)) throw new Error('Invalid image URL')
+      } catch {
+        showToast(isKo ? '이미지 링크는 http 또는 https URL로 입력해주세요.' : 'Enter an http or https image URL.', 'error')
+        return
+      }
+    }
     if (resolvedRows.some((r) => r.isNew && (!r.carbs || !r.protein || !r.fat))) {
       showToast(isKo ? '새 식재료의 영양소를 입력해주세요.' : 'Enter nutrition for new ingredients.', 'error')
       return
@@ -446,7 +455,7 @@ export function AddRecipePage() {
         name: recipeName.trim(),
         nameKo: recipeNameKo.trim(),
         categories: categories.length ? categories : ['기타'],
-        imageUrl: '',
+        imageUrl: recipeImageUrl.trim(),
         link: recipeLink.trim(),
         memo: '',
         tasteRating: 4,
@@ -467,6 +476,7 @@ export function AddRecipePage() {
       setRecipeName('')
       setRecipeNameKo('')
       setRecipeLink('')
+      setRecipeImageUrl('')
       setCategories([])
       setPastedText('')
       setResolvedRows([])
@@ -846,6 +856,11 @@ export function AddRecipePage() {
               onChange={(e) => setRecipeLink(e.target.value)}
               placeholder="https://..."
             />
+          </div>
+
+          <div className="edit-inline__link-field">
+            <label htmlFor="recipe-image-url" className="edit-inline__link-label">{isKo ? '이미지 링크 (선택)' : 'Image URL (optional)'}</label>
+            <Input id="recipe-image-url" type="url" value={recipeImageUrl} onChange={(e) => setRecipeImageUrl(e.target.value)} placeholder="https://..." disabled={saving} />
           </div>
 
           {(() => {

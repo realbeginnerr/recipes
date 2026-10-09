@@ -3,7 +3,16 @@ import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const root = fileURLToPath(new URL('../', import.meta.url))
-const images = new Set(await readdir(path.join(root, 'public/images')))
+const imageRoot = path.join(root, 'public/images')
+const images = new Set()
+async function collectImages(directory) {
+  for (const entry of await readdir(directory, { withFileTypes: true })) {
+    const filename = path.join(directory, entry.name)
+    if (entry.isDirectory()) await collectImages(filename)
+    else images.add(path.relative(imageRoot, filename).split(path.sep).join('/'))
+  }
+}
+await collectImages(imageRoot)
 const missing = []
 let checked = 0
 

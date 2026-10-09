@@ -1,6 +1,6 @@
 import type { Ingredient } from '../types'
 
-export type IngredientCategory = '탄수화물' | '단백질' | '지방' | '채소' | '과일' | '기타'
+export type IngredientCategory = '탄수화물' | '단백질' | '지방' | '채소' | '과일' | '음료' | '기타'
 
 // Classify the food itself, not a brand, an English substring, or the largest
 // macro in a small serving. Specific processed foods precede their ingredients.
@@ -20,12 +20,13 @@ export function reviewedIngredientCategory(ingredient: Pick<Ingredient, 'name' |
 }
 
 export function ingredientCategory(ingredient: Pick<Ingredient, 'name' | 'nameKo'>, saved?: string, reference?: string): IngredientCategory {
+  if (saved && ['탄수화물', '단백질', '지방', '채소', '과일', '음료', '기타'].includes(saved)) return saved as IngredientCategory
   const reviewed = reviewedIngredientCategory(ingredient)
   if (reviewed) return reviewed
   for (const category of [saved, reference]) {
     if (category === '채소류') return '채소'
     if (category === '고기류') return '단백질'
-    if (category && ['탄수화물', '단백질', '지방', '채소', '과일', '기타'].includes(category)) return category as IngredientCategory
+    if (category && ['탄수화물', '단백질', '지방', '채소', '과일', '음료', '기타'].includes(category)) return category as IngredientCategory
   }
   return '기타'
 }

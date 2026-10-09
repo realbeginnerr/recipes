@@ -1,5 +1,6 @@
-import { useEffect, useState, useRef } from 'react'
-import { ArrowLeftRight, ImagePlus } from 'lucide-react'
+import { RecipeImagesEditor, recipeImageDrafts, type ImageDraft } from './RecipeImagesEditor'
+import { useState, useRef } from 'react'
+import { ArrowLeftRight } from 'lucide-react'
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
 import { useLanguage } from '../context/LanguageContext'
 import { useAdmin } from '../context/AdminContext'
@@ -74,9 +75,8 @@ export function RecipeTable({
   const [localRecipe, setLocalRecipe] = useState(recipe)
   const activeRecipe = localRecipe
   const [isEditing, setIsEditing] = useState(defaultEditing)
-  const [editImageUrl, setEditImageUrl] = useState(activeRecipe.imageUrl)
-  const [imageFile, setImageFile] = useState<File | null>(null)
-  const [imagePreviewUrl, setImagePreviewUrl] = useState('')
+  const [editImages, setEditImages] = useState<ImageDraft[]>(() => recipeImageDrafts(activeRecipe))
+  const imageFile = editImages.some(image => image.file)
   const [editLink, setEditLink] = useState(activeRecipe.link ?? '')
   const [editItems, setEditItems] = useState<RecipeItem[]>(() => activeRecipe.items.map(item => {
     const row = defaultEditing ? rows.find(value => value.ingredientId === item.ingredientId) : undefined
@@ -102,22 +102,9 @@ export function RecipeTable({
   const [isGuestSaveModalOpen, setIsGuestSaveModalOpen] = useState(false)
   const [isRecommendedInfoOpen, setIsRecommendedInfoOpen] = useState(false)
   const [newlyAddedIds, setNewlyAddedIds] = useState<Set<string>>(new Set())
-  const imageInputRef = useRef<HTMLInputElement>(null)
-
-  useEffect(() => {
-    if (!imageFile) {
-      setImagePreviewUrl('')
-      return
-    }
-    const objectUrl = URL.createObjectURL(imageFile)
-    setImagePreviewUrl(objectUrl)
-    return () => URL.revokeObjectURL(objectUrl)
-  }, [imageFile])
-
   function startEditing() {
     if (isEditing) return
-    setEditImageUrl(activeRecipe.imageUrl)
-    setImageFile(null)
+    setEditImages(recipeImageDrafts(activeRecipe))
     setEditLink(activeRecipe.link ?? '')
     const regularItems = activeRecipe.items.map((item) => {
       const row = rows?.find((r) => r.ingredientId === item.ingredientId)
@@ -134,14 +121,17 @@ export function RecipeTable({
 
   function handleCancel() {
     setDivisionInput(String(activeRecipe.divisionCount ?? divisionCount))
-    setEditImageUrl(activeRecipe.imageUrl)
-    setImageFile(null)
+    setEditImages(recipeImageDrafts(activeRecipe))
     setNewlyAddedIds(new Set())
     setIsEditing(false)
   }
 
   async function handleSave() {
     if (isSaving) return
+    if (!Number.isSafeInteger(Number(divisionInput)) || Number(divisionInput) < 1) {
+      showToast(language === 'ko' ? '기본 등분 수는 1 이상의 정수로 입력해주세요.' : 'Default portions must be a positive integer.', 'error')
+      return
+    }
     const riceItem = editSideItems.find((i) => i.ingredientId === MULTIGRAIN_ID)
     if (riceItem) {
       onMultigrainRiceAmountChange(riceItem.defaultAmount)
@@ -150,7 +140,7 @@ export function RecipeTable({
     const parsedDivision = Number.parseInt(divisionInput, 10)
     const validDivision = !Number.isNaN(parsedDivision) && parsedDivision > 0 ? parsedDivision : divisionCount
     onDivisionCountChange(validDivision)
-    const updated = { ...activeRecipe, name: editName.trim() || activeRecipe.name, nameKo: editNameKo.trim() || activeRecipe.nameKo, imageUrl: editImageUrl, link: editLink, items: editItems, sideItems: editSideItems, memo: editMemo, tasteRating: editTasteRating, divisionCount: validDivision }
+    const updated = { ...activeRecipe, name: editName.trim() || activeRecipe.name, nameKo: editNameKo.trim() || activeRecipe.nameKo, imageUrl: editImages.map(image => image.url.trim()).filter(Boolean)[0] ?? '', imageUrls: editImages.map(image => image.url.trim()).filter(Boolean).slice(1), link: editLink, items: editItems, sideItems: editSideItems, memo: editMemo, tasteRating: editTasteRating, divisionCount: validDivision }
     if (canSave) {
       setIsSaving(true)
       showToast(
@@ -160,9 +150,15 @@ export function RecipeTable({
         'info',
       )
       try {
-        if (imageFile) {
+        const savedImages: string[] = []
+        for (const [index, image] of editImages.entries()) {
+          if (!image.file) {
+            if (image.url.trim()) savedImages.push(image.url.trim())
+            continue
+          }
+          const imageFile = image.file
           const safeFileName = imageFile.name.replace(/[^\w.-]/g, '_')
-          const imageRef = ref(storage, `recipes/${activeRecipe.id}/${Date.now()}-${safeFileName}`)
+          const imageRef = ref(storage, `recipes/${activeRecipe.id}/${Date.now()}-${index}-${safeFileName}`)
           // A missing bucket can fail browser preflight and leave the SDK retrying.
           // Check that endpoint before starting an upload; this writes no data.
           try {
@@ -178,8 +174,10 @@ export function RecipeTable({
             throw Object.assign(new Error('Storage endpoint could not be reached', { cause: error }), { code: 'storage/network-unavailable' })
           }
           const uploadedImage = await uploadBytes(imageRef, imageFile, { contentType: imageFile.type })
-          updated.imageUrl = await getDownloadURL(uploadedImage.ref)
+          savedImages.push(await getDownloadURL(uploadedImage.ref))
         }
+        updated.imageUrl = savedImages[0] ?? ''
+        updated.imageUrls = savedImages.slice(1)
         showToast(language === 'ko' ? '레시피를 데이터베이스에 저장하는 중입니다...' : 'Saving the recipe to the database...', 'info')
         await onSaveRecipe(updated)
         showToast(imageFile
@@ -211,8 +209,7 @@ export function RecipeTable({
       setIsGuestSaveModalOpen(true)
     }
     setLocalRecipe(updated)
-    setEditImageUrl(updated.imageUrl)
-    setImageFile(null)
+    setEditImages(recipeImageDrafts(updated))
     setNewlyAddedIds(new Set())
     setIsEditing(false)
   }
@@ -480,41 +477,15 @@ export function RecipeTable({
       )}
 
       {!isCollapsed && isEditing && (
-        <div className="edit-inline__image-field">
-          <label className="edit-inline__link-label">
-            {language === 'ko' ? '레시피 사진' : 'Recipe photo'}
+        <RecipeImagesEditor images={editImages} onChange={setEditImages} disabled={isSaving} />
+      )}
+
+      {!isCollapsed && isEditing && (
+        <div className="edit-inline__link-field">
+          <label htmlFor={`recipe-default-divisions-${activeRecipe.id}`} className="edit-inline__link-label">
+            {language === 'ko' ? '기본 등분 수' : 'Default portions'}
           </label>
-          <div className="edit-inline__image-controls">
-            <Button type="button" variant="outline" size="sm" onClick={() => imageInputRef.current?.click()} disabled={isSaving}>
-              <ImagePlus aria-hidden="true" />
-              {language === 'ko' ? '기기에서 사진 선택' : 'Choose photo'}
-            </Button>
-            {(imageFile || editImageUrl) && <Button type="button" variant="ghost" size="sm" onClick={() => { setImageFile(null); setEditImageUrl('') }} disabled={isSaving}>
-              {language === 'ko' ? '사진 제거' : 'Remove photo'}
-            </Button>}
-            <input
-              ref={imageInputRef}
-              className="edit-inline__image-input"
-              type="file"
-              accept="image/*"
-              onChange={(event) => {
-                const file = event.target.files?.[0]
-                if (!file) return
-                if (!file.type.startsWith('image/') || file.size > 10 * 1024 * 1024) {
-                  showToast(
-                    language === 'ko' ? '10MB 이하의 이미지 파일을 선택해 주세요.' : 'Choose an image under 10 MB.',
-                    'error',
-                  )
-                  event.target.value = ''
-                  return
-                }
-                setImageFile(file)
-                event.target.value = ''
-              }}
-            />
-            {imageFile && <span className="edit-inline__image-filename">{imageFile.name}</span>}
-          </div>
-          {(imagePreviewUrl || editImageUrl) && <img className="edit-inline__image-preview" src={imagePreviewUrl || editImageUrl} alt={language === 'ko' ? '레시피 사진 미리보기' : 'Recipe photo preview'} />}
+          <Input id={`recipe-default-divisions-${activeRecipe.id}`} type="number" min={1} step={1} value={divisionInput} onChange={(event) => setDivisionInput(event.target.value)} disabled={isSaving} />
         </div>
       )}
 

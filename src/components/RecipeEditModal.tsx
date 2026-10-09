@@ -1,3 +1,4 @@
+import { RecipeImagesEditor, recipeImageDrafts } from './RecipeImagesEditor'
 import { useState } from 'react'
 import { ingredientById, ingredients } from '../data/ingredientCache'
 import { useLanguage } from '../context/LanguageContext'
@@ -23,7 +24,7 @@ type Props = {
 
 export function RecipeEditModal({ recipe, onSave, onClose }: Props) {
   const { language, t } = useLanguage()
-  const [imageUrl, setImageUrl] = useState(recipe.imageUrl)
+  const [images, setImages] = useState(() => recipeImageDrafts(recipe))
   const [items, setItems] = useState<RecipeItem[]>(recipe.items)
   const [addSearch, setAddSearch] = useState('')
 
@@ -68,7 +69,8 @@ export function RecipeEditModal({ recipe, onSave, onClose }: Props) {
   }
 
   function handleSave() {
-    onSave({ ...recipe, imageUrl, items })
+    const urls = images.map(image => image.url.trim()).filter(Boolean)
+    onSave({ ...recipe, imageUrl: urls[0] ?? '', imageUrls: urls.slice(1), items })
   }
 
   return (
@@ -81,22 +83,7 @@ export function RecipeEditModal({ recipe, onSave, onClose }: Props) {
         </DialogHeader>
 
         <div className="space-y-6 py-2">
-          <section className="space-y-2">
-            <label className="text-sm font-medium">이미지 URL</label>
-            <Input
-              type="text"
-              value={imageUrl}
-              onChange={(e) => setImageUrl(e.target.value)}
-              placeholder="https://..."
-            />
-            {imageUrl && (
-              <img
-                src={imageUrl}
-                alt="preview"
-                className="edit-modal__image-preview"
-              />
-            )}
-          </section>
+          <RecipeImagesEditor images={images} onChange={setImages} allowFiles={false} />
 
           <section className="space-y-2">
             <label className="text-sm font-medium">{t.colIngredient}</label>

@@ -19,6 +19,7 @@ export type FirestoreIngredient = {
   imageUrl?: string
   legacyIds?: string[]
   retired?: boolean
+  storageLocation?: '냉장실' | '냉동실' | '실온보관' | ''
   category?: string
   createdAt?: number
   gramsPerTbsp?: number

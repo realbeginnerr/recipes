@@ -50,6 +50,9 @@
 .detail-divisions input[type=number] { width: 52px; }
 .detail-divisions > span { color: #899591; }
 .detail-nutrition-summary { margin-top: 16px; }
+.nutrition-detail .site-table.site-table tr.detail-storage-group { height: auto; }
+.detail-storage-icon { display: inline-block; margin-right: 6px; font-size: 12px; line-height: 1; vertical-align: middle; }
+.nutrition-detail .site-table.site-table tbody tr.detail-storage-group > th { height: auto; text-align: left; background: var(--table-header-background); color: var(--table-header-color); font-weight: 600; }
 .detail-notes { margin-top: 32px; }
 .detail-notes p { margin: 0; max-width: 720px; font-size: 15px; color: #122B22; line-height: 1.75; letter-spacing: -.02em; white-space: pre-wrap; overflow-wrap: anywhere; }
 

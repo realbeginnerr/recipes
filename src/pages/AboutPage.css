@@ -8,12 +8,15 @@
 .service-page:lang(en) { font-family: 'Inter', sans-serif; letter-spacing: 0; }
 .service-page:lang(en) h1, .service-page:lang(en) h2 { letter-spacing: -0.02em; }
 .service-page a:focus-visible { outline: 3px solid #4AA660; outline-offset: 6px; }
-.story-hero { position: relative; min-height: 90svh; display: flex; align-items: flex-start; justify-content: center; overflow: hidden; background: #F7F3E7; }
-.story-hero > img { position: absolute; top: 0; left: 50%; width: auto; max-width: none; height: 100%; transform: translateX(-50%); }
-.story-hero-content { position: relative; z-index: 1; width: 100%; max-width: 1100px; margin: 0 auto; padding: 120px 24px 80px; text-align: center; }
+.story-hero { position: relative; min-height: 90svh; display: flex; align-items: center; justify-content: center; overflow: hidden; background-color: #391A0A; background-size: cover; background-position: center; background-repeat: no-repeat; }
+.story-hero::before { content: ''; position: absolute; inset: 0; background: rgb(0 0 0 / 56%); pointer-events: none; }
+.story-hero-content { position: relative; z-index: 1; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); column-gap: 32px; width: 100%; max-width: 1584px; min-width: 0; margin: 0 auto; padding: clamp(64px, 10vw, 120px) 16px; text-align: center; }
+.story-hero-content > * { grid-column: 1 / -1; min-width: 0; }
+@media (min-width: 672px) { .story-hero-content { grid-template-columns: repeat(8, minmax(0, 1fr)); } }
+@media (min-width: 1056px) { .story-hero-content { grid-template-columns: repeat(16, minmax(0, 1fr)); } }
 .service-page .story-eyebrow { font-size: 14px; font-weight: 500; line-height: 1.5; letter-spacing: 2px; text-transform: uppercase; color: #255A46; margin-bottom: 24px; }
 .story-hero .story-eyebrow { color: var(--primary); font-size: 14px; margin-bottom: 36px; }
-.story-hero h3 { font-family: var(--font-display); font-weight: 400; font-synthesis: none; letter-spacing: -0.02em; color: var(--primary); font-size: clamp(26px, 4.5vw, 52px); line-height: 1.55; margin: 0 0 20px; overflow-wrap: break-word; }
-.story-hero .story-intro { font-size: 16px; color: var(--primary); line-height: 1.8; max-width: 540px; margin: 0 auto 52px; white-space: pre-line; }
+.story-hero h3 { font-family: var(--font-display); font-weight: 400; font-synthesis: none; letter-spacing: -0.02em; color: #FFFFFF; font-size: clamp(26px, 4.5vw, 52px); line-height: 1.55; margin: 0 0 20px; overflow-wrap: break-word; }
+.story-hero .story-intro { font-size: 16px; color: #FFFFFF; line-height: 1.8; max-width: 540px; margin: 0 auto; white-space: pre-line; overflow-wrap: anywhere; }
 .story-scroll { display: flex; flex-direction: column; align-items: center; gap: 8px; color: var(--primary); font-size: 14px; letter-spacing: 1.5px; text-transform: uppercase; text-decoration: none; }
 .story-scroll span { width: 1px; height: 48px; background: currentColor; }

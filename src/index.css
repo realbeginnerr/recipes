@@ -24,13 +24,6 @@ table[data-ingredient-hug] td:first-child:not([colspan]) > .table-cell-content *
   background: #888;
 }
 
-@font-face {
-  font-family: 'OwnglyphYuntaeng';
-  src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/2608211801@font-160/font-160/온글잎 윤탱체.woff2') format('woff2');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
 
 /* Keep Hangul sans-serif even inside mixed-language display headings. */
 @font-face {
@@ -53,7 +46,7 @@ table[data-ingredient-hug] td:first-child:not([colspan]) > .table-cell-content *
   --gutter: 16px;
   --section-space: 96px;
   --font-body: 'Pretendard Hangul', 'Inter', 'Pretendard Variable', sans-serif;
-  --font-display: 'OwnglyphYuntaeng', 'Pretendard Variable', sans-serif;
+  --font-display: 'Gowun Batang', 'Pretendard Variable', serif;
   --font-numeric: 'Inter', sans-serif;
   --focus-ring: 0 0 0 3px rgba(37, 90, 70, 0.15);
 }

@@ -8,6 +8,7 @@ import { LoadingState } from '../components/feedback/ContentState'
 import { UnitSelect } from '../components/UnitSelect'
 import { useLanguage } from '../context/LanguageContext'
 import { ingredientPresentation } from '../data/ingredientPresentation'
+import { ingredientCategory } from '../utils/ingredientCategory'
 import { recipes as staticRecipes } from '../data/recipe'
 import {
   deleteIngredientFromFirestore,
@@ -46,6 +47,7 @@ function initialDraft(ingredient: FirestoreIngredient): IngredientDraft {
     ...(ingredient.imageUrl !== undefined ? { imageUrl: ingredient.imageUrl } : {}),
     ...(ingredient.legacyIds !== undefined ? { legacyIds: ingredient.legacyIds } : {}),
     ...(ingredient.retired !== undefined ? { retired: ingredient.retired } : {}),
+    ...(ingredient.storageLocation !== undefined ? { storageLocation: ingredient.storageLocation } : {}),
     ...(ingredient.category !== undefined ? { category: ingredient.category } : {}),
     ...(ingredient.createdAt !== undefined ? { createdAt: ingredient.createdAt } : {}),
     ...(ingredient.gramsPerTbsp !== undefined ? { gramsPerTbsp: ingredient.gramsPerTbsp } : {}),
@@ -191,6 +193,7 @@ export function IngredientEditPage() {
 
   const reference = ingredientPresentation[draft.nameKo] ?? Object.entries(ingredientPresentation).find(([key]) => draft.nameKo.includes(key))?.[1]
   const previewImage = draft.imageUrl === undefined ? reference?.image : draft.imageUrl || undefined
+  const selectedCategory = ingredientCategory(draft, draft.category, reference?.category)
 
   return <section className="page" style={{ maxWidth: 760, margin: '0 auto', paddingBottom: 64 }}>
     <Button type="button" variant="ghost" size="sm" onClick={() => navigate('/ingredients')}>← {isKo ? '식재료 목록' : 'Ingredients'}</Button>
@@ -215,6 +218,26 @@ export function IngredientEditPage() {
           <UnitSelect value={draft.baseUnit} onValueChange={(value) => setDraft((current) => current ? { ...current, baseUnit: value } : current)} language={language} options={UNIT_OPTIONS} />
         </div>
       </div>
+
+      <fieldset className="space-y-2" disabled={saving}>
+        <legend className="text-sm font-semibold">{isKo ? '식재료 분류' : 'Ingredient category'}</legend>
+        <div className="flex flex-wrap gap-2">
+          {([
+            ['탄수화물', 'Carbs'], ['단백질', 'Protein'], ['지방', 'Fats'],
+            ['채소', 'Vegetables'], ['과일', 'Fruit'], ['음료', 'Drinks'], ['기타', 'Other'],
+          ] as const).map(([value, label]) => <Button key={value} type="button" size="sm" variant={selectedCategory === value ? 'default' : 'outline'} aria-pressed={selectedCategory === value} onClick={() => setDraft(current => current ? { ...current, category: value } : current)}>{isKo ? value : label}</Button>)}
+        </div>
+      </fieldset>
+
+      <fieldset className="space-y-2" disabled={saving}>
+        <legend className="text-sm font-semibold">{isKo ? '보관 장소' : 'Storage location'}</legend>
+        <div className="flex flex-wrap gap-2">
+          {([
+            ['', '미지정', 'Unspecified'], ['냉장실', '냉장실', 'Fridge'],
+            ['냉동실', '냉동실', 'Freezer'], ['실온보관', '실온보관', 'Room temperature'],
+          ] as const).map(([value, labelKo, labelEn]) => <Button key={value} type="button" size="sm" variant={(draft.storageLocation ?? '') === value ? 'default' : 'outline'} aria-pressed={(draft.storageLocation ?? '') === value} onClick={() => setDraft(current => current ? { ...current, storageLocation: value } : current)}>{isKo ? labelKo : labelEn}</Button>)}
+        </div>
+      </fieldset>
 
       <fieldset className="flex flex-col gap-3">
         <legend className="text-sm font-semibold">{isKo ? `탄단지 (기준 ${draft.baseAmount}${draft.baseUnit})` : `Macros (per ${draft.baseAmount} ${draft.baseUnit})`}</legend>

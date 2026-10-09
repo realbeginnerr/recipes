@@ -85,9 +85,9 @@ export function RecipePage() {
 
   return <section className="recipe-catalog recipe-list-catalog" lang={language}>
     <PageIntro
-      title={ko ? <>다음주엔<span className="recipe-list-title-second-line"> 뭘 해줄까?</span></> : 'Gotta eat something tasty tomorrow too'}
+      backgroundImage={`${import.meta.env.BASE_URL}images/service/home-care.png`}
+      title={ko ? '나에게 해준 요리, 해줄 요리' : 'Gotta eat something tasty tomorrow too'}
       description={ko ? '' : 'Find the recipe you’re craving with categories and search.'}
-      titleImage={{ src: `${import.meta.env.BASE_URL}images/라마얼굴만동동 (윙크).png`, alt: ko ? '윙크하는 라마 얼굴' : 'Winking llama face' }}
     />
     <CatalogToolbar>
       <CategoryFilter<RecipeCategory> label={ko ? '레시피 분류' : 'Recipe categories'} value={category.length ? category : ['전체']} options={recipeCategories.map(value => ({ value, label: ko ? value : categoryEnglish[value] }))} onValueChange={value => setCategory(value === '전체' ? [] : [value])} leadingAction={<Button variant="filter" size="compact" nativeButton={false} render={<Link to="/recipe-roulette" />}>{ko ? '랜덤' : 'Random'}</Button>} />

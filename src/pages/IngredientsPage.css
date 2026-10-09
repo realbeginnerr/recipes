@@ -11,7 +11,6 @@
   .ingredient-catalog .catalog-intro__inner > div,
   .ingredient-catalog .catalog-intro__title-image { min-height: 120px; }
   .ingredient-catalog .catalog-intro__title-with-image h1 { padding-block: 12px; }
-  .ingredient-catalog:lang(ko) .catalog-intro__inner > div { grid-template-columns: minmax(0, 1fr) clamp(96px, 30vw, 160px); }
   .ingredient-catalog:lang(ko) .catalog-intro__title-image { width: 100%; }
   .ingredient-catalog:lang(ko) .catalog-intro__title-with-image h1 { font-size: clamp(24px, 6vw, 32px); white-space: nowrap; }
   .ingredient-title-second-line { display: block; }
