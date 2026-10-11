@@ -5,8 +5,9 @@
 .ingredient-macro strong > span { color: #ACB5B2; }
 .ingredient-bar i { display: block; height: 100%; border-radius: inherit; background: #4AA660; }
 .ingredient-macro strong { min-width: 44px; text-align: right; font-family: var(--font-numeric); font-variant-numeric: tabular-nums; letter-spacing: 0; font-size: 14px; font-weight: 400; }
-.catalog-macros { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
-.catalog-macros > div { flex: 1 1 72px; min-width: 0; display: flex; align-items: center; flex-direction: column; padding: 16px 8px 12px; border-radius: 8px; background: #DEE3E1; color: #364B43; }
+.catalog-macros { display: flex; flex-wrap: nowrap; gap: 8px; margin-bottom: 12px; }
+.catalog-macros > div { flex: 1 1 0; min-width: 0; display: flex; align-items: center; flex-direction: column; padding: 16px 8px 12px; border-radius: 8px; background: #DEE3E1; color: #364B43; }
+.catalog-macros strong { white-space: nowrap; }
 .catalog-macros > div:nth-child(2) { background: rgb(37 90 70 / 10%); color: #255A46; }
 .catalog-macros strong { font-family: var(--font-numeric); font-variant-numeric: tabular-nums; font-size: 16px; font-weight: 400; letter-spacing: 0; line-height: 1; }
 .catalog-macros span { font-size: 14px; font-weight: 500; margin-top: 6px; opacity: .8; }

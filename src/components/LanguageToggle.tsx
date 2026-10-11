@@ -26,7 +26,7 @@ export function LanguageToggle() {
           aria-label={option.label}
           className="h-auto w-auto p-1 rounded-md opacity-50 aria-pressed:opacity-100  "
         >
-          <img src={option.icon} alt={option.label} width="22" height="16" />
+          <img src={option.icon} alt={option.label} width="22" height="22" style={{ width: 22, height: 22, boxSizing: 'border-box', borderRadius: 0, border: '1px solid rgba(18, 43, 34, 0.12)', objectFit: 'cover', filter: language === option.value ? 'none' : 'grayscale(1)' }} />
         </ToggleGroupItem>
       ))}
     </ToggleGroup>

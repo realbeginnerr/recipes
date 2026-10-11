@@ -54,5 +54,5 @@ export function ProductDetailPage() {
   }, [slug, isAdmin, authReady, attempt])
   if (loading) return <LoadingState label="상품을 불러오고 있어요." />
   if (!product) return <ContentState error={error} title={error ? '상품을 불러오지 못했어요.' : '현재 공개된 상품을 찾을 수 없어요.'}>{error && <Button onClick={() => setAttempt(value => value + 1)}>다시 시도</Button>}<Link to="/blending-tea">차한잔으로 돌아가기</Link></ContentState>
-  return <div className="product-admin"><header className="product-admin-heading"><Link to="/blending-tea">← 차한잔</Link>{isAdmin && <Button variant="link" onClick={() => requestAccess(`/products/${product.id}/edit`)}>상품 수정</Button>}</header>{isAdmin && (product.draft || product.visibility !== 'public') && <div className="product-notice">관리자 미리보기 · {product.draft ? '임시 저장' : product.visibility === 'scheduled' ? '예약 공개' : '비공개'}</div>}<ProductPreview product={product} settings={settings} /></div>
+  return <div className="product-admin product-detail-page">{isAdmin && (product.draft || product.visibility !== 'public') && <div className="product-notice">관리자 미리보기 · {product.draft ? '임시 저장' : product.visibility === 'scheduled' ? '예약 공개' : '비공개'}</div>}<ProductPreview product={product} settings={settings} mediaFooter={isAdmin && <Button variant="link" className="product-detail-edit" onClick={() => requestAccess(`/products/${product.id}/edit`)}>상품 수정</Button>} /></div>
 }

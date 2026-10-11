@@ -3,7 +3,7 @@ import { ContentState, LoadingState } from '../components/feedback/ContentState'
 import { PageIntro, CatalogToolbar, CategoryFilter, SearchField, SortSelect } from '../components/catalog/CatalogControls'
 import { Button } from '@/components/ui/button'
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { Link, useSearchParams } from 'react-router-dom'
+import { useSearchParams } from 'react-router-dom'
 import { useLanguage } from '../context/LanguageContext'
 import { useSearch } from '../context/SearchContext'
 import { useAdmin } from '../context/AdminContext'
@@ -101,7 +101,7 @@ export function RecipePage({ blendingTea = false }: { blendingTea?: boolean }) {
     <CatalogToolbar>
       {blendingTea
         ? <CategoryFilter<TeaCategory> label={ko ? '차 분류' : 'Tea categories'} value={teaCategory} options={teaCategories.map(value => ({ value, label: ko ? value : teaCategoryEnglish[value] }))} onValueChange={setTeaCategory} />
-        : <CategoryFilter<RecipeCategory> label={ko ? '레시피 분류' : 'Recipe categories'} value={category.length ? category : ['전체']} options={recipeCategories.map(value => ({ value, label: ko ? value : categoryEnglish[value] }))} onValueChange={value => setCategory(value === '전체' ? [] : [value])} leadingAction={<Button variant="filter" size="compact" nativeButton={false} render={<Link to="/recipe-roulette" />}>{ko ? '랜덤' : 'Random'}</Button>} />}
+        : <CategoryFilter<RecipeCategory> label={ko ? '레시피 분류' : 'Recipe categories'} value={category.length ? category : ['전체']} options={recipeCategories.map(value => ({ value, label: ko ? value : categoryEnglish[value] }))} onValueChange={value => setCategory(value === '전체' ? [] : [value])} />}
       <SearchField label={blendingTea ? (ko ? '차 검색' : 'Search tea') : (ko ? `${itemLabel} 검색` : `Search ${itemLabel.toLowerCase()}`)} value={appliedSearch} onValueChange={value => setSearchParams(current => {
         const next = new URLSearchParams(current)
         if (value) next.set('q', value)

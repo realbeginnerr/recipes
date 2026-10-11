@@ -15,22 +15,22 @@ export function AboutPage() {
     <section className="story-hero" aria-labelledby="story-title" style={{ backgroundImage: `url("${import.meta.env.BASE_URL}images/service/home-hero.png")` }}>
       <div className="story-hero-content">
         <h3 id="story-title">{copy.heroFirst && <>{copy.heroFirst}<br /></>}{copy.heroLast}</h3>
-        <p className="story-intro">{copy.introFirst}<br />{copy.introLast}</p>
+        <p className="story-intro">{copy.introFirst}{copy.introLast && <><br />{copy.introLast}</>}</p>
       </div>
     </section>
-    <StorySplit id="story-start" titleId="story-background" title={<>{copy.storyTitleFirst}{copy.storyTitleLast && <><br />{copy.storyTitleLast}</>}</>} eyebrow={copy.storyLabel} image={{ src: `${import.meta.env.BASE_URL}images/service/home-care.png`, alt: copy.tableAlt }}>
-      <p>{copy.story}</p><blockquote>{copy.quote}</blockquote>
+    <StorySplit number="01" id="story-start" titleId="story-background" title={<>{copy.storyTitleFirst}{copy.storyTitleLast && <><br />{copy.storyTitleLast}</>}</>} eyebrow={language === 'ko' ? undefined : copy.storyLabel} image={{ src: `${import.meta.env.BASE_URL}images/service/home-care-updated.png`, alt: copy.tableAlt }}>
+      <p>{copy.story}</p>{copy.quote && <blockquote>{copy.quote}</blockquote>}
     </StorySplit>
-    <StorySection number="01" titleId="story-meeting" title={copy.meetingTitle}>
+    <StorySection number="02" titleId="story-meeting" title={copy.meetingTitle}>
       <p>{copy.meeting}</p>
     </StorySection>
-    <StorySplit number="02" titleId="story-meal" title={copy.mealTitle} tone="dark" imageSide="right" image={{ src: `${import.meta.env.BASE_URL}images/service/home-cooking.png`, alt: copy.bowlsAlt }}>
+    <StorySplit number="03" titleId="story-meal" title={copy.mealTitle} tone="dark" imageSide="right" image={{ src: `${import.meta.env.BASE_URL}images/service/home-cooking.png`, alt: copy.bowlsAlt }}>
       <p>{copy.mealFirst}</p>{'mealLast' in copy && <p>{copy.mealLast}</p>}
     </StorySplit>
-    <StorySection number="03" titleId="story-continue" title={copy.continueTitle} tone="soft">
+    <StorySection number="04" titleId="story-continue" title={copy.continueTitle} tone="soft">
       <p>{copy.continue}</p>
     </StorySection>
-    <StorySection number="04" titleId="story-origin" title={copy.originTitle} banner={{ src: `${import.meta.env.BASE_URL}images/service/home-record-updated.png`, alt: copy.ritualAlt }}>
+    <StorySection number="05" titleId="story-origin" title={copy.originTitle} banner={{ src: `${import.meta.env.BASE_URL}images/service/home-record-letter.png`, alt: copy.ritualAlt }}>
       <p>{copy.origin}</p>
       <div className="story-action"><Button nativeButton={false} render={<Link to="/recipes" onClick={resetHome} />} size="header" className="reference-request">{copy.browse}</Button></div>
     </StorySection>

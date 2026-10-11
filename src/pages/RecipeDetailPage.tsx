@@ -1,6 +1,7 @@
 import { NutritionTable, MacroCells } from '../components/NutritionTable'
 import { useAddPageAccess } from '../components/AddPageAccessProvider'
 import { NutritionSummary } from '../components/NutritionSummary'
+import { StarRating } from '../components/recipe/StarRating'
 import { QuantityUnitCells } from '../components/QuantityUnitCells'
 import { FoodImage } from '../components/FoodImage'
 import { ContentState, LoadingState } from '../components/feedback/ContentState'
@@ -128,24 +129,32 @@ function RecipeNutrition({ recipe }: { recipe: Recipe }) {
   }
 
   return <article className="nutrition-detail reference-container" lang={language}>
-    <div className="detail-topbar">
-      <BackLink />
-      <Button onClick={() => requestAccess(`/recipe/${recipe.id}/edit`)} variant="link" size="content" className="catalog-intro__subtle-action">{ko ? '레시피 수정' : 'Edit recipe'}</Button>
-    </div>
     <div className="detail-layout">
       <header className="detail-heading">
-        <div className="catalog-card-categories detail-image-tags" role="group" aria-label={ko ? '레시피 분류' : 'Recipe categories'}>
-          {getRecipeCategories(recipe).map(category => <span key={category} className="catalog-category">{ko ? category : categoryEnglish[category]}</span>)}
-        </div>
         <RecipeImageGallery recipe={recipe} name={name} ko={ko} />
+        <Button onClick={() => requestAccess(`/recipe/${recipe.id}/edit`)} variant="link" size="content" className="catalog-intro__subtle-action detail-edit-button">{ko ? '레시피 수정' : 'Edit recipe'}</Button>
         <div className="detail-heading-content">
-          <h1 className="recipe-detail-title">{name}</h1>
           <div className="detail-heading-actions">
-            {recipe.link ? <a className="detail-source" href={recipe.link} target="_blank" rel="noopener noreferrer">↗ {ko ? (/instagram/.test(recipe.link) ? '인스타그램 원본 레시피' : /youtu/.test(recipe.link) ? '원본 레시피' : '원본 레시피') : 'Original recipe'}</a> : <span className="detail-source detail-source-empty">↗ {ko ? '원본 레시피 링크' : 'Original recipe link'}</span>}
+            {recipe.link?.trim() && <a className="detail-source" href={recipe.link} target="_blank" rel="noopener noreferrer" aria-label={ko ? '원본 레시피 보기' : 'View original recipe'} title={ko ? '원본 레시피 보기' : 'View original recipe'}>
+              <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 1024 1024" aria-hidden="true" focusable="false">
+                <path d="M0 0h1024v1024H0z" fill="none" />
+                <path fill="currentColor" d="M574 665.4a8.03 8.03 0 0 0-11.3 0L446.5 781.6c-53.8 53.8-144.6 59.5-204 0c-59.5-59.5-53.8-150.2 0-204l116.2-116.2c3.1-3.1 3.1-8.2 0-11.3l-39.8-39.8a8.03 8.03 0 0 0-11.3 0L191.4 526.5c-84.6 84.6-84.6 221.5 0 306s221.5 84.6 306 0l116.2-116.2c3.1-3.1 3.1-8.2 0-11.3zm258.6-474c-84.6-84.6-221.5-84.6-306 0L410.3 307.6a8.03 8.03 0 0 0 0 11.3l39.7 39.7c3.1 3.1 8.2 3.1 11.3 0l116.2-116.2c53.8-53.8 144.6-59.5 204 0c59.5 59.5 53.8 150.2 0 204L665.3 562.6a8.03 8.03 0 0 0 0 11.3l39.8 39.8c3.1 3.1 8.2 3.1 11.3 0l116.2-116.2c84.5-84.6 84.5-221.5 0-306.1M610.1 372.3a8.03 8.03 0 0 0-11.3 0L372.3 598.7a8.03 8.03 0 0 0 0 11.3l39.6 39.6c3.1 3.1 8.2 3.1 11.3 0l226.4-226.4c3.1-3.1 3.1-8.2 0-11.3z" />
+              </svg>
+            </a>}
           </div>
         </div>
       </header>
-      <section className="detail-section" aria-labelledby="whole-recipe-title"><div className="detail-section-heading"><h2 id="whole-recipe-title">{ko ? '전체 재료' : 'All ingredients'}</h2></div>
+      <div className="detail-tables">
+      <div className="detail-title-tags">
+        <div className="detail-title-tags-row">
+        <h1 className="recipe-detail-title">{name}</h1>
+        <div className="catalog-card-categories detail-image-tags" role="group" aria-label={ko ? '레시피 분류' : 'Recipe categories'}>
+          {getRecipeCategories(recipe).map(category => <span key={category} className="catalog-category">{ko ? category : categoryEnglish[category]}</span>)}
+        </div>
+        </div>
+        <StarRating label={ko ? '맛' : 'Taste'} value={recipe.tasteRating ?? 4} showLabel={false} />
+      </div>
+      <section className="detail-section" aria-labelledby="whole-recipe-title"><h2 id="whole-recipe-title" className="sr-only">{ko ? '전체 재료' : 'All ingredients'}</h2>
       <NutritionTable total={total} labelledBy="whole-recipe-title">{storageGroups.flatMap(({ location, entries }) => [
         <tr key={`storage-${location}`} className="detail-storage-group"><th colSpan={6}><span className="detail-storage-icon" aria-hidden="true">{storageIcons[location]}</span>{ko ? location || '미지정' : storageLabels[location]}</th></tr>,
         ...entries.map(({ row, index }) => <tr key={`${row.ingredientId}-${index}`}><td>{label(ingredientFor(row.ingredientId), row.ingredientId)}</td>{quantityCells(row, index)}<MacroCells values={macros[index]} /></tr>),
@@ -165,8 +174,9 @@ function RecipeNutrition({ recipe }: { recipe: Recipe }) {
         })}
       </NutritionTable>
       <TableNutritionSummary total={meal} />
-      <section className="detail-notes"><h2>{ko ? '메모' : 'Notes'}</h2><p>{memo.trim() ? memo : (ko ? '메모 없음' : 'No notes')}</p></section>
+      {memo.trim() && <section className="detail-notes"><h2>{ko ? '메모' : 'Notes'}</h2><p>{memo}</p></section>}
       </section>
+      </div>
     </div>
   </article>
 }

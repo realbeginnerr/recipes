@@ -1,6 +1,5 @@
 import { CatalogTags } from '../catalog/CatalogTags'
 import { FoodImage } from '../FoodImage'
-import { MacroSummary } from '../MacroDisplay'
 import { NutritionSummary } from '../NutritionSummary'
 import { StarRating } from './StarRating'
 import { Link, useNavigate } from 'react-router-dom'
@@ -56,8 +55,8 @@ export function RecipeCard({ recipe, openInNewTab = false, variant = 'recipe' }:
         </div>}
         {variant === 'recipe' && macros && <>
           <div className="recipe-card__rating"><StarRating label={language === 'ko' ? '맛' : 'Taste'} value={recipe.tasteRating ?? 4} showLabel={false} /></div>
-          <MacroSummary macros={macros} variant="recipe" />
-          <NutritionSummary {...macros} perMeal />
+          <p className="recipe-card__macro-grams">{language === 'ko' ? '탄단지(g)' : 'C/P/F(g)'} <span>{Math.round(macros.carbs)} / {Math.round(macros.protein)} / {Math.round(macros.fat)}</span></p>
+          <NutritionSummary {...macros} perMeal showRatio={false} />
         </>}
       </div>
     </>

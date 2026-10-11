@@ -1,4 +1,4 @@
-.ingredient-card { background: #E9EBE8; border-radius: 12px; overflow: hidden; min-width: 0; }
+.ingredient-card { background: #E9EBE8; border-radius: 0; overflow: hidden; min-width: 0; }
 .ingredient-photo { position: relative; aspect-ratio: 4 / 3; overflow: hidden; }
 .ingredient-photo img { width: 100%; height: 100%; object-fit: cover; }
 .ingredient-card-body { padding: 16px; }
