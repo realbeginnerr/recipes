@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useLanguage } from '../context/LanguageContext'
 import { saveRecipeToFirestore, loadRecipesFromFirestore, type FirestoreRecipe } from '../services/recipeService'
 import {
@@ -142,6 +142,8 @@ async function translateKoToEn(text: string): Promise<string> {
 
 export function AddRecipePage() {
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
+  const blendingTea = searchParams.get('category') === 'blending-tea'
   const { language } = useLanguage()
   const isKo = language === 'ko'
 
@@ -151,7 +153,7 @@ export function AddRecipePage() {
   const [recipeNameKo, setRecipeNameKo] = useState('')
   const [recipeLink, setRecipeLink] = useState('')
   const [recipeImageUrl, setRecipeImageUrl] = useState('')
-  const [categories, setCategories] = useState<RecipeCategory[]>([])
+  const [categories, setCategories] = useState<RecipeCategory[]>(blendingTea ? ['차'] : [])
   const [pastedText, setPastedText] = useState('')
   const [resolvedRows, setResolvedRows] = useState<ResolvedRow[]>([])
   const [enRows, setEnRows] = useState<EnRow[]>([])
@@ -477,7 +479,7 @@ export function AddRecipePage() {
       setRecipeNameKo('')
       setRecipeLink('')
       setRecipeImageUrl('')
-      setCategories([])
+      setCategories(blendingTea ? ['차'] : [])
       setPastedText('')
       setResolvedRows([])
       setEnRows([])
@@ -645,7 +647,7 @@ export function AddRecipePage() {
   if (mode === 'select') {
     return (
       <section className="page">
-        <Button type="button" variant="ghost" size="sm" onClick={() => navigate('/recipes')}>{isKo ? '← 뒤로' : '← Back'}</Button>
+        <Button type="button" variant="ghost" size="sm" onClick={() => navigate(blendingTea ? '/blending-tea' : '/recipes')}>{isKo ? '← 뒤로' : '← Back'}</Button>
         <h2 className="page__heading">{isKo ? '레시피 추가' : 'Add Recipe'}</h2>
         <p className="add-recipe__select-subtitle">
           {isKo ? '어떤 방식으로 레시피를 추가하시겠어요?' : 'How would you like to add a recipe?'}
@@ -676,7 +678,7 @@ export function AddRecipePage() {
 
   return (
     <section className="page">
-      <Button type="button" variant="ghost" size="sm" onClick={() => navigate('/recipes')}>{isKo ? '← 뒤로' : '← Back'}</Button>
+      <Button type="button" variant="ghost" size="sm" onClick={() => navigate(blendingTea ? '/blending-tea' : '/recipes')}>{isKo ? '← 뒤로' : '← Back'}</Button>
       <div className="add-recipe__mode-header">
         <Button type="button" variant="ghost" size="sm" onClick={() => setMode('select')}>
           ← {isKo ? '뒤로' : 'Back'}

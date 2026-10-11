@@ -1,5 +1,13 @@
 # tsrecipe — 사진 중심 디자인 가이드 & 통합 토큰
 
+- 식재료 필터에 냉장실·냉동실·실온보관을 포함한다. Firestore `ingredients` 문서의 `storageLocation` 문자열로 필터링하며, 식재료 수정 화면에서 지정한다. 미지정 재료는 전체 및 기존 분류에만 표시한다. 그리드와 목록에 동일하게 적용한다.
+- 식재료 필터 칩의 `기타`는 항상 맨 마지막에 표시한다. 새 필터를 추가할 때도 `기타` 앞에 배치한다.
+- 식재료 수정 화면에서 분류와 보관 장소를 각각 칩으로 선택한다. 분류는 탄수화물·단백질·지방·채소·과일·기타 중 하나, 보관 장소는 미지정·냉장실·냉동실·실온보관 중 하나다. 저장한 분류는 이름 기반 자동 분류보다 우선한다.
+- 식재료 카드에서 지정된 보관 장소는 분류 칩 옆에 같은 스타일의 칩으로 표시한다. 보관 장소가 미지정이면 보관 장소 칩은 표시하지 않는다.
+- 레시피 상세의 전체 재료 테이블은 냉장실·냉동실·실온보관·미지정 순으로 그룹 제목 행을 표시한다. 빈 그룹은 숨기고 그룹 안에서는 기존 재료 순서를 유지한다. 재료 양·단위 편집 및 전체 합계는 유지한다.
+- 보관 장소 그룹 제목 행은 테이블 헤더와 동일한 배경색·글자색 토큰을 사용한다. 높이는 고정하지 않고 내용과 셀 패딩에 맞춰 자동으로 정한다(Hug).
+- 그룹명 앞에 작은 아이콘을 표시한다: 냉장실 🗄️, 냉동실 ❄️, 실온보관 🧂, 미지정 ❓. 아이콘은 12px이며 장식 요소로 처리한다.
+
 ## 목차
 
 - [1장. 디자인의 방향과 원칙](#chapter-1)
@@ -98,21 +106,21 @@
 
 | 적용 대상                          | 영어 `en`                                | 한국어 `ko`                              |
 | ---------------------------------- | ---------------------------------------- | ---------------------------------------- |
-| 큰 제목 `display-*`                | 온글잎 윤탱체, `typography.display-*`    | 온글잎 윤탱체, `typography-kr.display-*` |
+| 큰 제목 `display-*`                | 고운바탕체, `typography.display-*`    | 고운바탕체, `typography-kr.display-*` |
 | 카드·소제목 `title-*`              | StyreneB → Inter, `typography.title-*`   | Pretendard, `typography-kr.title-*`      |
 | 본문·메뉴·버튼·캡션                | StyreneB → Inter, 해당 `typography` 토큰 | Pretendard, 해당 `typography-kr` 토큰    |
 | 표·카드의 영양 수치·중량·계산 결과 | Inter, `typography.numeric`              | Inter, `typography.numeric`              |
-| 홈 섹션 번호 01–04                 | 온글잎 윤탱체, 72px                      | 온글잎 윤탱체, 72px                      |
+| 홈 섹션 번호 01–04                 | 고운바탕체, 72px                      | 고운바탕체, 72px                      |
 
 ### 2. 영어 전용 정책
 
-- **큰 제목 `display-*`은 온글잎 윤탱체 (OwnglyphYuntaeng)를 웹폰트로 사용한다.** 사용자 기기의 폰트 설치 여부에 의존하지 않는다.
+- **큰 제목 `display-*`은 고운바탕체 (Gowun Batang)를 웹폰트로 사용한다.** 사용자 기기의 폰트 설치 여부에 의존하지 않는다.
 - 굵기는 `400`, 합성 굵기는 사용하지 않는다. 크기·행간·자간은 해당 `typography.display-*` 토큰을 따른다.
 - 카드·소제목, 본문, 메뉴, 버튼, 캡션은 StyreneB를 사용하고, 없으면 Inter를 로드한다. Pretendard를 영어 UI의 대체 글꼴로 선택하지 않는다.
 
 ### 3. 한국어 전용 정책
 
-- **큰 제목 `display-*`은 온글잎 윤탱체, 카드·소제목과 본문·메뉴·버튼·캡션은 Pretendard를 사용한다.** 모두 웹폰트로 실제 로드한다.
+- **큰 제목 `display-*`은 고운바탕체, 카드·소제목과 본문·메뉴·버튼·캡션은 Pretendard를 사용한다.** 모두 웹폰트로 실제 로드한다.
 - 모든 속성은 해당 `typography-kr` 토큰을 따른다. 행간은 `1.5`, 자간은 `-0.04em`이다.
 - 큰 제목 `display-*`의 굵기는 `400`, 카드·소제목 `title-*`은 `500`, 본문 `body-*`는 `400`, 메뉴·버튼·캡션은 `500`이다.
 - 영문 제목의 좁은 행간과 px 자간을 한글에 적용하지 않는다.
@@ -121,21 +129,21 @@
 ### 4. 혼합 문장과 숫자
 
 - 한 문장 안에 영문 약어·단위·숫자가 섞여 있어도 **문장 전체는 해당 텍스트 요소의 언어 정책**을 따른다. 글자마다 자동으로 영문·한글 스타일을 번갈아 적용하지 않는다.
-- 예: 한국어 큰 제목 `AI로 만드는 레시피 3개`는 `AI`와 `3`까지 온글잎 윤탱체다. 영어 큰 제목 `Recipes for 3`도 전체가 온글잎 윤탱체이며 영문 `display-*` 정책을 따른다.
+- 예: 한국어 큰 제목 `AI로 만드는 레시피 3개`는 `AI`와 `3`까지 고운바탕체다. 영어 큰 제목 `Recipes for 3`도 전체가 고운바탕체이며 영문 `display-*` 정책을 따른다.
 - 한 화면에서 한국어 제목과 독립된 영어 부제목을 함께 사용할 때는 각 요소에 `ko`, `en`을 명시하고 각자의 토큰을 적용한다. HTML에서는 요소의 `lang` 또는 이에 대응하는 명시적 언어 클래스로 구분한다.
-- **표와 카드의 영양 수치·열량·중량·계산 결과, 수량 입력에는 공통 숫자 글꼴 Inter를 사용한다.** `typography.numeric`의 글꼴을 적용하고, 역할별 크기와 행간은 해당 컴포넌트 스타일을 따른다. 숫자 정렬이 필요한 영역에는 `font-variant-numeric: tabular-nums`를 명시해 숫자 폭을 일정하게 유지한다. 제목·본문 속 숫자, 메뉴, 표의 식재료 이름에는 적용하지 않는다. 홈 섹션 번호 01–04는 디스플레이 글꼴인 온글잎 윤탱체를 사용하며 크기는 72px로 유지한다.
+- **표와 카드의 영양 수치·열량·중량·계산 결과, 수량 입력에는 공통 숫자 글꼴 Inter를 사용한다.** `typography.numeric`의 글꼴을 적용하고, 역할별 크기와 행간은 해당 컴포넌트 스타일을 따른다. 숫자 정렬이 필요한 영역에는 `font-variant-numeric: tabular-nums`를 명시해 숫자 폭을 일정하게 유지한다. 제목·본문 속 숫자, 메뉴, 표의 식재료 이름에는 적용하지 않는다. 홈 섹션 번호 01–04는 디스플레이 글꼴인 고운바탕체를 사용하며 크기는 72px로 유지한다.
 
 ### 5. 적용 예시와 확인 기준
 
 | 예시                             | 적용 결과                                                 |
 | -------------------------------- | --------------------------------------------------------- |
-| 영어 큰 제목, `display-lg`       | 온글잎 윤탱체 / 48px / 굵기 400 / 행간 1.1 / 자간 -1px    |
-| 한국어 큰 제목, `display-lg`     | 온글잎 윤탱체 / 48px / 굵기 400 / 행간 1.5 / 자간 -0.04em |
+| 영어 큰 제목, `display-lg`       | 고운바탕체 / 48px / 굵기 400 / 행간 1.1 / 자간 -1px    |
+| 한국어 큰 제목, `display-lg`     | 고운바탕체 / 48px / 굵기 400 / 행간 1.5 / 자간 -0.04em |
 | 영어 본문, `body-md`, Inter 사용 | 16px / 굵기 400 / 행간 1.55 / 자간 0                      |
 | 한국어 본문, `body-md`           | Pretendard / 16px / 굵기 400 / 행간 1.5 / 자간 -0.04em    |
 
 - 언어 전환 시 글꼴 이름만 바꾸지 않았는지 확인한다. 행간·자간·굵기도 해당 언어의 값으로 바뀌어야 한다.
-- 영문·한글 큰 제목에 온글잎 윤탱체가 로드되는지 확인한다. 굵기는 `400`이며 합성 굵기를 사용하지 않는다.
+- 영문·한글 큰 제목에 고운바탕체가 로드되는지 확인한다. 굵기는 `400`이며 합성 굵기를 사용하지 않는다.
 - 강조는 과도한 굵기보다 크기와 여백으로 만든다. 아래 YAML의 정확한 수치를 따른다.
 
 ### 6. 보이스 톤
@@ -174,6 +182,36 @@
 <a id="chapter-5"></a>
 
 ## 5장. 컴포넌트, 인터랙션
+
+### Section Background Image with Text Overlay
+
+- 반응형 레이아웃은 Carbon Design System의 2x Grid 정책을 따른다.
+
+#### Background Image
+
+- 배경 이미지는 `background-size: cover`를 기본으로 한다.
+- 원본 종횡비를 유지하면서 섹션 영역 전체를 채운다.
+- 브라우저 너비에 따라 이미지가 비례 확대·축소되며, 일부 영역이 잘릴 수 있다.
+- 기본 위치는 `background-position: center`로 한다.
+- 중요한 피사체가 잘리는 경우 이미지별로 위치를 조정한다.
+- 배경 이미지는 반복하지 않는다.
+
+#### Text Overlay
+
+- 텍스트는 이미지와 독립적인 HTML 요소로 배치한다.
+- 텍스트의 위치와 여백은 Carbon의 반응형 그리드 정책을 따른다.
+- 브라우저 너비가 좁아지면 텍스트는 자연스럽게 줄바꿈한다.
+- 텍스트 내용에 따라 섹션 높이가 확장될 수 있어야 한다.
+- 이미지와 텍스트가 겹치더라도 가독성을 유지해야 한다.
+
+#### Accessibility
+
+- 이미지 위 텍스트의 명도 대비는 Carbon의 Accessibility > Color 정책을 따른다.
+- 일반 텍스트는 최소 4.5:1, 큰 텍스트는 최소 3:1의 명도 대비를 충족해야 한다.
+- 필요한 경우 이미지 위에 반투명 오버레이 또는 그라데이션을 적용한다.
+- 모든 반응형 화면에서 텍스트가 배경 이미지와 충분한 대비를 유지하는지 확인한다.
+
+### 공통 컴포넌트 규칙
 
 - 버튼·입력창은 `box-sizing: border-box`로 외곽 높이를 계산한다. 세로 패딩 없이 내용을 가운데 정렬하고, 테두리를 포함해 토큰 높이를 맞춘다. 버튼 문구가 여러 줄이어야 하면 잘라내지 말고 높이가 늘어나도록 허용한다.
 - 기본·눌림·비활성·포커스 상태를 지원한다. 호버에서는 색상·크기·그림자를 추가로 바꾸지 않는다.
@@ -365,7 +403,7 @@ Network, Server, Database 등의 문제로 데이터를 확인할 수 없는 경
 
 #### 헤더·홈 구조 (4단계)
 
-- `SiteHeader`는 브랜드, 주 메뉴, 현재 메뉴 표시, About Me 버튼과 모바일 메뉴를 관리한다. 모바일 메뉴는 경로 이동 시 닫히고 Escape 키로 닫으면 메뉴 버튼에 포커스를 돌려준다. About Me는 https://linktr.ee/growyourbusinesstogether 를 새 탭에서 연다.
+- `SiteHeader`는 브랜드, 주 메뉴, 현재 메뉴 표시, 티백 소분하기 버튼과 모바일 메뉴를 관리한다. 모바일 메뉴는 경로 이동 시 닫히고 Escape 키로 닫으면 메뉴 버튼에 포커스를 돌려준다. 티백 소분하기는 https://linktr.ee/growyourbusinesstogether 를 새 탭에서 연다.
 - `Layout`은 컨텍스트 공급자, 페이지 폭, 경로 이동 시 스크롤 초기화, 헤더·본문·푸터 배치를 담당한다. 헤더 스타일은 `SiteHeader.css`, 전체 배치와 공통 컨테이너는 `SiteLayout.css`에서 관리한다.
 - `StorySection`은 홈의 번호·제목·본문 영역을 구성하며 밝은 배경과 상단 배너 사진을 지원한다. `StorySplit`은 사진과 본문을 나란히 표시하며 사진 위치와 배경을 지정한다.
 - 홈의 문구·사진·순서는 `AboutPage`와 `i18n/about.ts`에서 전달한다. 반복 섹션 스타일은 `StorySection.css`, 히어로와 홈 전체 글꼴은 `AboutPage.css`에서 관리한다. 섹션 제목 ID와 스크롤 목적지는 유지한다.
@@ -454,12 +492,12 @@ Filter Chip은 Carbon의 `Tag`와 거의 비슷한 UI 요소이다.
 
 최신 화면 기준은 https://ethics-code-82488462.figma.site/ 이며, 아래 구성은 이전의 일반 가이드보다 우선한다.
 
-- 공통 헤더는 높이 64px, 전체 너비이며 공통 gutter를 적용한다. `T's Recipe / 홈 / 레시피 / 식재료`와 오른쪽 `About Me`로 구성한다. 선택 메뉴는 초록 밑줄로 표시한다. 768px 미만은 접이식 메뉴를 사용한다. 검색은 목록의 필터 줄에 배치한다.
-- 홈은 전체 화면 사진의 히어로, 이야기 소개, 번호 01–04 섹션으로 구성한다. 첫 섹션 캡션은 `T's Recipe`, 두 번째 섹션 캡션은 `나를 아낀다는 것`이다. 영문은 각각 `T's Recipe`, `What it means to care for myself`이며 `src/i18n/about.ts`에서 관리한다. 제목은 온글잎 윤탱체 400, 히어로 26–52px, 나머지 섹션 제목은 40px다.
+- 공통 헤더는 높이 64px, 전체 너비이며 공통 gutter를 적용한다. `T's Recipe / 홈 / 레시피 / 식재료`와 오른쪽 `티백 소분하기`로 구성한다. 선택 메뉴는 초록 밑줄로 표시한다. 768px 미만은 접이식 메뉴를 사용한다. 검색은 목록의 필터 줄에 배치한다.
+- 홈은 전체 화면 사진의 히어로, 이야기 소개, 번호 01–04 섹션으로 구성한다. 첫 섹션 캡션은 `T's Recipe`, 두 번째 섹션 캡션은 `나를 아낀다는 것`이다. 영문은 각각 `T's Recipe`, `What it means to care for myself`이며 `src/i18n/about.ts`에서 관리한다. 제목은 고운바탕체 400, 히어로 26–52px, 나머지 섹션 제목은 40px다.
 - 레시피 목록은 소개 영역, 분류·검색·정렬 줄, 모바일 2열·태블릿 2열·데스크톱 3열 카드 순서다. 식재료는 같은 소개·도구 구조에 2/3/4/5열 사진 카드를 사용한다. 레시피는 1440px 이상에서 카드 최소 너비 300px, 식재료는 1600px 이상에서 최소 너비 240px 기준으로 열 수를 자동으로 늘린다.
 - 상세는 목록 돌아가기, 제목·원본 링크, 전체 재료 표, 등분 수·주식을 포함하는 한 끼 표, 메모 순서다. 큰 음식 사진과 기존 평점 영역은 상세의 기본 화면에 표시하지 않는다.
 - 공통 푸터에는 `© 2026 T's Recipe. All rights reserved.` 문구만 표시하고 가로 중앙 정렬한다. 로고·브랜드 소개·메뉴·소셜은 표시하지 않는다.
-- About Me CTA는 https://linktr.ee/growyourbusinesstogether 를 새 탭에서 연다. 소셜 링크는 추후 제공된다.
+- 티백 소분하기 CTA는 https://linktr.ee/growyourbusinesstogether 를 새 탭에서 연다. 소셜 링크는 추후 제공된다.
 - 기존 저장 데이터와 관리자 편집 기능은 유지하며, 공개 화면은 위 구조로 표시한다. 사진이 없는 실제 식재료는 공통 대체 이미지를 사용한다.
 - 식재료 추가와 레시피 추가 화면은 페이지 맨 위에 기존 수정 화면과 동일한 ghost/sm 뒤로가기 버튼을 표시한다. 각 목록으로 돌아간다. 레시피 추가·수정 및 식재료 추가·수정은 관리자 Google 로그인 팝업을 통과해야 접근할 수 있다. 로그인은 Firebase 브라우저 세션으로 유지하며, 경로 이동 및 새로고침 시 유지되고 탭·창 종료 시 끝난다. 브라우저 세션 복원 기능에 따라 재시작 시 복원될 수 있으며 웹에서 컴퓨터 재시작 자체를 감지하지는 못한다.
 - 재료 문서의 `imageUrl` 필드에 이미지 URL 또는 `/recipes/images/...` 경로를 저장한다. Firestore에서 직접 수정한 값은 사이트를 새로고침하면 반영된다. 빈 문자열은 사진 미등록을 뜻하며, 새 재료에도 이 필드를 생성한다.
@@ -512,25 +550,25 @@ typography:
     extends: "{typography.display-xl}"
     fontSize: 32px
   display-xl:
-    fontFamily: "OwnglyphYuntaeng, Pretendard Variable, Inter, sans-serif"
+    fontFamily: "Gowun Batang, Pretendard Variable, Inter, serif"
     fontSize: 64px
     fontWeight: 400
     lineHeight: 1.05
     letterSpacing: -1.5px
   display-lg:
-    fontFamily: "OwnglyphYuntaeng, Pretendard Variable, Inter, sans-serif"
+    fontFamily: "Gowun Batang, Pretendard Variable, Inter, serif"
     fontSize: 48px
     fontWeight: 400
     lineHeight: 1.1
     letterSpacing: -1px
   display-md:
-    fontFamily: "OwnglyphYuntaeng, Pretendard Variable, Inter, sans-serif"
+    fontFamily: "Gowun Batang, Pretendard Variable, Inter, serif"
     fontSize: 36px
     fontWeight: 400
     lineHeight: 1.15
     letterSpacing: -0.5px
   display-sm:
-    fontFamily: "OwnglyphYuntaeng, Pretendard Variable, Inter, sans-serif"
+    fontFamily: "Gowun Batang, Pretendard Variable, Inter, serif"
     fontSize: 28px
     fontWeight: 400
     lineHeight: 1.2
@@ -606,25 +644,25 @@ typography-kr:
     extends: "{typography-kr.display-xl}"
     fontSize: 32px
   display-xl:
-    fontFamily: "OwnglyphYuntaeng, Pretendard Variable, Inter, sans-serif"
+    fontFamily: "Gowun Batang, Pretendard Variable, Inter, serif"
     fontSize: 64px
     fontWeight: 400
     lineHeight: 1.5
     letterSpacing: -0.04em
   display-lg:
-    fontFamily: "OwnglyphYuntaeng, Pretendard Variable, Inter, sans-serif"
+    fontFamily: "Gowun Batang, Pretendard Variable, Inter, serif"
     fontSize: 48px
     fontWeight: 400
     lineHeight: 1.5
     letterSpacing: -0.04em
   display-md:
-    fontFamily: "OwnglyphYuntaeng, Pretendard Variable, Inter, sans-serif"
+    fontFamily: "Gowun Batang, Pretendard Variable, Inter, serif"
     fontSize: 36px
     fontWeight: 400
     lineHeight: 1.5
     letterSpacing: -0.04em
   display-sm:
-    fontFamily: "OwnglyphYuntaeng, Pretendard Variable, Inter, sans-serif"
+    fontFamily: "Gowun Batang, Pretendard Variable, Inter, serif"
     fontSize: 28px
     fontWeight: 400
     lineHeight: 1.5
@@ -708,12 +746,12 @@ font-substitutions:
   display:
     languages: [en, ko]
     applies-to: [typography.display-*, typography-kr.display-*]
-    preferred: OwnglyphYuntaeng
-    fallback: Pretendard Variable / Inter / sans-serif
+    preferred: Gowun Batang
+    fallback: Pretendard Variable / Inter / serif
     font-weight: 400
     font-synthesis: none
-    webfont-url: "https://cdn.jsdelivr.net/gh/Project-Noonnu/2608211801@font-160/font-160/온글잎 윤탱체.woff2"
-    source: "https://noonnu.cc/font_page/1918"
+    webfont-url: "https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400&display=swap"
+    source: "https://github.com/yangheeryu/Gowun-Batang"
 
 layout:
   content-max: none
@@ -919,3 +957,9 @@ components:
     paddingBlock: "{spacing.cta}"
     paddingInline: "{layout.gutter-desktop}"
 ```
+
+### 레시피 사진 수정
+
+- Firestore `recipes` 문서의 `imageUrl`은 대표 사진 문자열, `imageUrls`는 추가 사진 URL 배열이다. 대표 사진을 포함해 최대 5장을 표시하며, Firebase에서 직접 수정한 뒤 새로고침하면 반영된다.
+- 레시피 수정 화면에서 URL 입력, 기기 파일 선택(장당 10MB 이하), 사진 추가·삭제 및 대표 사진 지정을 지원한다. 파일은 Firebase Storage에, URL은 Firestore에 저장한다.
+- 모든 사진을 삭제하면 `imageUrl: ""`, `imageUrls: []`로 저장하여 기본 사진도 숨긴다. 사진 삭제는 연결을 제거하며 Storage 원본 파일은 유지한다.

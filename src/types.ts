@@ -1,4 +1,6 @@
 import type { RecipeCategory } from './utils/recipeCategory'
+import type { TeaTag } from './utils/teaCategory'
+import type { Product } from './types/product'
 
 export type Ingredient = {
   id: string
@@ -22,6 +24,13 @@ export type RecipeItem = {
 }
 
 export type Recipe = {
+  catalog?: 'tea'
+  productId?: string
+  productDescription?: string
+  productPricing?: Product['pricing']
+  catalogOrder?: number
+  sourceRecipeId?: string
+  teaTags?: TeaTag[]
   categories?: RecipeCategory[]
   id: string
   name: string

@@ -39,7 +39,7 @@ export function IngredientCard({ ingredient, image, category, storageLocation, r
   }
 
   return <article className="ingredient-card">
-    <div className="ingredient-photo"><FoodImage src={image} alt={name} /></div>
+    <div className="ingredient-photo card-photo"><FoodImage src={image} alt={name} /></div>
     <div className="ingredient-card-body"><div className="catalog-card-categories"><span className="catalog-category">{category}</span>{storageLocation && <span className="catalog-category">{storageLocation}</span>}</div><div className="ingredient-card-heading"><h2>{name}</h2>{onEdit && <Button type="button" variant="ghost" size="icon-sm" aria-label={ko ? `${name} 수정` : `Edit ${name}`} title={ko ? '식재료 수정' : 'Edit ingredient'} onClick={onEdit}><Pencil aria-hidden="true" /></Button>}</div>
       <div className="ingredient-basis">
         <Input density="quantity" type="number" min="0" step="any" aria-label={`${name} ${ko ? '용량' : 'amount'}`} value={quantity} onChange={event => {

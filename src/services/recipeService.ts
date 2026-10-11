@@ -11,6 +11,7 @@ import { db } from '../firebase'
 import { canonicalIngredientId } from '../data/ingredientCatalogOverrides'
 import type { Recipe } from '../types'
 import { getRecipeCategories, type RecipeCategory } from '../utils/recipeCategory'
+import type { TeaTag } from '../utils/teaCategory'
 
 export type FirestoreRecipeItem = {
   ingredientId: string
@@ -19,6 +20,9 @@ export type FirestoreRecipeItem = {
 }
 
 export type FirestoreRecipe = {
+  catalog?: 'tea'
+  sourceRecipeId?: string
+  teaTags?: TeaTag[]
   categories?: RecipeCategory[]
   deleted?: boolean
   id?: string
@@ -93,6 +97,9 @@ export async function loadRecipesFromFirestore(): Promise<FirestoreRecipe[]> {
 export function convertToRecipe(fs: FirestoreRecipe): Recipe {
   return {
     id: fs.id ?? '',
+    catalog: fs.catalog,
+    sourceRecipeId: fs.sourceRecipeId,
+    teaTags: fs.teaTags,
     categories: getRecipeCategories(fs),
     name: fs.name,
     nameKo: fs.nameKo || fs.name,
@@ -125,6 +132,7 @@ export function mergeStaticAndFirestoreRecipes(
   for (const firestoreRecipe of firestoreRecipes) {
     const duplicateIndex = merged.findIndex((existing) =>
       existing.id === firestoreRecipe.id || (
+        existing.catalog === firestoreRecipe.catalog &&
         existing.name.toLocaleLowerCase() === firestoreRecipe.name.toLocaleLowerCase() &&
         existing.nameKo.toLocaleLowerCase() === firestoreRecipe.nameKo.toLocaleLowerCase()
       ),

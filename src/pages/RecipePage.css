@@ -23,11 +23,12 @@
 .recipe-catalog .recipe-card__image-wrap { aspect-ratio: 4 / 3; }
 .recipe-catalog .recipe-card__image { width: 100%; height: 100%; object-fit: cover; }
 .recipe-catalog .recipe-card__footer { display: block; padding: 20px; }
-.catalog-category { display: inline-block; font-size: 14px; font-weight: 500; padding: 4px 12px; border-radius: 999px; background: #DEE3E1; color: #364B43; margin-bottom: 12px; }
-.catalog-card-categories { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
-.catalog-card-categories .catalog-category { margin-bottom: 0; }
 .recipe-catalog .recipe-card__name { font-family: inherit; font-size: 16px; font-weight: 500; line-height: 1.5; color: #122B22; margin: 0 0 16px; }
 .recipe-catalog .recipe-card__rating { margin: -8px 0 12px; }
+.recipe-catalog .product-card-description { margin: -8px 0 12px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; color: #596B64; font-size: 14px; }
+.recipe-catalog .product-card-price { display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px; font-size: 18px; }
+.recipe-catalog .product-card-price strong { color: #122B22; font-weight: 500; }
+.recipe-catalog .product-card-price del { color: #596B64; font-size: 14px; }
 .catalog-end { display: flex; justify-content: center; margin-top: 48px; }
 .catalog-end > span, .catalog-end button { padding: 12px 24px; border-radius: 999px; background: #F6F5F1; color: #596B64; font-size: 14px; border: 0; }
 .catalog-end button { cursor: pointer; }

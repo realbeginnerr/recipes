@@ -234,6 +234,10 @@ body {
   outline-offset: 2px;
 }
 
+.card-photo { position: relative; overflow: hidden; isolation: isolate; }
+.card-photo > img { display: block; }
+.card-photo::after { content: ''; position: absolute; inset: 0; z-index: 1; background: rgb(0 0 0 / 3%); pointer-events: none; }
+
 .recipe-card__image-wrap {
   aspect-ratio: 1 / 1;
   overflow: hidden;
@@ -2205,3 +2209,7 @@ html:lang(ko) .recipe-card__name { line-height: 1.5; }
 [data-slot="button"][data-size="menu"] { width: 36px; height: 36px; min-height: 36px; padding: 8px; border: 0; border-radius: 0; background: transparent; }
 [data-slot="button"][data-variant="filter"] { border: 1px solid var(--border); background: var(--background); color: var(--text-body); }
 [data-slot="button"][data-variant="filter"][aria-pressed="true"] { border-color: var(--primary); background: var(--primary); color: var(--primary-foreground); }
+
+.catalog-category { display: inline-block; font-size: 14px; font-weight: 500; padding: 4px 12px; border-radius: 999px; background: #DEE3E1; color: #364B43; margin-bottom: 12px; }
+.catalog-card-categories { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+.catalog-card-categories .catalog-category { margin-bottom: 0; }

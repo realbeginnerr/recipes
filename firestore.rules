@@ -22,5 +22,44 @@ service cloud.firestore {
       allow create: if true;
       allow read, delete: if isAdmin();
     }
+
+    function publicProduct(data) {
+      return data.deleted == false && data.draft == false
+        && data.visibility in ['public', 'scheduled']
+        && data.publicAfter <= request.time.toMillis();
+    }
+    function policySafe(policies, complete) {
+      return policies.refund.enabled == true
+        && policies.refund.defectFee == 0 && policies.exchange.defectFee == 0
+        && ((policies.refund.days == null && !complete) || (policies.refund.days is int && policies.refund.days >= 7))
+        && ((policies.refund.refundDays == null && !complete) || (policies.refund.refundDays is int && policies.refund.refundDays >= 0 && policies.refund.refundDays <= 3))
+        && policies.refund.exceptions.hasOnly(['consumer-damage', 'used', 'perishable', 'custom'])
+        && (policies.refund.exceptions.size() == 0 || policies.refund.exceptionNotice == true)
+        && (!policies.refund.exceptions.hasAny(['custom']) || policies.refund.customConsent == true);
+    }
+    function externalProduct(data) {
+      return data.get('compositionType', 'single') == 'single'
+        && !data.teaTags.hasAny(['혼합차'])
+        && data.get('purchaseUrl', '').matches('https?://[^ ].+');
+    }
+    match /products/{productId} {
+      allow read: if isAdmin() || publicProduct(resource.data);
+      allow create, update: if isAdmin()
+        && !request.resource.data.keys().hasAny(['cost', 'privateData'])
+        && request.resource.data.name is string
+        && request.resource.data.sku is string
+        && request.resource.data.version is int
+        && policySafe(request.resource.data.policies, request.resource.data.draft == false && request.resource.data.visibility != 'private' && !externalProduct(request.resource.data));
+      allow delete: if isAdmin();
+    }
+    match /productAdmin/{productId} { allow read, write: if isAdmin(); }
+    match /productSkus/{sku} { allow read, write: if isAdmin(); }
+    match /productSlugs/{slug} {
+      allow read: if isAdmin() || publicProduct(get(/databases/$(database)/documents/products/$(resource.data.productId)).data);
+      allow write: if isAdmin();
+    }
+    match /shopSettings/{id} { allow read: if isAdmin(); allow write: if isAdmin() && policySafe(request.resource.data.policies, true); }
+    match /shopPolicyHistory/{id} { allow read: if isAdmin(); allow create: if isAdmin() && policySafe(request.resource.data.policies, true); }
+    match /shopPolicies/{id} { allow read: if true; allow write: if isAdmin() && policySafe(request.resource.data.policies, true); }
   }
 }

@@ -15,5 +15,12 @@ service firebase.storage {
         && request.resource.contentType.matches('image/.*');
       allow delete: if isAdmin();
     }
+    match /products/{productId}/{fileName} {
+      allow read: if true;
+      allow create, update: if isAdmin()
+        && request.resource.size <= 10 * 1024 * 1024
+        && request.resource.contentType.matches('image/(jpeg|png|webp|avif)');
+      allow delete: if isAdmin();
+    }
   }
 }

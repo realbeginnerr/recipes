@@ -14,6 +14,6 @@ export function RelatedRecipes({ recipes: related, ingredientId }: { recipes: Re
       <p>{ko ? '관련 레시피' : 'Recipes with this ingredient'}</p>
       {related.length > 1 && <Link className="ingredient-more" to={`/recipes?ingredient=${encodeURIComponent(ingredientId)}`}>{ko ? '더보기' : 'More'}</Link>}
     </div>
-    {first ? <Link className="ingredient-recipe" to={`/recipe/${first.id}`}><FoodImage src={resolveRecipeImage(first)} alt="" /><span>{ko ? first.nameKo : first.name}</span></Link> : <span className="ingredient-no-recipes">{ko ? '관련 레시피가 없어요.' : 'No recipes yet.'}</span>}
+    {first ? <Link className="ingredient-recipe" to={`/recipe/${first.id}`}><div className="ingredient-recipe-photo card-photo"><FoodImage src={resolveRecipeImage(first)} alt="" /></div><span>{ko ? first.nameKo : first.name}</span></Link> : <span className="ingredient-no-recipes">{ko ? '관련 레시피가 없어요.' : 'No recipes yet.'}</span>}
   </div>
 }

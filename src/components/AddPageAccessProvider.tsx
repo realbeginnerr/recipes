@@ -5,9 +5,9 @@ import { useAdmin } from '../context/AdminContext'
 import { Button } from './ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from './ui/dialog'
 
-type AddPath = '/add-recipe' | '/add-ingredient' | '/ingredients/manage' | `/recipe/${string}/edit` | `/ingredient/${string}/edit`
+type AddPath = '/add-recipe' | '/add-recipe?category=blending-tea' | '/add-ingredient' | '/ingredients/manage' | '/products/new' | '/shop-settings' | `/products/${string}/edit` | `/recipe/${string}/edit` | `/ingredient/${string}/edit`
 export function isProtectedPagePath(path: string): path is AddPath {
-  return path === '/add-recipe' || path === '/add-ingredient' || path === '/ingredients/manage' || /^\/(recipe|ingredient)\/[^/]+\/edit$/.test(path)
+  return path === '/add-recipe' || path === '/add-ingredient' || path === '/ingredients/manage' || path === '/products/new' || path === '/shop-settings' || /^\/(recipe|ingredient|products)\/[^/]+\/edit$/.test(path)
 }
 const AccessContext = createContext<{ requestAccess: (path: AddPath) => void; approvedPath: AddPath | null } | null>(null)
 
@@ -48,7 +48,7 @@ export function AddPageAccessProvider({ children }: { children: ReactNode }) {
     if (isSubmitting) return
     setTarget(null)
     setError(null)
-    if (target && pathname === target) navigate(target === '/add-ingredient' || target === '/ingredients/manage' || target.startsWith('/ingredient/') ? '/ingredients' : target.startsWith('/recipe/') ? target.slice(0, -5) : '/recipes', { replace: true })
+    if (target && pathname === target) navigate(target.startsWith('/products/') || target === '/shop-settings' ? '/blending-tea' : target === '/add-ingredient' || target === '/ingredients/manage' || target.startsWith('/ingredient/') ? '/ingredients' : target.startsWith('/recipe/') ? target.slice(0, -5) : '/recipes', { replace: true })
   }
   async function signIn() {
     if (!target || isSubmitting) return
