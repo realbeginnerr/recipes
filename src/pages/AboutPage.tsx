@@ -30,7 +30,7 @@ export function AboutPage() {
     <StorySection number="03" titleId="story-continue" title={copy.continueTitle} tone="soft">
       <p>{copy.continue}</p>
     </StorySection>
-    <StorySection number="04" titleId="story-origin" title={copy.originTitle} banner={{ src: `${import.meta.env.BASE_URL}images/service/home-record.png`, alt: copy.ritualAlt }}>
+    <StorySection number="04" titleId="story-origin" title={copy.originTitle} banner={{ src: `${import.meta.env.BASE_URL}images/service/home-record-updated.png`, alt: copy.ritualAlt }}>
       <p>{copy.origin}</p>
       <div className="story-action"><Button nativeButton={false} render={<Link to="/recipes" onClick={resetHome} />} size="header" className="reference-request">{copy.browse}</Button></div>
     </StorySection>

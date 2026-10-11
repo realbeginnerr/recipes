@@ -19,7 +19,7 @@ export const aboutCopy = {
     "bowlsAlt": "요리하는 라마",
     "continueTitle": "모든 관계에는 노력이 필요해",
     "continue": "나와 내 자신의 관계에도 노력이 필요해. 일상이 바쁘다 보면 내 안의 그 작은 아이를 깜빡할 때가 많아. 그 아이의 목소리보다 타인의 목소리를 더 귀기울여 듣게 되는 날도 있어. 엄청 슬프거나 즐거웠던 감정도 시간이 지나면 희미해지는 것처럼, 이 고마운 감정도 때로는 희미해져. 그렇지만 일주일에 한번이라도 요리를 해준다면 너무 오래 잊게되지는 않을 것 같아. 요리해주면서 그때마다 계속 고맙다고 얘기해줘야지.",
-    "ritualAlt": "요리하는 라마",
+    "ritualAlt": "노트에 과거의 나에게 편지를 쓰는 모습",
     "originTitle": "잊지 않기 위한 기록",
     "origin": "다른 사람들 모니터 주변을 보면 포스트잇 엄청나게 많이 붙어있어. 잊지 않으려고 그러는거야. 이 레시피 기록이 그 포스트잇이야. 레시피를 들여다볼 때마다 고마움을 계속 떠올리게 되는거야. 그 순간만큼은 무의식적으로 내게 해오던 지적질도 멈추게 돼. 자, 그럼 이제 또 그 꼬마를 위한 요리를 하러 가봐야지.",
     "browse": "레시피 보러 가기 →"
@@ -44,7 +44,7 @@ export const aboutCopy = {
     "bowlsAlt": "A llama cooking",
     "continueTitle": "Continuing with a gentle heart",
     "continue": "Of course, busy days mean I sometimes forget. I cannot be completely free from the influence of the media or other people, either. If forgetting this promise becomes another source of stress, I will not keep it up for long. Through this ritual, I simply want to keep comforting that little child. And I want to find a balance between social expectations and treating myself with care.",
-    "ritualAlt": "A llama cooking",
+    "ritualAlt": "Writing a letter to my past self in a notebook",
     "originTitle": "How these healthy recipes, and this website, began",
     "origin": "Since February 2026, I have been making and using recipes with carbs, protein, and fat calculated in Excel. That spreadsheet is one of the documents I open most often. I wanted to turn it into this website and write this story here. Each time I visit, it can remind me that this is time to share a meal with myself. And little by little, I can stop the criticism I have been directing at myself without even realizing it.",
     "browse": "Explore recipes →"
