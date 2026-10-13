@@ -17,7 +17,7 @@ export const translations = {
     colAmount: 'Amount',
     colUnit: 'Unit',
     colCarbs: 'Carbs',
-    colProtein: 'Protein',
+    colProtein: 'Prot.',
     colFat: 'Fat',
     colAddedSugar: 'Added Sugar',
     total: 'Total',

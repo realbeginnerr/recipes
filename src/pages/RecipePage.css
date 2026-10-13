@@ -34,6 +34,8 @@
 .recipe-catalog .recipe-card__footer { display: block; padding: 20px; }
 .recipe-catalog .recipe-card__name { font-family: inherit; font-size: 16px; font-weight: 500; line-height: 1.5; color: #122B22; margin: 0 0 16px; }
 .recipe-catalog .recipe-card__rating { margin: -8px 0 8px; }
+.recipe-catalog.recipe-list-catalog .recipe-card__name { margin-bottom: 12px; }
+.recipe-catalog.recipe-list-catalog .recipe-card__rating { margin-top: 0; }
 .recipe-catalog .product-card-description { margin: -8px 0 12px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; color: #596B64; font-size: 14px; }
 .recipe-catalog .product-card-price { display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px; font-size: 18px; }
 .recipe-catalog .product-card-price strong { color: #122B22; font-weight: 500; }

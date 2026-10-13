@@ -1,8 +1,8 @@
 # Recipe Nutrition Calculator
 
-## 차한잔 상품 관리
+## Shop 상품 관리
 
-- 차한잔 목록의 **상품 추가** → 관리자 Google 로그인 → `/products/new` 등록 폼
+- Shop 목록의 **상품 추가** → 관리자 Google 로그인 → `/products/new` 등록 폼
 - `/products/:id/edit`: 동일한 폼으로 수정, 임시 저장, 복제, 삭제
 - `/shop-settings`: 공통 카테고리 및 배송·교환·반품 정책, 변경 이력
 - `/product/:slug`: 상품 상세와 고객 정책 안내. 주문·결제·환불 실행은 포함하지 않음

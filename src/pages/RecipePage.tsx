@@ -1,4 +1,3 @@
-import { useAddPageAccess } from '../components/AddPageAccessProvider'
 import { ContentState, LoadingState } from '../components/feedback/ContentState'
 import { PageIntro, CatalogToolbar, CategoryFilter, SearchField, SortSelect } from '../components/catalog/CatalogControls'
 import { Button } from '@/components/ui/button'
@@ -16,12 +15,11 @@ import { loadRecipesFromFirestore, mergeStaticAndFirestoreRecipes } from '../ser
 import { loadIngredientsFromFirestore } from '../services/ingredientService'
 import { loadProducts } from '../services/productService'
 import { recipeCategories, categoryEnglish, getRecipeCategories, type RecipeCategory } from '../utils/recipeCategory'
-import { teaCategories, teaCategoryEnglish, getTeaTags, type TeaCategory } from '../utils/teaCategory'
+import { teaCategoryEnglish, getTeaTags, type TeaCategory } from '../utils/teaCategory'
 import type { Recipe } from '../types'
 import './RecipePage.css'
 
 export function RecipePage({ blendingTea = false }: { blendingTea?: boolean }) {
-  const { requestAccess } = useAddPageAccess()
   const { homeVersion, resetHome } = useSearch()
   const [searchParams, setSearchParams] = useSearchParams()
   const appliedSearch = searchParams.get('q') ?? ''
@@ -35,7 +33,7 @@ export function RecipePage({ blendingTea = false }: { blendingTea?: boolean }) {
   const [recipes, setRecipes] = useState<Recipe[]>(staticRecipes)
   const [category, setCategory] = useState<RecipeCategory[]>([])
   const [teaCategory, setTeaCategory] = useState<TeaCategory>('전체')
-  const [sortOrder, setSortOrder] = useState(blendingTea ? 'order-asc' : 'date-desc')
+  const [sortOrder, setSortOrder] = useState('date-desc')
   const [loading, setLoading] = useState(true)
   const [loadFailed, setLoadFailed] = useState(false)
   const [loadAttempt, setLoadAttempt] = useState(0)
@@ -71,7 +69,6 @@ export function RecipePage({ blendingTea = false }: { blendingTea?: boolean }) {
     .filter(recipe => !appliedSearch || recipeMatchesSearch(recipe, appliedSearch))
     .filter(recipe => !ingredientId || recipeContainsIngredient(recipe, ingredientId))
     .sort((a, b) => {
-      if (sortOrder === 'order-asc') return (a.catalogOrder ?? 0) - (b.catalogOrder ?? 0) || (b.createdAt ?? 0) - (a.createdAt ?? 0)
       if (sortOrder.startsWith('alpha')) {
         const result = (ko ? a.nameKo : a.name).localeCompare(ko ? b.nameKo : b.name, language)
         return sortOrder === 'alpha-asc' ? result : -result
@@ -95,20 +92,20 @@ export function RecipePage({ blendingTea = false }: { blendingTea?: boolean }) {
   return <section className="recipe-catalog recipe-list-catalog" lang={language}>
     <PageIntro
       backgroundImage={blendingTea ? `${import.meta.env.BASE_URL}images/service/tea-header.png` : `${import.meta.env.BASE_URL}images/service/home-care.png`}
-      title={blendingTea ? (ko ? '차한잔' : 'A Cup of Tea') : (ko ? '나에게 해준 요리, 해줄 요리' : 'Gotta eat something tasty tomorrow too')}
+      title={blendingTea ? 'Shop' : (ko ? '나에게 해준 요리, 해줄 요리' : 'Gotta eat something tasty tomorrow too')}
       description={blendingTea ? '' : (ko ? '' : 'Find the recipe you’re craving with categories and search.')}
     />
     <CatalogToolbar>
       {blendingTea
-        ? <CategoryFilter<TeaCategory> label={ko ? '차 분류' : 'Tea categories'} value={teaCategory} options={teaCategories.map(value => ({ value, label: ko ? value : teaCategoryEnglish[value] }))} onValueChange={setTeaCategory} />
+        ? <CategoryFilter<TeaCategory> label={ko ? '상품 분류' : 'Product categories'} value={teaCategory} options={(['전체', '에코백', '기타'] as const).map(value => ({ value, label: ko ? value : teaCategoryEnglish[value] }))} onValueChange={setTeaCategory} />
         : <CategoryFilter<RecipeCategory> label={ko ? '레시피 분류' : 'Recipe categories'} value={category.length ? category : ['전체']} options={recipeCategories.map(value => ({ value, label: ko ? value : categoryEnglish[value] }))} onValueChange={value => setCategory(value === '전체' ? [] : [value])} />}
-      <SearchField label={blendingTea ? (ko ? '차 검색' : 'Search tea') : (ko ? `${itemLabel} 검색` : `Search ${itemLabel.toLowerCase()}`)} value={appliedSearch} onValueChange={value => setSearchParams(current => {
+      <SearchField label={blendingTea ? (ko ? '검색' : 'Search') : (ko ? `${itemLabel} 검색` : `Search ${itemLabel.toLowerCase()}`)} value={appliedSearch} onValueChange={value => setSearchParams(current => {
         const next = new URLSearchParams(current)
         if (value) next.set('q', value)
         else next.delete('q')
         return next
       }, { replace: true })} />
-      <SortSelect label={blendingTea ? (ko ? '상품 정렬' : 'Sort products') : (ko ? '레시피 정렬' : 'Sort recipes')} value={sortOrder} options={[...(blendingTea ? [{ value: 'order-asc', label: ko ? '상품 노출순' : 'Display order' }] : []), { value: 'date-desc', label: ko ? '최근 등록순' : 'Newest first' }, { value: 'date-asc', label: ko ? '오래된 등록순' : 'Oldest first' }, { value: 'alpha-asc', label: ko ? '이름순 (ㄱ~ㅎ)' : 'Name (A–Z)' }, { value: 'alpha-desc', label: ko ? '이름순 (ㅎ~ㄱ)' : 'Name (Z–A)' }]} onValueChange={setSortOrder} />
+      <SortSelect label={blendingTea ? (ko ? '상품 정렬' : 'Sort products') : (ko ? '레시피 정렬' : 'Sort recipes')} value={sortOrder} options={[ { value: 'date-desc', label: ko ? '최근 등록순' : 'Newest first' }, { value: 'date-asc', label: ko ? '오래된 등록순' : 'Oldest first' }, { value: 'alpha-asc', label: ko ? 'ㄱ→ㅎ' : 'A→Z' }, { value: 'alpha-desc', label: ko ? 'ㅎ→ㄱ' : 'Z→A' }]} onValueChange={setSortOrder} />
     </CatalogToolbar>
     <div className="catalog-container catalog-results" aria-busy={loading}>
       {ingredientId && <p className="catalog-count">{ko ? `${ingredientName} 포함 레시피` : `Recipes with ${ingredientName}`} · <Button variant="link" size="content" onClick={() => setSearchParams(current => {
@@ -116,7 +113,7 @@ export function RecipePage({ blendingTea = false }: { blendingTea?: boolean }) {
         next.delete('ingredient')
         return next
       })}>{ko ? '재료 필터 해제' : 'Clear ingredient filter'}</Button></p>}
-      {!loading && <div className="catalog-count-row"><p className="catalog-count" role="status">{itemLabel} <strong>{visibleRecipes.length}{ko ? '개' : ''}</strong>{appliedSearch && <span> · “{appliedSearch}”</span>}</p><Button onClick={() => requestAccess(blendingTea ? '/products/new' : '/add-recipe')} variant="link" size="content" className="catalog-intro__subtle-action">{blendingTea ? (ko ? '상품 추가' : 'Add product') : (ko ? '레시피 추가' : 'Add recipe')}</Button></div>}
+      {!loading && <div className="catalog-count-row"><p className="catalog-count" role="status">{itemLabel} <strong>{visibleRecipes.length}{ko ? '개' : ''}</strong>{appliedSearch && <span> · “{appliedSearch}”</span>}</p></div>}
       {loadFailed ? <ContentState error title={ko ? `${itemLabel}를 불러오지 못했습니다` : `Unable to load ${itemLabel.toLowerCase()}`}><Button className="catalog-primary" onClick={() => setLoadAttempt(n => n + 1)}>{ko ? '다시 시도' : 'Try again'}</Button></ContentState>
         : loading ? <LoadingState skeleton label={ko ? `${itemLabel} 불러오는 중` : `Loading ${itemLabel.toLowerCase()}`} />
         : visibleRecipes.length === 0 ? <ContentState icon={blendingTea ? '🍵' : '🥗'} title={ko ? `조건에 맞는 ${blendingTea ? '차' : itemLabel}가 없어요` : `No ${itemLabel.toLowerCase()} match your selection`} description={ko ? '필터를 조정하거나 새로운 항목을 등록해보세요.' : 'Try adjusting your filters or adding a new item.'}><Button className="catalog-primary" onClick={() => { setCategory([]); setSearchParams({}); resetHome() }}>{ko ? '필터 초기화' : 'Reset filters'}</Button></ContentState>

@@ -19,16 +19,16 @@ export function AboutPage() {
       </div>
     </section>
     <StorySplit number="01" id="story-start" titleId="story-background" title={<>{copy.storyTitleFirst}{copy.storyTitleLast && <><br />{copy.storyTitleLast}</>}</>} eyebrow={language === 'ko' ? undefined : copy.storyLabel} image={{ src: `${import.meta.env.BASE_URL}images/service/home-care-updated.png`, alt: copy.tableAlt }}>
-      <p>{copy.story}</p>{copy.quote && <blockquote>{copy.quote}</blockquote>}
+      {copy.story.split('\n\n').map((paragraph, index) => <p key={index}>{paragraph}</p>)}{copy.quote && <blockquote>{copy.quote}</blockquote>}
     </StorySplit>
     <StorySection number="02" titleId="story-meeting" title={copy.meetingTitle}>
-      <p>{copy.meeting}</p>
+      <p style={{ whiteSpace: 'pre-line' }}>{copy.meeting}</p>
     </StorySection>
     <StorySplit number="03" titleId="story-meal" title={copy.mealTitle} tone="dark" imageSide="right" image={{ src: `${import.meta.env.BASE_URL}images/service/home-cooking.png`, alt: copy.bowlsAlt }}>
-      <p>{copy.mealFirst}</p>{'mealLast' in copy && <p>{copy.mealLast}</p>}
+      {copy.mealFirst.split('\n\n').map((paragraph, index) => <p key={index}>{paragraph}</p>)}{'mealLast' in copy && <p>{copy.mealLast}</p>}
     </StorySplit>
     <StorySection number="04" titleId="story-continue" title={copy.continueTitle} tone="soft">
-      <p>{copy.continue}</p>
+      <p style={{ whiteSpace: 'pre-line' }}>{copy.continue}</p>
     </StorySection>
     <StorySection number="05" titleId="story-origin" title={copy.originTitle} banner={{ src: `${import.meta.env.BASE_URL}images/service/home-record-letter.png`, alt: copy.ritualAlt }}>
       <p>{copy.origin}</p>

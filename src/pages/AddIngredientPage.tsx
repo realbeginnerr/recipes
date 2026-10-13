@@ -268,7 +268,7 @@ export function AddIngredientPage() {
               <Table className="data-table recipe-table">
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Ingredient</TableHead><TableHead>Amount</TableHead><TableHead>Unit</TableHead><TableHead>Carbs</TableHead><TableHead>Protein</TableHead><TableHead>Fat</TableHead><TableHead />
+                    <TableHead>Ingredient</TableHead><TableHead>Amount</TableHead><TableHead>Unit</TableHead><TableHead>Carbs</TableHead><TableHead>Prot.</TableHead><TableHead>Fat</TableHead><TableHead />
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -316,7 +316,7 @@ export function AddIngredientPage() {
             <TableHead>{isKo ? '기준량' : 'Amount'}</TableHead>
             <TableHead>{isKo ? '단위' : 'Unit'}</TableHead>
             <TableHead>{isKo ? '탄수화물' : 'Carbs'}</TableHead>
-            <TableHead>{isKo ? '단백질' : 'Protein'}</TableHead>
+            <TableHead>{isKo ? '단백질' : 'Prot.'}</TableHead>
             <TableHead>{isKo ? '지방' : 'Fat'}</TableHead>
             <TableHead>{isKo ? '이미지 링크 (선택)' : 'Image URL (optional)'}</TableHead>
             <TableHead>{isKo ? '분류 태그' : 'Category'}</TableHead>

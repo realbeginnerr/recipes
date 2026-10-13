@@ -146,7 +146,7 @@ export function resolveBlend(product: Product, catalog: Product[]): Product {
   const total = components.length >= 2 && prices.every(value => value !== null) ? prices.reduce<number>((sum, value) => sum + (value ?? 0), 0) : null
   const inheritedTags = new Set<TeaTag>(['혼합차', ...components.flatMap(item => { const source = item.unavailable ? undefined : catalog.find(candidate => candidate.id === item.productId); return source ? getTeaTags(source) : [] })])
   if (inheritedTags.has('카페인')) inheritedTags.delete('무카페인')
-  const teaTags = teaCategories.filter((tag): tag is TeaTag => tag !== '전체' && inheritedTags.has(tag))
+  const teaTags: TeaTag[] = product.teaTags.length === 1 && product.teaTags[0] === '기타' ? ['기타'] : teaCategories.filter((tag): tag is TeaTag => tag !== '전체' && inheritedTags.has(tag))
   return { ...product, teaTags, blend: { components, waterMl: product.blend?.waterMl ?? null }, pricing: { ...product.pricing, regular: total, discount: null, discountStart: '', discountEnd: '' } }
 }
 

@@ -283,8 +283,8 @@ export function IngredientsPage({ visibleIds }: { visibleIds?: string[] } = {}) 
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="alpha-asc">{isKo ? '이름순 (ㄱ→ㅎ)' : 'Name (A→Z)'}</SelectItem>
-            <SelectItem value="alpha-desc">{isKo ? '이름순 (ㅎ→ㄱ)' : 'Name (Z→A)'}</SelectItem>
+            <SelectItem value="alpha-asc">{isKo ? 'ㄱ→ㅎ' : 'A→Z'}</SelectItem>
+            <SelectItem value="alpha-desc">{isKo ? 'ㅎ→ㄱ' : 'Z→A'}</SelectItem>
           </SelectContent>
         </Select>}
         {!embedded && (isEditing ? (
@@ -349,7 +349,7 @@ export function IngredientsPage({ visibleIds }: { visibleIds?: string[] } = {}) 
                 <TableHead>{isKo ? '양' : 'Amount'}</TableHead>
                 <TableHead>{isKo ? '단위' : 'Unit'}</TableHead>
                 <TableHead>{isKo ? '탄수화물' : 'Carbs'}</TableHead>
-                <TableHead>{isKo ? '단백질' : 'Protein'}</TableHead>
+                <TableHead>{isKo ? '단백질' : 'Prot.'}</TableHead>
                 <TableHead>{isKo ? '지방' : 'Fat'}</TableHead>
                 <TableHead>1T=?g</TableHead>
                 <TableHead>1t=?g</TableHead>

@@ -41,7 +41,7 @@ export function NutritionTable({ children, total, showCalories = false, labelled
   const { language } = useLanguage()
   const tableRef = useIngredientColumnWidth()
   const ko = language === 'ko'
-  const titles = ko ? ['식재료명', '양', '단위', '탄 (g)', '단 (g)', '지 (g)'] : ['Ingredient', 'Amount', 'Unit', 'Carbs (g)', 'Protein (g)', 'Fat (g)']
+  const titles = ko ? ['식재료명', '양', '단위', '탄 (g)', '단 (g)', '지 (g)'] : ['Ingredient', 'Amount', 'Unit', 'Carbs (g)', 'Prot. (g)', 'Fat (g)']
   return <div className="detail-table-wrap site-table-frame"><table className="site-table" ref={tableRef} data-ingredient-default-ratio="0.3" aria-labelledby={labelledBy}>
     <thead><tr>{titles.map((title, index) => <th scope="col" key={title} className={index === 1 || index > 2 ? 'numeric' : ''}>{title}</th>)}</tr></thead>
     <tbody>{wrapIngredientCells(children)}</tbody>

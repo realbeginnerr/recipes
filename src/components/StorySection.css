@@ -14,6 +14,7 @@
 .story-soft { background: #F6F5F1; }
 .story-section { padding: clamp(80px, 10vw, 120px) 24px; }
 .story-reading { max-width: 680px; margin: 0 auto; }
+.story-section[aria-labelledby="story-meeting"] .story-reading { text-align: center; }
 .story-reading p { font-size: 16px; line-height: 1.9; }
 .story-number { font-family: var(--font-display); font-variant-numeric: tabular-nums; font-size: 72px; color: #E5EAE9; line-height: 1; letter-spacing: 0; margin-bottom: 24px; user-select: none; }
 .story-soft .story-number { color: #DEE3E1; }

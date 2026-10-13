@@ -46,8 +46,8 @@ export function RecipeCard({ recipe, openInNewTab = false, variant = 'recipe' }:
           </div>} />
       </div>
       <div className="recipe-card__footer">
-        <CatalogTags tags={categories} />
         <h2 className="recipe-card__name">{name}</h2>
+        <CatalogTags tags={categories} />
         {variant === 'product' && description && <p className="product-card-description" title={description}>{description}</p>}
         {variant === 'product' && <div className="product-card-price">
           <strong>{price === null ? (language === 'ko' ? '가격 미정' : 'Price unavailable') : `${price.toLocaleString('en-US')}${language === 'ko' ? '원' : ' KRW'}`}</strong>

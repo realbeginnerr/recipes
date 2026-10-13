@@ -928,7 +928,7 @@ export function AddRecipePage() {
                         <TableHead>Amount</TableHead>
                         <TableHead>Unit</TableHead>
                         <TableHead>Carbs</TableHead>
-                        <TableHead>Protein</TableHead>
+                        <TableHead>Prot.</TableHead>
                         <TableHead>Fat</TableHead>
                         <TableHead className="edit-inline__delete-cell">
                           <Button type="button" variant="ghost" size="icon-sm" className="text-muted-foreground " title="Delete all" onClick={() => { setResolvedRows([]); setEnRows([]); setSideRows([]) }}>✕</Button>

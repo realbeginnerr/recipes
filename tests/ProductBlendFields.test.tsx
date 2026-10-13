@@ -62,7 +62,8 @@ it('shows the one-cup leaf basis and default brewing instructions without a cust
 })
 
 it('shows group-buy recruitment only for blended tea and keeps the purchase link on single tea', () => {
-  const product = { ...emptyProduct(), purchaseUrl: 'https://shop.example.com/tea' }
+  const base = emptyProduct()
+  const product = { ...base, pricing: { ...base.pricing, regular: 10000 }, purchaseUrl: 'https://shop.example.com/tea' }
   const { rerender } = render(<MemoryRouter><ProductPreview product={product} settings={null} /></MemoryRouter>)
   expect(screen.queryByText('판매 중')).toBeNull()
   expect(screen.queryByText('공동구매 모집 중')).toBeNull()
@@ -76,6 +77,16 @@ it('shows group-buy recruitment only for blended tea and keeps the purchase link
   expect(groupLink.getAttribute('target')).toBe('_blank')
   expect(groupLink.className).toBe('product-purchase-link')
   expect(screen.queryByText('판매 중')).toBeNull()
+})
+
+it('keeps the purchase button visible and disabled when the price or purchase link is missing', () => {
+  const product = emptyProduct()
+  const { rerender } = render(<MemoryRouter><ProductPreview product={product} settings={null} /></MemoryRouter>)
+  expect((screen.getByRole('button', { name: '구매하기' }) as HTMLButtonElement).disabled).toBe(true)
+  rerender(<MemoryRouter><ProductPreview product={{ ...product, purchaseUrl: 'https://shop.example.com/bag' }} settings={null} /></MemoryRouter>)
+  expect((screen.getByRole('button', { name: '구매하기' }) as HTMLButtonElement).disabled).toBe(true)
+  rerender(<MemoryRouter><ProductPreview product={{ ...product, pricing: { ...product.pricing, regular: 10000 } }} settings={null} /></MemoryRouter>)
+  expect((screen.getByRole('button', { name: '구매하기' }) as HTMLButtonElement).disabled).toBe(true)
 })
 
 it('renders detail tea tags with the same chip classes as catalog cards', () => {

@@ -3,6 +3,7 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import { Layout } from './components/Layout'
 import { AddPagePasswordGate } from './components/AddPagePasswordGate'
 import { AboutPage } from './pages/AboutPage'
+const AdminPage = lazy(() => import('./pages/AdminPage').then(module => ({ default: module.AdminPage })))
 
 const RecipePage = lazy(() => import('./pages/RecipePage').then(module => ({ default: module.RecipePage })))
 const RecipeRoulettePage = lazy(() => import('./pages/RecipeRoulettePage').then(module => ({ default: module.RecipeRoulettePage })))
@@ -24,6 +25,7 @@ export function App() {
     <Routes>
       <Route element={<Layout />}>
         <Route index element={<AboutPage />} />
+        <Route path="admin" element={<AddPagePasswordGate key="admin"><AdminPage /></AddPagePasswordGate>} />
         <Route path="recipes" element={<RecipePage key="recipes" />} />
         <Route path="blending-tea" element={<RecipePage key="blending-tea" blendingTea />} />
         <Route path="products/new" element={<AddPagePasswordGate key="new-product"><ProductEditPage /></AddPagePasswordGate>} />

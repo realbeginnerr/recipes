@@ -5,7 +5,7 @@
 - 식재료 수정 화면에서 분류와 보관 장소를 각각 칩으로 선택한다. 분류는 탄수화물·단백질·지방·채소·과일·기타 중 하나, 보관 장소는 미지정·냉장실·냉동실·실온보관 중 하나다. 저장한 분류는 이름 기반 자동 분류보다 우선한다.
 - 식재료 카드에서 지정된 보관 장소는 분류 칩 옆에 같은 스타일의 칩으로 표시한다. 보관 장소가 미지정이면 보관 장소 칩은 표시하지 않는다.
 - 레시피 상세의 전체 재료 테이블은 냉장실·냉동실·실온보관·미지정 순으로 그룹 제목 행을 표시한다. 빈 그룹은 숨기고 그룹 안에서는 기존 재료 순서를 유지한다. 재료 양·단위 편집 및 전체 합계는 유지한다.
-- 보관 장소 그룹 제목 행은 테이블 헤더와 동일한 배경색·글자색 토큰을 사용한다. 높이는 고정하지 않고 내용과 셀 패딩에 맞춰 자동으로 정한다(Hug).
+- 보관 장소 그룹 제목 행은 테이블 헤더와 동일한 글꼴·크기·굵기·자간·배경색·글자색을 사용한다. 모든 기본 행과 동일하게 최소 높이 56px을 적용하고, 내용이 많으면 늘어난다. 테두리와 교차 배경은 `Data Table > Default UI` 규칙을 따른다.
 - 그룹명 앞에 작은 아이콘을 표시한다: 냉장실 🗄️, 냉동실 ❄️, 실온보관 🧂, 미지정 ❓. 아이콘은 12px이며 장식 요소로 처리한다.
 
 ## 목차
@@ -361,8 +361,12 @@ Network, Server, Database 등의 문제로 데이터를 확인할 수 없는 경
 #### Default UI
 
 - 레시피 상세 Table의 외형을 웹사이트 전체 Table의 기본 UI로 사용한다. 공통 스타일과 CSS 변수는 `src/components/ui/table.css`에서 관리하고, 공통 `Table`과 `NutritionTable`이 함께 사용한다.
-- 제목행은 `surface-soft` 배경, 본문색 `body`, 14px·굵기 500을 사용한다. 본문행은 `canvas` 배경이며 짝수행은 `table-row-alternate` 배경으로 구분한다.
-- 기본 행 높이는 56px이며 내용이 많으면 늘어난다. 셀 패딩은 상하 10px·좌우 14px이다. 외곽 테두리, 제목행 아래 구분선과 합계행 위 구분선은 `hairline-soft` 1px를 사용한다.
+- 제목행과 카테고리 구분 행(냉장실·냉동실·실온보관·미지정 등)은 동일한 글꼴을 상속하고, `surface-soft` 배경, 본문색 `body`, 14px·굵기 500·자간 0.4px·좌측 정렬을 사용한다.
+- 제목행 바로 다음의 첫 본문행은 흰색 `canvas` 배경으로 시작하고, 이후 `canvas`와 `table-row-alternate` 배경을 교대로 적용한다. 카테고리 구분 행이 있으면 각 그룹의 첫 본문행부터 흰색으로 다시 시작한다. 카테고리 행은 본문 교차 배경 순서에 포함하지 않는다. 그룹 안에서는 `table-row--white`와 `table-row--alternate` 역할 클래스로 적용한다.
+- 제목행·카테고리 구분 행·본문행의 기본 최소 높이는 모두 56px이며 내용이 많으면 늘어난다. 셀 패딩은 상하 10px·좌우 14px이다. PC와 모바일에 동일하게 적용한다.
+- 외곽 테두리와 구분선은 `hairline-soft` 1px를 사용한다. 제목행은 아래쪽, 카테고리 구분 행과 합계행은 위쪽에 구분선을 표시한다. 카테고리 행 아래쪽에는 테두리를 표시하지 않는다.
+- 제목행(`thead`) 바로 다음에 오는 첫 행은 카테고리·본문·합계 등 종류와 관계없이 위쪽 테두리를 표시하지 않는다. 제목행의 아래쪽 테두리와 겹치지 않도록 해당 행과 셀 모두에 적용한다.
+- 모든 테이블 외곽 프레임은 각진 모서리로 표시하며 `border-radius: 0`을 사용한다.
 - 합계행은 `surface-soft` 배경, `ink` 색상, 15px·굵기 700으로 제목과 수치를 통일한다. 공통 `TableRow`의 `tone="total"` 또는 `table-row--total` 역할 클래스로 적용한다.
 - 열 너비는 `Column Width` 정책을 따른다. 주식행·칼로리행 등 별도 의미를 가진 행은 해당 화면의 예외로 관리하며 공통 기본 스타일을 복제하지 않는다.
 
@@ -754,6 +758,8 @@ font-substitutions:
     source: "https://github.com/yangheeryu/Gowun-Batang"
 
 layout:
+  recipe-card-column-gap: 18px
+  recipe-card-row-gap: 24px
   content-max: none
   recipe-detail-content-max: 1200px
   gutter-mobile: 16px
@@ -784,10 +790,22 @@ components:
     alternateRowBackgroundColor: "{colors.table-row-alternate}"
     borderColor: "{colors.hairline-soft}"
     borderWidth: 1px
+    rounded: 0px
     rowMinHeight: 56px
     cellPadding: 10px 14px
     fontSize: 14px
     headerFontWeight: 500
+    headerLetterSpacing: 0.4px
+    headerBorderBottom: "1px solid {colors.hairline-soft}"
+    categoryRowTypography: inherit-header
+    categoryRowMinHeight: "{components.data-table.rowMinHeight}"
+    categoryRowBackgroundColor: "{components.data-table.headerBackgroundColor}"
+    categoryRowTextColor: "{components.data-table.headerTextColor}"
+    categoryRowBorderTop: "1px solid {colors.hairline-soft}"
+    categoryRowBorderBottom: none
+    firstBodyRowBorderTop: none
+    stripeStart: "{colors.canvas}"
+    stripeResetAfterCategory: true
     totalBackgroundColor: "{colors.surface-soft}"
     totalTextColor: "{colors.ink}"
     totalFontSize: 15px
@@ -798,24 +816,24 @@ components:
     typography:
       en: "{typography.button}"
       ko: "{typography-kr.button}"
-    rounded: "{rounded.md}"
+    rounded: 0px
     padding: 0 20px
     height: 40px
   button-primary-active:
     backgroundColor: "{colors.primary-active}"
     textColor: "{colors.on-primary}"
-    rounded: "{rounded.md}"
+    rounded: 0px
   button-primary-disabled:
     backgroundColor: "{colors.primary-disabled}"
     textColor: "{colors.muted}"
-    rounded: "{rounded.md}"
+    rounded: 0px
   button-secondary:
     backgroundColor: "{colors.canvas}"
     textColor: "{colors.ink}"
     typography:
       en: "{typography.button}"
       ko: "{typography-kr.button}"
-    rounded: "{rounded.md}"
+    rounded: 0px
     padding: 0 20px
     height: 40px
   button-secondary-on-dark:
@@ -824,7 +842,7 @@ components:
     typography:
       en: "{typography.button}"
       ko: "{typography-kr.button}"
-    rounded: "{rounded.md}"
+    rounded: 0px
     padding: 0 20px
     height: 40px
   button-text-link:
@@ -836,7 +854,7 @@ components:
   button-icon-circular:
     backgroundColor: "{colors.canvas}"
     textColor: "{colors.ink}"
-    rounded: "{rounded.full}"
+    rounded: 0px
     size: 40px
   text-link:
     backgroundColor: transparent
@@ -861,14 +879,14 @@ components:
   hero-photo:
     backgroundColor: "{colors.canvas}"
     textColor: "{colors.ink}"
-    rounded: "{rounded.xl}"
+    rounded: 0px
   recipe-card:
     backgroundColor: "{colors.surface-card}"
     textColor: "{colors.ink}"
     typography:
       en: "{typography.title-md}"
       ko: "{typography-kr.title-md}"
-    rounded: "{rounded.lg}"
+    rounded: 0px
     padding: 32px
   nutrition-panel:
     backgroundColor: "{colors.surface-dark}"
@@ -963,3 +981,7 @@ components:
 - Firestore `recipes` 문서의 `imageUrl`은 대표 사진 문자열, `imageUrls`는 추가 사진 URL 배열이다. 대표 사진을 포함해 최대 5장을 표시하며, Firebase에서 직접 수정한 뒤 새로고침하면 반영된다.
 - 레시피 수정 화면에서 URL 입력, 기기 파일 선택(장당 10MB 이하), 사진 추가·삭제 및 대표 사진 지정을 지원한다. 파일은 Firebase Storage에, URL은 Firestore에 저장한다.
 - 모든 사진을 삭제하면 `imageUrl: ""`, `imageUrls: []`로 저장하여 기본 사진도 숨긴다. 사진 삭제는 연결을 제거하며 Storage 원본 파일은 유지한다.
+
+### 이미지와 버튼 모서리
+
+- 모든 이미지와 이미지 프레임, 버튼(아이콘 버튼·언어 전환 포함)은 `border-radius: 0`을 사용한다. 원형 마스크와 둥근 모서리를 적용하지 않는다.

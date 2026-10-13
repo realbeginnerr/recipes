@@ -50,7 +50,7 @@ export function IngredientCsvTable({ ingredients }: { ingredients: FirestoreIngr
   })
   const headings = ko
     ? ['재료명', 'g', 'T', 't', 'cup', '개, 장', '병, 캔, 팩', '탄수화물(g)', '단백질(g)', '지방(g)']
-    : ['Ingredient', 'g', 'T', 't', 'cup', 'Pieces, sheets', 'Bottles, cans, packs', 'Carbs (g)', 'Protein (g)', 'Fat (g)']
+    : ['Ingredient', 'g', 'T', 't', 'cup', 'Pieces, sheets', 'Bottles, cans, packs', 'Carbs (g)', 'Prot. (g)', 'Fat (g)']
   return <div className="table-container table-container--sticky-header ingredient-csv-table">
     <Table className="data-table" style={{ minWidth: headings.length * 120 }}>
       <TableHeader><TableRow>{headings.map((heading, column) => {

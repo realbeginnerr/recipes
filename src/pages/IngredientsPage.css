@@ -1,5 +1,5 @@
-﻿.ingredient-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 256px), 1fr)); gap: 16px; }
-@media (min-width: 768px) { .ingredient-grid { gap: 20px; } }
+.ingredient-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 256px), 1fr)); column-gap: 18px; row-gap: 24px; }
+
 @media (max-width: 767px) {
   .ingredient-catalog .ingredient-basis { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .ingredient-catalog .ingredient-basis-label { display: none; }
@@ -14,8 +14,8 @@
   .ingredient-catalog:lang(ko) .catalog-intro__title-image { width: 100%; }
   .ingredient-catalog:lang(ko) .catalog-intro__title-with-image h1 { font-size: clamp(24px, 6vw, 32px); white-space: nowrap; }
   .ingredient-title-second-line { display: block; }
-  .ingredient-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
-  .ingredient-grid .ingredient-card-body { padding: 12px; }
+  .ingredient-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ingredient-grid .ingredient-card-body { padding: 12px 0; }
   .ingredient-grid .catalog-macros > div { padding-block: 12px; }
   .ingredient-grid .catalog-macros span { width: 100%; text-align: center; }
   .ingredient-grid .catalog-macros .macro-label-full { display: none; }

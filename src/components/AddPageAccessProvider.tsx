@@ -5,9 +5,9 @@ import { useAdmin } from '../context/AdminContext'
 import { Button } from './ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from './ui/dialog'
 
-type AddPath = '/add-recipe' | '/add-recipe?category=blending-tea' | '/add-ingredient' | '/ingredients/manage' | '/products/new' | '/shop-settings' | `/products/${string}/edit` | `/recipe/${string}/edit` | `/ingredient/${string}/edit`
+type AddPath = '/admin' | '/add-recipe' | '/add-recipe?category=blending-tea' | '/add-ingredient' | '/ingredients/manage' | '/products/new' | '/shop-settings' | `/products/${string}/edit` | `/recipe/${string}/edit` | `/ingredient/${string}/edit`
 export function isProtectedPagePath(path: string): path is AddPath {
-  return path === '/add-recipe' || path === '/add-ingredient' || path === '/ingredients/manage' || path === '/products/new' || path === '/shop-settings' || /^\/(recipe|ingredient|products)\/[^/]+\/edit$/.test(path)
+  return path === '/admin' || path === '/add-recipe' || path === '/add-ingredient' || path === '/ingredients/manage' || path === '/products/new' || path === '/shop-settings' || /^\/(recipe|ingredient|products)\/[^/]+\/edit$/.test(path)
 }
 const AccessContext = createContext<{ requestAccess: (path: AddPath) => void; approvedPath: AddPath | null } | null>(null)
 

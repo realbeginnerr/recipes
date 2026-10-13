@@ -1,0 +1,12 @@
+.admin-page { width: 100%; min-width: 0; }
+.admin-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 24px; }
+.admin-heading h1 { margin: 0; font-size: 32px; }
+.admin-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 32px; }
+.admin-actions a { padding: 12px 16px; background: #F6F5F1; text-decoration: none; }
+.admin-search { display: flex; flex-direction: column; gap: 8px; margin-bottom: 24px; }
+.admin-search input { width: 100%; padding: 10px 12px; border: 1px solid #D4D9D7; }
+.admin-page section { margin-top: 32px; }
+.admin-page section h2 { font-size: 20px; }
+.admin-page ul { list-style: none; padding: 0; }
+.admin-page li { border-bottom: 1px solid #E5EAE9; }
+.admin-page li a { display: block; padding: 12px 0; overflow-wrap: anywhere; }

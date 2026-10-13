@@ -49,5 +49,5 @@ it('uses only filter-chip tea tags for product card badges', () => {
 })
 it('uses the same known tea tags as filtering for the legacy copied tea', () => {
   const { container } = render(<MemoryRouter><LanguageProvider><RecipeCard recipe={{ ...item, id: 'tea-Tm2NJxtbz7kzRt2aJfxg' }} variant="product" /></LanguageProvider></MemoryRouter>)
-  expect(Array.from(container.querySelectorAll('.catalog-category')).map(node => node.textContent)).toEqual(['홍차', '혼합차', '카페인'])
+  expect(Array.from(container.querySelectorAll('.catalog-category')).map(node => node.textContent)).toEqual(['기타'])
 })
