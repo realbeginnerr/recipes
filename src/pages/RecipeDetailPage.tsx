@@ -45,6 +45,7 @@ function TableNutritionSummary({ total }: { total: Macros }) {
 function RecipeImageGallery({ recipe, name, ko }: { recipe: Recipe; name: string; ko: boolean }) {
   const primary = resolveRecipeImage(recipe)
   const images = [...new Set([primary, ...(recipe.imageUrls ?? [])].filter(url => typeof url === 'string' && url.trim()))].slice(0, 5)
+  if (recipe.id === 'WcLik1YkmcONHWKo7Njg') images.splice(1, images.length > 1 ? 1 : 0, `${import.meta.env.BASE_URL}images/recipes/soybeansoup (0).png`)
   const [selected, setSelected] = useState(0)
   const [open, setOpen] = useState(false)
   const touchStart = useRef<{ x: number; y: number } | null>(null)
@@ -130,6 +131,7 @@ function RecipeNutrition({ recipe }: { recipe: Recipe }) {
     <div className="detail-layout">
       <header className="detail-heading">
         <RecipeImageGallery recipe={recipe} name={name} ko={ko} />
+        <p className="detail-image-caption">*그릇이 없어서 인공지능에게 빌리고 있음. 실물그릇 협찬 환영.</p>
       </header>
       <div className="detail-tables">
       <div className="detail-title-tags">
