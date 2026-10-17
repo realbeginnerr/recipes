@@ -28,6 +28,7 @@ export type FirestoreIngredient = {
   gramsPerCup?: number
   gramsPerEach?: number
   gramsPerCan?: number
+  gramsPerHandful?: number
   gramsPerPack?: number
 }
 
@@ -131,11 +132,12 @@ function registerIngredient(ing: FirestoreIngredient) {
 
 const OZ_TO_G = 28.3495
 
-function buildConversions(ing: Pick<FirestoreIngredient, 'baseUnit' | 'gramsPerTbsp' | 'gramsPerTsp' | 'gramsPerCup' | 'gramsPerEach' | 'gramsPerCan' | 'gramsPerPack'>): Record<string, number> {
+function buildConversions(ing: Pick<FirestoreIngredient, 'baseUnit' | 'gramsPerTbsp' | 'gramsPerTsp' | 'gramsPerCup' | 'gramsPerEach' | 'gramsPerCan' | 'gramsPerPack' | 'gramsPerHandful'>): Record<string, number> {
   const { baseUnit } = ing
   let base: Record<string, number>
   if (baseUnit === 'g' || baseUnit === 'ml') base = { g: 1, ml: 1, oz: OZ_TO_G }
   else if (baseUnit === 'oz') base = { g: 1, oz: OZ_TO_G }
+  else if (baseUnit === '줌' || baseUnit === 'handful') base = { '줌': 1, handful: 1 }
   else if (baseUnit === '꼬집' || baseUnit === 'pinch') base = { '꼬집': 1, pinch: 1 }
   else if (baseUnit === '개' || baseUnit === 'each') base = { '개': 1, each: 1 }
   else if (baseUnit === '캔' || baseUnit === 'can') base = { '캔': 1, can: 1 }
@@ -169,15 +171,20 @@ function buildConversions(ing: Pick<FirestoreIngredient, 'baseUnit' | 'gramsPerT
     base['팩'] = ing.gramsPerPack
     base['pack'] = ing.gramsPerPack
   }
+  if (ing.gramsPerHandful) {
+    base['줌'] = ing.gramsPerHandful
+    base['handful'] = ing.gramsPerHandful
+  }
   return base
 }
 
-function buildAllowedUnits(ing: Pick<FirestoreIngredient, 'baseUnit' | 'gramsPerTbsp' | 'gramsPerTsp' | 'gramsPerCup' | 'gramsPerEach' | 'gramsPerCan' | 'gramsPerPack'>): string[] {
+function buildAllowedUnits(ing: Pick<FirestoreIngredient, 'baseUnit' | 'gramsPerTbsp' | 'gramsPerTsp' | 'gramsPerCup' | 'gramsPerEach' | 'gramsPerCan' | 'gramsPerPack' | 'gramsPerHandful'>): string[] {
   const { baseUnit } = ing
   let units: string[]
   if (baseUnit === 'g') units = ['g', 'oz', 'ml']
   else if (baseUnit === 'oz') units = ['oz', 'g']
   else if (baseUnit === 'ml') units = ['ml', 'g', 'oz']
+  else if (baseUnit === '줌' || baseUnit === 'handful') units = ['줌', 'handful']
   else if (baseUnit === '꼬집' || baseUnit === 'pinch') units = ['꼬집', 'pinch']
   else if (baseUnit === '개' || baseUnit === 'each') units = ['개', 'each']
   else if (baseUnit === '캔' || baseUnit === 'can') units = ['캔', 'can']
@@ -193,5 +200,6 @@ function buildAllowedUnits(ing: Pick<FirestoreIngredient, 'baseUnit' | 'gramsPer
   if (ing.gramsPerEach && !units.includes('개')) units.push('개')
   if (ing.gramsPerCan && !units.includes('캔')) units.push('캔')
   if (ing.gramsPerPack && !units.includes('팩')) units.push('팩')
+  if (ing.gramsPerHandful && !units.includes('줌')) units.push('줌')
   return units
 }

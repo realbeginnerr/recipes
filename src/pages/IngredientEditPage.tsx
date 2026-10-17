@@ -21,15 +21,15 @@ import { convertToRecipe, loadRecipesFromFirestore } from '../services/recipeSer
 
 type IngredientDraft = Omit<FirestoreIngredient, 'id'>
 type NumericField = 'baseAmount' | 'carbs' | 'protein' | 'fat'
-type ConversionField = 'gramsPerTbsp' | 'gramsPerTsp' | 'gramsPerCup' | 'gramsPerEach' | 'gramsPerCan' | 'gramsPerPack'
+type ConversionField = 'gramsPerTbsp' | 'gramsPerTsp' | 'gramsPerCup' | 'gramsPerEach' | 'gramsPerCan' | 'gramsPerPack' | 'gramsPerHandful'
 
-const UNIT_OPTIONS = ['g', 'ml', 'oz', 'lbs', 'T', 't', '컵', '개', '캔', '팩', '꼬집']
 const CONVERSION_FIELDS: { key: ConversionField; labelKo: string; labelEn: string }[] = [
   { key: 'gramsPerTbsp', labelKo: 'T', labelEn: 'tbsp' },
   { key: 'gramsPerTsp', labelKo: 't', labelEn: 'tsp' },
   { key: 'gramsPerCup', labelKo: '컵', labelEn: 'cup' },
   { key: 'gramsPerEach', labelKo: '개', labelEn: 'each' },
   { key: 'gramsPerCan', labelKo: '캔', labelEn: 'can' },
+  { key: 'gramsPerHandful', labelKo: '줌', labelEn: 'handful' },
   { key: 'gramsPerPack', labelKo: '팩', labelEn: 'pack' },
 ]
 
@@ -55,6 +55,7 @@ function initialDraft(ingredient: FirestoreIngredient): IngredientDraft {
     ...(ingredient.gramsPerCup !== undefined ? { gramsPerCup: ingredient.gramsPerCup } : {}),
     ...(ingredient.gramsPerEach !== undefined ? { gramsPerEach: ingredient.gramsPerEach } : {}),
     ...(ingredient.gramsPerCan !== undefined ? { gramsPerCan: ingredient.gramsPerCan } : {}),
+    ...(ingredient.gramsPerHandful !== undefined ? { gramsPerHandful: ingredient.gramsPerHandful } : {}),
     ...(ingredient.gramsPerPack !== undefined ? { gramsPerPack: ingredient.gramsPerPack } : {}),
   }
 }
@@ -215,7 +216,7 @@ export function IngredientEditPage() {
         </div>
         <div className="flex flex-col gap-2">
           <label htmlFor="ingredient-base-unit" className="text-sm font-medium">{isKo ? '기준 단위' : 'Base unit'}</label>
-          <UnitSelect value={draft.baseUnit} onValueChange={(value) => setDraft((current) => current ? { ...current, baseUnit: value } : current)} language={language} options={UNIT_OPTIONS} />
+          <UnitSelect value={draft.baseUnit} onValueChange={(value) => setDraft((current) => current ? { ...current, baseUnit: value } : current)} language={language} />
         </div>
       </div>
 

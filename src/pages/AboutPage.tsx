@@ -4,14 +4,16 @@ import { Button } from '../components/ui/button'
 import { useSearch } from '../context/SearchContext'
 import { useLanguage } from '../context/LanguageContext'
 import { aboutCopy } from '../i18n/about'
+import { useScrollReveal } from '../hooks/useScrollReveal'
 import './AboutPage.css'
 
 export function AboutPage() {
   const { language } = useLanguage()
   const copy = aboutCopy[language]
   const { resetHome } = useSearch()
+  const revealRoot = useScrollReveal()
 
-  return <div className="service-page" lang={language}>
+  return <div ref={revealRoot} className="service-page" lang={language}>
     <section className="story-hero" aria-labelledby="story-title" style={{ backgroundImage: `url("${import.meta.env.BASE_URL}images/service/home-hero.png")` }}>
       <div className="story-hero-content">
         <h3 id="story-title">{copy.heroFirst && <>{copy.heroFirst}<br /></>}{copy.heroLast}</h3>

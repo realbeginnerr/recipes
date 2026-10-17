@@ -40,7 +40,6 @@ function dedupeIngredients(isKo: boolean, order: 'alpha-asc' | 'alpha-desc' = 'a
   return list
 }
 
-const UNITS = ['g', 'ml', 'oz', 'lbs', 'T', 't', '컵', '개', '캔', '팩', '꼬집']
 
 type EditRow = FirestoreIngredient & { _dirty?: boolean }
 
@@ -394,7 +393,7 @@ export function IngredientsPage({ visibleIds }: { visibleIds?: string[] } = {}) 
                         value={ing.baseUnit}
                         onValueChange={(v) => updateEditRow(ing.id, 'baseUnit', v)}
                         language={language}
-                        options={UNITS}
+
                       />
                     </TableCell>
                     <TableCell>
@@ -576,7 +575,7 @@ export function IngredientsPage({ visibleIds }: { visibleIds?: string[] } = {}) 
                       value={newRow.baseUnit}
                       onValueChange={(v) => setNewRow((p) => ({ ...p, baseUnit: v }))}
                       language={language}
-                      options={UNITS}
+
                     />
                   </TableCell>
                   <TableCell>

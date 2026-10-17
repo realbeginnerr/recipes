@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button'
 import { useEffect, useRef, useState } from 'react'
 import { Dialog as ImageDialog } from '@base-ui/react/dialog'
 import { X } from 'lucide-react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { BackLink } from '../components/BackLink'
 import { useLanguage } from '../context/LanguageContext'
 import { useAdmin } from '../context/AdminContext'
@@ -36,9 +36,9 @@ function sum(rows: Macros[]) { return rows.reduce((total, row) => ({ carbs: tota
 function initialRows(recipe: Recipe) { return recipe.items.map(item => ({ ingredientId: item.ingredientId, amount: item.defaultAmount, unit: item.defaultUnit })) }
 function amount(value: string) { const parsed = Number(value); return Number.isFinite(parsed) ? Math.max(0, parsed) : 0 }
 
-function TableNutritionSummary({ total }: { total: Macros }) {
+function TableNutritionSummary({ total, showRatio = false }: { total: Macros; showRatio?: boolean }) {
   return <div className="detail-nutrition-summary">
-    <NutritionSummary {...total} />
+    <NutritionSummary {...total} showRatio={showRatio} />
   </div>
 }
 
@@ -91,6 +91,8 @@ function RecipeImageGallery({ recipe, name, ko }: { recipe: Recipe; name: string
 
 function RecipeNutrition({ recipe }: { recipe: Recipe }) {
   const { language } = useLanguage()
+  const { isAdmin } = useAdmin()
+  const navigate = useNavigate()
   const ko = language === 'ko'
   const name = ko ? recipe.nameKo : recipe.name
   const [rows, setRows] = useState<RecipeRowState[]>(() => initialRows(recipe))
@@ -132,6 +134,7 @@ function RecipeNutrition({ recipe }: { recipe: Recipe }) {
       <header className="detail-heading">
         <RecipeImageGallery recipe={recipe} name={name} ko={ko} />
         <p className="detail-image-caption">*그릇이 없어서 인공지능에게 빌리고 있음. 실물그릇 협찬 환영.</p>
+        {isAdmin && <Button type="button" variant="ghost" size="content" className="catalog-intro__subtle-action detail-edit-button" onClick={() => navigate(`/recipe/${recipe.id}/edit`)}>{ko ? '수정' : 'Edit'}</Button>}
       </header>
       <div className="detail-tables">
       <div className="detail-title-tags">
@@ -168,7 +171,7 @@ function RecipeNutrition({ recipe }: { recipe: Recipe }) {
           return <tr key={index}><td>{label(current, row.ingredientId)}</td>{quantityCells(row, index, true)}<MacroCells values={macrosFor(row)} /></tr>
         })}
       </NutritionTable>
-      <TableNutritionSummary total={meal} />
+      <TableNutritionSummary total={meal} showRatio />
       {memo.trim() && <section className="detail-notes"><h2>{ko ? '메모' : 'Notes'}</h2><p>{memo}</p></section>}
       </section>
       </div>

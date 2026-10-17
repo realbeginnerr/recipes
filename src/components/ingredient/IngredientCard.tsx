@@ -48,7 +48,7 @@ export function IngredientCard({ ingredient, image, category, storageLocation, r
           const value = event.target.value
           setQuantity(value === '' ? '' : String(Math.max(0, Number(value) || 0)))
         }} />
-        {units.length > 1 ? <UnitSelect size="quantity" language={language} value={unit} options={units} onValueChange={changeUnit} aria-label={`${name} ${ko ? '단위' : 'unit'}`} /> : <span>{unit}</span>}
+        <UnitSelect size="quantity" language={language} value={unit} options={units} onValueChange={changeUnit} aria-label={`${name} ${ko ? '단위' : 'unit'}`} />
         <span className="ingredient-basis-label">{ko ? '기준' : 'serving'}</span>
         {changed && <Button type="button" variant="ghost" size="content" aria-label={`${name} ${ko ? '용량 초기화' : 'reset amount'}`} onClick={() => { setQuantity(String(defaultAmount)); setUnit(defaultUnit) }}>{ko ? '초기화' : 'Reset'}</Button>}
       </div>

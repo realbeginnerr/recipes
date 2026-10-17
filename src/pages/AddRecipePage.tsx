@@ -112,6 +112,7 @@ const KO_TO_EN_UNIT: Record<string, string> = {
   '캔': 'can',
   '팩': 'pack',
   '꼬집': 'pinch',
+  '줌': 'handful',
   T: 'tbsp',
   t: 'tsp',
   oz: 'oz',
