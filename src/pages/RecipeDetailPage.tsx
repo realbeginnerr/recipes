@@ -133,7 +133,6 @@ function RecipeNutrition({ recipe }: { recipe: Recipe }) {
     <div className="detail-layout">
       <header className="detail-heading">
         <RecipeImageGallery recipe={recipe} name={name} ko={ko} />
-        <p className="detail-image-caption">*그릇이 없어서 인공지능에게 빌리고 있음. 실물그릇 협찬 환영.</p>
         {isAdmin && <Button type="button" variant="ghost" size="content" className="catalog-intro__subtle-action detail-edit-button" onClick={() => navigate(`/recipe/${recipe.id}/edit`)}>{ko ? '수정' : 'Edit'}</Button>}
       </header>
       <div className="detail-tables">

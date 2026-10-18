@@ -1,0 +1,174 @@
+﻿{
+    "name":  "projects/recipes-5a663/databases/(default)/documents/recipes/hXNF3PD6BXb1ySkxUhxM",
+    "fields":  {
+                   "items":  {
+                                 "arrayValue":  {
+                                                    "values":  [
+                                                                   {
+                                                                       "mapValue":  {
+                                                                                        "fields":  {
+                                                                                                       "ingredientId":  {
+                                                                                                                            "stringValue":  "skKMHHCCdH6xrfDhCxqX"
+                                                                                                                        },
+                                                                                                       "amount":  {
+                                                                                                                      "integerValue":  "54"
+                                                                                                                  },
+                                                                                                       "unit":  {
+                                                                                                                    "stringValue":  "g"
+                                                                                                                }
+                                                                                                   }
+                                                                                    }
+                                                                   },
+                                                                   {
+                                                                       "mapValue":  {
+                                                                                        "fields":  {
+                                                                                                       "ingredientId":  {
+                                                                                                                            "stringValue":  "bRwGqpOlZ3WiEY0BzeIK"
+                                                                                                                        },
+                                                                                                       "amount":  {
+                                                                                                                      "integerValue":  "9"
+                                                                                                                  },
+                                                                                                       "unit":  {
+                                                                                                                    "stringValue":  "g"
+                                                                                                                }
+                                                                                                   }
+                                                                                    }
+                                                                   },
+                                                                   {
+                                                                       "mapValue":  {
+                                                                                        "fields":  {
+                                                                                                       "ingredientId":  {
+                                                                                                                            "stringValue":  "N2a6l7d2ieuJTU08nPwE"
+                                                                                                                        },
+                                                                                                       "amount":  {
+                                                                                                                      "integerValue":  "1"
+                                                                                                                  },
+                                                                                                       "unit":  {
+                                                                                                                    "stringValue":  "g"
+                                                                                                                }
+                                                                                                   }
+                                                                                    }
+                                                                   },
+                                                                   {
+                                                                       "mapValue":  {
+                                                                                        "fields":  {
+                                                                                                       "ingredientId":  {
+                                                                                                                            "stringValue":  "SQfaXCwVWYWhKXcY3mzR"
+                                                                                                                        },
+                                                                                                       "amount":  {
+                                                                                                                      "doubleValue":  "NaN"
+                                                                                                                  },
+                                                                                                       "unit":  {
+                                                                                                                    "stringValue":  "T"
+                                                                                                                }
+                                                                                                   }
+                                                                                    }
+                                                                   },
+                                                                   {
+                                                                       "mapValue":  {
+                                                                                        "fields":  {
+                                                                                                       "ingredientId":  {
+                                                                                                                            "stringValue":  "ZZCWkM5cnx8wZoT989Mj"
+                                                                                                                        },
+                                                                                                       "amount":  {
+                                                                                                                      "integerValue":  "2"
+                                                                                                                  },
+                                                                                                       "unit":  {
+                                                                                                                    "stringValue":  "g"
+                                                                                                                }
+                                                                                                   }
+                                                                                    }
+                                                                   },
+                                                                   {
+                                                                       "mapValue":  {
+                                                                                        "fields":  {
+                                                                                                       "ingredientId":  {
+                                                                                                                            "stringValue":  "jEqm93wSTmv5KCvkGM9q"
+                                                                                                                        },
+                                                                                                       "amount":  {
+                                                                                                                      "integerValue":  "100"
+                                                                                                                  },
+                                                                                                       "unit":  {
+                                                                                                                    "stringValue":  "g"
+                                                                                                                }
+                                                                                                   }
+                                                                                    }
+                                                                   },
+                                                                   {
+                                                                       "mapValue":  {
+                                                                                        "fields":  {
+                                                                                                       "ingredientId":  {
+                                                                                                                            "stringValue":  "829YpxVHPDAcLsnd136y"
+                                                                                                                        },
+                                                                                                       "amount":  {
+                                                                                                                      "integerValue":  "3"
+                                                                                                                  },
+                                                                                                       "unit":  {
+                                                                                                                    "stringValue":  "g"
+                                                                                                                }
+                                                                                                   }
+                                                                                    }
+                                                                   },
+                                                                   {
+                                                                       "mapValue":  {
+                                                                                        "fields":  {
+                                                                                                       "ingredientId":  {
+                                                                                                                            "stringValue":  "LMSglwCZYdS1XmO2CwLQ"
+                                                                                                                        },
+                                                                                                       "amount":  {
+                                                                                                                      "integerValue":  "85"
+                                                                                                                  },
+                                                                                                       "unit":  {
+                                                                                                                    "stringValue":  "g"
+                                                                                                                }
+                                                                                                   }
+                                                                                    }
+                                                                   }
+                                                               ]
+                                                }
+                             },
+                   "tasteRating":  {
+                                       "integerValue":  "3"
+                                   },
+                   "nameKo":  {
+                                  "stringValue":  "단팥빵"
+                              },
+                   "createdAt":  {
+                                     "integerValue":  "1783661000403"
+                                 },
+                   "name":  {
+                                "stringValue":  "Redbean bread"
+                            },
+                   "imageUrl":  {
+                                    "stringValue":  "https://i.namu.wiki/i/tn2J0e6G2ZvBonjxb-QS56JUbjwn29GbP_WhTCpKw9yCNt55Dd2tlr6s-TtBuJximWmkn-nhl3xdsuysnl3_KtRQQRZiFIyvAOyVFaZmxMo24MyimljTKuGdkMNcF82pf4izsJjTHKrHGUqXNN2Z3A.webp"
+                                },
+                   "categories":  {
+                                      "arrayValue":  {
+                                                         "values":  [
+                                                                        {
+                                                                            "stringValue":  "베이커리"
+                                                                        },
+                                                                        {
+                                                                            "stringValue":  "간식"
+                                                                        }
+                                                                    ]
+                                                     }
+                                  },
+                   "divisionCount":  {
+                                         "integerValue":  "2"
+                                     },
+                   "memo":  {
+                                "stringValue":  ""
+                            },
+                   "link":  {
+                                "stringValue":  "https://www.youtube.com/watch?v=MBqWw1XIpaE"
+                            },
+                   "sideItems":  {
+                                     "arrayValue":  {
+
+                                                    }
+                                 }
+               },
+    "createTime":  "2026-07-10T05:23:20.430854Z",
+    "updateTime":  "2026-10-07T08:37:01.456446Z"
+}

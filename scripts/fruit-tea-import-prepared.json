@@ -1,0 +1,742 @@
+[
+  {
+    "id": "csv-tea-60eacf8e9ec2c14c",
+    "version": 1,
+    "createdAt": 1791553549590,
+    "updatedAt": 1791553549591,
+    "name": "건조 사과칩",
+    "sku": "TEA-CSV-60EACF8E9EC2C14C",
+    "categories": [
+      "",
+      "",
+      ""
+    ],
+    "teaTags": [
+      "무카페인",
+      "과일차"
+    ],
+    "compositionType": "single",
+    "groupBuy": {
+      "participants": null
+    },
+    "blend": {
+      "components": [],
+      "waterMl": 250
+    },
+    "brand": "과일봉봉",
+    "manufacturer": "",
+    "type": "physical",
+    "summary": "",
+    "description": "<p>티백 X. 40g</p>",
+    "purchaseUrl": "https://www.coupang.com/vp/products/9651715184?itemId=28848520337&vendorItemId=95832021437&sourceType=srp_product_ads&clickEventId=42fcc800-c3dc-11f1-8164-e3f300f2b082&clickEventId=42fcc800-c3dc-11f1-8164-e3f300f2b082&korePlacement=15&korePlacement=15&koreSubPlacement=5&koreSubPlacement=5&q=%EB%A7%90%EB%A6%B0+%EA%B3%BC%EC%9D%BC%EC%B9%A9&searchId=68e7283314061194&searchRank=1&traceId=mv0xskx8",
+    "images": [
+      {
+        "id": "cover",
+        "url": "https://thumbnail.coupangcdn.com/thumbnails/remote/657x657q90trim/image/vendor_inventory/3e83/610d61329f32ecfd31d5f59523cf13c053fc4e604fedbdba3bdc60a2dffd.png",
+        "alt": "건조 사과칩"
+      }
+    ],
+    "pricing": {
+      "regular": 5900,
+      "discount": null,
+      "discountStart": "",
+      "discountEnd": "",
+      "tax": "taxable"
+    },
+    "optionsEnabled": false,
+    "options": [],
+    "variants": [],
+    "inventory": {
+      "enabled": false,
+      "stock": 0,
+      "safetyStock": 0,
+      "soldOutThreshold": 0,
+      "stopWhenSoldOut": true,
+      "preorder": false,
+      "restockDate": "",
+      "status": "available"
+    },
+    "shipping": {
+      "type": "parcel",
+      "feeType": "paid",
+      "fee": null,
+      "freeThreshold": null,
+      "extraFee": null,
+      "leadDays": null,
+      "carrier": "",
+      "weight": null,
+      "width": null,
+      "depth": null,
+      "height": null,
+      "bundle": false
+    },
+    "policySelection": {
+      "shipping": "common",
+      "exchange": "common",
+      "refund": "common"
+    },
+    "policies": {
+      "shipping": {
+        "type": "parcel",
+        "carrier": "",
+        "originAddress": "",
+        "leadDays": null,
+        "regions": "",
+        "international": false,
+        "bundle": false,
+        "feeType": "paid",
+        "fee": null,
+        "freeThreshold": null,
+        "jejuFee": null,
+        "remoteFee": null,
+        "quantityFee": null,
+        "individualFee": false,
+        "estimatedDays": "",
+        "cutoffTime": "",
+        "holidays": "",
+        "delayNotice": "",
+        "guidance": ""
+      },
+      "exchange": {
+        "enabled": true,
+        "days": null,
+        "reasons": "",
+        "method": "",
+        "changeFee": null,
+        "defectFee": 0,
+        "remoteFee": null,
+        "payer": "buyer",
+        "collectionMethod": "",
+        "inspection": "",
+        "reshipping": "",
+        "guidance": ""
+      },
+      "refund": {
+        "enabled": true,
+        "days": null,
+        "reasons": "",
+        "method": "",
+        "changeFee": null,
+        "defectFee": 0,
+        "remoteFee": null,
+        "payer": "buyer",
+        "exceptions": [],
+        "exceptionNotice": false,
+        "customConsent": false,
+        "collectionMethod": "",
+        "inspection": "",
+        "refundMethod": "original",
+        "refundDays": null,
+        "partial": true,
+        "settlement": "",
+        "guidance": ""
+      },
+      "address": {
+        "recipient": "",
+        "phone": "",
+        "postcode": "",
+        "address": "",
+        "detail": "",
+        "carrier": "",
+        "notice": "",
+        "customerService": ""
+      }
+    },
+    "policyVersion": 0,
+    "disclosure": {
+      "country": "",
+      "manufactureDate": "",
+      "expiryDate": "",
+      "material": "",
+      "capacity": "",
+      "contents": "",
+      "storage": "",
+      "precautions": "",
+      "certification": "",
+      "support": "",
+      "foodType": "",
+      "importer": "",
+      "nutrition": "",
+      "allergens": "",
+      "gmo": "",
+      "additional": ""
+    },
+    "seo": {
+      "title": "건조 사과칩",
+      "description": "티백 X. 40g",
+      "slug": "건조-사과칩"
+    },
+    "saleStatus": "active",
+    "visibility": "public",
+    "publishAt": "",
+    "saleStart": "",
+    "saleEnd": "",
+    "exposureStart": "",
+    "exposureEnd": "",
+    "featured": false,
+    "newProduct": true,
+    "order": 0,
+    "minQuantity": 1,
+    "maxQuantity": null,
+    "perPersonLimit": null,
+    "draft": false,
+    "deleted": false,
+    "publicAfter": 0,
+    "publicUntil": 8640000000000000
+  },
+  {
+    "id": "csv-tea-dc1cba4d609e952b",
+    "version": 1,
+    "createdAt": 1791553549599,
+    "updatedAt": 1791553549599,
+    "name": "건조 레몬칩",
+    "sku": "TEA-CSV-DC1CBA4D609E952B",
+    "categories": [
+      "",
+      "",
+      ""
+    ],
+    "teaTags": [
+      "무카페인",
+      "과일차"
+    ],
+    "compositionType": "single",
+    "groupBuy": {
+      "participants": null
+    },
+    "blend": {
+      "components": [],
+      "waterMl": 250
+    },
+    "brand": "과일봉봉",
+    "manufacturer": "",
+    "type": "physical",
+    "summary": "",
+    "description": "<p>티백 X. 40g</p>",
+    "purchaseUrl": "https://www.coupang.com/vp/products/9651715184?itemId=28848520337&vendorItemId=95832021437&sourceType=srp_product_ads&clickEventId=42fcc800-c3dc-11f1-8164-e3f300f2b082&clickEventId=42fcc800-c3dc-11f1-8164-e3f300f2b082&korePlacement=15&korePlacement=15&koreSubPlacement=5&koreSubPlacement=5&q=%EB%A7%90%EB%A6%B0+%EA%B3%BC%EC%9D%BC%EC%B9%A9&searchId=68e7283314061194&searchRank=1&traceId=mv0xskx8",
+    "images": [
+      {
+        "id": "cover",
+        "url": "https://thumbnail.coupangcdn.com/thumbnails/remote/657x657q90trim/image/vendor_inventory/3e83/610d61329f32ecfd31d5f59523cf13c053fc4e604fedbdba3bdc60a2dffd.png",
+        "alt": "건조 레몬칩"
+      }
+    ],
+    "pricing": {
+      "regular": 5900,
+      "discount": null,
+      "discountStart": "",
+      "discountEnd": "",
+      "tax": "taxable"
+    },
+    "optionsEnabled": false,
+    "options": [],
+    "variants": [],
+    "inventory": {
+      "enabled": false,
+      "stock": 0,
+      "safetyStock": 0,
+      "soldOutThreshold": 0,
+      "stopWhenSoldOut": true,
+      "preorder": false,
+      "restockDate": "",
+      "status": "available"
+    },
+    "shipping": {
+      "type": "parcel",
+      "feeType": "paid",
+      "fee": null,
+      "freeThreshold": null,
+      "extraFee": null,
+      "leadDays": null,
+      "carrier": "",
+      "weight": null,
+      "width": null,
+      "depth": null,
+      "height": null,
+      "bundle": false
+    },
+    "policySelection": {
+      "shipping": "common",
+      "exchange": "common",
+      "refund": "common"
+    },
+    "policies": {
+      "shipping": {
+        "type": "parcel",
+        "carrier": "",
+        "originAddress": "",
+        "leadDays": null,
+        "regions": "",
+        "international": false,
+        "bundle": false,
+        "feeType": "paid",
+        "fee": null,
+        "freeThreshold": null,
+        "jejuFee": null,
+        "remoteFee": null,
+        "quantityFee": null,
+        "individualFee": false,
+        "estimatedDays": "",
+        "cutoffTime": "",
+        "holidays": "",
+        "delayNotice": "",
+        "guidance": ""
+      },
+      "exchange": {
+        "enabled": true,
+        "days": null,
+        "reasons": "",
+        "method": "",
+        "changeFee": null,
+        "defectFee": 0,
+        "remoteFee": null,
+        "payer": "buyer",
+        "collectionMethod": "",
+        "inspection": "",
+        "reshipping": "",
+        "guidance": ""
+      },
+      "refund": {
+        "enabled": true,
+        "days": null,
+        "reasons": "",
+        "method": "",
+        "changeFee": null,
+        "defectFee": 0,
+        "remoteFee": null,
+        "payer": "buyer",
+        "exceptions": [],
+        "exceptionNotice": false,
+        "customConsent": false,
+        "collectionMethod": "",
+        "inspection": "",
+        "refundMethod": "original",
+        "refundDays": null,
+        "partial": true,
+        "settlement": "",
+        "guidance": ""
+      },
+      "address": {
+        "recipient": "",
+        "phone": "",
+        "postcode": "",
+        "address": "",
+        "detail": "",
+        "carrier": "",
+        "notice": "",
+        "customerService": ""
+      }
+    },
+    "policyVersion": 0,
+    "disclosure": {
+      "country": "",
+      "manufactureDate": "",
+      "expiryDate": "",
+      "material": "",
+      "capacity": "",
+      "contents": "",
+      "storage": "",
+      "precautions": "",
+      "certification": "",
+      "support": "",
+      "foodType": "",
+      "importer": "",
+      "nutrition": "",
+      "allergens": "",
+      "gmo": "",
+      "additional": ""
+    },
+    "seo": {
+      "title": "건조 레몬칩",
+      "description": "티백 X. 40g",
+      "slug": "건조-레몬칩"
+    },
+    "saleStatus": "active",
+    "visibility": "public",
+    "publishAt": "",
+    "saleStart": "",
+    "saleEnd": "",
+    "exposureStart": "",
+    "exposureEnd": "",
+    "featured": false,
+    "newProduct": true,
+    "order": 0,
+    "minQuantity": 1,
+    "maxQuantity": null,
+    "perPersonLimit": null,
+    "draft": false,
+    "deleted": false,
+    "publicAfter": 0,
+    "publicUntil": 8640000000000000
+  },
+  {
+    "id": "csv-tea-35262900f555d611",
+    "version": 1,
+    "createdAt": 1791553549600,
+    "updatedAt": 1791553549600,
+    "name": "건조 파인애플칩",
+    "sku": "TEA-CSV-35262900F555D611",
+    "categories": [
+      "",
+      "",
+      ""
+    ],
+    "teaTags": [
+      "무카페인",
+      "과일차"
+    ],
+    "compositionType": "single",
+    "groupBuy": {
+      "participants": null
+    },
+    "blend": {
+      "components": [],
+      "waterMl": 250
+    },
+    "brand": "과일봉봉",
+    "manufacturer": "",
+    "type": "physical",
+    "summary": "",
+    "description": "<p>티백 X. 40g</p>",
+    "purchaseUrl": "https://www.coupang.com/vp/products/9651715184?itemId=28848520337&vendorItemId=95832021437&sourceType=srp_product_ads&clickEventId=42fcc800-c3dc-11f1-8164-e3f300f2b082&clickEventId=42fcc800-c3dc-11f1-8164-e3f300f2b082&korePlacement=15&korePlacement=15&koreSubPlacement=5&koreSubPlacement=5&q=%EB%A7%90%EB%A6%B0+%EA%B3%BC%EC%9D%BC%EC%B9%A9&searchId=68e7283314061194&searchRank=1&traceId=mv0xskx8",
+    "images": [
+      {
+        "id": "cover",
+        "url": "https://thumbnail.coupangcdn.com/thumbnails/remote/657x657q90trim/image/vendor_inventory/3e83/610d61329f32ecfd31d5f59523cf13c053fc4e604fedbdba3bdc60a2dffd.png",
+        "alt": "건조 파인애플칩"
+      }
+    ],
+    "pricing": {
+      "regular": 5900,
+      "discount": null,
+      "discountStart": "",
+      "discountEnd": "",
+      "tax": "taxable"
+    },
+    "optionsEnabled": false,
+    "options": [],
+    "variants": [],
+    "inventory": {
+      "enabled": false,
+      "stock": 0,
+      "safetyStock": 0,
+      "soldOutThreshold": 0,
+      "stopWhenSoldOut": true,
+      "preorder": false,
+      "restockDate": "",
+      "status": "available"
+    },
+    "shipping": {
+      "type": "parcel",
+      "feeType": "paid",
+      "fee": null,
+      "freeThreshold": null,
+      "extraFee": null,
+      "leadDays": null,
+      "carrier": "",
+      "weight": null,
+      "width": null,
+      "depth": null,
+      "height": null,
+      "bundle": false
+    },
+    "policySelection": {
+      "shipping": "common",
+      "exchange": "common",
+      "refund": "common"
+    },
+    "policies": {
+      "shipping": {
+        "type": "parcel",
+        "carrier": "",
+        "originAddress": "",
+        "leadDays": null,
+        "regions": "",
+        "international": false,
+        "bundle": false,
+        "feeType": "paid",
+        "fee": null,
+        "freeThreshold": null,
+        "jejuFee": null,
+        "remoteFee": null,
+        "quantityFee": null,
+        "individualFee": false,
+        "estimatedDays": "",
+        "cutoffTime": "",
+        "holidays": "",
+        "delayNotice": "",
+        "guidance": ""
+      },
+      "exchange": {
+        "enabled": true,
+        "days": null,
+        "reasons": "",
+        "method": "",
+        "changeFee": null,
+        "defectFee": 0,
+        "remoteFee": null,
+        "payer": "buyer",
+        "collectionMethod": "",
+        "inspection": "",
+        "reshipping": "",
+        "guidance": ""
+      },
+      "refund": {
+        "enabled": true,
+        "days": null,
+        "reasons": "",
+        "method": "",
+        "changeFee": null,
+        "defectFee": 0,
+        "remoteFee": null,
+        "payer": "buyer",
+        "exceptions": [],
+        "exceptionNotice": false,
+        "customConsent": false,
+        "collectionMethod": "",
+        "inspection": "",
+        "refundMethod": "original",
+        "refundDays": null,
+        "partial": true,
+        "settlement": "",
+        "guidance": ""
+      },
+      "address": {
+        "recipient": "",
+        "phone": "",
+        "postcode": "",
+        "address": "",
+        "detail": "",
+        "carrier": "",
+        "notice": "",
+        "customerService": ""
+      }
+    },
+    "policyVersion": 0,
+    "disclosure": {
+      "country": "",
+      "manufactureDate": "",
+      "expiryDate": "",
+      "material": "",
+      "capacity": "",
+      "contents": "",
+      "storage": "",
+      "precautions": "",
+      "certification": "",
+      "support": "",
+      "foodType": "",
+      "importer": "",
+      "nutrition": "",
+      "allergens": "",
+      "gmo": "",
+      "additional": ""
+    },
+    "seo": {
+      "title": "건조 파인애플칩",
+      "description": "티백 X. 40g",
+      "slug": "건조-파인애플칩"
+    },
+    "saleStatus": "active",
+    "visibility": "public",
+    "publishAt": "",
+    "saleStart": "",
+    "saleEnd": "",
+    "exposureStart": "",
+    "exposureEnd": "",
+    "featured": false,
+    "newProduct": true,
+    "order": 0,
+    "minQuantity": 1,
+    "maxQuantity": null,
+    "perPersonLimit": null,
+    "draft": false,
+    "deleted": false,
+    "publicAfter": 0,
+    "publicUntil": 8640000000000000
+  },
+  {
+    "id": "csv-tea-da86411257b5e436",
+    "version": 1,
+    "createdAt": 1791553549601,
+    "updatedAt": 1791553549601,
+    "name": "건망고",
+    "sku": "TEA-CSV-DA86411257B5E436",
+    "categories": [
+      "",
+      "",
+      ""
+    ],
+    "teaTags": [
+      "무카페인",
+      "과일차"
+    ],
+    "compositionType": "single",
+    "groupBuy": {
+      "participants": null
+    },
+    "blend": {
+      "components": [],
+      "waterMl": 250
+    },
+    "brand": "헤세드",
+    "manufacturer": "",
+    "type": "physical",
+    "summary": "",
+    "description": "<p>티백 X. 120g</p>",
+    "purchaseUrl": "https://www.coupang.com/vp/products/6348870341?itemId=25467193538&vendorItemId=94095480625&q=%EB%AC%B4%EC%84%A4%ED%83%95%20%EA%B1%B4%EC%A1%B0%20%EB%A7%9D%EA%B3%A0&searchId=5baef65514456021&sourceType=search&rank=2&itemsCount=36&searchRank=2&traceId=mv0y0hs1",
+    "images": [
+      {
+        "id": "cover",
+        "url": "https://thumbnail.coupangcdn.com/thumbnails/remote/657x657q90trim/image/rs_quotation_api/jqcxw3fq/bfb294fb2c1e4634b42802a8b9743579.png",
+        "alt": "건망고"
+      }
+    ],
+    "pricing": {
+      "regular": 5790,
+      "discount": null,
+      "discountStart": "",
+      "discountEnd": "",
+      "tax": "taxable"
+    },
+    "optionsEnabled": false,
+    "options": [],
+    "variants": [],
+    "inventory": {
+      "enabled": false,
+      "stock": 0,
+      "safetyStock": 0,
+      "soldOutThreshold": 0,
+      "stopWhenSoldOut": true,
+      "preorder": false,
+      "restockDate": "",
+      "status": "available"
+    },
+    "shipping": {
+      "type": "parcel",
+      "feeType": "paid",
+      "fee": null,
+      "freeThreshold": null,
+      "extraFee": null,
+      "leadDays": null,
+      "carrier": "",
+      "weight": null,
+      "width": null,
+      "depth": null,
+      "height": null,
+      "bundle": false
+    },
+    "policySelection": {
+      "shipping": "common",
+      "exchange": "common",
+      "refund": "common"
+    },
+    "policies": {
+      "shipping": {
+        "type": "parcel",
+        "carrier": "",
+        "originAddress": "",
+        "leadDays": null,
+        "regions": "",
+        "international": false,
+        "bundle": false,
+        "feeType": "paid",
+        "fee": null,
+        "freeThreshold": null,
+        "jejuFee": null,
+        "remoteFee": null,
+        "quantityFee": null,
+        "individualFee": false,
+        "estimatedDays": "",
+        "cutoffTime": "",
+        "holidays": "",
+        "delayNotice": "",
+        "guidance": ""
+      },
+      "exchange": {
+        "enabled": true,
+        "days": null,
+        "reasons": "",
+        "method": "",
+        "changeFee": null,
+        "defectFee": 0,
+        "remoteFee": null,
+        "payer": "buyer",
+        "collectionMethod": "",
+        "inspection": "",
+        "reshipping": "",
+        "guidance": ""
+      },
+      "refund": {
+        "enabled": true,
+        "days": null,
+        "reasons": "",
+        "method": "",
+        "changeFee": null,
+        "defectFee": 0,
+        "remoteFee": null,
+        "payer": "buyer",
+        "exceptions": [],
+        "exceptionNotice": false,
+        "customConsent": false,
+        "collectionMethod": "",
+        "inspection": "",
+        "refundMethod": "original",
+        "refundDays": null,
+        "partial": true,
+        "settlement": "",
+        "guidance": ""
+      },
+      "address": {
+        "recipient": "",
+        "phone": "",
+        "postcode": "",
+        "address": "",
+        "detail": "",
+        "carrier": "",
+        "notice": "",
+        "customerService": ""
+      }
+    },
+    "policyVersion": 0,
+    "disclosure": {
+      "country": "",
+      "manufactureDate": "",
+      "expiryDate": "",
+      "material": "",
+      "capacity": "",
+      "contents": "",
+      "storage": "",
+      "precautions": "",
+      "certification": "",
+      "support": "",
+      "foodType": "",
+      "importer": "",
+      "nutrition": "",
+      "allergens": "",
+      "gmo": "",
+      "additional": ""
+    },
+    "seo": {
+      "title": "건망고",
+      "description": "티백 X. 120g",
+      "slug": "건망고"
+    },
+    "saleStatus": "active",
+    "visibility": "public",
+    "publishAt": "",
+    "saleStart": "",
+    "saleEnd": "",
+    "exposureStart": "",
+    "exposureEnd": "",
+    "featured": false,
+    "newProduct": true,
+    "order": 0,
+    "minQuantity": 1,
+    "maxQuantity": null,
+    "perPersonLimit": null,
+    "draft": false,
+    "deleted": false,
+    "publicAfter": 0,
+    "publicUntil": 8640000000000000
+  }
+]

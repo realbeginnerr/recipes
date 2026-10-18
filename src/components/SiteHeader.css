@@ -5,8 +5,8 @@
 .reference-desktop-nav { display: none; align-items: center; gap: 4px; }
 .reference-desktop-nav a { position: relative; padding: 4px 12px; font-size: 14px; font-weight: 500; color: #596B64; text-decoration: none; }
 .reference-desktop-nav a.is-active { color: #122B22; }
-.reference-header .reference-admin-link { padding: 4px 12px; color: #596B64; font-size: 14px; font-weight: 500; background: transparent; }
-.reference-header .reference-admin-link.is-active { color: #122B22; }
+.reference-header .reference-admin-link { padding: 4px 12px; color: #899591; font-size: 14px; font-weight: 500; background: transparent; }
+.reference-header .reference-admin-link.is-active { color: #899591; }
 .reference-mobile-nav .reference-admin-link { align-self: flex-start; padding: 4px 0; }
 .reference-desktop-nav a.is-active::after { content: ''; position: absolute; bottom: 0; left: 12px; right: 12px; height: 2px; background: #255A46; border-radius: 2px; }
 .reference-request { display: inline-flex; align-items: center; justify-content: center; height: 36px; padding: 0 20px; border: 0; border-radius: 0; background: #255A46; color: white; font-size: 14px; cursor: pointer; text-decoration: none; }
@@ -18,6 +18,8 @@
 .reference-mobile-nav a.is-active { color: #122B22; font-weight: 600; }
 .reference-mobile-nav .reference-request { height: 40px; margin-top: 4px; }
 .reference-mobile-language-toggle { display: flex; align-items: center; padding-top: 12px; border-top: 1px solid #E5EAE9; }
+.reference-language-toggle, .reference-mobile-language-toggle { gap: 4px; }
+.reference-language-toggle .reference-admin-link, .reference-mobile-language-toggle .reference-admin-link { padding: 4px; align-self: center; }
 @media (min-width: 768px) {
   .reference-header-inner { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); }
   .reference-brand { justify-self: start; }

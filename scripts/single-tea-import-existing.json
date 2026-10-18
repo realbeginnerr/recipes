@@ -1,0 +1,3299 @@
+{
+  "products": [
+    {
+      "name": "projects/recipes-5a663/databases/(default)/documents/products/4bDwnQSZZdJtXme5CYqF",
+      "fields": {
+        "maxQuantity": {
+          "nullValue": null
+        },
+        "compositionType": {
+          "stringValue": "single"
+        },
+        "name": {
+          "stringValue": "바닐라"
+        },
+        "updatedAt": {
+          "integerValue": "1791545907476"
+        },
+        "options": {
+          "arrayValue": {}
+        },
+        "publishAt": {
+          "stringValue": ""
+        },
+        "visibility": {
+          "stringValue": "private"
+        },
+        "description": {
+          "stringValue": "티백 O. 2g. 25개입"
+        },
+        "policyVersion": {
+          "integerValue": "0"
+        },
+        "policies": {
+          "mapValue": {
+            "fields": {
+              "address": {
+                "mapValue": {
+                  "fields": {
+                    "carrier": {
+                      "stringValue": ""
+                    },
+                    "customerService": {
+                      "stringValue": ""
+                    },
+                    "notice": {
+                      "stringValue": ""
+                    },
+                    "address": {
+                      "stringValue": ""
+                    },
+                    "phone": {
+                      "stringValue": ""
+                    },
+                    "detail": {
+                      "stringValue": ""
+                    },
+                    "postcode": {
+                      "stringValue": ""
+                    },
+                    "recipient": {
+                      "stringValue": ""
+                    }
+                  }
+                }
+              },
+              "shipping": {
+                "mapValue": {
+                  "fields": {
+                    "quantityFee": {
+                      "nullValue": null
+                    },
+                    "originAddress": {
+                      "stringValue": ""
+                    },
+                    "freeThreshold": {
+                      "nullValue": null
+                    },
+                    "regions": {
+                      "stringValue": ""
+                    },
+                    "fee": {
+                      "nullValue": null
+                    },
+                    "type": {
+                      "stringValue": "parcel"
+                    },
+                    "estimatedDays": {
+                      "stringValue": ""
+                    },
+                    "leadDays": {
+                      "nullValue": null
+                    },
+                    "carrier": {
+                      "stringValue": ""
+                    },
+                    "feeType": {
+                      "stringValue": "paid"
+                    },
+                    "individualFee": {
+                      "booleanValue": false
+                    },
+                    "guidance": {
+                      "stringValue": ""
+                    },
+                    "jejuFee": {
+                      "nullValue": null
+                    },
+                    "holidays": {
+                      "stringValue": ""
+                    },
+                    "international": {
+                      "booleanValue": false
+                    },
+                    "cutoffTime": {
+                      "stringValue": ""
+                    },
+                    "bundle": {
+                      "booleanValue": false
+                    },
+                    "remoteFee": {
+                      "nullValue": null
+                    },
+                    "delayNotice": {
+                      "stringValue": ""
+                    }
+                  }
+                }
+              },
+              "exchange": {
+                "mapValue": {
+                  "fields": {
+                    "remoteFee": {
+                      "nullValue": null
+                    },
+                    "collectionMethod": {
+                      "stringValue": ""
+                    },
+                    "payer": {
+                      "stringValue": "buyer"
+                    },
+                    "reshipping": {
+                      "stringValue": ""
+                    },
+                    "guidance": {
+                      "stringValue": ""
+                    },
+                    "changeFee": {
+                      "nullValue": null
+                    },
+                    "days": {
+                      "nullValue": null
+                    },
+                    "defectFee": {
+                      "integerValue": "0"
+                    },
+                    "method": {
+                      "stringValue": ""
+                    },
+                    "inspection": {
+                      "stringValue": ""
+                    },
+                    "enabled": {
+                      "booleanValue": true
+                    },
+                    "reasons": {
+                      "stringValue": ""
+                    }
+                  }
+                }
+              },
+              "refund": {
+                "mapValue": {
+                  "fields": {
+                    "customConsent": {
+                      "booleanValue": false
+                    },
+                    "changeFee": {
+                      "nullValue": null
+                    },
+                    "defectFee": {
+                      "integerValue": "0"
+                    },
+                    "exceptionNotice": {
+                      "booleanValue": false
+                    },
+                    "enabled": {
+                      "booleanValue": true
+                    },
+                    "remoteFee": {
+                      "nullValue": null
+                    },
+                    "days": {
+                      "nullValue": null
+                    },
+                    "guidance": {
+                      "stringValue": ""
+                    },
+                    "refundMethod": {
+                      "stringValue": "original"
+                    },
+                    "method": {
+                      "stringValue": ""
+                    },
+                    "settlement": {
+                      "stringValue": ""
+                    },
+                    "payer": {
+                      "stringValue": "buyer"
+                    },
+                    "refundDays": {
+                      "nullValue": null
+                    },
+                    "reasons": {
+                      "stringValue": ""
+                    },
+                    "inspection": {
+                      "stringValue": ""
+                    },
+                    "collectionMethod": {
+                      "stringValue": ""
+                    },
+                    "exceptions": {
+                      "arrayValue": {}
+                    },
+                    "partial": {
+                      "booleanValue": true
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "id": {
+          "stringValue": "4bDwnQSZZdJtXme5CYqF"
+        },
+        "policySelection": {
+          "mapValue": {
+            "fields": {
+              "refund": {
+                "stringValue": "common"
+              },
+              "exchange": {
+                "stringValue": "common"
+              },
+              "shipping": {
+                "stringValue": "common"
+              }
+            }
+          }
+        },
+        "order": {
+          "integerValue": "0"
+        },
+        "categories": {
+          "arrayValue": {
+            "values": [
+              {
+                "stringValue": ""
+              },
+              {
+                "stringValue": ""
+              },
+              {
+                "stringValue": ""
+              }
+            ]
+          }
+        },
+        "version": {
+          "integerValue": "4"
+        },
+        "optionsEnabled": {
+          "booleanValue": false
+        },
+        "variants": {
+          "arrayValue": {}
+        },
+        "manufacturer": {
+          "stringValue": ""
+        },
+        "publicAfter": {
+          "integerValue": "0"
+        },
+        "shipping": {
+          "mapValue": {
+            "fields": {
+              "height": {
+                "nullValue": null
+              },
+              "carrier": {
+                "stringValue": ""
+              },
+              "fee": {
+                "nullValue": null
+              },
+              "width": {
+                "nullValue": null
+              },
+              "extraFee": {
+                "nullValue": null
+              },
+              "feeType": {
+                "stringValue": "paid"
+              },
+              "bundle": {
+                "booleanValue": false
+              },
+              "weight": {
+                "nullValue": null
+              },
+              "freeThreshold": {
+                "nullValue": null
+              },
+              "depth": {
+                "nullValue": null
+              },
+              "type": {
+                "stringValue": "parcel"
+              },
+              "leadDays": {
+                "nullValue": null
+              }
+            }
+          }
+        },
+        "brand": {
+          "stringValue": "트와이닝"
+        },
+        "perPersonLimit": {
+          "nullValue": null
+        },
+        "deleted": {
+          "booleanValue": false
+        },
+        "pricing": {
+          "mapValue": {
+            "fields": {
+              "regular": {
+                "integerValue": "10400"
+              },
+              "discount": {
+                "nullValue": null
+              },
+              "tax": {
+                "stringValue": "taxable"
+              },
+              "discountEnd": {
+                "stringValue": ""
+              },
+              "discountStart": {
+                "stringValue": ""
+              }
+            }
+          }
+        },
+        "newProduct": {
+          "booleanValue": true
+        },
+        "purchaseUrl": {
+          "stringValue": ""
+        },
+        "exposureEnd": {
+          "stringValue": ""
+        },
+        "minQuantity": {
+          "integerValue": "1"
+        },
+        "type": {
+          "stringValue": "physical"
+        },
+        "summary": {
+          "stringValue": ""
+        },
+        "saleEnd": {
+          "stringValue": ""
+        },
+        "createdAt": {
+          "integerValue": "1791540164391"
+        },
+        "saleStart": {
+          "stringValue": ""
+        },
+        "inventory": {
+          "mapValue": {
+            "fields": {
+              "enabled": {
+                "booleanValue": false
+              },
+              "preorder": {
+                "booleanValue": false
+              },
+              "restockDate": {
+                "stringValue": ""
+              },
+              "safetyStock": {
+                "integerValue": "0"
+              },
+              "soldOutThreshold": {
+                "integerValue": "0"
+              },
+              "stopWhenSoldOut": {
+                "booleanValue": true
+              },
+              "stock": {
+                "integerValue": "0"
+              },
+              "status": {
+                "stringValue": "available"
+              }
+            }
+          }
+        },
+        "disclosure": {
+          "mapValue": {
+            "fields": {
+              "importer": {
+                "stringValue": ""
+              },
+              "allergens": {
+                "stringValue": ""
+              },
+              "expiryDate": {
+                "stringValue": ""
+              },
+              "foodType": {
+                "stringValue": ""
+              },
+              "country": {
+                "stringValue": ""
+              },
+              "manufactureDate": {
+                "stringValue": ""
+              },
+              "certification": {
+                "stringValue": ""
+              },
+              "support": {
+                "stringValue": ""
+              },
+              "nutrition": {
+                "stringValue": ""
+              },
+              "material": {
+                "stringValue": ""
+              },
+              "additional": {
+                "stringValue": ""
+              },
+              "precautions": {
+                "stringValue": ""
+              },
+              "storage": {
+                "stringValue": ""
+              },
+              "contents": {
+                "stringValue": ""
+              },
+              "gmo": {
+                "stringValue": ""
+              },
+              "capacity": {
+                "stringValue": ""
+              }
+            }
+          }
+        },
+        "saleStatus": {
+          "stringValue": "active"
+        },
+        "draft": {
+          "booleanValue": false
+        },
+        "seo": {
+          "mapValue": {
+            "fields": {
+              "title": {
+                "stringValue": "바닐라"
+              },
+              "description": {
+                "stringValue": "티백 형태. 2g. 25개입"
+              },
+              "slug": {
+                "stringValue": "바닐라"
+              }
+            }
+          }
+        },
+        "images": {
+          "arrayValue": {
+            "values": [
+              {
+                "mapValue": {
+                  "fields": {
+                    "url": {
+                      "stringValue": "https://museo.hgodo.com/thumb_img/brand/twinings/480/480_10375_02.jpg"
+                    },
+                    "id": {
+                      "stringValue": "52ec6d9c-9f5b-4bd1-b91f-a36454b6bff5"
+                    },
+                    "alt": {
+                      "stringValue": ""
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "teaTags": {
+          "arrayValue": {
+            "values": [
+              {
+                "stringValue": "홍차"
+              },
+              {
+                "stringValue": "카페인"
+              }
+            ]
+          }
+        },
+        "publicUntil": {
+          "integerValue": "8640000000000000"
+        },
+        "exposureStart": {
+          "stringValue": ""
+        },
+        "sku": {
+          "stringValue": "TEA-BC520852"
+        },
+        "featured": {
+          "booleanValue": false
+        }
+      },
+      "createTime": "2026-10-09T10:02:46.022010Z",
+      "updateTime": "2026-10-09T11:38:28.528523Z"
+    },
+    {
+      "name": "projects/recipes-5a663/databases/(default)/documents/products/HiUJaYQkHOq83ySJsELX",
+      "fields": {
+        "maxQuantity": {
+          "nullValue": null
+        },
+        "order": {
+          "integerValue": "0"
+        },
+        "visibility": {
+          "stringValue": "private"
+        },
+        "exposureStart": {
+          "stringValue": ""
+        },
+        "description": {
+          "stringValue": "티백 X. 40g.&nbsp;<!--EndFragment-->"
+        },
+        "teaTags": {
+          "arrayValue": {
+            "values": [
+              {
+                "stringValue": "무카페인"
+              }
+            ]
+          }
+        },
+        "variants": {
+          "arrayValue": {}
+        },
+        "shipping": {
+          "mapValue": {
+            "fields": {
+              "extraFee": {
+                "nullValue": null
+              },
+              "height": {
+                "nullValue": null
+              },
+              "depth": {
+                "nullValue": null
+              },
+              "width": {
+                "nullValue": null
+              },
+              "freeThreshold": {
+                "nullValue": null
+              },
+              "carrier": {
+                "stringValue": ""
+              },
+              "type": {
+                "stringValue": "parcel"
+              },
+              "weight": {
+                "nullValue": null
+              },
+              "bundle": {
+                "booleanValue": false
+              },
+              "fee": {
+                "nullValue": null
+              },
+              "leadDays": {
+                "nullValue": null
+              },
+              "feeType": {
+                "stringValue": "paid"
+              }
+            }
+          }
+        },
+        "categories": {
+          "arrayValue": {
+            "values": [
+              {
+                "stringValue": ""
+              },
+              {
+                "stringValue": ""
+              },
+              {
+                "stringValue": ""
+              }
+            ]
+          }
+        },
+        "policies": {
+          "mapValue": {
+            "fields": {
+              "refund": {
+                "mapValue": {
+                  "fields": {
+                    "payer": {
+                      "stringValue": "buyer"
+                    },
+                    "enabled": {
+                      "booleanValue": true
+                    },
+                    "guidance": {
+                      "stringValue": ""
+                    },
+                    "days": {
+                      "nullValue": null
+                    },
+                    "method": {
+                      "stringValue": ""
+                    },
+                    "refundMethod": {
+                      "stringValue": "original"
+                    },
+                    "settlement": {
+                      "stringValue": ""
+                    },
+                    "collectionMethod": {
+                      "stringValue": ""
+                    },
+                    "remoteFee": {
+                      "nullValue": null
+                    },
+                    "exceptionNotice": {
+                      "booleanValue": false
+                    },
+                    "inspection": {
+                      "stringValue": ""
+                    },
+                    "refundDays": {
+                      "nullValue": null
+                    },
+                    "customConsent": {
+                      "booleanValue": false
+                    },
+                    "reasons": {
+                      "stringValue": ""
+                    },
+                    "changeFee": {
+                      "nullValue": null
+                    },
+                    "defectFee": {
+                      "integerValue": "0"
+                    },
+                    "exceptions": {
+                      "arrayValue": {}
+                    },
+                    "partial": {
+                      "booleanValue": true
+                    }
+                  }
+                }
+              },
+              "shipping": {
+                "mapValue": {
+                  "fields": {
+                    "individualFee": {
+                      "booleanValue": false
+                    },
+                    "holidays": {
+                      "stringValue": ""
+                    },
+                    "regions": {
+                      "stringValue": ""
+                    },
+                    "type": {
+                      "stringValue": "parcel"
+                    },
+                    "carrier": {
+                      "stringValue": ""
+                    },
+                    "bundle": {
+                      "booleanValue": false
+                    },
+                    "delayNotice": {
+                      "stringValue": ""
+                    },
+                    "guidance": {
+                      "stringValue": ""
+                    },
+                    "feeType": {
+                      "stringValue": "paid"
+                    },
+                    "remoteFee": {
+                      "nullValue": null
+                    },
+                    "international": {
+                      "booleanValue": false
+                    },
+                    "leadDays": {
+                      "nullValue": null
+                    },
+                    "freeThreshold": {
+                      "nullValue": null
+                    },
+                    "cutoffTime": {
+                      "stringValue": ""
+                    },
+                    "quantityFee": {
+                      "nullValue": null
+                    },
+                    "originAddress": {
+                      "stringValue": ""
+                    },
+                    "jejuFee": {
+                      "nullValue": null
+                    },
+                    "fee": {
+                      "nullValue": null
+                    },
+                    "estimatedDays": {
+                      "stringValue": ""
+                    }
+                  }
+                }
+              },
+              "address": {
+                "mapValue": {
+                  "fields": {
+                    "detail": {
+                      "stringValue": ""
+                    },
+                    "customerService": {
+                      "stringValue": ""
+                    },
+                    "phone": {
+                      "stringValue": ""
+                    },
+                    "address": {
+                      "stringValue": ""
+                    },
+                    "notice": {
+                      "stringValue": ""
+                    },
+                    "postcode": {
+                      "stringValue": ""
+                    },
+                    "carrier": {
+                      "stringValue": ""
+                    },
+                    "recipient": {
+                      "stringValue": ""
+                    }
+                  }
+                }
+              },
+              "exchange": {
+                "mapValue": {
+                  "fields": {
+                    "defectFee": {
+                      "integerValue": "0"
+                    },
+                    "changeFee": {
+                      "nullValue": null
+                    },
+                    "enabled": {
+                      "booleanValue": true
+                    },
+                    "reasons": {
+                      "stringValue": ""
+                    },
+                    "method": {
+                      "stringValue": ""
+                    },
+                    "reshipping": {
+                      "stringValue": ""
+                    },
+                    "collectionMethod": {
+                      "stringValue": ""
+                    },
+                    "remoteFee": {
+                      "nullValue": null
+                    },
+                    "days": {
+                      "nullValue": null
+                    },
+                    "guidance": {
+                      "stringValue": ""
+                    },
+                    "inspection": {
+                      "stringValue": ""
+                    },
+                    "payer": {
+                      "stringValue": "buyer"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "name": {
+          "stringValue": "라벤더"
+        },
+        "images": {
+          "arrayValue": {
+            "values": [
+              {
+                "mapValue": {
+                  "fields": {
+                    "url": {
+                      "stringValue": "https://m.greentmall.co.kr/web/product/big/202312/24a9880f48d8f509587ae2b8c608f67e.png"
+                    },
+                    "alt": {
+                      "stringValue": ""
+                    },
+                    "id": {
+                      "stringValue": "039ec361-9037-4af3-9417-c81e26eb1ba0"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "perPersonLimit": {
+          "nullValue": null
+        },
+        "manufacturer": {
+          "stringValue": ""
+        },
+        "publicAfter": {
+          "integerValue": "0"
+        },
+        "id": {
+          "stringValue": "HiUJaYQkHOq83ySJsELX"
+        },
+        "saleEnd": {
+          "stringValue": ""
+        },
+        "summary": {
+          "stringValue": ""
+        },
+        "inventory": {
+          "mapValue": {
+            "fields": {
+              "status": {
+                "stringValue": "available"
+              },
+              "stock": {
+                "integerValue": "0"
+              },
+              "stopWhenSoldOut": {
+                "booleanValue": true
+              },
+              "safetyStock": {
+                "integerValue": "0"
+              },
+              "soldOutThreshold": {
+                "integerValue": "0"
+              },
+              "preorder": {
+                "booleanValue": false
+              },
+              "restockDate": {
+                "stringValue": ""
+              },
+              "enabled": {
+                "booleanValue": false
+              }
+            }
+          }
+        },
+        "optionsEnabled": {
+          "booleanValue": false
+        },
+        "brand": {
+          "stringValue": "다비앙"
+        },
+        "createdAt": {
+          "integerValue": "1791539698933"
+        },
+        "saleStart": {
+          "stringValue": ""
+        },
+        "newProduct": {
+          "booleanValue": true
+        },
+        "version": {
+          "integerValue": "4"
+        },
+        "featured": {
+          "booleanValue": false
+        },
+        "policySelection": {
+          "mapValue": {
+            "fields": {
+              "refund": {
+                "stringValue": "common"
+              },
+              "shipping": {
+                "stringValue": "common"
+              },
+              "exchange": {
+                "stringValue": "common"
+              }
+            }
+          }
+        },
+        "seo": {
+          "mapValue": {
+            "fields": {
+              "slug": {
+                "stringValue": "라벤더"
+              },
+              "title": {
+                "stringValue": "라벤더"
+              },
+              "description": {
+                "stringValue": "티백 형태 아님. 찻잎만 들어있음. 총 40g."
+              }
+            }
+          }
+        },
+        "exposureEnd": {
+          "stringValue": ""
+        },
+        "purchaseUrl": {
+          "stringValue": ""
+        },
+        "compositionType": {
+          "stringValue": "single"
+        },
+        "deleted": {
+          "booleanValue": false
+        },
+        "minQuantity": {
+          "integerValue": "1"
+        },
+        "disclosure": {
+          "mapValue": {
+            "fields": {
+              "precautions": {
+                "stringValue": ""
+              },
+              "expiryDate": {
+                "stringValue": ""
+              },
+              "contents": {
+                "stringValue": ""
+              },
+              "capacity": {
+                "stringValue": ""
+              },
+              "country": {
+                "stringValue": ""
+              },
+              "certification": {
+                "stringValue": ""
+              },
+              "material": {
+                "stringValue": ""
+              },
+              "allergens": {
+                "stringValue": ""
+              },
+              "foodType": {
+                "stringValue": ""
+              },
+              "additional": {
+                "stringValue": ""
+              },
+              "support": {
+                "stringValue": ""
+              },
+              "gmo": {
+                "stringValue": ""
+              },
+              "manufactureDate": {
+                "stringValue": ""
+              },
+              "importer": {
+                "stringValue": ""
+              },
+              "storage": {
+                "stringValue": ""
+              },
+              "nutrition": {
+                "stringValue": ""
+              }
+            }
+          }
+        },
+        "pricing": {
+          "mapValue": {
+            "fields": {
+              "discountEnd": {
+                "stringValue": ""
+              },
+              "tax": {
+                "stringValue": "taxable"
+              },
+              "regular": {
+                "integerValue": "9410"
+              },
+              "discount": {
+                "nullValue": null
+              },
+              "discountStart": {
+                "stringValue": ""
+              }
+            }
+          }
+        },
+        "sku": {
+          "stringValue": "TEA-959EF486"
+        },
+        "saleStatus": {
+          "stringValue": "active"
+        },
+        "updatedAt": {
+          "integerValue": "1791544671643"
+        },
+        "publishAt": {
+          "stringValue": ""
+        },
+        "options": {
+          "arrayValue": {}
+        },
+        "publicUntil": {
+          "integerValue": "8640000000000000"
+        },
+        "type": {
+          "stringValue": "physical"
+        },
+        "draft": {
+          "booleanValue": false
+        },
+        "policyVersion": {
+          "integerValue": "0"
+        }
+      },
+      "createTime": "2026-10-09T09:55:00.567328Z",
+      "updateTime": "2026-10-09T11:17:52.684094Z"
+    },
+    {
+      "name": "projects/recipes-5a663/databases/(default)/documents/products/Sqsv6TcShqyA9gWcKBg5",
+      "fields": {
+        "publicUntil": {
+          "integerValue": "8640000000000000"
+        },
+        "shipping": {
+          "mapValue": {
+            "fields": {
+              "bundle": {
+                "booleanValue": false
+              },
+              "fee": {
+                "nullValue": null
+              },
+              "weight": {
+                "nullValue": null
+              },
+              "feeType": {
+                "stringValue": "paid"
+              },
+              "width": {
+                "nullValue": null
+              },
+              "carrier": {
+                "stringValue": ""
+              },
+              "extraFee": {
+                "nullValue": null
+              },
+              "height": {
+                "nullValue": null
+              },
+              "leadDays": {
+                "nullValue": null
+              },
+              "type": {
+                "stringValue": "parcel"
+              },
+              "depth": {
+                "nullValue": null
+              },
+              "freeThreshold": {
+                "nullValue": null
+              }
+            }
+          }
+        },
+        "variants": {
+          "arrayValue": {}
+        },
+        "saleStatus": {
+          "stringValue": "active"
+        },
+        "summary": {
+          "stringValue": ""
+        },
+        "saleEnd": {
+          "stringValue": ""
+        },
+        "exposureStart": {
+          "stringValue": ""
+        },
+        "brand": {
+          "stringValue": "다비앙"
+        },
+        "blend": {
+          "mapValue": {
+            "fields": {
+              "waterMl": {
+                "integerValue": "250"
+              },
+              "components": {
+                "arrayValue": {}
+              }
+            }
+          }
+        },
+        "disclosure": {
+          "mapValue": {
+            "fields": {
+              "additional": {
+                "stringValue": ""
+              },
+              "importer": {
+                "stringValue": ""
+              },
+              "certification": {
+                "stringValue": ""
+              },
+              "manufactureDate": {
+                "stringValue": ""
+              },
+              "nutrition": {
+                "stringValue": ""
+              },
+              "foodType": {
+                "stringValue": ""
+              },
+              "country": {
+                "stringValue": ""
+              },
+              "gmo": {
+                "stringValue": ""
+              },
+              "precautions": {
+                "stringValue": ""
+              },
+              "expiryDate": {
+                "stringValue": ""
+              },
+              "material": {
+                "stringValue": ""
+              },
+              "support": {
+                "stringValue": ""
+              },
+              "storage": {
+                "stringValue": ""
+              },
+              "allergens": {
+                "stringValue": ""
+              },
+              "capacity": {
+                "stringValue": ""
+              },
+              "contents": {
+                "stringValue": ""
+              }
+            }
+          }
+        },
+        "order": {
+          "integerValue": "0"
+        },
+        "minQuantity": {
+          "integerValue": "1"
+        },
+        "exposureEnd": {
+          "stringValue": ""
+        },
+        "purchaseUrl": {
+          "stringValue": "https://www.coupang.com/vp/products/7573215608?itemId=19976680247&vendorItemId=87075059095&pickType=COU_PICK&q=%EB%A1%9C%EC%A6%88%ED%9E%99&searchId=5a9c75cb724939&sourceType=search&rank=2&itemsCount=36&searchRank=2&traceId=mv0wsah8"
+        },
+        "type": {
+          "stringValue": "physical"
+        },
+        "policies": {
+          "mapValue": {
+            "fields": {
+              "address": {
+                "mapValue": {
+                  "fields": {
+                    "recipient": {
+                      "stringValue": ""
+                    },
+                    "detail": {
+                      "stringValue": ""
+                    },
+                    "phone": {
+                      "stringValue": ""
+                    },
+                    "postcode": {
+                      "stringValue": ""
+                    },
+                    "notice": {
+                      "stringValue": ""
+                    },
+                    "address": {
+                      "stringValue": ""
+                    },
+                    "carrier": {
+                      "stringValue": ""
+                    },
+                    "customerService": {
+                      "stringValue": ""
+                    }
+                  }
+                }
+              },
+              "refund": {
+                "mapValue": {
+                  "fields": {
+                    "defectFee": {
+                      "integerValue": "0"
+                    },
+                    "changeFee": {
+                      "nullValue": null
+                    },
+                    "settlement": {
+                      "stringValue": ""
+                    },
+                    "payer": {
+                      "stringValue": "buyer"
+                    },
+                    "reasons": {
+                      "stringValue": ""
+                    },
+                    "remoteFee": {
+                      "nullValue": null
+                    },
+                    "collectionMethod": {
+                      "stringValue": ""
+                    },
+                    "partial": {
+                      "booleanValue": true
+                    },
+                    "guidance": {
+                      "stringValue": ""
+                    },
+                    "method": {
+                      "stringValue": ""
+                    },
+                    "exceptions": {
+                      "arrayValue": {}
+                    },
+                    "enabled": {
+                      "booleanValue": true
+                    },
+                    "days": {
+                      "nullValue": null
+                    },
+                    "exceptionNotice": {
+                      "booleanValue": false
+                    },
+                    "customConsent": {
+                      "booleanValue": false
+                    },
+                    "refundDays": {
+                      "nullValue": null
+                    },
+                    "inspection": {
+                      "stringValue": ""
+                    },
+                    "refundMethod": {
+                      "stringValue": "original"
+                    }
+                  }
+                }
+              },
+              "exchange": {
+                "mapValue": {
+                  "fields": {
+                    "inspection": {
+                      "stringValue": ""
+                    },
+                    "remoteFee": {
+                      "nullValue": null
+                    },
+                    "collectionMethod": {
+                      "stringValue": ""
+                    },
+                    "guidance": {
+                      "stringValue": ""
+                    },
+                    "days": {
+                      "nullValue": null
+                    },
+                    "changeFee": {
+                      "nullValue": null
+                    },
+                    "defectFee": {
+                      "integerValue": "0"
+                    },
+                    "payer": {
+                      "stringValue": "buyer"
+                    },
+                    "enabled": {
+                      "booleanValue": true
+                    },
+                    "reasons": {
+                      "stringValue": ""
+                    },
+                    "method": {
+                      "stringValue": ""
+                    },
+                    "reshipping": {
+                      "stringValue": ""
+                    }
+                  }
+                }
+              },
+              "shipping": {
+                "mapValue": {
+                  "fields": {
+                    "quantityFee": {
+                      "nullValue": null
+                    },
+                    "individualFee": {
+                      "booleanValue": false
+                    },
+                    "jejuFee": {
+                      "nullValue": null
+                    },
+                    "cutoffTime": {
+                      "stringValue": ""
+                    },
+                    "leadDays": {
+                      "nullValue": null
+                    },
+                    "international": {
+                      "booleanValue": false
+                    },
+                    "remoteFee": {
+                      "nullValue": null
+                    },
+                    "originAddress": {
+                      "stringValue": ""
+                    },
+                    "guidance": {
+                      "stringValue": ""
+                    },
+                    "fee": {
+                      "nullValue": null
+                    },
+                    "freeThreshold": {
+                      "nullValue": null
+                    },
+                    "regions": {
+                      "stringValue": ""
+                    },
+                    "estimatedDays": {
+                      "stringValue": ""
+                    },
+                    "carrier": {
+                      "stringValue": ""
+                    },
+                    "holidays": {
+                      "stringValue": ""
+                    },
+                    "bundle": {
+                      "booleanValue": false
+                    },
+                    "delayNotice": {
+                      "stringValue": ""
+                    },
+                    "type": {
+                      "stringValue": "parcel"
+                    },
+                    "feeType": {
+                      "stringValue": "paid"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "newProduct": {
+          "booleanValue": true
+        },
+        "saleStart": {
+          "stringValue": ""
+        },
+        "createdAt": {
+          "integerValue": "1791547010226"
+        },
+        "inventory": {
+          "mapValue": {
+            "fields": {
+              "restockDate": {
+                "stringValue": ""
+              },
+              "stopWhenSoldOut": {
+                "booleanValue": true
+              },
+              "status": {
+                "stringValue": "available"
+              },
+              "safetyStock": {
+                "integerValue": "0"
+              },
+              "soldOutThreshold": {
+                "integerValue": "0"
+              },
+              "stock": {
+                "integerValue": "0"
+              },
+              "enabled": {
+                "booleanValue": false
+              },
+              "preorder": {
+                "booleanValue": false
+              }
+            }
+          }
+        },
+        "teaTags": {
+          "arrayValue": {
+            "values": [
+              {
+                "stringValue": "무카페인"
+              }
+            ]
+          }
+        },
+        "policySelection": {
+          "mapValue": {
+            "fields": {
+              "refund": {
+                "stringValue": "common"
+              },
+              "shipping": {
+                "stringValue": "common"
+              },
+              "exchange": {
+                "stringValue": "common"
+              }
+            }
+          }
+        },
+        "options": {
+          "arrayValue": {}
+        },
+        "seo": {
+          "mapValue": {
+            "fields": {
+              "title": {
+                "stringValue": "로즈힙"
+              },
+              "slug": {
+                "stringValue": "로즈힙"
+              },
+              "description": {
+                "stringValue": "티백 X. 80g"
+              }
+            }
+          }
+        },
+        "optionsEnabled": {
+          "booleanValue": false
+        },
+        "id": {
+          "stringValue": "Sqsv6TcShqyA9gWcKBg5"
+        },
+        "manufacturer": {
+          "stringValue": ""
+        },
+        "publicAfter": {
+          "integerValue": "0"
+        },
+        "draft": {
+          "booleanValue": false
+        },
+        "featured": {
+          "booleanValue": false
+        },
+        "perPersonLimit": {
+          "nullValue": null
+        },
+        "compositionType": {
+          "stringValue": "single"
+        },
+        "sku": {
+          "stringValue": "TEA-886174D4"
+        },
+        "name": {
+          "stringValue": "로즈힙"
+        },
+        "publishAt": {
+          "stringValue": ""
+        },
+        "categories": {
+          "arrayValue": {
+            "values": [
+              {
+                "stringValue": ""
+              },
+              {
+                "stringValue": ""
+              },
+              {
+                "stringValue": ""
+              }
+            ]
+          }
+        },
+        "updatedAt": {
+          "integerValue": "1791547010226"
+        },
+        "version": {
+          "integerValue": "1"
+        },
+        "description": {
+          "stringValue": "티백 X. 80g"
+        },
+        "pricing": {
+          "mapValue": {
+            "fields": {
+              "tax": {
+                "stringValue": "taxable"
+              },
+              "discountStart": {
+                "stringValue": ""
+              },
+              "regular": {
+                "integerValue": "9410"
+              },
+              "discount": {
+                "nullValue": null
+              },
+              "discountEnd": {
+                "stringValue": ""
+              }
+            }
+          }
+        },
+        "images": {
+          "arrayValue": {
+            "values": [
+              {
+                "mapValue": {
+                  "fields": {
+                    "url": {
+                      "stringValue": "https://m.greentmall.co.kr/web/product/medium/202312/91181d88ef971792bf6197f02dc06ffd.png"
+                    },
+                    "id": {
+                      "stringValue": "ebcf3457-f8ea-43cc-bd74-0650bae4c080"
+                    },
+                    "alt": {
+                      "stringValue": ""
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "policyVersion": {
+          "integerValue": "0"
+        },
+        "visibility": {
+          "stringValue": "private"
+        },
+        "maxQuantity": {
+          "nullValue": null
+        },
+        "deleted": {
+          "booleanValue": false
+        }
+      },
+      "createTime": "2026-10-09T11:56:51.316824Z",
+      "updateTime": "2026-10-09T11:56:51.316824Z"
+    },
+    {
+      "name": "projects/recipes-5a663/databases/(default)/documents/products/Zqbi1q02v3JoG7ik0ZNA",
+      "fields": {
+        "policies": {
+          "mapValue": {
+            "fields": {
+              "refund": {
+                "mapValue": {
+                  "fields": {
+                    "remoteFee": {
+                      "nullValue": null
+                    },
+                    "exceptionNotice": {
+                      "booleanValue": false
+                    },
+                    "payer": {
+                      "stringValue": "buyer"
+                    },
+                    "defectFee": {
+                      "integerValue": "0"
+                    },
+                    "changeFee": {
+                      "nullValue": null
+                    },
+                    "refundMethod": {
+                      "stringValue": "original"
+                    },
+                    "settlement": {
+                      "stringValue": ""
+                    },
+                    "days": {
+                      "nullValue": null
+                    },
+                    "enabled": {
+                      "booleanValue": true
+                    },
+                    "guidance": {
+                      "stringValue": ""
+                    },
+                    "collectionMethod": {
+                      "stringValue": ""
+                    },
+                    "customConsent": {
+                      "booleanValue": false
+                    },
+                    "partial": {
+                      "booleanValue": true
+                    },
+                    "method": {
+                      "stringValue": ""
+                    },
+                    "exceptions": {
+                      "arrayValue": {}
+                    },
+                    "reasons": {
+                      "stringValue": ""
+                    },
+                    "refundDays": {
+                      "nullValue": null
+                    },
+                    "inspection": {
+                      "stringValue": ""
+                    }
+                  }
+                }
+              },
+              "exchange": {
+                "mapValue": {
+                  "fields": {
+                    "reshipping": {
+                      "stringValue": ""
+                    },
+                    "guidance": {
+                      "stringValue": ""
+                    },
+                    "payer": {
+                      "stringValue": "buyer"
+                    },
+                    "days": {
+                      "nullValue": null
+                    },
+                    "method": {
+                      "stringValue": ""
+                    },
+                    "remoteFee": {
+                      "nullValue": null
+                    },
+                    "defectFee": {
+                      "integerValue": "0"
+                    },
+                    "changeFee": {
+                      "nullValue": null
+                    },
+                    "collectionMethod": {
+                      "stringValue": ""
+                    },
+                    "enabled": {
+                      "booleanValue": true
+                    },
+                    "reasons": {
+                      "stringValue": ""
+                    },
+                    "inspection": {
+                      "stringValue": ""
+                    }
+                  }
+                }
+              },
+              "shipping": {
+                "mapValue": {
+                  "fields": {
+                    "estimatedDays": {
+                      "stringValue": ""
+                    },
+                    "remoteFee": {
+                      "nullValue": null
+                    },
+                    "type": {
+                      "stringValue": "parcel"
+                    },
+                    "delayNotice": {
+                      "stringValue": ""
+                    },
+                    "holidays": {
+                      "stringValue": ""
+                    },
+                    "guidance": {
+                      "stringValue": ""
+                    },
+                    "freeThreshold": {
+                      "nullValue": null
+                    },
+                    "jejuFee": {
+                      "nullValue": null
+                    },
+                    "originAddress": {
+                      "stringValue": ""
+                    },
+                    "cutoffTime": {
+                      "stringValue": ""
+                    },
+                    "carrier": {
+                      "stringValue": ""
+                    },
+                    "international": {
+                      "booleanValue": false
+                    },
+                    "leadDays": {
+                      "nullValue": null
+                    },
+                    "feeType": {
+                      "stringValue": "paid"
+                    },
+                    "individualFee": {
+                      "booleanValue": false
+                    },
+                    "quantityFee": {
+                      "nullValue": null
+                    },
+                    "regions": {
+                      "stringValue": ""
+                    },
+                    "fee": {
+                      "nullValue": null
+                    },
+                    "bundle": {
+                      "booleanValue": false
+                    }
+                  }
+                }
+              },
+              "address": {
+                "mapValue": {
+                  "fields": {
+                    "phone": {
+                      "stringValue": ""
+                    },
+                    "detail": {
+                      "stringValue": ""
+                    },
+                    "postcode": {
+                      "stringValue": ""
+                    },
+                    "notice": {
+                      "stringValue": ""
+                    },
+                    "address": {
+                      "stringValue": ""
+                    },
+                    "carrier": {
+                      "stringValue": ""
+                    },
+                    "customerService": {
+                      "stringValue": ""
+                    },
+                    "recipient": {
+                      "stringValue": ""
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "categories": {
+          "arrayValue": {
+            "values": [
+              {
+                "stringValue": ""
+              },
+              {
+                "stringValue": ""
+              },
+              {
+                "stringValue": ""
+              }
+            ]
+          }
+        },
+        "version": {
+          "integerValue": "3"
+        },
+        "order": {
+          "integerValue": "0"
+        },
+        "seo": {
+          "mapValue": {
+            "fields": {
+              "title": {
+                "stringValue": "히비스커스"
+              },
+              "slug": {
+                "stringValue": "히비스커스"
+              },
+              "description": {
+                "stringValue": "티백 형태 X. 80g"
+              }
+            }
+          }
+        },
+        "visibility": {
+          "stringValue": "private"
+        },
+        "type": {
+          "stringValue": "physical"
+        },
+        "deleted": {
+          "booleanValue": false
+        },
+        "sku": {
+          "stringValue": "TEA-160B6316"
+        },
+        "pricing": {
+          "mapValue": {
+            "fields": {
+              "discountStart": {
+                "stringValue": ""
+              },
+              "regular": {
+                "integerValue": "9410"
+              },
+              "tax": {
+                "stringValue": "taxable"
+              },
+              "discountEnd": {
+                "stringValue": ""
+              },
+              "discount": {
+                "nullValue": null
+              }
+            }
+          }
+        },
+        "minQuantity": {
+          "integerValue": "1"
+        },
+        "purchaseUrl": {
+          "stringValue": "https://www.coupang.com/vp/products/7325376693?itemId=19974648133&vendorItemId=87073090399&q=%ED%9E%88%EB%B9%84%EC%8A%A4%EC%BB%A4%EC%8A%A4&searchId=e8887de99171266&sourceType=search&rank=4&itemsCount=36&searchRank=4&traceId=mv0t233d"
+        },
+        "exposureEnd": {
+          "stringValue": ""
+        },
+        "policySelection": {
+          "mapValue": {
+            "fields": {
+              "shipping": {
+                "stringValue": "common"
+              },
+              "exchange": {
+                "stringValue": "common"
+              },
+              "refund": {
+                "stringValue": "common"
+              }
+            }
+          }
+        },
+        "images": {
+          "arrayValue": {
+            "values": [
+              {
+                "mapValue": {
+                  "fields": {
+                    "url": {
+                      "stringValue": "https://m.greentmall.co.kr/web/product/medium/202312/a6c0b3c066233f204963b5f6df2ab875.png"
+                    },
+                    "id": {
+                      "stringValue": "1766bc47-99de-4cd7-833b-c6a9b3a4bad7"
+                    },
+                    "alt": {
+                      "stringValue": ""
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "policyVersion": {
+          "integerValue": "0"
+        },
+        "options": {
+          "arrayValue": {}
+        },
+        "updatedAt": {
+          "integerValue": "1791544827320"
+        },
+        "publishAt": {
+          "stringValue": ""
+        },
+        "publicUntil": {
+          "integerValue": "8640000000000000"
+        },
+        "id": {
+          "stringValue": "Zqbi1q02v3JoG7ik0ZNA"
+        },
+        "compositionType": {
+          "stringValue": "single"
+        },
+        "variants": {
+          "arrayValue": {}
+        },
+        "shipping": {
+          "mapValue": {
+            "fields": {
+              "bundle": {
+                "booleanValue": false
+              },
+              "freeThreshold": {
+                "nullValue": null
+              },
+              "feeType": {
+                "stringValue": "paid"
+              },
+              "weight": {
+                "nullValue": null
+              },
+              "width": {
+                "nullValue": null
+              },
+              "carrier": {
+                "stringValue": ""
+              },
+              "leadDays": {
+                "nullValue": null
+              },
+              "fee": {
+                "nullValue": null
+              },
+              "height": {
+                "nullValue": null
+              },
+              "extraFee": {
+                "nullValue": null
+              },
+              "depth": {
+                "nullValue": null
+              },
+              "type": {
+                "stringValue": "parcel"
+              }
+            }
+          }
+        },
+        "brand": {
+          "stringValue": "다비앙"
+        },
+        "name": {
+          "stringValue": "히비스커스"
+        },
+        "disclosure": {
+          "mapValue": {
+            "fields": {
+              "country": {
+                "stringValue": ""
+              },
+              "precautions": {
+                "stringValue": ""
+              },
+              "contents": {
+                "stringValue": ""
+              },
+              "capacity": {
+                "stringValue": ""
+              },
+              "allergens": {
+                "stringValue": ""
+              },
+              "material": {
+                "stringValue": ""
+              },
+              "expiryDate": {
+                "stringValue": ""
+              },
+              "manufactureDate": {
+                "stringValue": ""
+              },
+              "nutrition": {
+                "stringValue": ""
+              },
+              "gmo": {
+                "stringValue": ""
+              },
+              "foodType": {
+                "stringValue": ""
+              },
+              "storage": {
+                "stringValue": ""
+              },
+              "support": {
+                "stringValue": ""
+              },
+              "importer": {
+                "stringValue": ""
+              },
+              "certification": {
+                "stringValue": ""
+              },
+              "additional": {
+                "stringValue": ""
+              }
+            }
+          }
+        },
+        "perPersonLimit": {
+          "nullValue": null
+        },
+        "exposureStart": {
+          "stringValue": ""
+        },
+        "maxQuantity": {
+          "nullValue": null
+        },
+        "optionsEnabled": {
+          "booleanValue": false
+        },
+        "teaTags": {
+          "arrayValue": {
+            "values": [
+              {
+                "stringValue": "무카페인"
+              }
+            ]
+          }
+        },
+        "newProduct": {
+          "booleanValue": true
+        },
+        "description": {
+          "stringValue": "티백 X. 80g"
+        },
+        "inventory": {
+          "mapValue": {
+            "fields": {
+              "stock": {
+                "integerValue": "0"
+              },
+              "restockDate": {
+                "stringValue": ""
+              },
+              "soldOutThreshold": {
+                "integerValue": "0"
+              },
+              "stopWhenSoldOut": {
+                "booleanValue": true
+              },
+              "safetyStock": {
+                "integerValue": "0"
+              },
+              "enabled": {
+                "booleanValue": false
+              },
+              "status": {
+                "stringValue": "available"
+              },
+              "preorder": {
+                "booleanValue": false
+              }
+            }
+          }
+        },
+        "publicAfter": {
+          "integerValue": "0"
+        },
+        "manufacturer": {
+          "stringValue": ""
+        },
+        "featured": {
+          "booleanValue": false
+        },
+        "createdAt": {
+          "integerValue": "1791540731459"
+        },
+        "saleStart": {
+          "stringValue": ""
+        },
+        "summary": {
+          "stringValue": ""
+        },
+        "saleEnd": {
+          "stringValue": ""
+        },
+        "draft": {
+          "booleanValue": false
+        },
+        "saleStatus": {
+          "stringValue": "active"
+        }
+      },
+      "createTime": "2026-10-09T10:12:13.105960Z",
+      "updateTime": "2026-10-09T11:20:28.348307Z"
+    },
+    {
+      "name": "projects/recipes-5a663/databases/(default)/documents/products/mBLpm3uqVFf2fcEE295c",
+      "fields": {
+        "name": {
+          "stringValue": "얼그레이"
+        },
+        "publishAt": {
+          "stringValue": ""
+        },
+        "updatedAt": {
+          "integerValue": "1791540800445"
+        },
+        "maxQuantity": {
+          "nullValue": null
+        },
+        "saleStatus": {
+          "stringValue": "active"
+        },
+        "featured": {
+          "booleanValue": false
+        },
+        "saleEnd": {
+          "stringValue": ""
+        },
+        "summary": {
+          "stringValue": ""
+        },
+        "description": {
+          "stringValue": "티백 O. 2g 25개입<!--EndFragment--><!--EndFragment-->"
+        },
+        "brand": {
+          "stringValue": "트와이닝"
+        },
+        "publicAfter": {
+          "integerValue": "0"
+        },
+        "exposureStart": {
+          "stringValue": ""
+        },
+        "order": {
+          "integerValue": "0"
+        },
+        "disclosure": {
+          "mapValue": {
+            "fields": {
+              "gmo": {
+                "stringValue": ""
+              },
+              "expiryDate": {
+                "stringValue": ""
+              },
+              "certification": {
+                "stringValue": ""
+              },
+              "support": {
+                "stringValue": ""
+              },
+              "nutrition": {
+                "stringValue": ""
+              },
+              "precautions": {
+                "stringValue": ""
+              },
+              "material": {
+                "stringValue": ""
+              },
+              "manufactureDate": {
+                "stringValue": ""
+              },
+              "storage": {
+                "stringValue": ""
+              },
+              "capacity": {
+                "stringValue": ""
+              },
+              "contents": {
+                "stringValue": ""
+              },
+              "additional": {
+                "stringValue": ""
+              },
+              "importer": {
+                "stringValue": ""
+              },
+              "allergens": {
+                "stringValue": ""
+              },
+              "foodType": {
+                "stringValue": ""
+              },
+              "country": {
+                "stringValue": ""
+              }
+            }
+          }
+        },
+        "newProduct": {
+          "booleanValue": true
+        },
+        "policySelection": {
+          "mapValue": {
+            "fields": {
+              "shipping": {
+                "stringValue": "common"
+              },
+              "exchange": {
+                "stringValue": "common"
+              },
+              "refund": {
+                "stringValue": "common"
+              }
+            }
+          }
+        },
+        "teaTags": {
+          "arrayValue": {
+            "values": [
+              {
+                "stringValue": "홍차"
+              },
+              {
+                "stringValue": "카페인"
+              }
+            ]
+          }
+        },
+        "policyVersion": {
+          "integerValue": "0"
+        },
+        "options": {
+          "arrayValue": {}
+        },
+        "shipping": {
+          "mapValue": {
+            "fields": {
+              "width": {
+                "nullValue": null
+              },
+              "height": {
+                "nullValue": null
+              },
+              "extraFee": {
+                "nullValue": null
+              },
+              "weight": {
+                "nullValue": null
+              },
+              "carrier": {
+                "stringValue": ""
+              },
+              "freeThreshold": {
+                "nullValue": null
+              },
+              "bundle": {
+                "booleanValue": false
+              },
+              "type": {
+                "stringValue": "parcel"
+              },
+              "leadDays": {
+                "nullValue": null
+              },
+              "fee": {
+                "nullValue": null
+              },
+              "feeType": {
+                "stringValue": "paid"
+              },
+              "depth": {
+                "nullValue": null
+              }
+            }
+          }
+        },
+        "variants": {
+          "arrayValue": {}
+        },
+        "createdAt": {
+          "integerValue": "1791538112171"
+        },
+        "saleStart": {
+          "stringValue": ""
+        },
+        "draft": {
+          "booleanValue": false
+        },
+        "type": {
+          "stringValue": "physical"
+        },
+        "inventory": {
+          "mapValue": {
+            "fields": {
+              "status": {
+                "stringValue": "available"
+              },
+              "stopWhenSoldOut": {
+                "booleanValue": true
+              },
+              "stock": {
+                "integerValue": "0"
+              },
+              "restockDate": {
+                "stringValue": ""
+              },
+              "soldOutThreshold": {
+                "integerValue": "0"
+              },
+              "preorder": {
+                "booleanValue": false
+              },
+              "enabled": {
+                "booleanValue": false
+              },
+              "safetyStock": {
+                "integerValue": "0"
+              }
+            }
+          }
+        },
+        "manufacturer": {
+          "stringValue": ""
+        },
+        "exposureEnd": {
+          "stringValue": ""
+        },
+        "purchaseUrl": {
+          "stringValue": ""
+        },
+        "minQuantity": {
+          "integerValue": "1"
+        },
+        "perPersonLimit": {
+          "nullValue": null
+        },
+        "seo": {
+          "mapValue": {
+            "fields": {
+              "slug": {
+                "stringValue": "얼그레이"
+              },
+              "title": {
+                "stringValue": "얼그레이"
+              },
+              "description": {
+                "stringValue": "2g 25개입"
+              }
+            }
+          }
+        },
+        "version": {
+          "integerValue": "3"
+        },
+        "categories": {
+          "arrayValue": {
+            "values": [
+              {
+                "stringValue": ""
+              },
+              {
+                "stringValue": ""
+              },
+              {
+                "stringValue": ""
+              }
+            ]
+          }
+        },
+        "pricing": {
+          "mapValue": {
+            "fields": {
+              "discountEnd": {
+                "stringValue": ""
+              },
+              "regular": {
+                "integerValue": "6320"
+              },
+              "discount": {
+                "nullValue": null
+              },
+              "tax": {
+                "stringValue": "taxable"
+              },
+              "discountStart": {
+                "stringValue": ""
+              }
+            }
+          }
+        },
+        "policies": {
+          "mapValue": {
+            "fields": {
+              "refund": {
+                "mapValue": {
+                  "fields": {
+                    "guidance": {
+                      "stringValue": ""
+                    },
+                    "customConsent": {
+                      "booleanValue": false
+                    },
+                    "refundMethod": {
+                      "stringValue": "original"
+                    },
+                    "reasons": {
+                      "stringValue": ""
+                    },
+                    "days": {
+                      "nullValue": null
+                    },
+                    "settlement": {
+                      "stringValue": ""
+                    },
+                    "method": {
+                      "stringValue": ""
+                    },
+                    "partial": {
+                      "booleanValue": true
+                    },
+                    "exceptionNotice": {
+                      "booleanValue": false
+                    },
+                    "changeFee": {
+                      "nullValue": null
+                    },
+                    "defectFee": {
+                      "integerValue": "0"
+                    },
+                    "refundDays": {
+                      "nullValue": null
+                    },
+                    "inspection": {
+                      "stringValue": ""
+                    },
+                    "payer": {
+                      "stringValue": "buyer"
+                    },
+                    "enabled": {
+                      "booleanValue": true
+                    },
+                    "remoteFee": {
+                      "nullValue": null
+                    },
+                    "exceptions": {
+                      "arrayValue": {}
+                    },
+                    "collectionMethod": {
+                      "stringValue": ""
+                    }
+                  }
+                }
+              },
+              "shipping": {
+                "mapValue": {
+                  "fields": {
+                    "leadDays": {
+                      "nullValue": null
+                    },
+                    "jejuFee": {
+                      "nullValue": null
+                    },
+                    "international": {
+                      "booleanValue": false
+                    },
+                    "individualFee": {
+                      "booleanValue": false
+                    },
+                    "fee": {
+                      "nullValue": null
+                    },
+                    "remoteFee": {
+                      "nullValue": null
+                    },
+                    "cutoffTime": {
+                      "stringValue": ""
+                    },
+                    "delayNotice": {
+                      "stringValue": ""
+                    },
+                    "bundle": {
+                      "booleanValue": false
+                    },
+                    "type": {
+                      "stringValue": "parcel"
+                    },
+                    "quantityFee": {
+                      "nullValue": null
+                    },
+                    "estimatedDays": {
+                      "stringValue": ""
+                    },
+                    "holidays": {
+                      "stringValue": ""
+                    },
+                    "regions": {
+                      "stringValue": ""
+                    },
+                    "carrier": {
+                      "stringValue": ""
+                    },
+                    "freeThreshold": {
+                      "nullValue": null
+                    },
+                    "guidance": {
+                      "stringValue": ""
+                    },
+                    "originAddress": {
+                      "stringValue": ""
+                    },
+                    "feeType": {
+                      "stringValue": "paid"
+                    }
+                  }
+                }
+              },
+              "exchange": {
+                "mapValue": {
+                  "fields": {
+                    "changeFee": {
+                      "nullValue": null
+                    },
+                    "defectFee": {
+                      "integerValue": "0"
+                    },
+                    "reshipping": {
+                      "stringValue": ""
+                    },
+                    "remoteFee": {
+                      "nullValue": null
+                    },
+                    "enabled": {
+                      "booleanValue": true
+                    },
+                    "payer": {
+                      "stringValue": "buyer"
+                    },
+                    "reasons": {
+                      "stringValue": ""
+                    },
+                    "guidance": {
+                      "stringValue": ""
+                    },
+                    "method": {
+                      "stringValue": ""
+                    },
+                    "collectionMethod": {
+                      "stringValue": ""
+                    },
+                    "inspection": {
+                      "stringValue": ""
+                    },
+                    "days": {
+                      "nullValue": null
+                    }
+                  }
+                }
+              },
+              "address": {
+                "mapValue": {
+                  "fields": {
+                    "carrier": {
+                      "stringValue": ""
+                    },
+                    "notice": {
+                      "stringValue": ""
+                    },
+                    "detail": {
+                      "stringValue": ""
+                    },
+                    "customerService": {
+                      "stringValue": ""
+                    },
+                    "postcode": {
+                      "stringValue": ""
+                    },
+                    "recipient": {
+                      "stringValue": ""
+                    },
+                    "phone": {
+                      "stringValue": ""
+                    },
+                    "address": {
+                      "stringValue": ""
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "images": {
+          "arrayValue": {
+            "values": [
+              {
+                "mapValue": {
+                  "fields": {
+                    "url": {
+                      "stringValue": "https://lottemartzetta.com/images-v3/932dcbc7-fca8-4d43-bcde-f73d1ce3cc7d/3b7b0e05-f85a-4d85-bda1-13d31e151877/500x500.jpg"
+                    },
+                    "id": {
+                      "stringValue": "60cef5af-d717-46a0-b99f-66240f38e778"
+                    },
+                    "alt": {
+                      "stringValue": ""
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "sku": {
+          "stringValue": "TEA-01"
+        },
+        "publicUntil": {
+          "integerValue": "8640000000000000"
+        },
+        "visibility": {
+          "stringValue": "private"
+        },
+        "optionsEnabled": {
+          "booleanValue": false
+        },
+        "deleted": {
+          "booleanValue": false
+        },
+        "id": {
+          "stringValue": "mBLpm3uqVFf2fcEE295c"
+        }
+      },
+      "createTime": "2026-10-09T09:28:33.773496Z",
+      "updateTime": "2026-10-09T10:13:22.046936Z"
+    },
+    {
+      "name": "projects/recipes-5a663/databases/(default)/documents/products/nzdRx7HpufBSu7bej3FR",
+      "fields": {
+        "brand": {
+          "stringValue": ""
+        },
+        "publicUntil": {
+          "integerValue": "8640000000000000"
+        },
+        "version": {
+          "integerValue": "1"
+        },
+        "type": {
+          "stringValue": "physical"
+        },
+        "optionsEnabled": {
+          "booleanValue": false
+        },
+        "deleted": {
+          "booleanValue": false
+        },
+        "perPersonLimit": {
+          "nullValue": null
+        },
+        "pricing": {
+          "mapValue": {
+            "fields": {
+              "discountStart": {
+                "stringValue": ""
+              },
+              "regular": {
+                "integerValue": "26130"
+              },
+              "discountEnd": {
+                "stringValue": ""
+              },
+              "discount": {
+                "nullValue": null
+              },
+              "tax": {
+                "stringValue": "taxable"
+              }
+            }
+          }
+        },
+        "featured": {
+          "booleanValue": false
+        },
+        "exposureStart": {
+          "stringValue": ""
+        },
+        "id": {
+          "stringValue": "nzdRx7HpufBSu7bej3FR"
+        },
+        "compositionType": {
+          "stringValue": "blend"
+        },
+        "exposureEnd": {
+          "stringValue": ""
+        },
+        "purchaseUrl": {
+          "stringValue": ""
+        },
+        "sku": {
+          "stringValue": "TEA-62524019"
+        },
+        "createdAt": {
+          "integerValue": "1791545715624"
+        },
+        "saleStart": {
+          "stringValue": ""
+        },
+        "categories": {
+          "arrayValue": {
+            "values": [
+              {
+                "stringValue": ""
+              },
+              {
+                "stringValue": ""
+              },
+              {
+                "stringValue": ""
+              }
+            ]
+          }
+        },
+        "minQuantity": {
+          "integerValue": "1"
+        },
+        "options": {
+          "arrayValue": {}
+        },
+        "inventory": {
+          "mapValue": {
+            "fields": {
+              "status": {
+                "stringValue": "available"
+              },
+              "safetyStock": {
+                "integerValue": "0"
+              },
+              "soldOutThreshold": {
+                "integerValue": "0"
+              },
+              "preorder": {
+                "booleanValue": false
+              },
+              "stock": {
+                "integerValue": "0"
+              },
+              "restockDate": {
+                "stringValue": ""
+              },
+              "enabled": {
+                "booleanValue": false
+              },
+              "stopWhenSoldOut": {
+                "booleanValue": true
+              }
+            }
+          }
+        },
+        "visibility": {
+          "stringValue": "private"
+        },
+        "order": {
+          "integerValue": "0"
+        },
+        "seo": {
+          "mapValue": {
+            "fields": {
+              "title": {
+                "stringValue": "조용히 있고 싶은 날"
+              },
+              "slug": {
+                "stringValue": "조용히-있고-싶은-날"
+              },
+              "description": {
+                "stringValue": "얼그레이에 라벤더랑 바닐라가 들어가서 향이 차분하고 포근함. 혼자 가만히 쉬고 싶은 날 마시기."
+              }
+            }
+          }
+        },
+        "blend": {
+          "mapValue": {
+            "fields": {
+              "components": {
+                "arrayValue": {
+                  "values": [
+                    {
+                      "mapValue": {
+                        "fields": {
+                          "grams": {
+                            "doubleValue": 2.4
+                          },
+                          "imageUrl": {
+                            "stringValue": "https://lottemartzetta.com/images-v3/932dcbc7-fca8-4d43-bcde-f73d1ce3cc7d/3b7b0e05-f85a-4d85-bda1-13d31e151877/500x500.jpg"
+                          },
+                          "unavailable": {
+                            "booleanValue": false
+                          },
+                          "productId": {
+                            "stringValue": "mBLpm3uqVFf2fcEE295c"
+                          },
+                          "slug": {
+                            "stringValue": "얼그레이"
+                          },
+                          "name": {
+                            "stringValue": "얼그레이"
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "mapValue": {
+                        "fields": {
+                          "unavailable": {
+                            "booleanValue": false
+                          },
+                          "name": {
+                            "stringValue": "라벤더"
+                          },
+                          "grams": {
+                            "doubleValue": 0.2
+                          },
+                          "slug": {
+                            "stringValue": "라벤더"
+                          },
+                          "productId": {
+                            "stringValue": "HiUJaYQkHOq83ySJsELX"
+                          },
+                          "imageUrl": {
+                            "stringValue": "https://m.greentmall.co.kr/web/product/big/202312/24a9880f48d8f509587ae2b8c608f67e.png"
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "mapValue": {
+                        "fields": {
+                          "slug": {
+                            "stringValue": "바닐라"
+                          },
+                          "imageUrl": {
+                            "stringValue": "https://museo.hgodo.com/thumb_img/brand/twinings/480/480_10375_02.jpg"
+                          },
+                          "name": {
+                            "stringValue": "바닐라"
+                          },
+                          "unavailable": {
+                            "booleanValue": false
+                          },
+                          "productId": {
+                            "stringValue": "4bDwnQSZZdJtXme5CYqF"
+                          },
+                          "grams": {
+                            "doubleValue": 0.5
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              "waterMl": {
+                "integerValue": "250"
+              }
+            }
+          }
+        },
+        "policySelection": {
+          "mapValue": {
+            "fields": {
+              "shipping": {
+                "stringValue": "common"
+              },
+              "exchange": {
+                "stringValue": "common"
+              },
+              "refund": {
+                "stringValue": "common"
+              }
+            }
+          }
+        },
+        "draft": {
+          "booleanValue": false
+        },
+        "variants": {
+          "arrayValue": {}
+        },
+        "images": {
+          "arrayValue": {
+            "values": [
+              {
+                "mapValue": {
+                  "fields": {
+                    "alt": {
+                      "stringValue": ""
+                    },
+                    "id": {
+                      "stringValue": "d05229c7-79d5-47d9-8430-c760c0458297"
+                    },
+                    "url": {
+                      "stringValue": "https://teafloor.com/wp-content/uploads/2016/12/Tea2-750X500.jpg"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "shipping": {
+          "mapValue": {
+            "fields": {
+              "leadDays": {
+                "nullValue": null
+              },
+              "depth": {
+                "nullValue": null
+              },
+              "freeThreshold": {
+                "nullValue": null
+              },
+              "fee": {
+                "nullValue": null
+              },
+              "bundle": {
+                "booleanValue": false
+              },
+              "type": {
+                "stringValue": "parcel"
+              },
+              "weight": {
+                "nullValue": null
+              },
+              "feeType": {
+                "stringValue": "paid"
+              },
+              "extraFee": {
+                "nullValue": null
+              },
+              "width": {
+                "nullValue": null
+              },
+              "height": {
+                "nullValue": null
+              },
+              "carrier": {
+                "stringValue": ""
+              }
+            }
+          }
+        },
+        "teaTags": {
+          "arrayValue": {
+            "values": [
+              {
+                "stringValue": "혼합차"
+              }
+            ]
+          }
+        },
+        "manufacturer": {
+          "stringValue": ""
+        },
+        "saleStatus": {
+          "stringValue": "active"
+        },
+        "publicAfter": {
+          "integerValue": "0"
+        },
+        "name": {
+          "stringValue": "조용히 있고 싶은 날"
+        },
+        "description": {
+          "stringValue": "얼그레이에 라벤더랑 바닐라가 들어가서 향이 차분하고 포근함. 혼자 가만히 쉬고 싶은 날 마시기.<br><br>"
+        },
+        "disclosure": {
+          "mapValue": {
+            "fields": {
+              "storage": {
+                "stringValue": ""
+              },
+              "allergens": {
+                "stringValue": ""
+              },
+              "expiryDate": {
+                "stringValue": ""
+              },
+              "foodType": {
+                "stringValue": ""
+              },
+              "certification": {
+                "stringValue": ""
+              },
+              "gmo": {
+                "stringValue": ""
+              },
+              "support": {
+                "stringValue": ""
+              },
+              "importer": {
+                "stringValue": ""
+              },
+              "nutrition": {
+                "stringValue": ""
+              },
+              "capacity": {
+                "stringValue": ""
+              },
+              "contents": {
+                "stringValue": ""
+              },
+              "precautions": {
+                "stringValue": ""
+              },
+              "manufactureDate": {
+                "stringValue": ""
+              },
+              "additional": {
+                "stringValue": ""
+              },
+              "country": {
+                "stringValue": ""
+              },
+              "material": {
+                "stringValue": ""
+              }
+            }
+          }
+        },
+        "policies": {
+          "mapValue": {
+            "fields": {
+              "refund": {
+                "mapValue": {
+                  "fields": {
+                    "enabled": {
+                      "booleanValue": true
+                    },
+                    "customConsent": {
+                      "booleanValue": false
+                    },
+                    "settlement": {
+                      "stringValue": ""
+                    },
+                    "method": {
+                      "stringValue": ""
+                    },
+                    "reasons": {
+                      "stringValue": ""
+                    },
+                    "exceptionNotice": {
+                      "booleanValue": false
+                    },
+                    "payer": {
+                      "stringValue": "buyer"
+                    },
+                    "exceptions": {
+                      "arrayValue": {}
+                    },
+                    "collectionMethod": {
+                      "stringValue": ""
+                    },
+                    "changeFee": {
+                      "nullValue": null
+                    },
+                    "defectFee": {
+                      "integerValue": "0"
+                    },
+                    "partial": {
+                      "booleanValue": true
+                    },
+                    "guidance": {
+                      "stringValue": ""
+                    },
+                    "refundDays": {
+                      "nullValue": null
+                    },
+                    "refundMethod": {
+                      "stringValue": "original"
+                    },
+                    "inspection": {
+                      "stringValue": ""
+                    },
+                    "remoteFee": {
+                      "nullValue": null
+                    },
+                    "days": {
+                      "nullValue": null
+                    }
+                  }
+                }
+              },
+              "exchange": {
+                "mapValue": {
+                  "fields": {
+                    "remoteFee": {
+                      "nullValue": null
+                    },
+                    "reasons": {
+                      "stringValue": ""
+                    },
+                    "enabled": {
+                      "booleanValue": true
+                    },
+                    "inspection": {
+                      "stringValue": ""
+                    },
+                    "collectionMethod": {
+                      "stringValue": ""
+                    },
+                    "method": {
+                      "stringValue": ""
+                    },
+                    "days": {
+                      "nullValue": null
+                    },
+                    "guidance": {
+                      "stringValue": ""
+                    },
+                    "defectFee": {
+                      "integerValue": "0"
+                    },
+                    "changeFee": {
+                      "nullValue": null
+                    },
+                    "payer": {
+                      "stringValue": "buyer"
+                    },
+                    "reshipping": {
+                      "stringValue": ""
+                    }
+                  }
+                }
+              },
+              "shipping": {
+                "mapValue": {
+                  "fields": {
+                    "remoteFee": {
+                      "nullValue": null
+                    },
+                    "holidays": {
+                      "stringValue": ""
+                    },
+                    "jejuFee": {
+                      "nullValue": null
+                    },
+                    "delayNotice": {
+                      "stringValue": ""
+                    },
+                    "estimatedDays": {
+                      "stringValue": ""
+                    },
+                    "freeThreshold": {
+                      "nullValue": null
+                    },
+                    "originAddress": {
+                      "stringValue": ""
+                    },
+                    "guidance": {
+                      "stringValue": ""
+                    },
+                    "leadDays": {
+                      "nullValue": null
+                    },
+                    "regions": {
+                      "stringValue": ""
+                    },
+                    "international": {
+                      "booleanValue": false
+                    },
+                    "fee": {
+                      "nullValue": null
+                    },
+                    "bundle": {
+                      "booleanValue": false
+                    },
+                    "cutoffTime": {
+                      "stringValue": ""
+                    },
+                    "type": {
+                      "stringValue": "parcel"
+                    },
+                    "feeType": {
+                      "stringValue": "paid"
+                    },
+                    "quantityFee": {
+                      "nullValue": null
+                    },
+                    "individualFee": {
+                      "booleanValue": false
+                    },
+                    "carrier": {
+                      "stringValue": ""
+                    }
+                  }
+                }
+              },
+              "address": {
+                "mapValue": {
+                  "fields": {
+                    "phone": {
+                      "stringValue": ""
+                    },
+                    "customerService": {
+                      "stringValue": ""
+                    },
+                    "address": {
+                      "stringValue": ""
+                    },
+                    "carrier": {
+                      "stringValue": ""
+                    },
+                    "detail": {
+                      "stringValue": ""
+                    },
+                    "postcode": {
+                      "stringValue": ""
+                    },
+                    "recipient": {
+                      "stringValue": ""
+                    },
+                    "notice": {
+                      "stringValue": ""
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "summary": {
+          "stringValue": ""
+        },
+        "saleEnd": {
+          "stringValue": ""
+        },
+        "maxQuantity": {
+          "nullValue": null
+        },
+        "policyVersion": {
+          "integerValue": "0"
+        },
+        "newProduct": {
+          "booleanValue": true
+        },
+        "updatedAt": {
+          "integerValue": "1791545715624"
+        },
+        "publishAt": {
+          "stringValue": ""
+        }
+      },
+      "createTime": "2026-10-09T11:35:16.693391Z",
+      "updateTime": "2026-10-09T11:35:16.693391Z"
+    }
+  ],
+  "settings": null
+}

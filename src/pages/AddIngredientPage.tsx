@@ -128,7 +128,7 @@ export function AddIngredientPage() {
       for (const row of aiRows) {
         await saveIngredientToFirestore({ name: (row.nameEn || row.nameKo).toLowerCase(), nameKo: row.nameKo, baseAmount: Number.parseFloat(row.amount) || 100, baseUnit: row.unit || 'g', carbs: Number.parseFloat(row.carbs) || 0, protein: Number.parseFloat(row.protein) || 0, fat: Number.parseFloat(row.fat) || 0 })
       }
-      showToast(isKo ? '저장되었습니다.' : 'Saved!', 'success')
+      showToast(isKo ? '저장되었습니다.' : 'Saved!', 'success', { label: isKo ? '식재료 보러가기' : 'View ingredients', onClick: () => navigate('/ingredients') })
       setPastedText(''); setAiRows([]); setAiResolved(false)
     } catch { showToast(isKo ? '저장 실패. 다시 시도해주세요.' : 'Save failed.', 'error') }
     finally { setSaving(false) }
@@ -150,7 +150,7 @@ export function AddIngredientPage() {
         const nameEn = await translateKoToEn(row.nameKo)
         await saveIngredientToFirestore({ name: nameEn.toLowerCase(), nameKo: row.nameKo, baseAmount: Number.parseFloat(row.amount) || 100, baseUnit: row.unit || 'g', carbs: Number.parseFloat(row.carbs) || 0, protein: Number.parseFloat(row.protein) || 0, fat: Number.parseFloat(row.fat) || 0, ...(row.imageUrl.trim() ? { imageUrl: row.imageUrl.trim() } : {}), ...(row.category ? { category: row.category } : {}), storageLocation: row.storageLocation })
       }
-      showToast(isKo ? '저장되었습니다.' : 'Saved!', 'success')
+      showToast(isKo ? '저장되었습니다.' : 'Saved!', 'success', { label: isKo ? '식재료 보러가기' : 'View ingredients', onClick: () => navigate('/ingredients') })
       setManualRows([{ ...EMPTY_MANUAL }])
     } catch { showToast(isKo ? '저장 실패. 다시 시도해주세요.' : 'Save failed.', 'error') }
     finally { setSaving(false) }
@@ -189,7 +189,7 @@ export function AddIngredientPage() {
             </span>
           </button>
         </div>
-        {toast && <Toast message={toast.message} type={toast.type} onClose={closeToast} />}
+        {toast && <Toast message={toast.message} type={toast.type} action={toast.action} onClose={closeToast} />}
       </section>
     )
   }
@@ -293,7 +293,7 @@ export function AddIngredientPage() {
           </div>
         )}
 
-        {toast && <Toast message={toast.message} type={toast.type} onClose={closeToast} />}
+        {toast && <Toast message={toast.message} type={toast.type} action={toast.action} onClose={closeToast} />}
       </section>
     )
   }
@@ -309,7 +309,7 @@ export function AddIngredientPage() {
         <h2 className="page__heading" style={{ margin: 0 }}>{isKo ? '직접 입력하기' : 'Enter manually'}</h2>
       </div>
 
-      <Table className="data-table recipe-table" style={{ marginTop: '1rem' }}>
+      <Table className="data-table recipe-table" style={{ marginTop: '1rem', minWidth: 1900 }}>
         <TableHeader>
           <TableRow>
             <TableHead>{isKo ? '식재료명' : 'Name'}</TableHead>
@@ -318,9 +318,9 @@ export function AddIngredientPage() {
             <TableHead>{isKo ? '탄수화물' : 'Carbs'}</TableHead>
             <TableHead>{isKo ? '단백질' : 'Prot.'}</TableHead>
             <TableHead>{isKo ? '지방' : 'Fat'}</TableHead>
-            <TableHead>{isKo ? '이미지 링크 (선택)' : 'Image URL (optional)'}</TableHead>
-            <TableHead>{isKo ? '분류 태그' : 'Category'}</TableHead>
-            <TableHead>{isKo ? '보관 장소' : 'Storage location'}</TableHead>
+            <TableHead style={{ width: 328, minWidth: 300 }}>{isKo ? '이미지 링크 (선택)' : 'Image URL (optional)'}</TableHead>
+            <TableHead style={{ width: 378, minWidth: 350 }}>{isKo ? '분류 태그' : 'Category'}</TableHead>
+            <TableHead style={{ width: 378, minWidth: 350 }}>{isKo ? '보관 장소' : 'Storage location'}</TableHead>
             <TableHead />
           </TableRow>
         </TableHeader>
@@ -333,14 +333,14 @@ export function AddIngredientPage() {
               <TableCell><Input type="number" className="h-7 w-20 text-sm" min={0} step={0.1} placeholder="0" value={row.carbs} onChange={(e) => handleManualRowChange(i, 'carbs', e.target.value)} /></TableCell>
               <TableCell><Input type="number" className="h-7 w-20 text-sm" min={0} step={0.1} placeholder="0" value={row.protein} onChange={(e) => handleManualRowChange(i, 'protein', e.target.value)} /></TableCell>
               <TableCell><Input type="number" className="h-7 w-20 text-sm" min={0} step={0.1} placeholder="0" value={row.fat} onChange={(e) => handleManualRowChange(i, 'fat', e.target.value)} /></TableCell>
-              <TableCell><Input type="url" className="h-7 min-w-48 text-sm" aria-label={isKo ? `${i + 1}번째 식재료 이미지 링크` : `Ingredient ${i + 1} image URL`} value={row.imageUrl} placeholder="https://..." onChange={(e) => handleManualRowChange(i, 'imageUrl', e.target.value)} /></TableCell>
+              <TableCell><Input type="url" className="h-7 min-w-[300px] text-sm" aria-label={isKo ? `${i + 1}번째 식재료 이미지 링크` : `Ingredient ${i + 1} image URL`} value={row.imageUrl} placeholder="https://..." onChange={(e) => handleManualRowChange(i, 'imageUrl', e.target.value)} /></TableCell>
               <TableCell>
-                <div className="flex min-w-64 flex-wrap gap-2" role="group" aria-label={isKo ? `${i + 1}번째 식재료 분류` : `Ingredient ${i + 1} category`}>
+                <div className="flex min-w-[350px] flex-wrap gap-2" role="group" aria-label={isKo ? `${i + 1}번째 식재료 분류` : `Ingredient ${i + 1} category`}>
                   {CATEGORY_OPTIONS.map(([value, ko, en]) => <Button key={value} type="button" variant="filter" size="compact" aria-pressed={row.category === value} disabled={saving} onClick={() => handleManualRowChange(i, 'category', value)}>{isKo ? ko : en}</Button>)}
                 </div>
               </TableCell>
               <TableCell>
-                <div className="flex min-w-56 flex-wrap gap-2" role="group" aria-label={isKo ? `${i + 1}번째 식재료 보관 장소` : `Ingredient ${i + 1} storage location`}>
+                <div className="flex min-w-[350px] flex-wrap gap-2" role="group" aria-label={isKo ? `${i + 1}번째 식재료 보관 장소` : `Ingredient ${i + 1} storage location`}>
                   {STORAGE_OPTIONS.map(([value, ko, en]) => <Button key={value} type="button" variant="filter" size="compact" aria-pressed={row.storageLocation === value} disabled={saving} onClick={() => handleManualRowChange(i, 'storageLocation', value)}>{isKo ? ko : en}</Button>)}
                 </div>
               </TableCell>
@@ -363,7 +363,7 @@ export function AddIngredientPage() {
         </div>
       </div>
 
-      {toast && <Toast message={toast.message} type={toast.type} onClose={closeToast} />}
+      {toast && <Toast message={toast.message} type={toast.type} action={toast.action} onClose={closeToast} />}
     </section>
   )
 }

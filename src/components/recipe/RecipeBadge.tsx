@@ -1,3 +1,4 @@
+import { formatTableNumber } from '../../utils/numberFormatting'
 import { useLanguage } from '../../context/LanguageContext'
 import type { CSSProperties } from 'react'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
@@ -32,7 +33,7 @@ function MacroChart({ macros }: { macros: { carbs: number; protein: number; fat:
               <div className="macro-chart__rec-line" style={{ left: `${(100 / 130) * 100}%` }} />
             </div>
             <span className="macro-chart__value" style={{ color, minWidth: 'unset', width: '52px', textAlign: 'right' }}>
-              {Math.round(value)} / {rec}
+              {formatTableNumber(value)} / {rec}
             </span>
           </div>
         )

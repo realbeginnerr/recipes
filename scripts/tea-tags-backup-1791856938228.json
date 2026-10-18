@@ -1,0 +1,555 @@
+[
+  {
+    "name": "projects/recipes-5a663/databases/(default)/documents/products/csv-tea-4192b72a618eb77b",
+    "fields": {
+      "id": {
+        "stringValue": "csv-tea-4192b72a618eb77b"
+      },
+      "version": {
+        "integerValue": "1"
+      },
+      "createdAt": {
+        "integerValue": "1791553200762"
+      },
+      "updatedAt": {
+        "integerValue": "1791553200762"
+      },
+      "name": {
+        "stringValue": "페퍼민트"
+      },
+      "sku": {
+        "stringValue": "TEA-CSV-4192B72A618EB77B"
+      },
+      "categories": {
+        "arrayValue": {
+          "values": [
+            {
+              "stringValue": ""
+            },
+            {
+              "stringValue": ""
+            },
+            {
+              "stringValue": ""
+            }
+          ]
+        }
+      },
+      "teaTags": {
+        "arrayValue": {
+          "values": [
+            {
+              "stringValue": "무카페인"
+            }
+          ]
+        }
+      },
+      "compositionType": {
+        "stringValue": "single"
+      },
+      "groupBuy": {
+        "mapValue": {
+          "fields": {
+            "participants": {
+              "nullValue": null
+            }
+          }
+        }
+      },
+      "blend": {
+        "mapValue": {
+          "fields": {
+            "components": {
+              "arrayValue": {}
+            },
+            "waterMl": {
+              "integerValue": "250"
+            }
+          }
+        }
+      },
+      "brand": {
+        "stringValue": "다비앙"
+      },
+      "manufacturer": {
+        "stringValue": ""
+      },
+      "type": {
+        "stringValue": "physical"
+      },
+      "summary": {
+        "stringValue": ""
+      },
+      "description": {
+        "stringValue": "<p>티백 X. 35g</p>"
+      },
+      "purchaseUrl": {
+        "stringValue": "https://www.coupang.com/vp/products/7325398624?itemId=19979665888&vendorItemId=87077968452&pickType=COU_PICK&q=%ED%8E%98%ED%8D%BC%EB%AF%BC%ED%8A%B8&searchId=71710faa1109295&sourceType=search&rank=2&itemsCount=36&searchRank=2&traceId=mv0xp7fp"
+      },
+      "images": {
+        "arrayValue": {
+          "values": [
+            {
+              "mapValue": {
+                "fields": {
+                  "id": {
+                    "stringValue": "cover"
+                  },
+                  "url": {
+                    "stringValue": "https://m.greentmall.co.kr/web/product/big/202312/c98281cc7dd62fe0db7e5886e9ba89f8.png"
+                  },
+                  "alt": {
+                    "stringValue": "페퍼민트"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      "pricing": {
+        "mapValue": {
+          "fields": {
+            "regular": {
+              "integerValue": "9410"
+            },
+            "discount": {
+              "nullValue": null
+            },
+            "discountStart": {
+              "stringValue": ""
+            },
+            "discountEnd": {
+              "stringValue": ""
+            },
+            "tax": {
+              "stringValue": "taxable"
+            }
+          }
+        }
+      },
+      "optionsEnabled": {
+        "booleanValue": false
+      },
+      "options": {
+        "arrayValue": {}
+      },
+      "variants": {
+        "arrayValue": {}
+      },
+      "inventory": {
+        "mapValue": {
+          "fields": {
+            "enabled": {
+              "booleanValue": false
+            },
+            "stock": {
+              "integerValue": "0"
+            },
+            "safetyStock": {
+              "integerValue": "0"
+            },
+            "soldOutThreshold": {
+              "integerValue": "0"
+            },
+            "stopWhenSoldOut": {
+              "booleanValue": true
+            },
+            "preorder": {
+              "booleanValue": false
+            },
+            "restockDate": {
+              "stringValue": ""
+            },
+            "status": {
+              "stringValue": "available"
+            }
+          }
+        }
+      },
+      "shipping": {
+        "mapValue": {
+          "fields": {
+            "type": {
+              "stringValue": "parcel"
+            },
+            "feeType": {
+              "stringValue": "paid"
+            },
+            "fee": {
+              "nullValue": null
+            },
+            "freeThreshold": {
+              "nullValue": null
+            },
+            "extraFee": {
+              "nullValue": null
+            },
+            "leadDays": {
+              "nullValue": null
+            },
+            "carrier": {
+              "stringValue": ""
+            },
+            "weight": {
+              "nullValue": null
+            },
+            "width": {
+              "nullValue": null
+            },
+            "depth": {
+              "nullValue": null
+            },
+            "height": {
+              "nullValue": null
+            },
+            "bundle": {
+              "booleanValue": false
+            }
+          }
+        }
+      },
+      "policySelection": {
+        "mapValue": {
+          "fields": {
+            "shipping": {
+              "stringValue": "common"
+            },
+            "exchange": {
+              "stringValue": "common"
+            },
+            "refund": {
+              "stringValue": "common"
+            }
+          }
+        }
+      },
+      "policies": {
+        "mapValue": {
+          "fields": {
+            "shipping": {
+              "mapValue": {
+                "fields": {
+                  "type": {
+                    "stringValue": "parcel"
+                  },
+                  "carrier": {
+                    "stringValue": ""
+                  },
+                  "originAddress": {
+                    "stringValue": ""
+                  },
+                  "leadDays": {
+                    "nullValue": null
+                  },
+                  "regions": {
+                    "stringValue": ""
+                  },
+                  "international": {
+                    "booleanValue": false
+                  },
+                  "bundle": {
+                    "booleanValue": false
+                  },
+                  "feeType": {
+                    "stringValue": "paid"
+                  },
+                  "fee": {
+                    "nullValue": null
+                  },
+                  "freeThreshold": {
+                    "nullValue": null
+                  },
+                  "jejuFee": {
+                    "nullValue": null
+                  },
+                  "remoteFee": {
+                    "nullValue": null
+                  },
+                  "quantityFee": {
+                    "nullValue": null
+                  },
+                  "individualFee": {
+                    "booleanValue": false
+                  },
+                  "estimatedDays": {
+                    "stringValue": ""
+                  },
+                  "cutoffTime": {
+                    "stringValue": ""
+                  },
+                  "holidays": {
+                    "stringValue": ""
+                  },
+                  "delayNotice": {
+                    "stringValue": ""
+                  },
+                  "guidance": {
+                    "stringValue": ""
+                  }
+                }
+              }
+            },
+            "exchange": {
+              "mapValue": {
+                "fields": {
+                  "enabled": {
+                    "booleanValue": true
+                  },
+                  "days": {
+                    "nullValue": null
+                  },
+                  "reasons": {
+                    "stringValue": ""
+                  },
+                  "method": {
+                    "stringValue": ""
+                  },
+                  "changeFee": {
+                    "nullValue": null
+                  },
+                  "defectFee": {
+                    "integerValue": "0"
+                  },
+                  "remoteFee": {
+                    "nullValue": null
+                  },
+                  "payer": {
+                    "stringValue": "buyer"
+                  },
+                  "collectionMethod": {
+                    "stringValue": ""
+                  },
+                  "inspection": {
+                    "stringValue": ""
+                  },
+                  "reshipping": {
+                    "stringValue": ""
+                  },
+                  "guidance": {
+                    "stringValue": ""
+                  }
+                }
+              }
+            },
+            "refund": {
+              "mapValue": {
+                "fields": {
+                  "enabled": {
+                    "booleanValue": true
+                  },
+                  "days": {
+                    "nullValue": null
+                  },
+                  "reasons": {
+                    "stringValue": ""
+                  },
+                  "method": {
+                    "stringValue": ""
+                  },
+                  "changeFee": {
+                    "nullValue": null
+                  },
+                  "defectFee": {
+                    "integerValue": "0"
+                  },
+                  "remoteFee": {
+                    "nullValue": null
+                  },
+                  "payer": {
+                    "stringValue": "buyer"
+                  },
+                  "exceptions": {
+                    "arrayValue": {}
+                  },
+                  "exceptionNotice": {
+                    "booleanValue": false
+                  },
+                  "customConsent": {
+                    "booleanValue": false
+                  },
+                  "collectionMethod": {
+                    "stringValue": ""
+                  },
+                  "inspection": {
+                    "stringValue": ""
+                  },
+                  "refundMethod": {
+                    "stringValue": "original"
+                  },
+                  "refundDays": {
+                    "nullValue": null
+                  },
+                  "partial": {
+                    "booleanValue": true
+                  },
+                  "settlement": {
+                    "stringValue": ""
+                  },
+                  "guidance": {
+                    "stringValue": ""
+                  }
+                }
+              }
+            },
+            "address": {
+              "mapValue": {
+                "fields": {
+                  "recipient": {
+                    "stringValue": ""
+                  },
+                  "phone": {
+                    "stringValue": ""
+                  },
+                  "postcode": {
+                    "stringValue": ""
+                  },
+                  "address": {
+                    "stringValue": ""
+                  },
+                  "detail": {
+                    "stringValue": ""
+                  },
+                  "carrier": {
+                    "stringValue": ""
+                  },
+                  "notice": {
+                    "stringValue": ""
+                  },
+                  "customerService": {
+                    "stringValue": ""
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "policyVersion": {
+        "integerValue": "0"
+      },
+      "disclosure": {
+        "mapValue": {
+          "fields": {
+            "country": {
+              "stringValue": ""
+            },
+            "manufactureDate": {
+              "stringValue": ""
+            },
+            "expiryDate": {
+              "stringValue": ""
+            },
+            "material": {
+              "stringValue": ""
+            },
+            "capacity": {
+              "stringValue": ""
+            },
+            "contents": {
+              "stringValue": ""
+            },
+            "storage": {
+              "stringValue": ""
+            },
+            "precautions": {
+              "stringValue": ""
+            },
+            "certification": {
+              "stringValue": ""
+            },
+            "support": {
+              "stringValue": ""
+            },
+            "foodType": {
+              "stringValue": ""
+            },
+            "importer": {
+              "stringValue": ""
+            },
+            "nutrition": {
+              "stringValue": ""
+            },
+            "allergens": {
+              "stringValue": ""
+            },
+            "gmo": {
+              "stringValue": ""
+            },
+            "additional": {
+              "stringValue": ""
+            }
+          }
+        }
+      },
+      "seo": {
+        "mapValue": {
+          "fields": {
+            "title": {
+              "stringValue": "페퍼민트"
+            },
+            "description": {
+              "stringValue": "티백 X. 35g"
+            },
+            "slug": {
+              "stringValue": "페퍼민트"
+            }
+          }
+        }
+      },
+      "saleStatus": {
+        "stringValue": "active"
+      },
+      "visibility": {
+        "stringValue": "public"
+      },
+      "publishAt": {
+        "stringValue": ""
+      },
+      "saleStart": {
+        "stringValue": ""
+      },
+      "saleEnd": {
+        "stringValue": ""
+      },
+      "exposureStart": {
+        "stringValue": ""
+      },
+      "exposureEnd": {
+        "stringValue": ""
+      },
+      "featured": {
+        "booleanValue": false
+      },
+      "newProduct": {
+        "booleanValue": true
+      },
+      "order": {
+        "integerValue": "0"
+      },
+      "minQuantity": {
+        "integerValue": "1"
+      },
+      "maxQuantity": {
+        "nullValue": null
+      },
+      "perPersonLimit": {
+        "nullValue": null
+      },
+      "draft": {
+        "booleanValue": false
+      },
+      "deleted": {
+        "booleanValue": false
+      },
+      "publicAfter": {
+        "integerValue": "0"
+      },
+      "publicUntil": {
+        "integerValue": "8640000000000000"
+      }
+    },
+    "createTime": "2026-10-09T13:41:27.518538Z",
+    "updateTime": "2026-10-09T13:41:27.518538Z"
+  }
+]

@@ -1,9 +1,6 @@
-import { ingredientById } from '../data/ingredientCache'
 import { recipes } from '../data/recipe'
 import type { Language } from '../i18n/translations'
 import type { Recipe, RecipeRowState } from '../types'
-import { convertUnit, roundToOne } from './nutrition'
-import { getPreferredUnit } from './unitPreference'
 
 export type RecipeStates = Record<string, RecipeRowState[]>
 
@@ -11,25 +8,10 @@ function rowWithPreferredUnit(
   ingredientId: string,
   amount: number,
   unit: string,
-  language: Language,
+  _language: Language,
 ): RecipeRowState {
-  const ingredient = ingredientById.get(ingredientId)
-  if (!ingredient) {
-    return { ingredientId, amount, unit }
-  }
-
-  const preferredUnit = getPreferredUnit(ingredient.allowedUnits, language)
-  if (unit === preferredUnit) {
-    return { ingredientId, amount, unit }
-  }
-
-  return {
-    ingredientId,
-    unit: preferredUnit,
-    amount: roundToOne(
-      convertUnit(amount, unit, preferredUnit, ingredient.conversions),
-    ),
-  }
+  // Language changes labels in UnitSelect, never the saved quantity or unit.
+  return { ingredientId, amount, unit }
 }
 
 export function buildInitialRecipeStates(language: Language, sourceRecipes: Recipe[] = recipes): RecipeStates {

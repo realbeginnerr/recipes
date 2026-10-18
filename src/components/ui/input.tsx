@@ -4,6 +4,12 @@ import { Input as InputPrimitive } from "@base-ui/react/input"
 import { cn } from "@/lib/utils"
 
 function Input({ className, type, density = "default", ...props }: React.ComponentProps<"input"> & { density?: "default" | "compact" | "quantity" }) {
+  const [focused, setFocused] = React.useState(false)
+  const numeric = type === 'number' && props.value !== '' && props.value !== undefined && props.value !== null
+    ? Number(props.value) : NaN
+  const displayValue = !focused && Number.isFinite(numeric)
+    ? new Intl.NumberFormat('en-US', { useGrouping: false, maximumFractionDigits: 1 }).format(numeric)
+    : props.value
   return (
     <InputPrimitive
       type={type}
@@ -14,6 +20,9 @@ function Input({ className, type, density = "default", ...props }: React.Compone
         className
       )}
       {...props}
+      value={displayValue}
+      onFocus={event => { setFocused(true); props.onFocus?.(event) }}
+      onBlur={event => { setFocused(false); props.onBlur?.(event) }}
     />
   )
 }

@@ -1,0 +1,7806 @@
+[
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/1fzxts2JUJhTYVVEHepS",
+      "fields": {
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "id": {
+          "stringValue": "1fzxts2JUJhTYVVEHepS"
+        },
+        "nameKo": {
+          "stringValue": "버섯 (느타리)"
+        },
+        "carbs": {
+          "doubleValue": 5
+        },
+        "protein": {
+          "doubleValue": 3
+        },
+        "fat": {
+          "doubleValue": 0.3
+        },
+        "name": {
+          "stringValue": "버섯 (느타리)"
+        },
+        "baseAmount": {
+          "doubleValue": 100
+        }
+      },
+      "createTime": "2026-07-05T12:17:05.286989Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/2iCufeMFi1yiJZ9vPSIw",
+      "fields": {
+        "nameKo": {
+          "stringValue": "깻잎"
+        },
+        "name": {
+          "stringValue": "Sesame leaf"
+        },
+        "id": {
+          "stringValue": "2iCufeMFi1yiJZ9vPSIw"
+        },
+        "gramsPerEach": {
+          "doubleValue": 0.75
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 0.05
+        },
+        "protein": {
+          "doubleValue": 0.03
+        },
+        "fat": {
+          "doubleValue": 0.01
+        },
+        "baseAmount": {
+          "doubleValue": 0.75
+        }
+      },
+      "createTime": "2026-07-05T11:14:00.216751Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/329iyOIuuBoku04FYSoc",
+      "fields": {
+        "name": {
+          "stringValue": "Eggs (boiled)"
+        },
+        "nameKo": {
+          "stringValue": "계란 (삶은 것)"
+        },
+        "baseAmount": {
+          "integerValue": "2"
+        },
+        "baseUnit": {
+          "stringValue": "개"
+        },
+        "carbs": {
+          "integerValue": "1"
+        },
+        "protein": {
+          "doubleValue": 12.3
+        },
+        "fat": {
+          "integerValue": "10"
+        },
+        "retired": {
+          "booleanValue": true
+        }
+      },
+      "createTime": "2026-07-07T12:56:49.941271Z",
+      "updateTime": "2026-10-01T11:31:57.682083Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/4mQc6rR1uVANftIkGSmc",
+      "fields": {
+        "name": {
+          "stringValue": "sweet potato"
+        },
+        "nameKo": {
+          "stringValue": "고구마"
+        },
+        "baseAmount": {
+          "integerValue": "200"
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "integerValue": "40"
+        },
+        "protein": {
+          "integerValue": "3"
+        },
+        "fat": {
+          "integerValue": "0"
+        }
+      },
+      "createTime": "2026-07-09T04:33:55.440432Z",
+      "updateTime": "2026-07-09T04:33:55.440432Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/4pPJPL8hRtjvPw4WqUTy",
+      "fields": {
+        "name": {
+          "stringValue": "oil"
+        },
+        "nameKo": {
+          "stringValue": "오일"
+        },
+        "baseAmount": {
+          "integerValue": "3"
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "integerValue": "0"
+        },
+        "protein": {
+          "integerValue": "0"
+        },
+        "fat": {
+          "integerValue": "3"
+        }
+      },
+      "createTime": "2026-07-07T12:56:49.896224Z",
+      "updateTime": "2026-07-07T12:56:49.896224Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/4x2YuF2jUBe2DFXLlMa4",
+      "fields": {
+        "name": {
+          "stringValue": "vinegar"
+        },
+        "nameKo": {
+          "stringValue": "식초"
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 0.4
+        },
+        "gramsPerTbsp": {
+          "doubleValue": 16.666666666666668
+        },
+        "protein": {
+          "doubleValue": 0
+        },
+        "fat": {
+          "doubleValue": 0
+        },
+        "gramsPerTsp": {
+          "doubleValue": 5.555555555555555
+        },
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "legacyIds": {
+          "arrayValue": {
+            "values": [
+              {
+                "stringValue": "vinegar"
+              }
+            ]
+          }
+        }
+      },
+      "createTime": "2026-07-07T12:56:49.876681Z",
+      "updateTime": "2026-10-01T11:30:14.127926Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/5BMPorHnPPSl3DhXyOcf",
+      "fields": {
+        "nameKo": {
+          "stringValue": "잡곡밥"
+        },
+        "baseAmount": {
+          "integerValue": "140"
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 48.1
+        },
+        "protein": {
+          "doubleValue": 8.2
+        },
+        "fat": {
+          "doubleValue": 2.6
+        },
+        "imageUrl": {
+          "stringValue": "https://i.namu.wiki/i/oTM57wiqISrVLQqPomT98Ch7K8t4b_aF4IFBoNhlSp3-X7Msyha-SjQYOtuL3WOlewRNXBQloOZM_XY94IfuWQ.webp"
+        },
+        "name": {
+          "stringValue": "Multigrain Rice"
+        },
+        "legacyIds": {
+          "arrayValue": {
+            "values": [
+              {
+                "stringValue": "multigrain-rice"
+              }
+            ]
+          }
+        }
+      },
+      "createTime": "2026-10-01T10:58:02.121651Z",
+      "updateTime": "2026-10-01T11:30:14.127926Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/5p6dWG8XlxkjzkjYIV1b",
+      "fields": {
+        "baseAmount": {
+          "integerValue": "2"
+        },
+        "baseUnit": {
+          "stringValue": "꼬집"
+        },
+        "carbs": {
+          "integerValue": "1"
+        },
+        "protein": {
+          "doubleValue": 0.5
+        },
+        "fat": {
+          "doubleValue": 0.2
+        },
+        "nameKo": {
+          "stringValue": "조미료 (다시다)"
+        },
+        "id": {
+          "stringValue": "5p6dWG8XlxkjzkjYIV1b"
+        },
+        "name": {
+          "stringValue": "Beef stock powder"
+        }
+      },
+      "createTime": "2026-07-05T11:14:00.178555Z",
+      "updateTime": "2026-07-07T07:04:44.496609Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/61AJLa2W6Ke1KFNZTl97",
+      "fields": {
+        "name": {
+          "stringValue": "corn (canned)"
+        },
+        "nameKo": {
+          "stringValue": "통조림 옥수수"
+        },
+        "baseAmount": {
+          "doubleValue": 0.5
+        },
+        "baseUnit": {
+          "stringValue": "캔"
+        },
+        "carbs": {
+          "integerValue": "15"
+        },
+        "protein": {
+          "integerValue": "2"
+        },
+        "fat": {
+          "integerValue": "1"
+        }
+      },
+      "createTime": "2026-07-07T01:18:08.338517Z",
+      "updateTime": "2026-07-07T01:18:08.338517Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/6bcQ2gcekdytG18xEg8O",
+      "fields": {
+        "name": {
+          "stringValue": "Chicken leg meat"
+        },
+        "nameKo": {
+          "stringValue": "닭다리살"
+        },
+        "baseAmount": {
+          "integerValue": "600"
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "integerValue": "0"
+        },
+        "protein": {
+          "integerValue": "96"
+        },
+        "fat": {
+          "integerValue": "90"
+        }
+      },
+      "createTime": "2026-07-09T04:33:55.233561Z",
+      "updateTime": "2026-07-09T04:33:55.233561Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/73jxlRA7fzKJm2JLdzMP",
+      "fields": {
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "nameKo": {
+          "stringValue": "닭가슴살 (생닭)"
+        },
+        "id": {
+          "stringValue": "73jxlRA7fzKJm2JLdzMP"
+        },
+        "name": {
+          "stringValue": "Chicken breast (raw)"
+        },
+        "carbs": {
+          "doubleValue": 0
+        },
+        "protein": {
+          "doubleValue": 23
+        },
+        "fat": {
+          "doubleValue": 1.5
+        },
+        "baseAmount": {
+          "doubleValue": 100
+        }
+      },
+      "createTime": "2026-07-05T12:17:05.198114Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/78Y5Fnm1Lp7REmYOnnAJ",
+      "fields": {
+        "name": {
+          "stringValue": "Basil (boiled and then squeezed)"
+        },
+        "nameKo": {
+          "stringValue": "바질 (데친 후 물기 꽉 짠 상태)"
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 6
+        },
+        "protein": {
+          "doubleValue": 3
+        },
+        "fat": {
+          "doubleValue": 0.6
+        },
+        "baseAmount": {
+          "doubleValue": 100
+        }
+      },
+      "createTime": "2026-07-07T01:18:08.417778Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/829YpxVHPDAcLsnd136y",
+      "fields": {
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "nameKo": {
+          "stringValue": "깨 (참깨. 통깨)"
+        },
+        "carbs": {
+          "doubleValue": 1.8
+        },
+        "gramsPerTbsp": {
+          "doubleValue": 8
+        },
+        "protein": {
+          "doubleValue": 1.5
+        },
+        "fat": {
+          "doubleValue": 4
+        },
+        "name": {
+          "stringValue": "깨 (참깨. 통깨)"
+        },
+        "gramsPerTsp": {
+          "doubleValue": 2.6666666666666665
+        },
+        "baseAmount": {
+          "doubleValue": 8
+        }
+      },
+      "createTime": "2026-07-06T11:50:44.934586Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/88ikjN3lW9Hk6ppCqqts",
+      "fields": {
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "nameKo": {
+          "stringValue": "쫄면 (면만)"
+        },
+        "carbs": {
+          "doubleValue": 75
+        },
+        "protein": {
+          "doubleValue": 8
+        },
+        "fat": {
+          "doubleValue": 1
+        },
+        "name": {
+          "stringValue": "쫄면 (면만)"
+        },
+        "baseAmount": {
+          "doubleValue": 100
+        }
+      },
+      "createTime": "2026-07-07T12:56:49.981115Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/8PBt3uMKbJXoo0SLSFd8",
+      "fields": {
+        "nameKo": {
+          "stringValue": "깨"
+        },
+        "baseAmount": {
+          "integerValue": "20"
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "integerValue": "4"
+        },
+        "protein": {
+          "integerValue": "4"
+        },
+        "fat": {
+          "integerValue": "20"
+        },
+        "name": {
+          "stringValue": "sesame seeds"
+        },
+        "id": {
+          "stringValue": "8PBt3uMKbJXoo0SLSFd8"
+        },
+        "gramsPerTbsp": {
+          "integerValue": "9"
+        },
+        "retired": {
+          "booleanValue": true
+        }
+      },
+      "createTime": "2026-07-06T11:47:37.164351Z",
+      "updateTime": "2026-10-01T11:31:57.682083Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/8gd8mVoNLBzG6xVmiWS3",
+      "fields": {
+        "baseAmount": {
+          "integerValue": "574"
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "integerValue": "0"
+        },
+        "protein": {
+          "integerValue": "98"
+        },
+        "fat": {
+          "integerValue": "86"
+        },
+        "id": {
+          "stringValue": "8gd8mVoNLBzG6xVmiWS3"
+        },
+        "name": {
+          "stringValue": "Pork Picnic (Fat O)"
+        },
+        "nameKo": {
+          "stringValue": "돼지 앞다리살 (지방 있음)"
+        }
+      },
+      "createTime": "2026-07-05T11:13:59.604039Z",
+      "updateTime": "2026-07-07T11:46:33.737537Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/9WeXrM3WaIuTgQLipEdZ",
+      "fields": {
+        "gramsPerEach": {
+          "doubleValue": 150
+        },
+        "nameKo": {
+          "stringValue": "양파"
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 12
+        },
+        "protein": {
+          "doubleValue": 1.5
+        },
+        "fat": {
+          "doubleValue": 0.1
+        },
+        "name": {
+          "stringValue": "onion"
+        },
+        "baseAmount": {
+          "doubleValue": 150
+        },
+        "legacyIds": {
+          "arrayValue": {
+            "values": [
+              {
+                "stringValue": "onion"
+              }
+            ]
+          }
+        }
+      },
+      "createTime": "2026-07-09T04:33:55.649214Z",
+      "updateTime": "2026-10-01T11:30:14.127926Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/9m4eL3c32S10wgkna0Fk",
+      "fields": {
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "id": {
+          "stringValue": "9m4eL3c32S10wgkna0Fk"
+        },
+        "nameKo": {
+          "stringValue": "버섯 (양송이)"
+        },
+        "carbs": {
+          "doubleValue": 5
+        },
+        "protein": {
+          "doubleValue": 3
+        },
+        "fat": {
+          "doubleValue": 0.3
+        },
+        "name": {
+          "stringValue": "버섯 (양송이)"
+        },
+        "baseAmount": {
+          "doubleValue": 100
+        }
+      },
+      "createTime": "2026-07-07T01:18:08.295376Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/AdE7jB56o2rQNl2ohFX1",
+      "fields": {
+        "name": {
+          "stringValue": "Whole grain mustard"
+        },
+        "nameKo": {
+          "stringValue": "홀그레인머스터드"
+        },
+        "baseAmount": {
+          "integerValue": "15"
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "integerValue": "2"
+        },
+        "protein": {
+          "integerValue": "1"
+        },
+        "fat": {
+          "integerValue": "1"
+        },
+        "gramsPerTbsp": {
+          "integerValue": "15"
+        },
+        "id": {
+          "stringValue": "AdE7jB56o2rQNl2ohFX1"
+        }
+      },
+      "createTime": "2026-07-05T12:17:05.507894Z",
+      "updateTime": "2026-07-07T12:42:00.687075Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/Bjknsh8lnyHq4ZKMwZHm",
+      "fields": {
+        "name": {
+          "stringValue": "red pepper powder"
+        },
+        "nameKo": {
+          "stringValue": "고춧가루"
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 4
+        },
+        "gramsPerTbsp": {
+          "doubleValue": 8
+        },
+        "protein": {
+          "doubleValue": 1
+        },
+        "fat": {
+          "doubleValue": 0.8
+        },
+        "gramsPerTsp": {
+          "doubleValue": 2.6666666666666665
+        },
+        "baseAmount": {
+          "doubleValue": 8
+        }
+      },
+      "createTime": "2026-07-06T11:50:44.891529Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/F9unjmVoMHvDzX3igBly",
+      "fields": {
+        "name": {
+          "stringValue": "green pepper"
+        },
+        "nameKo": {
+          "stringValue": "청고추"
+        },
+        "baseAmount": {
+          "integerValue": "2"
+        },
+        "baseUnit": {
+          "stringValue": "개"
+        },
+        "carbs": {
+          "integerValue": "2"
+        },
+        "protein": {
+          "doubleValue": 0.5
+        },
+        "fat": {
+          "integerValue": "0"
+        }
+      },
+      "createTime": "2026-07-09T04:33:55.545989Z",
+      "updateTime": "2026-07-09T04:33:55.545989Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/FToK9wdNj0aE6TkYUjRj",
+      "fields": {
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "nameKo": {
+          "stringValue": "치즈 (모짜렐라)"
+        },
+        "carbs": {
+          "doubleValue": 2
+        },
+        "gramsPerTbsp": {
+          "doubleValue": 16.666666666666668
+        },
+        "protein": {
+          "doubleValue": 22
+        },
+        "fat": {
+          "doubleValue": 22
+        },
+        "name": {
+          "stringValue": "치즈 (모짜렐라)"
+        },
+        "gramsPerTsp": {
+          "doubleValue": 5.555555555555555
+        },
+        "baseAmount": {
+          "doubleValue": 100
+        }
+      },
+      "createTime": "2026-07-05T12:17:05.488491Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/I7OB1CXKSvgseAOrvcLn",
+      "fields": {
+        "name": {
+          "stringValue": "Brewed soy sauce"
+        },
+        "nameKo": {
+          "stringValue": "양조간장"
+        },
+        "baseAmount": {
+          "integerValue": "5"
+        },
+        "baseUnit": {
+          "stringValue": "T"
+        },
+        "carbs": {
+          "integerValue": "5"
+        },
+        "protein": {
+          "integerValue": "5"
+        },
+        "fat": {
+          "integerValue": "0"
+        }
+      },
+      "createTime": "2026-07-09T04:33:55.751876Z",
+      "updateTime": "2026-07-09T04:33:55.751876Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/Js3ri4iLGK5sR1b66qcm",
+      "fields": {
+        "name": {
+          "stringValue": "Balsamic Glaze"
+        },
+        "nameKo": {
+          "stringValue": "발사믹글레이즈"
+        },
+        "baseAmount": {
+          "integerValue": "8"
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "integerValue": "6"
+        },
+        "protein": {
+          "integerValue": "0"
+        },
+        "fat": {
+          "integerValue": "0"
+        },
+        "gramsPerTbsp": {
+          "integerValue": "20"
+        },
+        "id": {
+          "stringValue": "Js3ri4iLGK5sR1b66qcm"
+        }
+      },
+      "createTime": "2026-07-05T12:17:05.446175Z",
+      "updateTime": "2026-07-07T12:42:00.515575Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/Jy1IPwEISRB5j1ei9Btw",
+      "fields": {
+        "nameKo": {
+          "stringValue": "꿀"
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "name": {
+          "stringValue": "Honey"
+        },
+        "id": {
+          "stringValue": "Jy1IPwEISRB5j1ei9Btw"
+        },
+        "carbs": {
+          "doubleValue": 82
+        },
+        "gramsPerTbsp": {
+          "doubleValue": 16.666666666666668
+        },
+        "protein": {
+          "doubleValue": 0.3
+        },
+        "fat": {
+          "doubleValue": 0
+        },
+        "gramsPerTsp": {
+          "doubleValue": 5.555555555555555
+        },
+        "baseAmount": {
+          "doubleValue": 100
+        }
+      },
+      "createTime": "2026-07-05T12:17:05.559557Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/K9LI2MGxnDeirSIwJ2Qg",
+      "fields": {
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "nameKo": {
+          "stringValue": "치즈 (파마산)"
+        },
+        "carbs": {
+          "doubleValue": 4
+        },
+        "gramsPerTbsp": {
+          "doubleValue": 16.666666666666668
+        },
+        "protein": {
+          "doubleValue": 35
+        },
+        "fat": {
+          "doubleValue": 30
+        },
+        "name": {
+          "stringValue": "치즈 (파마산)"
+        },
+        "gramsPerTsp": {
+          "doubleValue": 5.555555555555555
+        },
+        "baseAmount": {
+          "doubleValue": 100
+        }
+      },
+      "createTime": "2026-07-07T01:18:08.638539Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/KFpBKGoENpqFciVgFYiC",
+      "fields": {
+        "name": {
+          "stringValue": "protein powder"
+        },
+        "nameKo": {
+          "stringValue": "단백질파우더"
+        },
+        "baseAmount": {
+          "integerValue": "7"
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "integerValue": "0"
+        },
+        "protein": {
+          "integerValue": "7"
+        },
+        "fat": {
+          "integerValue": "0"
+        }
+      },
+      "createTime": "2026-07-07T12:56:50.022581Z",
+      "updateTime": "2026-07-07T12:56:50.022581Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/KiclanzESLnu5nzgri5x",
+      "fields": {
+        "nameKo": {
+          "stringValue": "다진마늘"
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "fat": {
+          "doubleValue": 0.1
+        },
+        "name": {
+          "stringValue": "Minced garlic"
+        },
+        "id": {
+          "stringValue": "KiclanzESLnu5nzgri5x"
+        },
+        "carbs": {
+          "doubleValue": 5
+        },
+        "gramsPerTbsp": {
+          "doubleValue": 15
+        },
+        "protein": {
+          "doubleValue": 1
+        },
+        "gramsPerTsp": {
+          "doubleValue": 5
+        },
+        "baseAmount": {
+          "doubleValue": 15
+        },
+        "legacyIds": {
+          "arrayValue": {
+            "values": [
+              {
+                "stringValue": "garlic"
+              },
+              {
+                "stringValue": "PVB1l0VMQQh0Nmr1Sa7h"
+              }
+            ]
+          }
+        }
+      },
+      "createTime": "2026-07-05T11:14:00.068081Z",
+      "updateTime": "2026-10-01T11:31:57.682083Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/LMSglwCZYdS1XmO2CwLQ",
+      "fields": {
+        "name": {
+          "stringValue": "red bean"
+        },
+        "nameKo": {
+          "stringValue": "팥"
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 60
+        },
+        "gramsPerTbsp": {
+          "doubleValue": 16.666666666666668
+        },
+        "protein": {
+          "doubleValue": 20
+        },
+        "fat": {
+          "doubleValue": 1
+        },
+        "gramsPerTsp": {
+          "doubleValue": 5.555555555555555
+        },
+        "baseAmount": {
+          "doubleValue": 100
+        }
+      },
+      "createTime": "2026-07-10T05:23:20.406591Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/LgyZEeNl6vJSPLCn0bfj",
+      "fields": {
+        "nameKo": {
+          "stringValue": "올리브유"
+        },
+        "baseAmount": {
+          "integerValue": "50"
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "integerValue": "0"
+        },
+        "protein": {
+          "integerValue": "0"
+        },
+        "fat": {
+          "integerValue": "50"
+        },
+        "name": {
+          "stringValue": "Olive oil"
+        },
+        "id": {
+          "stringValue": "LgyZEeNl6vJSPLCn0bfj"
+        },
+        "gramsPerTbsp": {
+          "integerValue": "14"
+        },
+        "legacyIds": {
+          "arrayValue": {
+            "values": [
+              {
+                "stringValue": "olive-oil"
+              }
+            ]
+          }
+        }
+      },
+      "createTime": "2026-07-06T11:47:37.127364Z",
+      "updateTime": "2026-10-01T11:31:57.682083Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/Mnoi1kWdMamMMlCLwzBQ",
+      "fields": {
+        "nameKo": {
+          "stringValue": "고추장"
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "name": {
+          "stringValue": "Red pepper paste"
+        },
+        "id": {
+          "stringValue": "Mnoi1kWdMamMMlCLwzBQ"
+        },
+        "carbs": {
+          "doubleValue": 7.2
+        },
+        "gramsPerTbsp": {
+          "doubleValue": 15
+        },
+        "protein": {
+          "doubleValue": 0.8
+        },
+        "fat": {
+          "doubleValue": 0.3
+        },
+        "gramsPerTsp": {
+          "doubleValue": 5
+        },
+        "baseAmount": {
+          "doubleValue": 15
+        }
+      },
+      "createTime": "2026-07-05T11:13:59.927318Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/N2a6l7d2ieuJTU08nPwE",
+      "fields": {
+        "nameKo": {
+          "stringValue": "소금"
+        },
+        "name": {
+          "stringValue": "Salt"
+        },
+        "id": {
+          "stringValue": "N2a6l7d2ieuJTU08nPwE"
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 0
+        },
+        "gramsPerTbsp": {
+          "doubleValue": 16.666666666666668
+        },
+        "protein": {
+          "doubleValue": 0
+        },
+        "fat": {
+          "doubleValue": 0
+        },
+        "gramsPerTsp": {
+          "doubleValue": 5.555555555555555
+        },
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "legacyIds": {
+          "arrayValue": {
+            "values": [
+              {
+                "stringValue": "salt"
+              }
+            ]
+          }
+        }
+      },
+      "createTime": "2026-07-05T12:17:05.305661Z",
+      "updateTime": "2026-10-01T11:30:14.127926Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/NABn6oX6dmxAafwJTdHg",
+      "fields": {
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "id": {
+          "stringValue": "NABn6oX6dmxAafwJTdHg"
+        },
+        "gramsPerEach": {
+          "doubleValue": 150
+        },
+        "nameKo": {
+          "stringValue": "양파"
+        },
+        "carbs": {
+          "doubleValue": 12
+        },
+        "protein": {
+          "doubleValue": 1.5
+        },
+        "fat": {
+          "doubleValue": 0.1
+        },
+        "name": {
+          "stringValue": "onion"
+        },
+        "baseAmount": {
+          "doubleValue": 150
+        }
+      },
+      "createTime": "2026-07-05T11:13:59.870796Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/NMmVq5ULBoHPtXpzvCk0",
+      "fields": {
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "id": {
+          "stringValue": "NMmVq5ULBoHPtXpzvCk0"
+        },
+        "gramsPerEach": {
+          "doubleValue": 1000
+        },
+        "nameKo": {
+          "stringValue": "알배추"
+        },
+        "carbs": {
+          "doubleValue": 35
+        },
+        "protein": {
+          "doubleValue": 15
+        },
+        "fat": {
+          "doubleValue": 2
+        },
+        "name": {
+          "stringValue": "알배추"
+        },
+        "baseAmount": {
+          "doubleValue": 1000
+        }
+      },
+      "createTime": "2026-07-05T11:13:59.653537Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/NTKROoAkIuKKXlVyl59b",
+      "fields": {
+        "nameKo": {
+          "stringValue": "드라이이스트"
+        },
+        "baseAmount": {
+          "integerValue": "3"
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "integerValue": "1"
+        },
+        "protein": {
+          "integerValue": "1"
+        },
+        "fat": {
+          "integerValue": "0"
+        },
+        "name": {
+          "stringValue": "Dry yeast"
+        },
+        "id": {
+          "stringValue": "NTKROoAkIuKKXlVyl59b"
+        }
+      },
+      "createTime": "2026-07-07T01:18:08.526112Z",
+      "updateTime": "2026-07-07T04:40:50.482603Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/O4gyjXuojYVluaSkz54D",
+      "fields": {
+        "nameKo": {
+          "stringValue": "코인육수"
+        },
+        "baseAmount": {
+          "integerValue": "1"
+        },
+        "baseUnit": {
+          "stringValue": "개"
+        },
+        "carbs": {
+          "integerValue": "1"
+        },
+        "protein": {
+          "integerValue": "1"
+        },
+        "fat": {
+          "integerValue": "0"
+        },
+        "name": {
+          "stringValue": "Soup broth coin"
+        },
+        "id": {
+          "stringValue": "O4gyjXuojYVluaSkz54D"
+        }
+      },
+      "createTime": "2026-07-05T11:13:59.891629Z",
+      "updateTime": "2026-07-07T07:04:44.588261Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/P6phrfLugrQuaNg3Zqww",
+      "fields": {
+        "name": {
+          "stringValue": "ginger juice"
+        },
+        "nameKo": {
+          "stringValue": "생강즙"
+        },
+        "baseAmount": {
+          "integerValue": "1"
+        },
+        "baseUnit": {
+          "stringValue": "T"
+        },
+        "carbs": {
+          "integerValue": "2"
+        },
+        "protein": {
+          "integerValue": "0"
+        },
+        "fat": {
+          "integerValue": "0"
+        }
+      },
+      "createTime": "2026-07-09T04:33:55.832128Z",
+      "updateTime": "2026-07-09T04:33:55.832128Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/PVB1l0VMQQh0Nmr1Sa7h",
+      "fields": {
+        "nameKo": {
+          "stringValue": "다진마늘"
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 5
+        },
+        "gramsPerTbsp": {
+          "doubleValue": 15
+        },
+        "protein": {
+          "doubleValue": 1
+        },
+        "fat": {
+          "doubleValue": 0.1
+        },
+        "name": {
+          "stringValue": "다진마늘"
+        },
+        "gramsPerTsp": {
+          "doubleValue": 5
+        },
+        "baseAmount": {
+          "doubleValue": 15
+        },
+        "retired": {
+          "booleanValue": true
+        }
+      },
+      "createTime": "2026-07-09T04:33:55.803893Z",
+      "updateTime": "2026-10-01T11:31:57.682083Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/PXOUpHYxTe4s8zIGKTaD",
+      "fields": {
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "nameKo": {
+          "stringValue": "치즈 (모짜렐라)"
+        },
+        "carbs": {
+          "doubleValue": 2
+        },
+        "gramsPerTbsp": {
+          "doubleValue": 16.666666666666668
+        },
+        "protein": {
+          "doubleValue": 22
+        },
+        "fat": {
+          "doubleValue": 22
+        },
+        "name": {
+          "stringValue": "치즈 (모짜렐라)"
+        },
+        "gramsPerTsp": {
+          "doubleValue": 5.555555555555555
+        },
+        "baseAmount": {
+          "doubleValue": 100
+        }
+      },
+      "createTime": "2026-07-07T01:18:08.597612Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/PvuNAVjtTEJc3kFM3eK9",
+      "fields": {
+        "nameKo": {
+          "stringValue": "진간장"
+        },
+        "baseAmount": {
+          "integerValue": "15"
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "integerValue": "1"
+        },
+        "protein": {
+          "integerValue": "1"
+        },
+        "fat": {
+          "integerValue": "0"
+        },
+        "name": {
+          "stringValue": "Soy source"
+        },
+        "id": {
+          "stringValue": "PvuNAVjtTEJc3kFM3eK9"
+        },
+        "gramsPerTbsp": {
+          "integerValue": "16"
+        }
+      },
+      "createTime": "2026-07-05T11:14:00.136229Z",
+      "updateTime": "2026-07-07T12:42:00.667083Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/RmjGbcCJBOM2zSueqnyW",
+      "fields": {
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "id": {
+          "stringValue": "RmjGbcCJBOM2zSueqnyW"
+        },
+        "nameKo": {
+          "stringValue": "닭가슴살 (삶은 후)"
+        },
+        "carbs": {
+          "doubleValue": 0
+        },
+        "protein": {
+          "doubleValue": 30
+        },
+        "fat": {
+          "doubleValue": 2
+        },
+        "name": {
+          "stringValue": "닭가슴살 (삶은 후)"
+        },
+        "baseAmount": {
+          "doubleValue": 100
+        }
+      },
+      "createTime": "2026-07-07T01:26:12.477595Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/Rvv3OhyRC653SMVZHs0j",
+      "fields": {
+        "nameKo": {
+          "stringValue": "까나리액젓"
+        },
+        "baseAmount": {
+          "integerValue": "15"
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "integerValue": "1"
+        },
+        "protein": {
+          "integerValue": "2"
+        },
+        "fat": {
+          "integerValue": "0"
+        },
+        "name": {
+          "stringValue": "Fish sauce"
+        },
+        "id": {
+          "stringValue": "Rvv3OhyRC653SMVZHs0j"
+        },
+        "gramsPerTbsp": {
+          "integerValue": "15"
+        }
+      },
+      "createTime": "2026-07-05T11:14:00.030834Z",
+      "updateTime": "2026-07-07T12:33:13.873048Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/SQfaXCwVWYWhKXcY3mzR",
+      "fields": {
+        "name": {
+          "stringValue": "cooking oil"
+        },
+        "nameKo": {
+          "stringValue": "식용유"
+        },
+        "baseAmount": {
+          "integerValue": "1"
+        },
+        "baseUnit": {
+          "stringValue": "T"
+        },
+        "carbs": {
+          "integerValue": "0"
+        },
+        "protein": {
+          "integerValue": "0"
+        },
+        "fat": {
+          "integerValue": "14"
+        }
+      },
+      "createTime": "2026-07-09T04:33:55.598016Z",
+      "updateTime": "2026-07-09T04:33:55.598016Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/THpcK1CLYcnCS3ZEilmj",
+      "fields": {
+        "name": {
+          "stringValue": "potato"
+        },
+        "baseAmount": {
+          "integerValue": "1"
+        },
+        "baseUnit": {
+          "stringValue": "개"
+        },
+        "carbs": {
+          "integerValue": "26"
+        },
+        "protein": {
+          "integerValue": "3"
+        },
+        "fat": {
+          "integerValue": "0"
+        },
+        "gramsPerEach": {
+          "integerValue": "150"
+        },
+        "nameKo": {
+          "stringValue": "감자 (중)"
+        },
+        "id": {
+          "stringValue": "THpcK1CLYcnCS3ZEilmj"
+        },
+        "retired": {
+          "booleanValue": true
+        }
+      },
+      "createTime": "2026-07-09T04:33:55.503174Z",
+      "updateTime": "2026-10-01T11:31:57.682083Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/UvpnGsTEJRDrK2dskUeZ",
+      "fields": {
+        "baseAmount": {
+          "integerValue": "300"
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "integerValue": "51"
+        },
+        "protein": {
+          "integerValue": "6"
+        },
+        "fat": {
+          "integerValue": "0"
+        },
+        "id": {
+          "stringValue": "UvpnGsTEJRDrK2dskUeZ"
+        },
+        "nameKo": {
+          "stringValue": "감자 (중)"
+        },
+        "name": {
+          "stringValue": "Potato (M)"
+        },
+        "gramsPerEach": {
+          "integerValue": "180"
+        },
+        "retired": {
+          "booleanValue": true
+        }
+      },
+      "createTime": "2026-07-05T11:13:59.768135Z",
+      "updateTime": "2026-10-01T11:31:57.682083Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/WV1sky3mHn3Rc2ZESnLf",
+      "fields": {
+        "nameKo": {
+          "stringValue": "다진생강"
+        },
+        "baseAmount": {
+          "integerValue": "5"
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "integerValue": "1"
+        },
+        "protein": {
+          "doubleValue": 0.1
+        },
+        "fat": {
+          "integerValue": "0"
+        },
+        "name": {
+          "stringValue": "Minced ginger"
+        },
+        "id": {
+          "stringValue": "WV1sky3mHn3Rc2ZESnLf"
+        }
+      },
+      "createTime": "2026-07-05T11:14:00.090323Z",
+      "updateTime": "2026-07-07T04:40:50.367950Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/X9fNU5amsczJCJ7vBrVP",
+      "fields": {
+        "name": {
+          "stringValue": "cabbage"
+        },
+        "nameKo": {
+          "stringValue": "양배추"
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "id": {
+          "stringValue": "X9fNU5amsczJCJ7vBrVP"
+        },
+        "carbs": {
+          "doubleValue": 6
+        },
+        "protein": {
+          "doubleValue": 1.3
+        },
+        "fat": {
+          "doubleValue": 0.2
+        },
+        "baseAmount": {
+          "doubleValue": 100
+        }
+      },
+      "createTime": "2026-07-09T04:33:55.264997Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/XH0zw778N0QnIz1Q9ys5",
+      "fields": {
+        "baseAmount": {
+          "integerValue": "30"
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "integerValue": "8"
+        },
+        "protein": {
+          "integerValue": "2"
+        },
+        "fat": {
+          "integerValue": "1"
+        },
+        "name": {
+          "stringValue": "Red pepper paste (low sugar)"
+        },
+        "id": {
+          "stringValue": "XH0zw778N0QnIz1Q9ys5"
+        },
+        "nameKo": {
+          "stringValue": "고추장 (저당)"
+        },
+        "gramsPerTbsp": {
+          "integerValue": "18"
+        },
+        "retired": {
+          "booleanValue": true
+        }
+      },
+      "createTime": "2026-07-06T11:50:44.873077Z",
+      "updateTime": "2026-10-01T11:31:57.682083Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/ZNpppHRwmBr4rvISz1q3",
+      "fields": {
+        "id": {
+          "stringValue": "ZNpppHRwmBr4rvISz1q3"
+        },
+        "gramsPerEach": {
+          "doubleValue": 250
+        },
+        "nameKo": {
+          "stringValue": "참외 (중 사이즈)"
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 20
+        },
+        "protein": {
+          "doubleValue": 1.5
+        },
+        "fat": {
+          "doubleValue": 0.2
+        },
+        "name": {
+          "stringValue": "참외 (중 사이즈)"
+        },
+        "baseAmount": {
+          "doubleValue": 250
+        }
+      },
+      "createTime": "2026-07-07T01:18:08.656943Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/ZZCWkM5cnx8wZoT989Mj",
+      "fields": {
+        "name": {
+          "stringValue": "Instant dry yeast"
+        },
+        "nameKo": {
+          "stringValue": "인스턴트드라이이스트"
+        },
+        "baseAmount": {
+          "integerValue": "2"
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "integerValue": "1"
+        },
+        "protein": {
+          "integerValue": "0"
+        },
+        "fat": {
+          "integerValue": "0"
+        }
+      },
+      "createTime": "2026-07-10T05:23:20.335721Z",
+      "updateTime": "2026-07-10T05:23:20.335721Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/bEAw3O6ada00RgxKjyBP",
+      "fields": {
+        "name": {
+          "stringValue": "whole wheat bread"
+        },
+        "nameKo": {
+          "stringValue": "통밀빵"
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "gramsPerEach": {
+          "doubleValue": 60
+        },
+        "carbs": {
+          "doubleValue": 26
+        },
+        "protein": {
+          "doubleValue": 5
+        },
+        "fat": {
+          "doubleValue": 1.5
+        },
+        "baseAmount": {
+          "doubleValue": 60
+        }
+      },
+      "createTime": "2026-07-05T12:49:03.475552Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/bRwGqpOlZ3WiEY0BzeIK",
+      "fields": {
+        "name": {
+          "stringValue": "Allulose"
+        },
+        "nameKo": {
+          "stringValue": "알룰로스"
+        },
+        "baseAmount": {
+          "integerValue": "20"
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "integerValue": "0"
+        },
+        "protein": {
+          "integerValue": "0"
+        },
+        "fat": {
+          "integerValue": "0"
+        },
+        "legacyIds": {
+          "arrayValue": {
+            "values": [
+              {
+                "stringValue": "allulose"
+              }
+            ]
+          }
+        }
+      },
+      "createTime": "2026-07-07T01:18:08.544827Z",
+      "updateTime": "2026-10-01T11:30:14.127926Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/beef-broth",
+      "fields": {
+        "name": {
+          "stringValue": "Beef broth"
+        },
+        "nameKo": {
+          "stringValue": "소고기 육수"
+        },
+        "baseUnit": {
+          "stringValue": "ml"
+        },
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "carbs": {
+          "doubleValue": 0.5
+        },
+        "protein": {
+          "doubleValue": 1.2
+        },
+        "fat": {
+          "doubleValue": 0.1
+        },
+        "createdAt": {
+          "integerValue": "1790854213278"
+        }
+      },
+      "createTime": "2026-10-01T11:30:14.127926Z",
+      "updateTime": "2026-10-01T11:30:14.127926Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/chili-powder",
+      "fields": {
+        "name": {
+          "stringValue": "Chili powder"
+        },
+        "nameKo": {
+          "stringValue": "칠리 파우더"
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "carbs": {
+          "doubleValue": 49.7
+        },
+        "protein": {
+          "doubleValue": 13.5
+        },
+        "fat": {
+          "doubleValue": 14.3
+        },
+        "createdAt": {
+          "integerValue": "1790854213279"
+        }
+      },
+      "createTime": "2026-10-01T11:30:14.127926Z",
+      "updateTime": "2026-10-01T11:30:14.127926Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-0680ecd98fcd2179744e3b2e",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 80
+        },
+        "protein": {
+          "doubleValue": 4
+        },
+        "fat": {
+          "doubleValue": 1.2
+        },
+        "gramsPerTbsp": {
+          "doubleValue": 16.666666666666668
+        },
+        "gramsPerTsp": {
+          "doubleValue": 5.555555555555555
+        },
+        "name": {
+          "stringValue": "시나몬파우더"
+        },
+        "nameKo": {
+          "stringValue": "시나몬파우더"
+        },
+        "createdAt": {
+          "integerValue": "1790853820400"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-0dfc83d4b6dbebc154b567be",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 40
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 18
+        },
+        "protein": {
+          "doubleValue": 4
+        },
+        "fat": {
+          "doubleValue": 1.5
+        },
+        "gramsPerEach": {
+          "doubleValue": 40
+        },
+        "name": {
+          "stringValue": "식빵 (곰곰. 저당)"
+        },
+        "nameKo": {
+          "stringValue": "식빵 (곰곰. 저당)"
+        },
+        "createdAt": {
+          "integerValue": "1790853820401"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-0e4aab40f6e3ffb17f80f0df",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 30
+        },
+        "protein": {
+          "doubleValue": 18
+        },
+        "fat": {
+          "doubleValue": 44
+        },
+        "gramsPerTbsp": {
+          "doubleValue": 16.666666666666668
+        },
+        "gramsPerTsp": {
+          "doubleValue": 5.555555555555555
+        },
+        "name": {
+          "stringValue": "캐슈넛. 케슈넛"
+        },
+        "nameKo": {
+          "stringValue": "캐슈넛. 케슈넛"
+        },
+        "createdAt": {
+          "integerValue": "1790853820403"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-0f7706d92c4d69b9de0c554d",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 16
+        },
+        "protein": {
+          "doubleValue": 0.6
+        },
+        "fat": {
+          "doubleValue": 0.3
+        },
+        "name": {
+          "stringValue": "포도"
+        },
+        "nameKo": {
+          "stringValue": "포도"
+        },
+        "createdAt": {
+          "integerValue": "1790853820404"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-103378c3f27c7c4f9340372a",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 85
+        },
+        "protein": {
+          "doubleValue": 0.5
+        },
+        "fat": {
+          "doubleValue": 0.1
+        },
+        "name": {
+          "stringValue": "당면 (마른 것)"
+        },
+        "nameKo": {
+          "stringValue": "당면 (마른 것)"
+        },
+        "createdAt": {
+          "integerValue": "1790853820396"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-1207a106dd4e1e5c8fd90bad",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 0
+        },
+        "protein": {
+          "doubleValue": 0
+        },
+        "fat": {
+          "doubleValue": 100
+        },
+        "gramsPerTbsp": {
+          "doubleValue": 16.666666666666668
+        },
+        "gramsPerTsp": {
+          "doubleValue": 5.555555555555555
+        },
+        "name": {
+          "stringValue": "올리브 오일. 식용유"
+        },
+        "nameKo": {
+          "stringValue": "올리브 오일. 식용유"
+        },
+        "createdAt": {
+          "integerValue": "1790853820401"
+        },
+        "retired": {
+          "booleanValue": true
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:31:57.682083Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-13de02352d461c10dd85a902",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 135
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 5
+        },
+        "protein": {
+          "doubleValue": 1
+        },
+        "fat": {
+          "doubleValue": 0.2
+        },
+        "gramsPerEach": {
+          "doubleValue": 135
+        },
+        "name": {
+          "stringValue": "토마토 (일반. 중)"
+        },
+        "nameKo": {
+          "stringValue": "토마토 (일반. 중)"
+        },
+        "createdAt": {
+          "integerValue": "1790853820403"
+        },
+        "legacyIds": {
+          "arrayValue": {
+            "values": [
+              {
+                "stringValue": "tomato"
+              }
+            ]
+          }
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:30:14.127926Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-145b9ea676a2b4681765a681",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 0
+        },
+        "protein": {
+          "doubleValue": 24
+        },
+        "fat": {
+          "doubleValue": 1
+        },
+        "name": {
+          "stringValue": "닭안심 (힘줄 제거. 생닭)"
+        },
+        "nameKo": {
+          "stringValue": "닭안심 (힘줄 제거. 생닭)"
+        },
+        "createdAt": {
+          "integerValue": "1790853820397"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-146cdde54cf28bd79456ef10",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 0
+        },
+        "protein": {
+          "doubleValue": 24
+        },
+        "fat": {
+          "doubleValue": 5
+        },
+        "gramsPerCan": {
+          "doubleValue": 100
+        },
+        "gramsPerPack": {
+          "doubleValue": 100
+        },
+        "name": {
+          "stringValue": "참치 (기름 빼고)"
+        },
+        "nameKo": {
+          "stringValue": "참치 (기름 빼고)"
+        },
+        "createdAt": {
+          "integerValue": "1790853820403"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-151c2679dc7f90bcd0b76d15",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 10
+        },
+        "protein": {
+          "doubleValue": 21
+        },
+        "fat": {
+          "doubleValue": 54
+        },
+        "gramsPerTbsp": {
+          "doubleValue": 16.666666666666668
+        },
+        "gramsPerTsp": {
+          "doubleValue": 5.555555555555555
+        },
+        "name": {
+          "stringValue": "아몬드 가루"
+        },
+        "nameKo": {
+          "stringValue": "아몬드 가루"
+        },
+        "createdAt": {
+          "integerValue": "1790853820401"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-160b99332158481e8732b948",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 15
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 2.3
+        },
+        "protein": {
+          "doubleValue": 0.6
+        },
+        "fat": {
+          "doubleValue": 1.8
+        },
+        "gramsPerTbsp": {
+          "doubleValue": 15
+        },
+        "gramsPerTsp": {
+          "doubleValue": 5
+        },
+        "name": {
+          "stringValue": "그린커리 페이스트 카레 (LOBO)"
+        },
+        "nameKo": {
+          "stringValue": "그린커리 페이스트 카레 (LOBO)"
+        },
+        "createdAt": {
+          "integerValue": "1790853820394"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-1acad7fe1cdd5978f7182eee",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 3
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 1.2
+        },
+        "protein": {
+          "doubleValue": 1
+        },
+        "fat": {
+          "doubleValue": 0.1
+        },
+        "gramsPerEach": {
+          "doubleValue": 3
+        },
+        "name": {
+          "stringValue": "김밥김"
+        },
+        "nameKo": {
+          "stringValue": "김밥김"
+        },
+        "createdAt": {
+          "integerValue": "1790853820395"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-1ad0b371b22fd1548b29d83d",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 5
+        },
+        "protein": {
+          "doubleValue": 2.2
+        },
+        "fat": {
+          "doubleValue": 0.4
+        },
+        "name": {
+          "stringValue": "부추"
+        },
+        "nameKo": {
+          "stringValue": "부추"
+        },
+        "createdAt": {
+          "integerValue": "1790853820399"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-1b8a5781977e904d3aa6197c",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 0
+        },
+        "protein": {
+          "doubleValue": 17
+        },
+        "fat": {
+          "doubleValue": 6
+        },
+        "name": {
+          "stringValue": "닭봉"
+        },
+        "nameKo": {
+          "stringValue": "닭봉"
+        },
+        "createdAt": {
+          "integerValue": "1790853820397"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-1cb238a6683e20537f249fe8",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 0
+        },
+        "protein": {
+          "doubleValue": 20
+        },
+        "fat": {
+          "doubleValue": 8
+        },
+        "name": {
+          "stringValue": "다짐육 (돼지 뒷다리살)"
+        },
+        "nameKo": {
+          "stringValue": "다짐육 (돼지 뒷다리살)"
+        },
+        "createdAt": {
+          "integerValue": "1790853820395"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-1de9a256caa520f9b216c6f5",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 0
+        },
+        "protein": {
+          "doubleValue": 0
+        },
+        "fat": {
+          "doubleValue": 0
+        },
+        "gramsPerTbsp": {
+          "doubleValue": 16.666666666666668
+        },
+        "gramsPerTsp": {
+          "doubleValue": 5.555555555555555
+        },
+        "name": {
+          "stringValue": "베이킹소다"
+        },
+        "nameKo": {
+          "stringValue": "베이킹소다"
+        },
+        "createdAt": {
+          "integerValue": "1790853820399"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-2473c1fb7863fcaf82150f55",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 15
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 4
+        },
+        "protein": {
+          "doubleValue": 0.2
+        },
+        "fat": {
+          "doubleValue": 0.1
+        },
+        "gramsPerTbsp": {
+          "doubleValue": 15
+        },
+        "gramsPerTsp": {
+          "doubleValue": 5
+        },
+        "name": {
+          "stringValue": "돈까스 소스"
+        },
+        "nameKo": {
+          "stringValue": "돈까스 소스"
+        },
+        "createdAt": {
+          "integerValue": "1790853820397"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-24cf9488f8d60f5c25dabca0",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 30
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 14
+        },
+        "protein": {
+          "doubleValue": 3
+        },
+        "fat": {
+          "doubleValue": 1.5
+        },
+        "gramsPerEach": {
+          "doubleValue": 30
+        },
+        "name": {
+          "stringValue": "모닝빵 (삼립. 저당)"
+        },
+        "nameKo": {
+          "stringValue": "모닝빵 (삼립. 저당)"
+        },
+        "createdAt": {
+          "integerValue": "1790853820398"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-28434ee71c4cb180a0269924",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 18
+        },
+        "protein": {
+          "doubleValue": 12
+        },
+        "fat": {
+          "doubleValue": 6
+        },
+        "name": {
+          "stringValue": "어묵 (고래사어묵. 생선살 듬뿍)"
+        },
+        "nameKo": {
+          "stringValue": "어묵 (고래사어묵. 생선살 듬뿍)"
+        },
+        "createdAt": {
+          "integerValue": "1790853820401"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-2894978b122605bc6292aee4",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 10
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 6
+        },
+        "protein": {
+          "doubleValue": 1
+        },
+        "fat": {
+          "doubleValue": 0.2
+        },
+        "gramsPerEach": {
+          "doubleValue": 10
+        },
+        "name": {
+          "stringValue": "만두피 (곰곰)"
+        },
+        "nameKo": {
+          "stringValue": "만두피 (곰곰)"
+        },
+        "createdAt": {
+          "integerValue": "1790853820398"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-2b7e75051be2c51a0337cb5b",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 4.8
+        },
+        "protein": {
+          "doubleValue": 3.2
+        },
+        "fat": {
+          "doubleValue": 3.6
+        },
+        "name": {
+          "stringValue": "우유"
+        },
+        "nameKo": {
+          "stringValue": "우유"
+        },
+        "createdAt": {
+          "integerValue": "1790853820402"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-2ff9c3dacce0aed7ded80bb9",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 80
+        },
+        "protein": {
+          "doubleValue": 7
+        },
+        "fat": {
+          "doubleValue": 0.5
+        },
+        "name": {
+          "stringValue": "베트남쌀국수 (오뚜기)"
+        },
+        "nameKo": {
+          "stringValue": "베트남쌀국수 (오뚜기)"
+        },
+        "createdAt": {
+          "integerValue": "1790853820399"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-304ad3aa5ceaece1a30a1e56",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 200
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 8
+        },
+        "protein": {
+          "doubleValue": 1.5
+        },
+        "fat": {
+          "doubleValue": 0.3
+        },
+        "gramsPerEach": {
+          "doubleValue": 200
+        },
+        "name": {
+          "stringValue": "애호박"
+        },
+        "nameKo": {
+          "stringValue": "애호박"
+        },
+        "createdAt": {
+          "integerValue": "1790853820401"
+        },
+        "legacyIds": {
+          "arrayValue": {
+            "values": [
+              {
+                "stringValue": "zucchini"
+              }
+            ]
+          }
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:30:14.127926Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-3105c0f95fa1139c398858dd",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 0
+        },
+        "protein": {
+          "doubleValue": 31
+        },
+        "fat": {
+          "doubleValue": 1.2
+        },
+        "name": {
+          "stringValue": "닭안심 (힘줄 제거. 삶은 후)"
+        },
+        "nameKo": {
+          "stringValue": "닭안심 (힘줄 제거. 삶은 후)"
+        },
+        "createdAt": {
+          "integerValue": "1790853820397"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-339a7176ded9a5b925ff4c50",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 4
+        },
+        "protein": {
+          "doubleValue": 10
+        },
+        "fat": {
+          "doubleValue": 4
+        },
+        "gramsPerTbsp": {
+          "doubleValue": 16.666666666666668
+        },
+        "gramsPerTsp": {
+          "doubleValue": 5.555555555555555
+        },
+        "name": {
+          "stringValue": "그릭 요거트"
+        },
+        "nameKo": {
+          "stringValue": "그릭 요거트"
+        },
+        "createdAt": {
+          "integerValue": "1790853820394"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-33b0dfe06fc25fb30dc20345",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 0
+        },
+        "protein": {
+          "doubleValue": 18
+        },
+        "fat": {
+          "doubleValue": 15
+        },
+        "name": {
+          "stringValue": "다짐육 (호주산 소고기. 냉동. 지방함량 보통 15%)"
+        },
+        "nameKo": {
+          "stringValue": "다짐육 (호주산 소고기. 냉동. 지방함량 보통 15%)"
+        },
+        "createdAt": {
+          "integerValue": "1790853820395"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-33f260e0ceece725d98ebfbe",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 150
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 25
+        },
+        "protein": {
+          "doubleValue": 3
+        },
+        "fat": {
+          "doubleValue": 0.1
+        },
+        "gramsPerEach": {
+          "doubleValue": 150
+        },
+        "name": {
+          "stringValue": "감자"
+        },
+        "nameKo": {
+          "stringValue": "감자"
+        },
+        "createdAt": {
+          "integerValue": "1790853820394"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-33fc0153b2a31e3e617d1cc8",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 0
+        },
+        "protein": {
+          "doubleValue": 21
+        },
+        "fat": {
+          "doubleValue": 8
+        },
+        "name": {
+          "stringValue": "소고기 앞다리살"
+        },
+        "nameKo": {
+          "stringValue": "소고기 앞다리살"
+        },
+        "createdAt": {
+          "integerValue": "1790853820400"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-3409738d0454d795be1682bd",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 60
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 7.5
+        },
+        "protein": {
+          "doubleValue": 0.5
+        },
+        "fat": {
+          "doubleValue": 0.1
+        },
+        "gramsPerEach": {
+          "doubleValue": 60
+        },
+        "name": {
+          "stringValue": "자두. 딱딱. 작은 것"
+        },
+        "nameKo": {
+          "stringValue": "자두. 딱딱. 작은 것"
+        },
+        "createdAt": {
+          "integerValue": "1790853820402"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-3461773f920d8abad4740a4e",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 4
+        },
+        "protein": {
+          "doubleValue": 14
+        },
+        "fat": {
+          "doubleValue": 68
+        },
+        "gramsPerTbsp": {
+          "doubleValue": 16.666666666666668
+        },
+        "gramsPerTsp": {
+          "doubleValue": 5.555555555555555
+        },
+        "name": {
+          "stringValue": "잣"
+        },
+        "nameKo": {
+          "stringValue": "잣"
+        },
+        "createdAt": {
+          "integerValue": "1790853820402"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-351ce38a125d3185ea3b5990",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 0
+        },
+        "protein": {
+          "doubleValue": 22
+        },
+        "fat": {
+          "doubleValue": 6
+        },
+        "name": {
+          "stringValue": "닭다리 (삶은 후)"
+        },
+        "nameKo": {
+          "stringValue": "닭다리 (삶은 후)"
+        },
+        "createdAt": {
+          "integerValue": "1790853820396"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-36d406a7dd92914e369bcc15",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 20
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 0.5
+        },
+        "protein": {
+          "doubleValue": 4.5
+        },
+        "fat": {
+          "doubleValue": 6
+        },
+        "gramsPerEach": {
+          "doubleValue": 20
+        },
+        "name": {
+          "stringValue": "치즈 (체다(서울우유))"
+        },
+        "nameKo": {
+          "stringValue": "치즈 (체다(서울우유))"
+        },
+        "createdAt": {
+          "integerValue": "1790853820403"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-3968e04791ced8901e9cd0c5",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 8
+        },
+        "protein": {
+          "doubleValue": 6
+        },
+        "fat": {
+          "doubleValue": 0
+        },
+        "gramsPerTbsp": {
+          "doubleValue": 16.666666666666668
+        },
+        "gramsPerTsp": {
+          "doubleValue": 5.555555555555555
+        },
+        "name": {
+          "stringValue": "진간장 (햇살담은 두번달여 더 진한)"
+        },
+        "nameKo": {
+          "stringValue": "진간장 (햇살담은 두번달여 더 진한)"
+        },
+        "createdAt": {
+          "integerValue": "1790853820402"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-3ba1c580e4879ae2e56e0f54",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 150
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 3.5
+        },
+        "protein": {
+          "doubleValue": 0.9
+        },
+        "fat": {
+          "doubleValue": 0.1
+        },
+        "gramsPerEach": {
+          "doubleValue": 150
+        },
+        "name": {
+          "stringValue": "오이"
+        },
+        "nameKo": {
+          "stringValue": "오이"
+        },
+        "createdAt": {
+          "integerValue": "1790853820401"
+        },
+        "legacyIds": {
+          "arrayValue": {
+            "values": [
+              {
+                "stringValue": "cucumber"
+              }
+            ]
+          }
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:30:14.127926Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-3f43c01a518915d5419b7663",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 72
+        },
+        "protein": {
+          "doubleValue": 12
+        },
+        "fat": {
+          "doubleValue": 1.5
+        },
+        "name": {
+          "stringValue": "파스타면 (리가토니)"
+        },
+        "nameKo": {
+          "stringValue": "파스타면 (리가토니)"
+        },
+        "createdAt": {
+          "integerValue": "1790853820404"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-409668b14ff6c36e60738cda",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 78
+        },
+        "protein": {
+          "doubleValue": 6.5
+        },
+        "fat": {
+          "doubleValue": 0.5
+        },
+        "gramsPerTbsp": {
+          "doubleValue": 16.666666666666668
+        },
+        "gramsPerTsp": {
+          "doubleValue": 5.555555555555555
+        },
+        "name": {
+          "stringValue": "쌀"
+        },
+        "nameKo": {
+          "stringValue": "쌀"
+        },
+        "createdAt": {
+          "integerValue": "1790853820402"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-42fc756b6f53945b05d09a4a",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 10
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 8
+        },
+        "protein": {
+          "doubleValue": 0.1
+        },
+        "fat": {
+          "doubleValue": 0
+        },
+        "gramsPerEach": {
+          "doubleValue": 10
+        },
+        "name": {
+          "stringValue": "라이스페이퍼"
+        },
+        "nameKo": {
+          "stringValue": "라이스페이퍼"
+        },
+        "createdAt": {
+          "integerValue": "1790853820398"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-48f995f06d1fd05cc686dc43",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 70
+        },
+        "protein": {
+          "doubleValue": 10
+        },
+        "fat": {
+          "doubleValue": 1
+        },
+        "name": {
+          "stringValue": "메밀면 면사랑"
+        },
+        "nameKo": {
+          "stringValue": "메밀면 면사랑"
+        },
+        "createdAt": {
+          "integerValue": "1790853820398"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-4a20f70be589faaf8faceb99",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 20
+        },
+        "protein": {
+          "doubleValue": 10
+        },
+        "fat": {
+          "doubleValue": 10
+        },
+        "gramsPerTbsp": {
+          "doubleValue": 16.666666666666668
+        },
+        "gramsPerTsp": {
+          "doubleValue": 5.555555555555555
+        },
+        "name": {
+          "stringValue": "치킨스톡"
+        },
+        "nameKo": {
+          "stringValue": "치킨스톡"
+        },
+        "createdAt": {
+          "integerValue": "1790853820403"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-4ef9b7d8ecdb1abca0a3f7d7",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 74
+        },
+        "protein": {
+          "doubleValue": 10
+        },
+        "fat": {
+          "doubleValue": 1
+        },
+        "name": {
+          "stringValue": "소면"
+        },
+        "nameKo": {
+          "stringValue": "소면"
+        },
+        "createdAt": {
+          "integerValue": "1790853820400"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-5102c666a4ab89c952a88453",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 90
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 42
+        },
+        "protein": {
+          "doubleValue": 10
+        },
+        "fat": {
+          "doubleValue": 1.5
+        },
+        "gramsPerEach": {
+          "doubleValue": 90
+        },
+        "name": {
+          "stringValue": "베이글 (저당)"
+        },
+        "nameKo": {
+          "stringValue": "베이글 (저당)"
+        },
+        "createdAt": {
+          "integerValue": "1790853820399"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-53fec7399dba24eb70bdcf99",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 30
+        },
+        "protein": {
+          "doubleValue": 4
+        },
+        "fat": {
+          "doubleValue": 1
+        },
+        "name": {
+          "stringValue": "뇨끼"
+        },
+        "nameKo": {
+          "stringValue": "뇨끼"
+        },
+        "createdAt": {
+          "integerValue": "1790853820395"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-5412337d0db0338a236a6915",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 23
+        },
+        "protein": {
+          "doubleValue": 1.2
+        },
+        "fat": {
+          "doubleValue": 0.3
+        },
+        "gramsPerEach": {
+          "doubleValue": 100
+        },
+        "name": {
+          "stringValue": "바나나"
+        },
+        "nameKo": {
+          "stringValue": "바나나"
+        },
+        "createdAt": {
+          "integerValue": "1790853820399"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-56325f2ae50e36527ff83a72",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 0.5
+        },
+        "protein": {
+          "doubleValue": 3.5
+        },
+        "fat": {
+          "doubleValue": 1.5
+        },
+        "name": {
+          "stringValue": "사골 곰탕"
+        },
+        "nameKo": {
+          "stringValue": "사골 곰탕"
+        },
+        "createdAt": {
+          "integerValue": "1790853820399"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-565a9d0e6aa4b9ee78d7d60e",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 7
+        },
+        "protein": {
+          "doubleValue": 1.5
+        },
+        "fat": {
+          "doubleValue": 2
+        },
+        "gramsPerTbsp": {
+          "doubleValue": 16.666666666666668
+        },
+        "gramsPerTsp": {
+          "doubleValue": 5.555555555555555
+        },
+        "name": {
+          "stringValue": "토마토 소스. 폰타나 시칠리아 아라비아따 저당 파스타 소스"
+        },
+        "nameKo": {
+          "stringValue": "토마토 소스. 폰타나 시칠리아 아라비아따 저당 파스타 소스"
+        },
+        "createdAt": {
+          "integerValue": "1790853820403"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-5802c102d898452a1383bb41",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 20
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 3
+        },
+        "protein": {
+          "doubleValue": 0.5
+        },
+        "fat": {
+          "doubleValue": 0.1
+        },
+        "gramsPerEach": {
+          "doubleValue": 20
+        },
+        "name": {
+          "stringValue": "버섯 (표고)"
+        },
+        "nameKo": {
+          "stringValue": "버섯 (표고)"
+        },
+        "createdAt": {
+          "integerValue": "1790853820399"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-587f409927fd86f7460843ef",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 30
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 15
+        },
+        "protein": {
+          "doubleValue": 3
+        },
+        "fat": {
+          "doubleValue": 2.5
+        },
+        "gramsPerEach": {
+          "doubleValue": 30
+        },
+        "name": {
+          "stringValue": "또띠아. 곰곰. 밀. 6인치. 15cm"
+        },
+        "nameKo": {
+          "stringValue": "또띠아. 곰곰. 밀. 6인치. 15cm"
+        },
+        "createdAt": {
+          "integerValue": "1790853820398"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-58da808d8e10eca465633e38",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 8
+        },
+        "protein": {
+          "doubleValue": 0.5
+        },
+        "fat": {
+          "doubleValue": 0.1
+        },
+        "name": {
+          "stringValue": "단무지"
+        },
+        "nameKo": {
+          "stringValue": "단무지"
+        },
+        "createdAt": {
+          "integerValue": "1790853820395"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-5c2d7543e265ac411a76966f",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 2
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 0.8
+        },
+        "protein": {
+          "doubleValue": 0.8
+        },
+        "fat": {
+          "doubleValue": 0.3
+        },
+        "gramsPerCan": {
+          "doubleValue": 2
+        },
+        "gramsPerPack": {
+          "doubleValue": 2
+        },
+        "name": {
+          "stringValue": "김 (조미)"
+        },
+        "nameKo": {
+          "stringValue": "김 (조미)"
+        },
+        "createdAt": {
+          "integerValue": "1790853820395"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-5c5b44d3136ae63370a8c2bf",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 0
+        },
+        "protein": {
+          "doubleValue": 18
+        },
+        "fat": {
+          "doubleValue": 13
+        },
+        "name": {
+          "stringValue": "돼지 목전지"
+        },
+        "nameKo": {
+          "stringValue": "돼지 목전지"
+        },
+        "createdAt": {
+          "integerValue": "1790853820397"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-5d9c0e6d701ead73af79d757",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 70
+        },
+        "protein": {
+          "doubleValue": 15
+        },
+        "fat": {
+          "doubleValue": 3
+        },
+        "gramsPerTbsp": {
+          "doubleValue": 16.666666666666668
+        },
+        "gramsPerTsp": {
+          "doubleValue": 5.555555555555555
+        },
+        "name": {
+          "stringValue": "미숫가루"
+        },
+        "nameKo": {
+          "stringValue": "미숫가루"
+        },
+        "createdAt": {
+          "integerValue": "1790853820398"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-5f9bbbae4e8125a6dfcd4b88",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 2.5
+        },
+        "protein": {
+          "doubleValue": 3
+        },
+        "fat": {
+          "doubleValue": 0.2
+        },
+        "name": {
+          "stringValue": "콩나물"
+        },
+        "nameKo": {
+          "stringValue": "콩나물"
+        },
+        "createdAt": {
+          "integerValue": "1790853820403"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-611fd5ef4e3c14d95cf93794",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 1
+        },
+        "protein": {
+          "doubleValue": 14
+        },
+        "fat": {
+          "doubleValue": 21
+        },
+        "gramsPerTbsp": {
+          "doubleValue": 16.666666666666668
+        },
+        "gramsPerTsp": {
+          "doubleValue": 5.555555555555555
+        },
+        "name": {
+          "stringValue": "치즈 (페타 루사스 포션)"
+        },
+        "nameKo": {
+          "stringValue": "치즈 (페타 루사스 포션)"
+        },
+        "createdAt": {
+          "integerValue": "1790853820403"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-613310c0f167a0578a38949b",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 60
+        },
+        "protein": {
+          "doubleValue": 22
+        },
+        "fat": {
+          "doubleValue": 2
+        },
+        "gramsPerTbsp": {
+          "doubleValue": 16.666666666666668
+        },
+        "gramsPerTsp": {
+          "doubleValue": 5.555555555555555
+        },
+        "name": {
+          "stringValue": "호랑이콩"
+        },
+        "nameKo": {
+          "stringValue": "호랑이콩"
+        },
+        "createdAt": {
+          "integerValue": "1790853820402"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-651905b9a1b626856cc7a3da",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 8
+        },
+        "protein": {
+          "doubleValue": 2
+        },
+        "fat": {
+          "doubleValue": 13
+        },
+        "gramsPerCan": {
+          "doubleValue": 430
+        },
+        "gramsPerPack": {
+          "doubleValue": 430
+        },
+        "name": {
+          "stringValue": "크림소스 (폰타나. 카르니아 베이컨 앤 머쉬룸 크림 파스타 소스. 총 430g)"
+        },
+        "nameKo": {
+          "stringValue": "크림소스 (폰타나. 카르니아 베이컨 앤 머쉬룸 크림 파스타 소스. 총 430g)"
+        },
+        "createdAt": {
+          "integerValue": "1790853820403"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-672eaa9aa9669fa88491800d",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 72
+        },
+        "protein": {
+          "doubleValue": 12
+        },
+        "fat": {
+          "doubleValue": 1.5
+        },
+        "name": {
+          "stringValue": "파스타면 (꼰길리에. 데치코)"
+        },
+        "nameKo": {
+          "stringValue": "파스타면 (꼰길리에. 데치코)"
+        },
+        "createdAt": {
+          "integerValue": "1790853820395"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-6b9405d3441120162a2bdbb3",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 4
+        },
+        "protein": {
+          "doubleValue": 1.5
+        },
+        "fat": {
+          "doubleValue": 0.2
+        },
+        "name": {
+          "stringValue": "봄동"
+        },
+        "nameKo": {
+          "stringValue": "봄동"
+        },
+        "createdAt": {
+          "integerValue": "1790853820399"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-6ce4a73320a43bd7b3bedd12",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 150
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 25
+        },
+        "protein": {
+          "doubleValue": 2.2
+        },
+        "fat": {
+          "doubleValue": 0.3
+        },
+        "gramsPerEach": {
+          "doubleValue": 150
+        },
+        "name": {
+          "stringValue": "단호박 (껍질·씨 제거,구운 것)"
+        },
+        "nameKo": {
+          "stringValue": "단호박 (껍질·씨 제거,구운 것)"
+        },
+        "createdAt": {
+          "integerValue": "1790853820396"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-730360d8e7afa3e1c904d1dd",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 0
+        },
+        "protein": {
+          "doubleValue": 15
+        },
+        "fat": {
+          "doubleValue": 4.5
+        },
+        "name": {
+          "stringValue": "닭다리 (생닭. 뼈O. 껍질 X)"
+        },
+        "nameKo": {
+          "stringValue": "닭다리 (생닭. 뼈O. 껍질 X)"
+        },
+        "createdAt": {
+          "integerValue": "1790853820396"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-73c6ee0ca6bfd44e14adf74e",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 27
+        },
+        "protein": {
+          "doubleValue": 9
+        },
+        "fat": {
+          "doubleValue": 2.5
+        },
+        "name": {
+          "stringValue": "삶은 병아리콩"
+        },
+        "nameKo": {
+          "stringValue": "삶은 병아리콩"
+        },
+        "createdAt": {
+          "integerValue": "1790853820399"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-7444f3f90a321562d5190ee6",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 0
+        },
+        "protein": {
+          "doubleValue": 14
+        },
+        "fat": {
+          "doubleValue": 28
+        },
+        "name": {
+          "stringValue": "돼지 삼겹살"
+        },
+        "nameKo": {
+          "stringValue": "돼지 삼겹살"
+        },
+        "createdAt": {
+          "integerValue": "1790853820397"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-7af75ba86ee09992f6d87c7b",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 3
+        },
+        "protein": {
+          "doubleValue": 2
+        },
+        "fat": {
+          "doubleValue": 38
+        },
+        "name": {
+          "stringValue": "생크림"
+        },
+        "nameKo": {
+          "stringValue": "생크림"
+        },
+        "createdAt": {
+          "integerValue": "1790853820400"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-7f0d750b85d6e17953a8d2b7",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 7
+        },
+        "protein": {
+          "doubleValue": 2.5
+        },
+        "fat": {
+          "doubleValue": 0.2
+        },
+        "name": {
+          "stringValue": "버섯 (새송이)"
+        },
+        "nameKo": {
+          "stringValue": "버섯 (새송이)"
+        },
+        "createdAt": {
+          "integerValue": "1790853820399"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-7fab042694f9766a20226c0b",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 60
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 7.8
+        },
+        "protein": {
+          "doubleValue": 0.5
+        },
+        "fat": {
+          "doubleValue": 0.1
+        },
+        "gramsPerEach": {
+          "doubleValue": 60
+        },
+        "name": {
+          "stringValue": "자두. 물렁. 작은 것"
+        },
+        "nameKo": {
+          "stringValue": "자두. 물렁. 작은 것"
+        },
+        "createdAt": {
+          "integerValue": "1790853820402"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-816951c7d3030883ec85b65c",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 200
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 8
+        },
+        "protein": {
+          "doubleValue": 5
+        },
+        "fat": {
+          "doubleValue": 0.8
+        },
+        "gramsPerEach": {
+          "doubleValue": 200
+        },
+        "name": {
+          "stringValue": "브로콜리"
+        },
+        "nameKo": {
+          "stringValue": "브로콜리"
+        },
+        "createdAt": {
+          "integerValue": "1790853820399"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-82027fa6f73ad7739ce7afca",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 3.5
+        },
+        "protein": {
+          "doubleValue": 2.8
+        },
+        "fat": {
+          "doubleValue": 0.1
+        },
+        "name": {
+          "stringValue": "숙주나물"
+        },
+        "nameKo": {
+          "stringValue": "숙주나물"
+        },
+        "createdAt": {
+          "integerValue": "1790853820400"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-83704f823568fd14d4d2a1be",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 25
+        },
+        "protein": {
+          "doubleValue": 12
+        },
+        "fat": {
+          "doubleValue": 5
+        },
+        "gramsPerTbsp": {
+          "doubleValue": 16.666666666666668
+        },
+        "gramsPerTsp": {
+          "doubleValue": 5.555555555555555
+        },
+        "name": {
+          "stringValue": "된장"
+        },
+        "nameKo": {
+          "stringValue": "된장"
+        },
+        "createdAt": {
+          "integerValue": "1790853820397"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-8432b196c0b75c6fcea4ea70",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 150
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 22
+        },
+        "protein": {
+          "doubleValue": 2
+        },
+        "fat": {
+          "doubleValue": 0.2
+        },
+        "gramsPerEach": {
+          "doubleValue": 150
+        },
+        "name": {
+          "stringValue": "단호박 (껍질·씨 제거, 찐 것)"
+        },
+        "nameKo": {
+          "stringValue": "단호박 (껍질·씨 제거, 찐 것)"
+        },
+        "createdAt": {
+          "integerValue": "1790853820396"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-868000119d96fda81186a3d7",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 0.1
+        },
+        "protein": {
+          "doubleValue": 0.8
+        },
+        "fat": {
+          "doubleValue": 81
+        },
+        "gramsPerTbsp": {
+          "doubleValue": 16.666666666666668
+        },
+        "gramsPerTsp": {
+          "doubleValue": 5.555555555555555
+        },
+        "name": {
+          "stringValue": "무염버터 (앵커)"
+        },
+        "nameKo": {
+          "stringValue": "무염버터 (앵커)"
+        },
+        "createdAt": {
+          "integerValue": "1790853820398"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-889f701f028e336972239702",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 10
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 0.8
+        },
+        "protein": {
+          "doubleValue": 0.2
+        },
+        "fat": {
+          "doubleValue": 0.1
+        },
+        "gramsPerEach": {
+          "doubleValue": 10
+        },
+        "name": {
+          "stringValue": "꽈리고추"
+        },
+        "nameKo": {
+          "stringValue": "꽈리고추"
+        },
+        "createdAt": {
+          "integerValue": "1790853820395"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-899355dc49c690aa43c55db5",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 20
+        },
+        "protein": {
+          "doubleValue": 20
+        },
+        "fat": {
+          "doubleValue": 13
+        },
+        "gramsPerTbsp": {
+          "doubleValue": 16.666666666666668
+        },
+        "gramsPerTsp": {
+          "doubleValue": 5.555555555555555
+        },
+        "name": {
+          "stringValue": "카카오 분말 가루. 코코아파우더. 무가당. 대장균검사"
+        },
+        "nameKo": {
+          "stringValue": "카카오 분말 가루. 코코아파우더. 무가당. 대장균검사"
+        },
+        "createdAt": {
+          "integerValue": "1790853820403"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-8b6e691b4b710f86b303a546",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 30
+        },
+        "protein": {
+          "doubleValue": 40
+        },
+        "fat": {
+          "doubleValue": 18
+        },
+        "gramsPerTbsp": {
+          "doubleValue": 16.666666666666668
+        },
+        "gramsPerTsp": {
+          "doubleValue": 5.555555555555555
+        },
+        "name": {
+          "stringValue": "서리태콩"
+        },
+        "nameKo": {
+          "stringValue": "서리태콩"
+        },
+        "createdAt": {
+          "integerValue": "1790853820402"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-8f3f6b606fc57d4327bfa9b2",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 180
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 25
+        },
+        "protein": {
+          "doubleValue": 0.5
+        },
+        "fat": {
+          "doubleValue": 0.3
+        },
+        "gramsPerEach": {
+          "doubleValue": 180
+        },
+        "name": {
+          "stringValue": "사과 (중간, 껍질 씨 제거)"
+        },
+        "nameKo": {
+          "stringValue": "사과 (중간, 껍질 씨 제거)"
+        },
+        "createdAt": {
+          "integerValue": "1790853820399"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-8f96470ba1ffc4fce5b3473e",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 15
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 2.3
+        },
+        "protein": {
+          "doubleValue": 0.3
+        },
+        "fat": {
+          "doubleValue": 0.1
+        },
+        "gramsPerTbsp": {
+          "doubleValue": 15
+        },
+        "gramsPerTsp": {
+          "doubleValue": 5
+        },
+        "name": {
+          "stringValue": "굴소스 (저당. 청정원)"
+        },
+        "nameKo": {
+          "stringValue": "굴소스 (저당. 청정원)"
+        },
+        "createdAt": {
+          "integerValue": "1790853820394"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-9375b0dc54036ec53a6fe60b",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 8
+        },
+        "protein": {
+          "doubleValue": 0.6
+        },
+        "fat": {
+          "doubleValue": 0.2
+        },
+        "name": {
+          "stringValue": "수박"
+        },
+        "nameKo": {
+          "stringValue": "수박"
+        },
+        "createdAt": {
+          "integerValue": "1790853820400"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-93f07709976bc1b8fed25ffd",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 120
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 14
+        },
+        "protein": {
+          "doubleValue": 1
+        },
+        "fat": {
+          "doubleValue": 0.2
+        },
+        "gramsPerEach": {
+          "doubleValue": 120
+        },
+        "name": {
+          "stringValue": "천도"
+        },
+        "nameKo": {
+          "stringValue": "천도"
+        },
+        "createdAt": {
+          "integerValue": "1790853820403"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-9497608ce1a51fcb3a97a8bd",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 4
+        },
+        "protein": {
+          "doubleValue": 1.5
+        },
+        "fat": {
+          "doubleValue": 0.5
+        },
+        "name": {
+          "stringValue": "배추김치"
+        },
+        "nameKo": {
+          "stringValue": "배추김치"
+        },
+        "createdAt": {
+          "integerValue": "1790853820399"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-96c423c04630df6abd2ae380",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 6
+        },
+        "protein": {
+          "doubleValue": 1.3
+        },
+        "fat": {
+          "doubleValue": 0.2
+        },
+        "name": {
+          "stringValue": "양배추 썰은 것"
+        },
+        "nameKo": {
+          "stringValue": "양배추 썰은 것"
+        },
+        "createdAt": {
+          "integerValue": "1790853820401"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-96d6c186cc7ad6ae4c28b333",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 3
+        },
+        "protein": {
+          "doubleValue": 4
+        },
+        "fat": {
+          "doubleValue": 2
+        },
+        "name": {
+          "stringValue": "콩국물 (이마트 두부코너)"
+        },
+        "nameKo": {
+          "stringValue": "콩국물 (이마트 두부코너)"
+        },
+        "createdAt": {
+          "integerValue": "1790853820403"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-990b196480e3e8f016f5c116",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 66
+        },
+        "protein": {
+          "doubleValue": 13
+        },
+        "fat": {
+          "doubleValue": 7
+        },
+        "gramsPerTbsp": {
+          "doubleValue": 16.666666666666668
+        },
+        "gramsPerTsp": {
+          "doubleValue": 5.555555555555555
+        },
+        "name": {
+          "stringValue": "오트밀 (롤드. 대구농산)"
+        },
+        "nameKo": {
+          "stringValue": "오트밀 (롤드. 대구농산)"
+        },
+        "createdAt": {
+          "integerValue": "1790853820401"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-9cbb1ac94c5cd26b2839bfa1",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 80
+        },
+        "protein": {
+          "doubleValue": 6
+        },
+        "fat": {
+          "doubleValue": 0.8
+        },
+        "gramsPerTbsp": {
+          "doubleValue": 16.666666666666668
+        },
+        "gramsPerTsp": {
+          "doubleValue": 5.555555555555555
+        },
+        "name": {
+          "stringValue": "찹쌀가루"
+        },
+        "nameKo": {
+          "stringValue": "찹쌀가루"
+        },
+        "createdAt": {
+          "integerValue": "1790853820403"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-9d014f6c9006bdcfc81cff0a",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 50
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 25
+        },
+        "protein": {
+          "doubleValue": 4
+        },
+        "fat": {
+          "doubleValue": 2
+        },
+        "gramsPerEach": {
+          "doubleValue": 50
+        },
+        "name": {
+          "stringValue": "식빵 (직접 만든 것)"
+        },
+        "nameKo": {
+          "stringValue": "식빵 (직접 만든 것)"
+        },
+        "createdAt": {
+          "integerValue": "1790853820401"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-9f926e05586491579d99ccd7",
+      "fields": {
+        "name": {
+          "stringValue": "돼지 - 등갈비 (김치등갈비찜용. 여기에서 뼈, 지방 안먹는다는가정하에 계산)"
+        },
+        "nameKo": {
+          "stringValue": "돼지 - 등갈비 (김치등갈비찜용. 여기에서 뼈, 지방 안먹는다는가정하에 계산)"
+        },
+        "baseAmount": {
+          "integerValue": "100"
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "integerValue": "0"
+        },
+        "protein": {
+          "integerValue": "20"
+        },
+        "fat": {
+          "integerValue": "10"
+        },
+        "createdAt": {
+          "integerValue": "1790853820397"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T12:07:08.220061Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-a232d0c9fd467c94f5f3fbba",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 13
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 0.5
+        },
+        "protein": {
+          "doubleValue": 0.1
+        },
+        "fat": {
+          "doubleValue": 0
+        },
+        "gramsPerEach": {
+          "doubleValue": 13
+        },
+        "name": {
+          "stringValue": "토마토 (방울)"
+        },
+        "nameKo": {
+          "stringValue": "토마토 (방울)"
+        },
+        "createdAt": {
+          "integerValue": "1790853820403"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-a367ab3717bfa4f8a3ea8d77",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 4
+        },
+        "protein": {
+          "doubleValue": 0.6
+        },
+        "fat": {
+          "doubleValue": 0.1
+        },
+        "gramsPerEach": {
+          "doubleValue": 100
+        },
+        "name": {
+          "stringValue": "무"
+        },
+        "nameKo": {
+          "stringValue": "무"
+        },
+        "createdAt": {
+          "integerValue": "1790853820398"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-a88b13c00b2d0e7c666a86e7",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 9
+        },
+        "protein": {
+          "doubleValue": 1
+        },
+        "fat": {
+          "doubleValue": 0.2
+        },
+        "gramsPerEach": {
+          "doubleValue": 100
+        },
+        "name": {
+          "stringValue": "당근 . 홍당무"
+        },
+        "nameKo": {
+          "stringValue": "당근 . 홍당무"
+        },
+        "createdAt": {
+          "integerValue": "1790853820396"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-ab66b08942bf440602ba1b46",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 5
+        },
+        "protein": {
+          "doubleValue": 8
+        },
+        "fat": {
+          "doubleValue": 0
+        },
+        "gramsPerTbsp": {
+          "doubleValue": 16.666666666666668
+        },
+        "gramsPerTsp": {
+          "doubleValue": 5.555555555555555
+        },
+        "name": {
+          "stringValue": "참치액"
+        },
+        "nameKo": {
+          "stringValue": "참치액"
+        },
+        "createdAt": {
+          "integerValue": "1790853820402"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-ad69fe4d0da9494c71c5e5d6",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 72
+        },
+        "protein": {
+          "doubleValue": 12
+        },
+        "fat": {
+          "doubleValue": 1.5
+        },
+        "name": {
+          "stringValue": "라가토니 면. 파스타. 디벨라"
+        },
+        "nameKo": {
+          "stringValue": "라가토니 면. 파스타. 디벨라"
+        },
+        "createdAt": {
+          "integerValue": "1790853820398"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-af49be09c7da5e5617ba77fa",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 2
+        },
+        "protein": {
+          "doubleValue": 8
+        },
+        "fat": {
+          "doubleValue": 4
+        },
+        "name": {
+          "stringValue": "두부. 곰곰. 알뜰. 800"
+        },
+        "nameKo": {
+          "stringValue": "두부. 곰곰. 알뜰. 800"
+        },
+        "createdAt": {
+          "integerValue": "1790853820397"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-b07a85f41f90390cfa886c85",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 0
+        },
+        "protein": {
+          "doubleValue": 15
+        },
+        "fat": {
+          "doubleValue": 1
+        },
+        "name": {
+          "stringValue": "쭈꾸미 손질된 것"
+        },
+        "nameKo": {
+          "stringValue": "쭈꾸미 손질된 것"
+        },
+        "createdAt": {
+          "integerValue": "1790853820402"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-b14d8ceedfd6783e4870f507",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 0
+        },
+        "protein": {
+          "doubleValue": 19
+        },
+        "fat": {
+          "doubleValue": 14
+        },
+        "name": {
+          "stringValue": "돼지 목살"
+        },
+        "nameKo": {
+          "stringValue": "돼지 목살"
+        },
+        "createdAt": {
+          "integerValue": "1790853820397"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-b1eaf4e4207b5637d525ca45",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 60
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 4.5
+        },
+        "protein": {
+          "doubleValue": 0.5
+        },
+        "fat": {
+          "doubleValue": 0.2
+        },
+        "gramsPerEach": {
+          "doubleValue": 10
+        },
+        "name": {
+          "stringValue": "딸기 (작은크기)"
+        },
+        "nameKo": {
+          "stringValue": "딸기 (작은크기)"
+        },
+        "createdAt": {
+          "integerValue": "1790853820397"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-b60256a0cd26acae941a0c45",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 74
+        },
+        "protein": {
+          "doubleValue": 12
+        },
+        "fat": {
+          "doubleValue": 1.5
+        },
+        "name": {
+          "stringValue": "파스타면 (스파게티)"
+        },
+        "nameKo": {
+          "stringValue": "파스타면 (스파게티)"
+        },
+        "createdAt": {
+          "integerValue": "1790853820404"
+        },
+        "legacyIds": {
+          "arrayValue": {
+            "values": [
+              {
+                "stringValue": "spaghetti"
+              }
+            ]
+          }
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:30:14.127926Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-b67272753b678243fdde1557",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 9
+        },
+        "protein": {
+          "doubleValue": 2
+        },
+        "fat": {
+          "doubleValue": 15
+        },
+        "name": {
+          "stringValue": "아보카도 (냉동)"
+        },
+        "nameKo": {
+          "stringValue": "아보카도 (냉동)"
+        },
+        "createdAt": {
+          "integerValue": "1790853820401"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-b7ee10aaa2f756561c410e47",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 340
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 65
+        },
+        "protein": {
+          "doubleValue": 8
+        },
+        "fat": {
+          "doubleValue": 2
+        },
+        "gramsPerCan": {
+          "doubleValue": 340
+        },
+        "gramsPerPack": {
+          "doubleValue": 340
+        },
+        "name": {
+          "stringValue": "옥수수 (스위트콘. 동원. 노슈가. 통조림)"
+        },
+        "nameKo": {
+          "stringValue": "옥수수 (스위트콘. 동원. 노슈가. 통조림)"
+        },
+        "createdAt": {
+          "integerValue": "1790853820402"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-b8d836df1591ff78925b745e",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 20
+        },
+        "protein": {
+          "doubleValue": 25
+        },
+        "fat": {
+          "doubleValue": 50
+        },
+        "gramsPerTbsp": {
+          "doubleValue": 16.666666666666668
+        },
+        "gramsPerTsp": {
+          "doubleValue": 5.555555555555555
+        },
+        "name": {
+          "stringValue": "땅콩버터 (제이넛터 크런치)"
+        },
+        "nameKo": {
+          "stringValue": "땅콩버터 (제이넛터 크런치)"
+        },
+        "createdAt": {
+          "integerValue": "1790853820397"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-ba5b4aef1d6d25e0617dd653",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 30
+        },
+        "protein": {
+          "doubleValue": 4
+        },
+        "fat": {
+          "doubleValue": 3
+        },
+        "gramsPerTbsp": {
+          "doubleValue": 16.666666666666668
+        },
+        "gramsPerTsp": {
+          "doubleValue": 5.555555555555555
+        },
+        "name": {
+          "stringValue": "썬드라이 토마토 (기름제거)"
+        },
+        "nameKo": {
+          "stringValue": "썬드라이 토마토 (기름제거)"
+        },
+        "createdAt": {
+          "integerValue": "1790853820401"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-bbda485d0968d1e7857cf449",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 55
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 0.4
+        },
+        "protein": {
+          "doubleValue": 6.3
+        },
+        "fat": {
+          "doubleValue": 5.3
+        },
+        "gramsPerEach": {
+          "doubleValue": 55
+        },
+        "name": {
+          "stringValue": "계란"
+        },
+        "nameKo": {
+          "stringValue": "계란"
+        },
+        "createdAt": {
+          "integerValue": "1790853820394"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-bc7eef98b737f31989e5bb1f",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 50
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 1.2
+        },
+        "protein": {
+          "doubleValue": 0.8
+        },
+        "fat": {
+          "doubleValue": 0.1
+        },
+        "gramsPerEach": {
+          "doubleValue": 50
+        },
+        "name": {
+          "stringValue": "청경채"
+        },
+        "nameKo": {
+          "stringValue": "청경채"
+        },
+        "createdAt": {
+          "integerValue": "1790853820403"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-c23026ffcb736fb03e5c79b0",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 150
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 9
+        },
+        "protein": {
+          "doubleValue": 1.2
+        },
+        "fat": {
+          "doubleValue": 0.3
+        },
+        "gramsPerEach": {
+          "doubleValue": 150
+        },
+        "name": {
+          "stringValue": "파프리카"
+        },
+        "nameKo": {
+          "stringValue": "파프리카"
+        },
+        "createdAt": {
+          "integerValue": "1790853820404"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-c4cd786252046269bf32e6e2",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 150
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 14
+        },
+        "protein": {
+          "doubleValue": 1
+        },
+        "fat": {
+          "doubleValue": 0.1
+        },
+        "gramsPerEach": {
+          "doubleValue": 150
+        },
+        "name": {
+          "stringValue": "복숭아"
+        },
+        "nameKo": {
+          "stringValue": "복숭아"
+        },
+        "createdAt": {
+          "integerValue": "1790853820399"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-c5219f0cc470bdbb4e19ca2e",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 4
+        },
+        "protein": {
+          "doubleValue": 6
+        },
+        "fat": {
+          "doubleValue": 30
+        },
+        "gramsPerTbsp": {
+          "doubleValue": 16.666666666666668
+        },
+        "gramsPerTsp": {
+          "doubleValue": 5.555555555555555
+        },
+        "name": {
+          "stringValue": "치즈 (필라델피아)"
+        },
+        "nameKo": {
+          "stringValue": "치즈 (필라델피아)"
+        },
+        "createdAt": {
+          "integerValue": "1790853820403"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-c566ca8515a3251cfe9e0646",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 7
+        },
+        "protein": {
+          "doubleValue": 0.4
+        },
+        "fat": {
+          "doubleValue": 0.2
+        },
+        "gramsPerTbsp": {
+          "doubleValue": 16.666666666666668
+        },
+        "gramsPerTsp": {
+          "doubleValue": 5.555555555555555
+        },
+        "name": {
+          "stringValue": "레몬즙"
+        },
+        "nameKo": {
+          "stringValue": "레몬즙"
+        },
+        "createdAt": {
+          "integerValue": "1790853820398"
+        },
+        "legacyIds": {
+          "arrayValue": {
+            "values": [
+              {
+                "stringValue": "lemon-juice"
+              }
+            ]
+          }
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:30:14.127926Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-c5c299b1efb9fc133a18c8d7",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 200
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 45
+        },
+        "protein": {
+          "doubleValue": 6
+        },
+        "fat": {
+          "doubleValue": 10
+        },
+        "gramsPerCan": {
+          "doubleValue": 200
+        },
+        "gramsPerPack": {
+          "doubleValue": 200
+        },
+        "name": {
+          "stringValue": "유부초밥. 풀무원"
+        },
+        "nameKo": {
+          "stringValue": "유부초밥. 풀무원"
+        },
+        "createdAt": {
+          "integerValue": "1790853820402"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-c5d8bc3b83e4e8ca9f285613",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 74
+        },
+        "protein": {
+          "doubleValue": 12
+        },
+        "fat": {
+          "doubleValue": 1.5
+        },
+        "name": {
+          "stringValue": "파스타면 (링귀니)"
+        },
+        "nameKo": {
+          "stringValue": "파스타면 (링귀니)"
+        },
+        "createdAt": {
+          "integerValue": "1790853820404"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-cbaee802a4c3229f21240d0c",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 15
+        },
+        "protein": {
+          "doubleValue": 16
+        },
+        "fat": {
+          "doubleValue": 45
+        },
+        "gramsPerTbsp": {
+          "doubleValue": 16.666666666666668
+        },
+        "gramsPerTsp": {
+          "doubleValue": 5.555555555555555
+        },
+        "name": {
+          "stringValue": "깨 (들깨가루)"
+        },
+        "nameKo": {
+          "stringValue": "깨 (들깨가루)"
+        },
+        "createdAt": {
+          "integerValue": "1790853820395"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-cbea0ba006aaf918084955b5",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 30
+        },
+        "protein": {
+          "doubleValue": 5
+        },
+        "fat": {
+          "doubleValue": 4
+        },
+        "name": {
+          "stringValue": "순대 (곰곰 장충동식 찰순대)"
+        },
+        "nameKo": {
+          "stringValue": "순대 (곰곰 장충동식 찰순대)"
+        },
+        "createdAt": {
+          "integerValue": "1790853820400"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-cf308997daba9a8a38103d49",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 0
+        },
+        "protein": {
+          "doubleValue": 20
+        },
+        "fat": {
+          "doubleValue": 7
+        },
+        "name": {
+          "stringValue": "돼지 뒷다리살"
+        },
+        "nameKo": {
+          "stringValue": "돼지 뒷다리살"
+        },
+        "createdAt": {
+          "integerValue": "1790853820397"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-d077ec4578ef9f72f01828cc",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 15
+        },
+        "protein": {
+          "doubleValue": 3
+        },
+        "fat": {
+          "doubleValue": 0
+        },
+        "gramsPerTbsp": {
+          "doubleValue": 16.666666666666668
+        },
+        "gramsPerTsp": {
+          "doubleValue": 5.555555555555555
+        },
+        "name": {
+          "stringValue": "메밀소바 소스 장국"
+        },
+        "nameKo": {
+          "stringValue": "메밀소바 소스 장국"
+        },
+        "createdAt": {
+          "integerValue": "1790853820398"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-d294c6c6322ee381d733a320",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 0
+        },
+        "protein": {
+          "doubleValue": 18
+        },
+        "fat": {
+          "doubleValue": 5
+        },
+        "name": {
+          "stringValue": "닭다리 (생닭. 뼈X. 껍질 X)"
+        },
+        "nameKo": {
+          "stringValue": "닭다리 (생닭. 뼈X. 껍질 X)"
+        },
+        "createdAt": {
+          "integerValue": "1790853820396"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-d574759a9f6f67a84ba5b5e7",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 0
+        },
+        "protein": {
+          "doubleValue": 21
+        },
+        "fat": {
+          "doubleValue": 5
+        },
+        "name": {
+          "stringValue": "돼지 앞다리살 (껍질제거. 지방X)"
+        },
+        "nameKo": {
+          "stringValue": "돼지 앞다리살 (껍질제거. 지방X)"
+        },
+        "createdAt": {
+          "integerValue": "1790853820397"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-d5922974f3c0ddfea0663e12",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 75
+        },
+        "protein": {
+          "doubleValue": 8
+        },
+        "fat": {
+          "doubleValue": 1
+        },
+        "gramsPerTbsp": {
+          "doubleValue": 16.666666666666668
+        },
+        "gramsPerTsp": {
+          "doubleValue": 5.555555555555555
+        },
+        "name": {
+          "stringValue": "튀김가루"
+        },
+        "nameKo": {
+          "stringValue": "튀김가루"
+        },
+        "createdAt": {
+          "integerValue": "1790853820404"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-d5c0a936afac14da39b72087",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 2
+        },
+        "protein": {
+          "doubleValue": 6
+        },
+        "fat": {
+          "doubleValue": 0.5
+        },
+        "gramsPerTbsp": {
+          "doubleValue": 16.666666666666668
+        },
+        "gramsPerTsp": {
+          "doubleValue": 5.555555555555555
+        },
+        "name": {
+          "stringValue": "멸치액젓"
+        },
+        "nameKo": {
+          "stringValue": "멸치액젓"
+        },
+        "createdAt": {
+          "integerValue": "1790853820398"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-d761704dca36e99ff0fc7818",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 150
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 25
+        },
+        "protein": {
+          "doubleValue": 3.5
+        },
+        "fat": {
+          "doubleValue": 1.5
+        },
+        "gramsPerEach": {
+          "doubleValue": 150
+        },
+        "name": {
+          "stringValue": "옥수수. 초당"
+        },
+        "nameKo": {
+          "stringValue": "옥수수. 초당"
+        },
+        "createdAt": {
+          "integerValue": "1790853820401"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-d7e97abac199ef7e7c6dd44e",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 25
+        },
+        "protein": {
+          "doubleValue": 0
+        },
+        "fat": {
+          "doubleValue": 0
+        },
+        "gramsPerTbsp": {
+          "doubleValue": 16.666666666666668
+        },
+        "gramsPerTsp": {
+          "doubleValue": 5.555555555555555
+        },
+        "name": {
+          "stringValue": "베이킹파우더"
+        },
+        "nameKo": {
+          "stringValue": "베이킹파우더"
+        },
+        "createdAt": {
+          "integerValue": "1790853820399"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-dcbea265856b811c139fc09d",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 160
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 50
+        },
+        "protein": {
+          "doubleValue": 6
+        },
+        "fat": {
+          "doubleValue": 1
+        },
+        "gramsPerCan": {
+          "doubleValue": 160
+        },
+        "gramsPerPack": {
+          "doubleValue": 160
+        },
+        "name": {
+          "stringValue": "냉면 사리"
+        },
+        "nameKo": {
+          "stringValue": "냉면 사리"
+        },
+        "createdAt": {
+          "integerValue": "1790853820395"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-e2fd74da730b15ade14fc395",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 40
+        },
+        "protein": {
+          "doubleValue": 0.1
+        },
+        "fat": {
+          "doubleValue": 0
+        },
+        "gramsPerTbsp": {
+          "doubleValue": 16.666666666666668
+        },
+        "gramsPerTsp": {
+          "doubleValue": 5.555555555555555
+        },
+        "name": {
+          "stringValue": "맛술 (청정원. 미림)"
+        },
+        "nameKo": {
+          "stringValue": "맛술 (청정원. 미림)"
+        },
+        "createdAt": {
+          "integerValue": "1790853820398"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-e3153fafce613b7af7dfd467",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 6
+        },
+        "protein": {
+          "doubleValue": 0.2
+        },
+        "fat": {
+          "doubleValue": 0.1
+        },
+        "name": {
+          "stringValue": "도토리묵 (풀무원)"
+        },
+        "nameKo": {
+          "stringValue": "도토리묵 (풀무원)"
+        },
+        "createdAt": {
+          "integerValue": "1790853820397"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-e7db0f8cb87db51cf9b03fe6",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 40
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 12
+        },
+        "protein": {
+          "doubleValue": 8
+        },
+        "fat": {
+          "doubleValue": 2
+        },
+        "gramsPerEach": {
+          "doubleValue": 40
+        },
+        "name": {
+          "stringValue": "식빵 (널담 고단백 저당 슬랩)"
+        },
+        "nameKo": {
+          "stringValue": "식빵 (널담 고단백 저당 슬랩)"
+        },
+        "createdAt": {
+          "integerValue": "1790853820401"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-ebac9d6c1af393fcd5dc3024",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 50
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 10
+        },
+        "protein": {
+          "doubleValue": 0.8
+        },
+        "fat": {
+          "doubleValue": 0.2
+        },
+        "gramsPerEach": {
+          "doubleValue": 50
+        },
+        "name": {
+          "stringValue": "무화과"
+        },
+        "nameKo": {
+          "stringValue": "무화과"
+        },
+        "createdAt": {
+          "integerValue": "1790853820398"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-ec965ba9d0a09240febbbef5",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 3
+        },
+        "protein": {
+          "doubleValue": 11
+        },
+        "fat": {
+          "doubleValue": 13
+        },
+        "gramsPerTbsp": {
+          "doubleValue": 16.666666666666668
+        },
+        "gramsPerTsp": {
+          "doubleValue": 5.555555555555555
+        },
+        "name": {
+          "stringValue": "치즈 (리코타)"
+        },
+        "nameKo": {
+          "stringValue": "치즈 (리코타)"
+        },
+        "createdAt": {
+          "integerValue": "1790853820403"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-ed7e59c0798a1ac9f819665d",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 75
+        },
+        "protein": {
+          "doubleValue": 10
+        },
+        "fat": {
+          "doubleValue": 1
+        },
+        "gramsPerTbsp": {
+          "doubleValue": 16.666666666666668
+        },
+        "gramsPerTsp": {
+          "doubleValue": 5.555555555555555
+        },
+        "name": {
+          "stringValue": "밀가루 (중력분. 백설)"
+        },
+        "nameKo": {
+          "stringValue": "밀가루 (중력분. 백설)"
+        },
+        "createdAt": {
+          "integerValue": "1790853820399"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-eef5fd7c8f1243e107e1432b",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 2
+        },
+        "protein": {
+          "doubleValue": 11
+        },
+        "fat": {
+          "doubleValue": 18
+        },
+        "gramsPerEach": {
+          "doubleValue": 100
+        },
+        "name": {
+          "stringValue": "부라타 치즈"
+        },
+        "nameKo": {
+          "stringValue": "부라타 치즈"
+        },
+        "createdAt": {
+          "integerValue": "1790853820399"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-ef423b65216e70fcac774cf7",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 120
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 18
+        },
+        "protein": {
+          "doubleValue": 12
+        },
+        "fat": {
+          "doubleValue": 10
+        },
+        "gramsPerEach": {
+          "doubleValue": 120
+        },
+        "name": {
+          "stringValue": "돈까스 (컬리)"
+        },
+        "nameKo": {
+          "stringValue": "돈까스 (컬리)"
+        },
+        "createdAt": {
+          "integerValue": "1790853820397"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-f178c49e645f3f230b963093",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 15
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 6.8
+        },
+        "protein": {
+          "doubleValue": 0.8
+        },
+        "fat": {
+          "doubleValue": 0.3
+        },
+        "gramsPerTbsp": {
+          "doubleValue": 15
+        },
+        "gramsPerTsp": {
+          "doubleValue": 5
+        },
+        "name": {
+          "stringValue": "고추장 (저당. 해찬들)"
+        },
+        "nameKo": {
+          "stringValue": "고추장 (저당. 해찬들)"
+        },
+        "createdAt": {
+          "integerValue": "1790853820394"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-f27dcdaf2369686a4a068d44",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 0
+        },
+        "protein": {
+          "doubleValue": 19
+        },
+        "fat": {
+          "doubleValue": 10
+        },
+        "name": {
+          "stringValue": "고등어"
+        },
+        "nameKo": {
+          "stringValue": "고등어"
+        },
+        "createdAt": {
+          "integerValue": "1790853820394"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-f2c3666b51c7a3bca259f792",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 76
+        },
+        "protein": {
+          "doubleValue": 9
+        },
+        "fat": {
+          "doubleValue": 1
+        },
+        "gramsPerTbsp": {
+          "doubleValue": 16.666666666666668
+        },
+        "gramsPerTsp": {
+          "doubleValue": 5.555555555555555
+        },
+        "name": {
+          "stringValue": "밀가루 (박력분. 백설)"
+        },
+        "nameKo": {
+          "stringValue": "밀가루 (박력분. 백설)"
+        },
+        "createdAt": {
+          "integerValue": "1790853820398"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-f3a76b6651905fdddec15bbb",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 0
+        },
+        "protein": {
+          "doubleValue": 18
+        },
+        "fat": {
+          "doubleValue": 12
+        },
+        "name": {
+          "stringValue": "돼지 앞다리살 (껍질제거. 지방O)"
+        },
+        "nameKo": {
+          "stringValue": "돼지 앞다리살 (껍질제거. 지방O)"
+        },
+        "createdAt": {
+          "integerValue": "1790853820397"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-f6bad033f767fcd7cd867e21",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 340
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 68
+        },
+        "protein": {
+          "doubleValue": 8
+        },
+        "fat": {
+          "doubleValue": 2.5
+        },
+        "gramsPerCan": {
+          "doubleValue": 340
+        },
+        "gramsPerPack": {
+          "doubleValue": 340
+        },
+        "name": {
+          "stringValue": "옥수수 (스위트콘. 이마트)"
+        },
+        "nameKo": {
+          "stringValue": "옥수수 (스위트콘. 이마트)"
+        },
+        "createdAt": {
+          "integerValue": "1790853820402"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-fa068c144575ad2de2642749",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 8
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 2.5
+        },
+        "protein": {
+          "doubleValue": 3
+        },
+        "fat": {
+          "doubleValue": 1.5
+        },
+        "gramsPerTbsp": {
+          "doubleValue": 8
+        },
+        "gramsPerTsp": {
+          "doubleValue": 2.6666666666666665
+        },
+        "name": {
+          "stringValue": "대두가루 (노란콩 가루)"
+        },
+        "nameKo": {
+          "stringValue": "대두가루 (노란콩 가루)"
+        },
+        "createdAt": {
+          "integerValue": "1790853820397"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-fd7862fa6687a6088a8118a6",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 0
+        },
+        "protein": {
+          "doubleValue": 18
+        },
+        "fat": {
+          "doubleValue": 1
+        },
+        "name": {
+          "stringValue": "새우"
+        },
+        "nameKo": {
+          "stringValue": "새우"
+        },
+        "createdAt": {
+          "integerValue": "1790853820400"
+        },
+        "legacyIds": {
+          "arrayValue": {
+            "values": [
+              {
+                "stringValue": "shrimp"
+              }
+            ]
+          }
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:30:14.127926Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-fdf6fc2c31d704fbcf26c754",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 15
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 0.2
+        },
+        "protein": {
+          "doubleValue": 0.1
+        },
+        "fat": {
+          "doubleValue": 11
+        },
+        "gramsPerTbsp": {
+          "doubleValue": 15
+        },
+        "gramsPerTsp": {
+          "doubleValue": 5
+        },
+        "name": {
+          "stringValue": "마요네즈"
+        },
+        "nameKo": {
+          "stringValue": "마요네즈"
+        },
+        "createdAt": {
+          "integerValue": "1790853820398"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/cumin",
+      "fields": {
+        "name": {
+          "stringValue": "Ground cumin"
+        },
+        "nameKo": {
+          "stringValue": "큐민 가루"
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "carbs": {
+          "doubleValue": 44.2
+        },
+        "protein": {
+          "doubleValue": 17.8
+        },
+        "fat": {
+          "doubleValue": 22.3
+        },
+        "createdAt": {
+          "integerValue": "1790854213279"
+        }
+      },
+      "createTime": "2026-10-01T11:30:14.127926Z",
+      "updateTime": "2026-10-01T11:30:14.127926Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/dZG543p9EPQddoltNyUv",
+      "fields": {
+        "id": {
+          "stringValue": "dZG543p9EPQddoltNyUv"
+        },
+        "gramsPerEach": {
+          "doubleValue": 130
+        },
+        "nameKo": {
+          "stringValue": "가지"
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 3.8
+        },
+        "protein": {
+          "doubleValue": 0.8
+        },
+        "fat": {
+          "doubleValue": 0.2
+        },
+        "name": {
+          "stringValue": "가지"
+        },
+        "baseAmount": {
+          "doubleValue": 130
+        }
+      },
+      "createTime": "2026-07-06T11:47:37.067101Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/diced-tomatoes",
+      "fields": {
+        "name": {
+          "stringValue": "Diced tomatoes (canned)"
+        },
+        "nameKo": {
+          "stringValue": "다진 토마토 (통조림)"
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "carbs": {
+          "doubleValue": 3.9
+        },
+        "protein": {
+          "doubleValue": 0.9
+        },
+        "fat": {
+          "doubleValue": 0.2
+        },
+        "createdAt": {
+          "integerValue": "1790854213278"
+        }
+      },
+      "createTime": "2026-10-01T11:30:14.127926Z",
+      "updateTime": "2026-10-01T11:30:14.127926Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/ginger-powder",
+      "fields": {
+        "name": {
+          "stringValue": "Ginger powder"
+        },
+        "nameKo": {
+          "stringValue": "생강가루"
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "carbs": {
+          "doubleValue": 54
+        },
+        "protein": {
+          "doubleValue": 6
+        },
+        "fat": {
+          "doubleValue": 2
+        },
+        "createdAt": {
+          "integerValue": "1790854213281"
+        },
+        "gramsPerTbsp": {
+          "doubleValue": 15
+        }
+      },
+      "createTime": "2026-10-01T11:30:14.127926Z",
+      "updateTime": "2026-10-01T11:30:14.127926Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/iRdGAm11O0WrEGsFCQ2j",
+      "fields": {
+        "nameKo": {
+          "stringValue": "후추가루"
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 1.3
+        },
+        "protein": {
+          "doubleValue": 0.2
+        },
+        "fat": {
+          "doubleValue": 0.1
+        },
+        "name": {
+          "stringValue": "후추가루"
+        },
+        "gramsPerTsp": {
+          "doubleValue": 2
+        },
+        "baseAmount": {
+          "doubleValue": 2
+        },
+        "legacyIds": {
+          "arrayValue": {
+            "values": [
+              {
+                "stringValue": "black-pepper"
+              }
+            ]
+          }
+        }
+      },
+      "createTime": "2026-07-05T12:17:05.350606Z",
+      "updateTime": "2026-10-01T11:30:14.127926Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/jEqm93wSTmv5KCvkGM9q",
+      "fields": {
+        "baseAmount": {
+          "integerValue": "300"
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "integerValue": "228"
+        },
+        "protein": {
+          "integerValue": "36"
+        },
+        "fat": {
+          "integerValue": "3"
+        },
+        "nameKo": {
+          "stringValue": "강력분 (백설. 밀가루)"
+        },
+        "name": {
+          "stringValue": "강력분 (백설. 밀가루)"
+        }
+      },
+      "createTime": "2026-07-07T01:18:08.505768Z",
+      "updateTime": "2026-10-01T11:30:14.127926Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/jHed3fhQSNmZb2hebHL8",
+      "fields": {
+        "nameKo": {
+          "stringValue": "빵가루"
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "name": {
+          "stringValue": "Breadcrumbs"
+        },
+        "id": {
+          "stringValue": "jHed3fhQSNmZb2hebHL8"
+        },
+        "carbs": {
+          "doubleValue": 70
+        },
+        "gramsPerTbsp": {
+          "doubleValue": 16.666666666666668
+        },
+        "protein": {
+          "doubleValue": 10
+        },
+        "fat": {
+          "doubleValue": 2
+        },
+        "gramsPerTsp": {
+          "doubleValue": 5.555555555555555
+        },
+        "baseAmount": {
+          "doubleValue": 100
+        }
+      },
+      "createTime": "2026-07-06T11:47:37.087643Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/jjajang-powder",
+      "fields": {
+        "name": {
+          "stringValue": "Jjajang powder"
+        },
+        "nameKo": {
+          "stringValue": "짜장가루"
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "carbs": {
+          "doubleValue": 62
+        },
+        "protein": {
+          "doubleValue": 10
+        },
+        "fat": {
+          "doubleValue": 5
+        },
+        "createdAt": {
+          "integerValue": "1790854213281"
+        }
+      },
+      "createTime": "2026-10-01T11:30:14.127926Z",
+      "updateTime": "2026-10-01T11:30:14.127926Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/jlmPkV112g6rFJlOW3va",
+      "fields": {
+        "name": {
+          "stringValue": "Tomato Hall (Julieto)"
+        },
+        "nameKo": {
+          "stringValue": "토마토홀 (줄리에토)"
+        },
+        "id": {
+          "stringValue": "jlmPkV112g6rFJlOW3va"
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 16
+        },
+        "gramsPerCan": {
+          "doubleValue": 400
+        },
+        "protein": {
+          "doubleValue": 3
+        },
+        "fat": {
+          "doubleValue": 0.5
+        },
+        "gramsPerPack": {
+          "doubleValue": 400
+        },
+        "baseAmount": {
+          "doubleValue": 400
+        }
+      },
+      "createTime": "2026-07-07T01:18:08.249069Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/kidney-beans",
+      "fields": {
+        "name": {
+          "stringValue": "Kidney beans (canned, drained)"
+        },
+        "nameKo": {
+          "stringValue": "강낭콩 (통조림, 물기 제거)"
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "carbs": {
+          "doubleValue": 22.8
+        },
+        "protein": {
+          "doubleValue": 8.7
+        },
+        "fat": {
+          "doubleValue": 0.5
+        },
+        "createdAt": {
+          "integerValue": "1790854213278"
+        }
+      },
+      "createTime": "2026-10-01T11:30:14.127926Z",
+      "updateTime": "2026-10-01T11:30:14.127926Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/kjjPpy8hPKVpedeBHExH",
+      "fields": {
+        "nameKo": {
+          "stringValue": "마요네즈 (하프)"
+        },
+        "name": {
+          "stringValue": "Mayonnaise (low-fat)"
+        },
+        "id": {
+          "stringValue": "kjjPpy8hPKVpedeBHExH"
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 2
+        },
+        "gramsPerTbsp": {
+          "doubleValue": 15
+        },
+        "protein": {
+          "doubleValue": 0.2
+        },
+        "fat": {
+          "doubleValue": 5
+        },
+        "gramsPerTsp": {
+          "doubleValue": 5
+        },
+        "baseAmount": {
+          "doubleValue": 15
+        }
+      },
+      "createTime": "2026-07-05T12:17:05.541316Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/lzOhIxClIImcUDhJogLg",
+      "fields": {
+        "name": {
+          "stringValue": "curry powder"
+        },
+        "nameKo": {
+          "stringValue": "카레가루"
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 65
+        },
+        "gramsPerTbsp": {
+          "doubleValue": 16.666666666666668
+        },
+        "protein": {
+          "doubleValue": 8
+        },
+        "fat": {
+          "doubleValue": 10
+        },
+        "gramsPerTsp": {
+          "doubleValue": 5.555555555555555
+        },
+        "baseAmount": {
+          "doubleValue": 100
+        }
+      },
+      "createTime": "2026-07-09T04:33:55.946209Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/myqweahoroS1k1eaTQmi",
+      "fields": {
+        "name": {
+          "stringValue": "onion"
+        },
+        "nameKo": {
+          "stringValue": "양파"
+        },
+        "gramsPerEach": {
+          "doubleValue": 150
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 12
+        },
+        "protein": {
+          "doubleValue": 1.5
+        },
+        "fat": {
+          "doubleValue": 0.1
+        },
+        "baseAmount": {
+          "doubleValue": 150
+        }
+      },
+      "createTime": "2026-07-09T04:33:55.365641Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/ngAIumXWqKb1iNdwgKUR",
+      "fields": {
+        "name": {
+          "stringValue": "sesame oil"
+        },
+        "nameKo": {
+          "stringValue": "참기름"
+        },
+        "baseAmount": {
+          "integerValue": "1"
+        },
+        "baseUnit": {
+          "stringValue": "T"
+        },
+        "carbs": {
+          "integerValue": "0"
+        },
+        "protein": {
+          "integerValue": "0"
+        },
+        "fat": {
+          "integerValue": "14"
+        }
+      },
+      "createTime": "2026-07-09T04:33:55.884838Z",
+      "updateTime": "2026-07-09T04:33:55.884838Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/oPt5dRoG6qUTrWvCVYBz",
+      "fields": {
+        "nameKo": {
+          "stringValue": "멸치"
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "name": {
+          "stringValue": "Anchovy"
+        },
+        "id": {
+          "stringValue": "oPt5dRoG6qUTrWvCVYBz"
+        },
+        "carbs": {
+          "doubleValue": 1
+        },
+        "protein": {
+          "doubleValue": 18
+        },
+        "gramsPerCup": {
+          "doubleValue": 30
+        },
+        "fat": {
+          "doubleValue": 2
+        },
+        "baseAmount": {
+          "doubleValue": 30
+        }
+      },
+      "createTime": "2026-07-06T11:50:44.829512Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/pork",
+      "fields": {
+        "name": {
+          "stringValue": "Pork"
+        },
+        "nameKo": {
+          "stringValue": "돼지고기"
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "carbs": {
+          "doubleValue": 0
+        },
+        "protein": {
+          "doubleValue": 20.8
+        },
+        "fat": {
+          "doubleValue": 8
+        },
+        "createdAt": {
+          "integerValue": "1790854213281"
+        }
+      },
+      "createTime": "2026-10-01T11:30:14.127926Z",
+      "updateTime": "2026-10-01T11:30:14.127926Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/s1ot2Hn8nAanj9qZNFKq",
+      "fields": {
+        "name": {
+          "stringValue": "rice cake"
+        },
+        "nameKo": {
+          "stringValue": "떡"
+        },
+        "baseAmount": {
+          "integerValue": "200"
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "integerValue": "100"
+        },
+        "protein": {
+          "integerValue": "4"
+        },
+        "fat": {
+          "integerValue": "1"
+        }
+      },
+      "createTime": "2026-07-09T04:33:55.572541Z",
+      "updateTime": "2026-07-09T04:33:55.572541Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/s8WMkf7PVq0E6kkofDH9",
+      "fields": {
+        "nameKo": {
+          "stringValue": "올리브"
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "name": {
+          "stringValue": "Olive"
+        },
+        "id": {
+          "stringValue": "s8WMkf7PVq0E6kkofDH9"
+        },
+        "carbs": {
+          "doubleValue": 6
+        },
+        "gramsPerTbsp": {
+          "doubleValue": 16.666666666666668
+        },
+        "protein": {
+          "doubleValue": 1
+        },
+        "fat": {
+          "doubleValue": 15
+        },
+        "gramsPerTsp": {
+          "doubleValue": 5.555555555555555
+        },
+        "baseAmount": {
+          "doubleValue": 100
+        }
+      },
+      "createTime": "2026-07-07T01:18:08.378575Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/sEaKvOTdKUhczQ07mZuv",
+      "fields": {
+        "nameKo": {
+          "stringValue": "대파"
+        },
+        "baseAmount": {
+          "integerValue": "100"
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "integerValue": "7"
+        },
+        "protein": {
+          "integerValue": "2"
+        },
+        "fat": {
+          "integerValue": "0"
+        },
+        "name": {
+          "stringValue": "Green onion"
+        },
+        "id": {
+          "stringValue": "sEaKvOTdKUhczQ07mZuv"
+        },
+        "gramsPerEach": {
+          "integerValue": "150"
+        }
+      },
+      "createTime": "2026-07-05T11:13:59.809610Z",
+      "updateTime": "2026-07-07T12:42:00.326475Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/skKMHHCCdH6xrfDhCxqX",
+      "fields": {
+        "nameKo": {
+          "stringValue": "물"
+        },
+        "baseAmount": {
+          "integerValue": "257"
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "integerValue": "0"
+        },
+        "protein": {
+          "integerValue": "0"
+        },
+        "fat": {
+          "integerValue": "0"
+        },
+        "name": {
+          "stringValue": "Water"
+        },
+        "id": {
+          "stringValue": "skKMHHCCdH6xrfDhCxqX"
+        },
+        "gramsPerCup": {
+          "integerValue": "240"
+        }
+      },
+      "createTime": "2026-07-07T01:18:08.564690Z",
+      "updateTime": "2026-07-07T12:42:00.498837Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/soy-sauce",
+      "fields": {
+        "name": {
+          "stringValue": "Soy sauce"
+        },
+        "nameKo": {
+          "stringValue": "간장"
+        },
+        "baseUnit": {
+          "stringValue": "ml"
+        },
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "carbs": {
+          "doubleValue": 5
+        },
+        "protein": {
+          "doubleValue": 8
+        },
+        "fat": {
+          "doubleValue": 0
+        },
+        "createdAt": {
+          "integerValue": "1790854213280"
+        },
+        "gramsPerTbsp": {
+          "doubleValue": 15
+        },
+        "gramsPerTsp": {
+          "doubleValue": 5
+        }
+      },
+      "createTime": "2026-10-01T11:30:14.127926Z",
+      "updateTime": "2026-10-01T11:30:14.127926Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/tomato-paste",
+      "fields": {
+        "name": {
+          "stringValue": "Tomato paste"
+        },
+        "nameKo": {
+          "stringValue": "토마토 페이스트"
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "carbs": {
+          "doubleValue": 18.9
+        },
+        "protein": {
+          "doubleValue": 4.3
+        },
+        "fat": {
+          "doubleValue": 0.2
+        },
+        "createdAt": {
+          "integerValue": "1790854213278"
+        }
+      },
+      "createTime": "2026-10-01T11:30:14.127926Z",
+      "updateTime": "2026-10-01T11:30:14.127926Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/uakmIJAkRUgGzzTarmo0",
+      "fields": {
+        "name": {
+          "stringValue": "Butter (no salt added)"
+        },
+        "nameKo": {
+          "stringValue": "버터 (소금 무첨가)"
+        },
+        "baseAmount": {
+          "integerValue": "15"
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "integerValue": "0"
+        },
+        "protein": {
+          "integerValue": "0"
+        },
+        "fat": {
+          "integerValue": "12"
+        }
+      },
+      "createTime": "2026-07-05T12:17:05.240631Z",
+      "updateTime": "2026-07-05T12:17:05.240631Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/wsISdD0sZqfZxiJkEgK4",
+      "fields": {
+        "name": {
+          "stringValue": "Plum juice"
+        },
+        "nameKo": {
+          "stringValue": "매실액"
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "id": {
+          "stringValue": "wsISdD0sZqfZxiJkEgK4"
+        },
+        "carbs": {
+          "doubleValue": 75
+        },
+        "gramsPerTbsp": {
+          "doubleValue": 16.666666666666668
+        },
+        "protein": {
+          "doubleValue": 0.1
+        },
+        "fat": {
+          "doubleValue": 0
+        },
+        "gramsPerTsp": {
+          "doubleValue": 5.555555555555555
+        },
+        "baseAmount": {
+          "doubleValue": 100
+        }
+      },
+      "createTime": "2026-07-07T01:18:08.458736Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/yzGYvY3ytIneCU1yowa1",
+      "fields": {
+        "name": {
+          "stringValue": "sugar"
+        },
+        "nameKo": {
+          "stringValue": "설탕"
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 100
+        },
+        "gramsPerTbsp": {
+          "doubleValue": 16.666666666666668
+        },
+        "protein": {
+          "doubleValue": 0
+        },
+        "fat": {
+          "doubleValue": 0
+        },
+        "gramsPerTsp": {
+          "doubleValue": 5.555555555555555
+        },
+        "baseAmount": {
+          "doubleValue": 100
+        }
+      },
+      "createTime": "2026-07-09T04:33:55.699942Z",
+      "updateTime": "2026-10-01T11:23:41.591806Z"
+    },
+    "readTime": "2026-10-04T01:00:14.397266Z"
+  }
+]

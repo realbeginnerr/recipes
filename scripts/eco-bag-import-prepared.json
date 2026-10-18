@@ -1,0 +1,194 @@
+[
+    {
+        "id":  "shop-eco-bag",
+        "version":  1,
+        "createdAt":  1791856451933,
+        "updatedAt":  1791856451933,
+        "name":  "에코백",
+        "sku":  "SHOP-ECO-BAG",
+        "categories":  [
+                           "에코백",
+                           "",
+                           ""
+                       ],
+        "teaTags":  [
+                        "에코백"
+                    ],
+        "compositionType":  "single",
+        "groupBuy":  {
+                         "participants":  null
+                     },
+        "blend":  {
+                      "components":  [
+
+                                     ],
+                      "waterMl":  250
+                  },
+        "brand":  "",
+        "manufacturer":  "",
+        "type":  "physical",
+        "summary":  "",
+        "description":  "",
+        "purchaseUrl":  "",
+        "images":  [
+                       {
+                           "alt":  "에코백",
+                           "url":  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2EdhCJht1WNRWnknjFRiR4xnYKMAM5SwGAQ5UAX302g\u0026s=10",
+                           "id":  "cover"
+                       }
+                   ],
+        "pricing":  {
+                        "regular":  null,
+                        "discount":  null,
+                        "discountStart":  "",
+                        "discountEnd":  "",
+                        "tax":  "taxable"
+                    },
+        "optionsEnabled":  false,
+        "options":  [
+
+                    ],
+        "variants":  [
+
+                     ],
+        "inventory":  {
+                          "enabled":  false,
+                          "stock":  0,
+                          "safetyStock":  0,
+                          "soldOutThreshold":  0,
+                          "stopWhenSoldOut":  true,
+                          "preorder":  false,
+                          "restockDate":  "",
+                          "status":  "available"
+                      },
+        "shipping":  {
+                         "type":  "parcel",
+                         "feeType":  "paid",
+                         "fee":  null,
+                         "freeThreshold":  null,
+                         "extraFee":  null,
+                         "leadDays":  null,
+                         "carrier":  "",
+                         "weight":  null,
+                         "width":  null,
+                         "depth":  null,
+                         "height":  null,
+                         "bundle":  false
+                     },
+        "policySelection":  {
+                                "shipping":  "common",
+                                "exchange":  "common",
+                                "refund":  "common"
+                            },
+        "policies":  {
+                         "shipping":  {
+                                          "type":  "parcel",
+                                          "carrier":  "",
+                                          "originAddress":  "",
+                                          "leadDays":  null,
+                                          "regions":  "",
+                                          "international":  false,
+                                          "bundle":  false,
+                                          "feeType":  "paid",
+                                          "fee":  null,
+                                          "freeThreshold":  null,
+                                          "jejuFee":  null,
+                                          "remoteFee":  null,
+                                          "quantityFee":  null,
+                                          "individualFee":  false,
+                                          "estimatedDays":  "",
+                                          "cutoffTime":  "",
+                                          "holidays":  "",
+                                          "delayNotice":  "",
+                                          "guidance":  ""
+                                      },
+                         "exchange":  {
+                                          "enabled":  true,
+                                          "days":  null,
+                                          "reasons":  "",
+                                          "method":  "",
+                                          "changeFee":  null,
+                                          "defectFee":  0,
+                                          "remoteFee":  null,
+                                          "payer":  "buyer",
+                                          "collectionMethod":  "",
+                                          "inspection":  "",
+                                          "reshipping":  "",
+                                          "guidance":  ""
+                                      },
+                         "refund":  {
+                                        "enabled":  true,
+                                        "days":  null,
+                                        "reasons":  "",
+                                        "method":  "",
+                                        "changeFee":  null,
+                                        "defectFee":  0,
+                                        "remoteFee":  null,
+                                        "payer":  "buyer",
+                                        "exceptions":  [
+
+                                                       ],
+                                        "exceptionNotice":  false,
+                                        "customConsent":  false,
+                                        "collectionMethod":  "",
+                                        "inspection":  "",
+                                        "refundMethod":  "original",
+                                        "refundDays":  null,
+                                        "partial":  true,
+                                        "settlement":  "",
+                                        "guidance":  ""
+                                    },
+                         "address":  {
+                                         "recipient":  "",
+                                         "phone":  "",
+                                         "postcode":  "",
+                                         "address":  "",
+                                         "detail":  "",
+                                         "carrier":  "",
+                                         "notice":  "",
+                                         "customerService":  ""
+                                     }
+                     },
+        "policyVersion":  0,
+        "disclosure":  {
+                           "country":  "",
+                           "manufactureDate":  "",
+                           "expiryDate":  "",
+                           "material":  "",
+                           "capacity":  "",
+                           "contents":  "",
+                           "storage":  "",
+                           "precautions":  "",
+                           "certification":  "",
+                           "support":  "",
+                           "foodType":  "",
+                           "importer":  "",
+                           "nutrition":  "",
+                           "allergens":  "",
+                           "gmo":  "",
+                           "additional":  ""
+                       },
+        "seo":  {
+                    "title":  "에코백",
+                    "description":  "",
+                    "slug":  "eco-bag"
+                },
+        "saleStatus":  "active",
+        "visibility":  "public",
+        "publishAt":  "",
+        "saleStart":  "",
+        "saleEnd":  "",
+        "exposureStart":  "",
+        "exposureEnd":  "",
+        "featured":  false,
+        "newProduct":  true,
+        "order":  0,
+        "minQuantity":  1,
+        "maxQuantity":  null,
+        "perPersonLimit":  null,
+        "draft":  false,
+        "deleted":  false,
+        "publicAfter":  0,
+        "publicUntil":  8640000000000000
+    }
+]

@@ -1,0 +1,175 @@
+{
+  "name": "projects/recipes-5a663/databases/(default)/documents/recipes/WcLik1YkmcONHWKo7Njg",
+  "fields": {
+    "categories": {
+      "arrayValue": {
+        "values": [
+          {
+            "stringValue": "한식"
+          }
+        ]
+      }
+    },
+    "name": {
+      "stringValue": "Soybean Paste Stew"
+    },
+    "nameKo": {
+      "stringValue": "된장찌개"
+    },
+    "imageUrl": {
+      "stringValue": "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FbQF6QM%2FdJMcaby9LMc%2FAAAAAAAAAAAAAAAAAAAAAMQzLwCrLetLsJyLpxhneKog4qyKfQTKN8sRrUpKdmCb%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1793458799%26allow_ip%3D%26allow_referer%3D%26signature%3DzrcaiSgcFRJ4RICtaTD4ySSlp5I%253D"
+    },
+    "imageUrls": {
+      "arrayValue": {}
+    },
+    "memo": {
+      "stringValue": ""
+    },
+    "tasteRating": {
+      "integerValue": "3"
+    },
+    "divisionCount": {
+      "integerValue": "4"
+    },
+    "createdAt": {
+      "integerValue": "1791364180764"
+    },
+    "link": {
+      "stringValue": ""
+    },
+    "items": {
+      "arrayValue": {
+        "values": [
+          {
+            "mapValue": {
+              "fields": {
+                "ingredientId": {
+                  "stringValue": "csv-83704f823568fd14d4d2a1be"
+                },
+                "amount": {
+                  "integerValue": "50"
+                },
+                "unit": {
+                  "stringValue": "g"
+                }
+              }
+            }
+          },
+          {
+            "mapValue": {
+              "fields": {
+                "ingredientId": {
+                  "stringValue": "csv-5802c102d898452a1383bb41"
+                },
+                "amount": {
+                  "integerValue": "120"
+                },
+                "unit": {
+                  "stringValue": "g"
+                }
+              }
+            }
+          },
+          {
+            "mapValue": {
+              "fields": {
+                "ingredientId": {
+                  "stringValue": "KiclanzESLnu5nzgri5x"
+                },
+                "amount": {
+                  "integerValue": "15"
+                },
+                "unit": {
+                  "stringValue": "g"
+                }
+              }
+            }
+          },
+          {
+            "mapValue": {
+              "fields": {
+                "ingredientId": {
+                  "stringValue": "oPt5dRoG6qUTrWvCVYBz"
+                },
+                "amount": {
+                  "integerValue": "85"
+                },
+                "unit": {
+                  "stringValue": "g"
+                }
+              }
+            }
+          },
+          {
+            "mapValue": {
+              "fields": {
+                "ingredientId": {
+                  "stringValue": "9WeXrM3WaIuTgQLipEdZ"
+                },
+                "amount": {
+                  "integerValue": "75"
+                },
+                "unit": {
+                  "stringValue": "g"
+                }
+              }
+            }
+          },
+          {
+            "mapValue": {
+              "fields": {
+                "ingredientId": {
+                  "stringValue": "csv-304ad3aa5ceaece1a30a1e56"
+                },
+                "amount": {
+                  "integerValue": "200"
+                },
+                "unit": {
+                  "stringValue": "g"
+                }
+              }
+            }
+          },
+          {
+            "mapValue": {
+              "fields": {
+                "ingredientId": {
+                  "stringValue": "csv-af49be09c7da5e5617ba77fa"
+                },
+                "amount": {
+                  "integerValue": "400"
+                },
+                "unit": {
+                  "stringValue": "g"
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "sideItems": {
+      "arrayValue": {
+        "values": [
+          {
+            "mapValue": {
+              "fields": {
+                "ingredientId": {
+                  "stringValue": "5BMPorHnPPSl3DhXyOcf"
+                },
+                "amount": {
+                  "integerValue": "140"
+                },
+                "unit": {
+                  "stringValue": "g"
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "createTime": "2026-10-07T09:09:41.093398Z",
+  "updateTime": "2026-10-09T13:47:04.961691Z"
+}

@@ -18,13 +18,14 @@ export function TextField({ label, value, onChange, error, hint, required, type 
     : <Input id={id} type={type} value={value} onChange={event => onChange(event.target.value)} aria-invalid={!!error} aria-describedby={descriptionId} disabled={disabled} />}</Field>
 }
 export function NumberField({ label, value, onChange, error, required, unit, integer = true, disabled = false }: { label: string; value: number | null; onChange: (value: number | null) => void; error?: string; required?: boolean; unit?: string; integer?: boolean; disabled?: boolean }) {
-  const format = (number: number | null) => number === null ? '' : number.toLocaleString('en-US', { maximumFractionDigits: 4 })
+  const format = (number: number | null) => number === null ? '' : number.toLocaleString('en-US', { maximumFractionDigits: 1 })
   const [display, setDisplay] = useState(() => format(value))
-  useEffect(() => { setDisplay(format(value)) }, [value])
-  return <Field label={label} error={error} required={required}>{(id, descriptionId) => <div className="product-unit-input"><Input id={id} type="text" inputMode={integer ? 'numeric' : 'decimal'} value={display} onBlur={() => setDisplay(format(value))} onChange={event => {
+  const [focused, setFocused] = useState(false)
+  useEffect(() => { if (!focused) setDisplay(format(value)) }, [value, focused])
+  return <Field label={label} error={error} required={required}>{(id, descriptionId) => <div className="product-unit-input"><Input id={id} type="text" inputMode={integer ? 'numeric' : 'decimal'} value={display} onFocus={() => setFocused(true)} onBlur={() => { setFocused(false); setDisplay(format(value)) }} onChange={event => {
     const raw = event.target.value.replace(/,/g, '')
     if (!raw) { setDisplay(''); onChange(null) }
-    else if ((integer ? /^\d{1,13}$/ : /^\d{1,13}(\.\d{0,4})?$/).test(raw)) { const [whole, fraction] = raw.split('.'); setDisplay(Number(whole).toLocaleString('en-US') + (fraction === undefined ? '' : `.${fraction}`)); onChange(Number(raw)) }
+    else if ((integer ? /^\d{1,13}$/ : /^\d{1,13}(\.\d{0,4})?$/).test(raw)) { const [whole, fraction] = raw.split('.'); setDisplay(Number(whole).toLocaleString('en-US', { maximumFractionDigits: 1 }) + (fraction === undefined ? '' : `.${fraction}`)); onChange(Number(raw)) }
   }} aria-invalid={!!error} aria-describedby={descriptionId} disabled={disabled} />{unit && <span>{unit}</span>}</div>}</Field>
 }
 export function SelectField<T extends string>({ label, value, options, onChange, error }: { label: string; value: T; options: readonly { value: T; label: string }[]; onChange: (value: T) => void; error?: string }) {

@@ -1,3 +1,4 @@
+import { formatTableNumber } from '../utils/numberFormatting'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
@@ -241,7 +242,7 @@ export function IngredientEditPage() {
       </fieldset>
 
       <fieldset className="flex flex-col gap-3">
-        <legend className="text-sm font-semibold">{isKo ? `탄단지 (기준 ${draft.baseAmount}${draft.baseUnit})` : `Macros (per ${draft.baseAmount} ${draft.baseUnit})`}</legend>
+        <legend className="text-sm font-semibold">{isKo ? `탄단지 (기준 ${formatTableNumber(draft.baseAmount)}${draft.baseUnit})` : `Macros (per ${formatTableNumber(draft.baseAmount)} ${draft.baseUnit})`}</legend>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
           {([
             ['carbs', isKo ? '탄수화물 (g)' : 'Carbs (g)'],

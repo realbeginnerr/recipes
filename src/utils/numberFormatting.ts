@@ -1,11 +1,11 @@
 export function formatTableNumber(
   value: number,
-  maximumFractionDigits = 20,
+  maximumFractionDigits = 1,
   minimumFractionDigits = 0,
 ): string {
   return new Intl.NumberFormat('en-US', {
     useGrouping: true,
-    minimumFractionDigits,
-    maximumFractionDigits,
+    minimumFractionDigits: Math.min(1, minimumFractionDigits, maximumFractionDigits),
+    maximumFractionDigits: Math.min(1, maximumFractionDigits),
   }).format(value)
 }

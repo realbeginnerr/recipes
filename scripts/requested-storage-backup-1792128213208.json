@@ -1,0 +1,137 @@
+[
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/sEaKvOTdKUhczQ07mZuv",
+      "fields": {
+        "nameKo": {
+          "stringValue": "대파"
+        },
+        "baseAmount": {
+          "integerValue": "100"
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "integerValue": "7"
+        },
+        "protein": {
+          "integerValue": "2"
+        },
+        "fat": {
+          "integerValue": "0"
+        },
+        "name": {
+          "stringValue": "Green onion"
+        },
+        "id": {
+          "stringValue": "sEaKvOTdKUhczQ07mZuv"
+        },
+        "gramsPerEach": {
+          "integerValue": "150"
+        },
+        "imageUrl": {
+          "stringValue": ""
+        },
+        "storageLocation": {
+          "stringValue": "냉장실"
+        }
+      },
+      "createTime": "2026-07-05T11:13:59.809610Z",
+      "updateTime": "2026-10-07T10:14:21.437514Z"
+    },
+    "name": "대파",
+    "location": "냉동실"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/csv-ab66b08942bf440602ba1b46",
+      "fields": {
+        "baseAmount": {
+          "doubleValue": 100
+        },
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "carbs": {
+          "doubleValue": 5
+        },
+        "protein": {
+          "doubleValue": 8
+        },
+        "fat": {
+          "doubleValue": 0
+        },
+        "gramsPerTbsp": {
+          "doubleValue": 16.666666666666668
+        },
+        "gramsPerTsp": {
+          "doubleValue": 5.555555555555555
+        },
+        "name": {
+          "stringValue": "참치액"
+        },
+        "nameKo": {
+          "stringValue": "참치액"
+        },
+        "createdAt": {
+          "integerValue": "1790853820402"
+        },
+        "imageUrl": {
+          "stringValue": "https://images.unsplash.com/photo-1571167366136-b57e973b7c39?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400"
+        },
+        "storageLocation": {
+          "stringValue": "실온보관"
+        }
+      },
+      "createTime": "2026-10-01T11:23:41.591806Z",
+      "updateTime": "2026-10-07T10:14:21.437514Z"
+    },
+    "name": "참치액",
+    "location": "냉장실"
+  },
+  {
+    "document": {
+      "name": "projects/recipes-5a663/databases/(default)/documents/ingredients/829YpxVHPDAcLsnd136y",
+      "fields": {
+        "baseUnit": {
+          "stringValue": "g"
+        },
+        "nameKo": {
+          "stringValue": "깨 (참깨. 통깨)"
+        },
+        "carbs": {
+          "doubleValue": 1.8
+        },
+        "gramsPerTbsp": {
+          "doubleValue": 8
+        },
+        "protein": {
+          "doubleValue": 1.5
+        },
+        "fat": {
+          "doubleValue": 4
+        },
+        "name": {
+          "stringValue": "깨 (참깨. 통깨)"
+        },
+        "gramsPerTsp": {
+          "doubleValue": 2.6666666666666665
+        },
+        "baseAmount": {
+          "doubleValue": 8
+        },
+        "imageUrl": {
+          "stringValue": "/recipes/images/깨 (참깨. 통깨).png"
+        },
+        "storageLocation": {
+          "stringValue": "실온보관"
+        }
+      },
+      "createTime": "2026-07-06T11:50:44.934586Z",
+      "updateTime": "2026-10-07T10:14:21.437514Z"
+    },
+    "name": "깨 (참깨. 통깨)",
+    "location": "냉장실"
+  }
+]

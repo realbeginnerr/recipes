@@ -31,10 +31,10 @@ export function SiteHeader() {
         <Link className="reference-brand" to="/" aria-label="T's Recipe 홈">
           T'S RECIPE
         </Link>
-        <nav className="reference-desktop-nav" aria-label={ko ? '주 메뉴' : 'Main navigation'}>{navLinks}{contactLink}{adminLink}</nav>
-        <div className="reference-language-toggle"><LanguageToggle /></div>
+        <nav className="reference-desktop-nav" aria-label={ko ? '주 메뉴' : 'Main navigation'}>{navLinks}{contactLink}</nav>
+        <div className="reference-language-toggle">{adminLink}<LanguageToggle /></div>
         <Button variant="ghost" size="menu" ref={menuButton} className="reference-menu-toggle" aria-expanded={menuOpen} aria-controls="mobile-navigation" aria-label={ko ? (menuOpen ? '메뉴 닫기' : '메뉴 열기') : 'Toggle menu'} onClick={() => setMenuOpen(value => !value)}><span /><span /><span /></Button>
       </div>
-      {menuOpen && <nav className="reference-mobile-nav" id="mobile-navigation" aria-label={ko ? '모바일 메뉴' : 'Mobile navigation'}>{navLinks}{contactLink}{adminLink}<div className="reference-mobile-language-toggle"><LanguageToggle /></div></nav>}
+      {menuOpen && <nav className="reference-mobile-nav" id="mobile-navigation" aria-label={ko ? '모바일 메뉴' : 'Mobile navigation'}>{navLinks}{contactLink}<div className="reference-mobile-language-toggle">{adminLink}<LanguageToggle /></div></nav>}
     </header>
 }

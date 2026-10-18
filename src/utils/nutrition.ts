@@ -49,7 +49,7 @@ export function roundToTwo(value: number): number {
 }
 
 export function formatAmount(value: number): string {
-  return roundToOne(value).toFixed(1)
+  return formatTableNumber(value, 1)
 }
 
 export function formatMacro(value: number): string {

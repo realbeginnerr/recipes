@@ -18,7 +18,7 @@
 .catalog-count { margin: 0 0 24px; color: #899591; font-size: 14px; }
 .catalog-count-row { display: flex; align-items: baseline; gap: 12px; margin-bottom: 24px; }
 .catalog-count-row .catalog-count { margin: 0; }
-.catalog-count-row .catalog-intro__subtle-action { margin: 0; flex-shrink: 0; }
+.catalog-count-row .catalog-intro__subtle-action { margin: 0 0 0 auto; flex-shrink: 0; }
 .catalog-count strong { color: #122B22; font-weight: 500; }
 .recipe-catalog .recipe-grid, .catalog-skeletons { display: grid; grid-template-columns: minmax(0, 1fr); gap: 24px; margin: 0; }
 .recipe-list-catalog .recipe-grid,

@@ -20,7 +20,7 @@ function baseGrams(ingredient: FirestoreIngredient): number | undefined {
 }
 
 function format(value: number | undefined) {
-  return value !== undefined && Number.isFinite(value) ? formatTableNumber(Number(value.toFixed(3))) : 'N/A'
+  return value !== undefined && Number.isFinite(value) ? formatTableNumber(value) : 'N/A'
 }
 
 export function IngredientCsvTable({ ingredients }: { ingredients: FirestoreIngredient[] }) {

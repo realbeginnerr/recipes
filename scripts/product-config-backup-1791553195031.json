@@ -1,0 +1,52 @@
+{
+  "previous": [
+    {
+      "name": "projects/recipes-5a663/releases/cloud.firestore",
+      "rulesetName": "projects/recipes-5a663/rulesets/dacf9e7f-b77e-4685-868b-8a6796903a27",
+      "createTime": "2026-07-03T07:11:34.742007Z",
+      "updateTime": "2026-10-09T08:56:45.425881Z"
+    },
+    {
+      "name": "projects/recipes-5a663/releases/firebase.storage/recipes-5a663.firebasestorage.app",
+      "rulesetName": "projects/recipes-5a663/rulesets/46a4be1e-948c-4c07-9ded-0dbadca54b06",
+      "createTime": "2026-10-09T08:56:46.920829Z",
+      "updateTime": "2026-10-09T08:56:46.920829Z"
+    }
+  ],
+  "currentIndexes": {
+    "indexes": [
+      {
+        "name": "projects/recipes-5a663/databases/(default)/collectionGroups/products/indexes/CICAgOjXh4EK",
+        "queryScope": "COLLECTION",
+        "fields": [
+          {
+            "fieldPath": "visibility",
+            "order": "ASCENDING"
+          },
+          {
+            "fieldPath": "draft",
+            "order": "ASCENDING"
+          },
+          {
+            "fieldPath": "deleted",
+            "order": "ASCENDING"
+          },
+          {
+            "fieldPath": "publicAfter",
+            "order": "ASCENDING"
+          },
+          {
+            "fieldPath": "publicUntil",
+            "order": "ASCENDING"
+          },
+          {
+            "fieldPath": "__name__",
+            "order": "ASCENDING"
+          }
+        ],
+        "state": "READY",
+        "density": "SPARSE_ALL"
+      }
+    ]
+  }
+}

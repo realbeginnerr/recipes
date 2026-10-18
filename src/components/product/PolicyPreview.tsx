@@ -1,7 +1,7 @@
 import type { ShopPolicies } from '../../types/shopPolicy'
 import { withdrawalExceptionLabels } from '../../utils/shopPolicy'
 
-const money = (value: number | null) => value === null ? '미정' : `${value.toLocaleString('en-US')}원`
+const money = (value: number | null) => value === null ? '미정' : `${value.toLocaleString('en-US', { maximumFractionDigits: 1 })}원`
 export function PolicyPreview({ policies }: { policies: ShopPolicies }) {
   const { shipping, exchange, refund, address } = policies
   return <div className="product-policy-preview">

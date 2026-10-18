@@ -1,5 +1,6 @@
 import { RecipeImagesEditor, recipeImageDrafts, type ImageDraft } from './RecipeImagesEditor'
 import { useState, useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { ArrowLeftRight } from 'lucide-react'
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
 import { useLanguage } from '../context/LanguageContext'
@@ -67,6 +68,7 @@ export function RecipeTable({
   const MULTIGRAIN_ID = '__multigrain_rice__'
 
   const { language, t } = useLanguage()
+  const navigate = useNavigate()
   const { isAdmin } = useAdmin()
   const { approvedPath } = useAddPageAccess()
   const canSave = isAdmin || approvedPath === `/recipe/${recipe.id}/edit`
@@ -182,7 +184,10 @@ export function RecipeTable({
         await onSaveRecipe(updated)
         showToast(imageFile
           ? (language === 'ko' ? '사진이 교체되고 레시피가 저장되었습니다.' : 'Photo replaced and recipe saved.')
-          : (language === 'ko' ? '레시피가 저장되었습니다.' : 'Recipe saved.'), 'success')
+          : (language === 'ko' ? '레시피가 저장되었습니다.' : 'Recipe saved.'), 'success', {
+            label: language === 'ko' ? '레시피 보러가기' : 'View recipe',
+            onClick: () => navigate(`/recipe/${updated.id}`),
+          })
       } catch (error) {
         const code = error && typeof error === 'object' && 'code' in error ? String(error.code) : 'unknown'
         console.error('Recipe save failed', error)
@@ -920,7 +925,7 @@ export function RecipeTable({
         )}
       />
 
-      {toast && <Toast message={toast.message} type={toast.type} onClose={closeToast} duration={toast.type === 'info' ? 0 : 5000} />}
+      {toast && <Toast message={toast.message} type={toast.type} action={toast.action} onClose={closeToast} duration={toast.type === 'info' ? 0 : toast.action ? 8000 : 5000} />}
       <Modal
         isOpen={isGuestSaveModalOpen}
         onClose={() => setIsGuestSaveModalOpen(false)}

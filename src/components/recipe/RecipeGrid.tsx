@@ -1,3 +1,4 @@
+import { formatTableNumber } from '../../utils/numberFormatting'
 import { CatalogTags } from '../catalog/CatalogTags'
 import { FoodImage } from '../FoodImage'
 import { NutritionSummary } from '../NutritionSummary'
@@ -50,12 +51,12 @@ export function RecipeCard({ recipe, openInNewTab = false, variant = 'recipe' }:
         <CatalogTags tags={categories} />
         {variant === 'product' && description && <p className="product-card-description" title={description}>{description}</p>}
         {variant === 'product' && <div className="product-card-price">
-          <strong>{price === null ? (language === 'ko' ? '가격 미정' : 'Price unavailable') : `${price.toLocaleString('en-US')}${language === 'ko' ? '원' : ' KRW'}`}</strong>
-          {price !== null && regularPrice !== null && price < regularPrice && <del aria-label={language === 'ko' ? '정상 판매가' : 'Regular price'}>{regularPrice.toLocaleString('en-US')}{language === 'ko' ? '원' : ' KRW'}</del>}
+          <strong>{price === null ? (language === 'ko' ? '가격 미정' : 'Price unavailable') : `${price.toLocaleString('en-US', { maximumFractionDigits: 1 })}${language === 'ko' ? '원' : ' KRW'}`}</strong>
+          {price !== null && regularPrice !== null && price < regularPrice && <del aria-label={language === 'ko' ? '정상 판매가' : 'Regular price'}>{regularPrice.toLocaleString('en-US', { maximumFractionDigits: 1 })}{language === 'ko' ? '원' : ' KRW'}</del>}
         </div>}
         {variant === 'recipe' && macros && <>
           <div className="recipe-card__rating"><StarRating label={language === 'ko' ? '맛' : 'Taste'} value={recipe.tasteRating ?? 4} showLabel={false} /></div>
-          <p className="recipe-card__macro-grams">{language === 'ko' ? '탄단지(g)' : 'C/P/F(g)'} <span>{Math.round(macros.carbs)} / {Math.round(macros.protein)} / {Math.round(macros.fat)}</span></p>
+          <p className="recipe-card__macro-grams">{language === 'ko' ? '탄단지(g)' : 'C/P/F(g)'} <span>{formatTableNumber(macros.carbs)} / {formatTableNumber(macros.protein)} / {formatTableNumber(macros.fat)}</span></p>
           <NutritionSummary {...macros} perMeal showRatio={false} />
         </>}
       </div>

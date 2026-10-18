@@ -3,15 +3,17 @@ import { createPortal } from 'react-dom'
 import { Button } from '@/components/ui/button'
 
 type ToastType = 'success' | 'error' | 'info'
+type ToastAction = { label: string; onClick: () => void }
 
 type ToastProps = {
   message: string
   type: ToastType
   onClose: () => void
   duration?: number
+  action?: ToastAction
 }
 
-export function Toast({ message, type, onClose, duration = 3000 }: ToastProps) {
+export function Toast({ message, type, onClose, action, duration = action ? 8000 : 3000 }: ToastProps) {
   const [visible, setVisible] = useState(false)
 
   useEffect(() => {
@@ -32,6 +34,7 @@ export function Toast({ message, type, onClose, duration = 3000 }: ToastProps) {
   return createPortal(
     <div role={type === 'error' ? 'alert' : 'status'} className={`toast toast--${type} ${visible ? 'toast--visible' : ''}`}>
       <span className="toast__message">{message}</span>
+      {action && <Button type="button" variant="link" size="content" className="text-inherit underline" onClick={() => { onClose(); action.onClick() }}>{action.label}</Button>}
       <Button
         type="button"
         variant="ghost"
@@ -48,10 +51,10 @@ export function Toast({ message, type, onClose, duration = 3000 }: ToastProps) {
 }
 
 export function useToast() {
-  const [toast, setToast] = useState<{ message: string; type: ToastType } | null>(null)
+  const [toast, setToast] = useState<{ message: string; type: ToastType; action?: ToastAction } | null>(null)
 
-  const showToast = useCallback((message: string, type: ToastType) => {
-    setToast({ message, type })
+  const showToast = useCallback((message: string, type: ToastType, action?: ToastAction) => {
+    setToast({ message, type, action })
   }, [])
 
   const closeToast = useCallback(() => {

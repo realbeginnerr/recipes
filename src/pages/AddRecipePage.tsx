@@ -454,7 +454,7 @@ export function AddRecipePage() {
         }
       }
 
-      await saveRecipeToFirestore({
+      const recipeId = await saveRecipeToFirestore({
         name: recipeName.trim(),
         nameKo: recipeNameKo.trim(),
         categories: categories.length ? categories : ['기타'],
@@ -475,7 +475,10 @@ export function AddRecipePage() {
       })
 
       trackAddRecipeCompleted(mode as 'sns' | 'manual', recipeNameKo.trim())
-      showToast(isKo ? '레시피가 저장되었습니다.' : 'Recipe saved!', 'success')
+      showToast(isKo ? '레시피가 저장되었습니다.' : 'Recipe saved!', 'success', {
+        label: isKo ? '레시피 보기' : 'View recipe',
+        onClick: () => navigate(`/recipe/${recipeId}`),
+      })
       setRecipeName('')
       setRecipeNameKo('')
       setRecipeLink('')
@@ -1036,7 +1039,7 @@ export function AddRecipePage() {
         </ul>
       </Modal>
 
-      {toast && <Toast message={toast.message} type={toast.type} onClose={closeToast} />}
+      {toast && <Toast message={toast.message} type={toast.type} action={toast.action} onClose={closeToast} />}
     </section>
   )
 }

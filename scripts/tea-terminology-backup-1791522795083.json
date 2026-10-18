@@ -1,0 +1,202 @@
+[
+  {
+    "name": "projects/recipes-5a663/databases/(default)/documents/recipes/Tm2NJxtbz7kzRt2aJfxg",
+    "fields": {
+      "categories": {
+        "arrayValue": {
+          "values": [
+            {
+              "stringValue": "음료"
+            }
+          ]
+        }
+      },
+      "name": {
+        "stringValue": "조용히 있고 싶은 날 (블렌딩티)"
+      },
+      "nameKo": {
+        "stringValue": "조용히 있고 싶은 날 (블렌딩티)"
+      },
+      "imageUrl": {
+        "stringValue": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR9yLskUvz6Ph06S7V0Gvbcut5cYcBJNfEJAAsYlhObunpIB5z_fUHnrjw&s=10"
+      },
+      "imageUrls": {
+        "arrayValue": {}
+      },
+      "memo": {
+        "stringValue": "[조용히 있고 싶은 날]\n- 얼그레이에 라벤더랑 바닐라가 들어가서 향이 차분하고 포근함. \n- 혼자 가만히 쉬고 싶은 날 마시기.\n\n[우려내는 방법]\n- 물 온도: 95도\n- 우리는 시간: 3~4분\n\n[걍 대충 끎는 물 써도 되지만, 굳이 온도 맞추고 싶다면 이렇게]\n- 100℃: 끓자마자 사용\n- 95℃: 끓인 후 뚜껑 열고 약 1분 기다리기\n- 80℃: 끓인 후 뚜껑 열고 약 5분 기다리기"
+      },
+      "tasteRating": {
+        "integerValue": "4"
+      },
+      "divisionCount": {
+        "integerValue": "1"
+      },
+      "createdAt": {
+        "integerValue": "1791455230971"
+      },
+      "link": {
+        "stringValue": ""
+      },
+      "items": {
+        "arrayValue": {
+          "values": [
+            {
+              "mapValue": {
+                "fields": {
+                  "ingredientId": {
+                    "stringValue": "2RMuaAIMU0HST3ZY3j6G"
+                  },
+                  "amount": {
+                    "doubleValue": 2.5
+                  },
+                  "unit": {
+                    "stringValue": "g"
+                  }
+                }
+              }
+            },
+            {
+              "mapValue": {
+                "fields": {
+                  "ingredientId": {
+                    "stringValue": "RQ2WLJepVrdIKbm6grcX"
+                  },
+                  "amount": {
+                    "doubleValue": 0.2
+                  },
+                  "unit": {
+                    "stringValue": "g"
+                  }
+                }
+              }
+            },
+            {
+              "mapValue": {
+                "fields": {
+                  "ingredientId": {
+                    "stringValue": "g8vXkd6a8UtQ2hwrh62C"
+                  },
+                  "amount": {
+                    "doubleValue": 0.5
+                  },
+                  "unit": {
+                    "stringValue": "g"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      "sideItems": {
+        "arrayValue": {}
+      }
+    },
+    "createTime": "2026-10-08T10:27:11.219521Z",
+    "updateTime": "2026-10-09T04:47:55.786808Z"
+  },
+  {
+    "name": "projects/recipes-5a663/databases/(default)/documents/recipes/tea-Tm2NJxtbz7kzRt2aJfxg",
+    "fields": {
+      "categories": {
+        "arrayValue": {
+          "values": [
+            {
+              "stringValue": "블렌딩 티"
+            }
+          ]
+        }
+      },
+      "nameKo": {
+        "stringValue": "조용히 있고 싶은 날 (블렌딩티)"
+      },
+      "items": {
+        "arrayValue": {
+          "values": [
+            {
+              "mapValue": {
+                "fields": {
+                  "amount": {
+                    "doubleValue": 2.5
+                  },
+                  "ingredientId": {
+                    "stringValue": "2RMuaAIMU0HST3ZY3j6G"
+                  },
+                  "unit": {
+                    "stringValue": "g"
+                  }
+                }
+              }
+            },
+            {
+              "mapValue": {
+                "fields": {
+                  "ingredientId": {
+                    "stringValue": "RQ2WLJepVrdIKbm6grcX"
+                  },
+                  "amount": {
+                    "doubleValue": 0.2
+                  },
+                  "unit": {
+                    "stringValue": "g"
+                  }
+                }
+              }
+            },
+            {
+              "mapValue": {
+                "fields": {
+                  "ingredientId": {
+                    "stringValue": "g8vXkd6a8UtQ2hwrh62C"
+                  },
+                  "unit": {
+                    "stringValue": "g"
+                  },
+                  "amount": {
+                    "doubleValue": 0.5
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      "imageUrls": {
+        "arrayValue": {}
+      },
+      "imageUrl": {
+        "stringValue": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR9yLskUvz6Ph06S7V0Gvbcut5cYcBJNfEJAAsYlhObunpIB5z_fUHnrjw&s=10"
+      },
+      "memo": {
+        "stringValue": "[조용히 있고 싶은 날]\n- 얼그레이에 라벤더랑 바닐라가 들어가서 향이 차분하고 포근함. \n- 혼자 가만히 쉬고 싶은 날 마시기.\n\n[우려내는 방법]\n- 물 온도: 95도\n- 우리는 시간: 3~4분\n\n[걍 대충 끎는 물 써도 되지만, 굳이 온도 맞추고 싶다면 이렇게]\n- 100℃: 끓자마자 사용\n- 95℃: 끓인 후 뚜껑 열고 약 1분 기다리기\n- 80℃: 끓인 후 뚜껑 열고 약 5분 기다리기"
+      },
+      "link": {
+        "stringValue": ""
+      },
+      "createdAt": {
+        "integerValue": "1791522265892"
+      },
+      "tasteRating": {
+        "integerValue": "4"
+      },
+      "name": {
+        "stringValue": "조용히 있고 싶은 날 (블렌딩티)"
+      },
+      "sideItems": {
+        "arrayValue": {}
+      },
+      "divisionCount": {
+        "integerValue": "1"
+      },
+      "catalog": {
+        "stringValue": "tea"
+      },
+      "sourceRecipeId": {
+        "stringValue": "Tm2NJxtbz7kzRt2aJfxg"
+      }
+    },
+    "createTime": "2026-10-09T05:04:27.152246Z",
+    "updateTime": "2026-10-09T05:04:27.152246Z"
+  }
+]

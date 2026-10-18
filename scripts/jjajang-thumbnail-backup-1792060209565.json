@@ -1,0 +1,181 @@
+{
+  "name": "projects/recipes-5a663/databases/(default)/documents/recipes/jjajang-bap",
+  "fields": {
+    "categories": {
+      "arrayValue": {
+        "values": [
+          {
+            "stringValue": "중식"
+          }
+        ]
+      }
+    },
+    "name": {
+      "stringValue": "Jjajang bop"
+    },
+    "nameKo": {
+      "stringValue": "짜장밥"
+    },
+    "imageUrl": {
+      "stringValue": "https://blog.kakaocdn.net/dna/dRA8HA/dJMcafPhF52/AAAAAAAAAAAAAAAAAAAAAHxpm-EB7VnfrTs3ObBt2YXFMoNWrwdtUT7r0D3tZ4Br/img.png?credential=yqXZFxpELC7KVnFOS48ylbz2pIh7yKj8&expires=1793458799&allow_ip=&allow_referer=&signature=vyMbZtajXcRy11z3kbpQwHVmCoI%3D"
+    },
+    "imageUrls": {
+      "arrayValue": {
+        "values": [
+          {
+            "stringValue": "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FTrpYW%2FdJMcagmUJ3g%2FAAAAAAAAAAAAAAAAAAAAAOltbskDOKx_L2VviAlhKqvorK4u0TMnhx4wnwcWJgJB%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1793458799%26allow_ip%3D%26allow_referer%3D%26signature%3DndHXzeDcgOw%252BFp15gE2kEWcnMEU%253D"
+          }
+        ]
+      }
+    },
+    "memo": {
+      "stringValue": "[요리 방법]\n- 귀찮으니 걍 처음부터 재료 다 넣고 볶기. 그래도 맛에 큰 문제 없음\n- 짜장가루/춘장은 맛 보면서 조금씩 넣기. 넘 짜게 될 수 있으니\n\n[식재료]\n- 새우: 이걸 넣어야 훨씬 식감 좋음. 꼬리 떼고 넣기. \n- 돼지고기: 제육용말고 카레용 깍둑썬 것 사용하기. 제육용은 고기의 자잘한 가루 같은것이 많이 생겨서 지저분.\n- 양파: 깍둑썰기 하는 것이 더 보기 좋음.\n- 오이: 채칼보다 손으로 채 써는 것이 더 예쁘고 깔끔하게 썰림. \n- 밥: 덮밥류할 때는 단립종으로 밥하기. 알알이 흝어져서 소스와 잘 섞임. \n- 짜장가루: 중국집에서 먹는 짜장 맛이 안남. 다음번에는 춘장으로 해보기. \n\n[플레이팅]\n- 그릇: 흰색 말고 적당히 색 있는 그릇 쓰는게 더 좋을 듯. 패턴 무늬가 있다거나. 청록색, 파란색, 빨간색 그릇도 괜찮을 듯. 검정색은 별로일 것 같고. 아무리 깜끔하게 담아도 짜장 국물이 꼭 벽에 뭍음. \n- 수저: 나무 수저가 어울릴 듯\n- 컵: 작은 찻잔도 괜찮을 듯. 유리컵은 무난할 듯. \n- 플레이스매트: 나무또는 갈색 캔버스 재질이 어울릴 듯\n\n[사진]\n- 짜장은 내가 직접 요리한 사진임\n- 그 외 그릇, 테이블, 식기류는 AI로 합성한 사진임. 예쁜 그릇들 사고 싶지만 아직 그럴 여유 없어서 미리 시뮬레이션 하는 중"
+    },
+    "tasteRating": {
+      "integerValue": "4"
+    },
+    "divisionCount": {
+      "integerValue": "4"
+    },
+    "createdAt": {
+      "integerValue": "1790826829308"
+    },
+    "link": {
+      "stringValue": "https://www.instagram.com/reel/C_y7SEFCk8w/?igsh=aHZrcHhoM3J6ZGR0"
+    },
+    "items": {
+      "arrayValue": {
+        "values": [
+          {
+            "mapValue": {
+              "fields": {
+                "ingredientId": {
+                  "stringValue": "csv-304ad3aa5ceaece1a30a1e56"
+                },
+                "amount": {
+                  "integerValue": "150"
+                },
+                "unit": {
+                  "stringValue": "g"
+                }
+              }
+            }
+          },
+          {
+            "mapValue": {
+              "fields": {
+                "ingredientId": {
+                  "stringValue": "csv-cf308997daba9a8a38103d49"
+                },
+                "amount": {
+                  "integerValue": "350"
+                },
+                "unit": {
+                  "stringValue": "g"
+                }
+              }
+            }
+          },
+          {
+            "mapValue": {
+              "fields": {
+                "ingredientId": {
+                  "stringValue": "csv-fd7862fa6687a6088a8118a6"
+                },
+                "amount": {
+                  "integerValue": "150"
+                },
+                "unit": {
+                  "stringValue": "g"
+                }
+              }
+            }
+          },
+          {
+            "mapValue": {
+              "fields": {
+                "ingredientId": {
+                  "stringValue": "9WeXrM3WaIuTgQLipEdZ"
+                },
+                "amount": {
+                  "integerValue": "300"
+                },
+                "unit": {
+                  "stringValue": "g"
+                }
+              }
+            }
+          },
+          {
+            "mapValue": {
+              "fields": {
+                "ingredientId": {
+                  "stringValue": "ginger-powder"
+                },
+                "amount": {
+                  "integerValue": "15"
+                },
+                "unit": {
+                  "stringValue": "g"
+                }
+              }
+            }
+          },
+          {
+            "mapValue": {
+              "fields": {
+                "ingredientId": {
+                  "stringValue": "jjajang-powder"
+                },
+                "amount": {
+                  "integerValue": "65"
+                },
+                "unit": {
+                  "stringValue": "g"
+                }
+              }
+            }
+          },
+          {
+            "mapValue": {
+              "fields": {
+                "ingredientId": {
+                  "stringValue": "LgyZEeNl6vJSPLCn0bfj"
+                },
+                "amount": {
+                  "integerValue": "45"
+                },
+                "unit": {
+                  "stringValue": "g"
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "sideItems": {
+      "arrayValue": {
+        "values": [
+          {
+            "mapValue": {
+              "fields": {
+                "ingredientId": {
+                  "stringValue": "5BMPorHnPPSl3DhXyOcf"
+                },
+                "amount": {
+                  "integerValue": "140"
+                },
+                "unit": {
+                  "stringValue": "g"
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "createTime": "2026-10-01T03:53:49.525599Z",
+  "updateTime": "2026-10-08T09:22:28.335262Z"
+}

@@ -56,6 +56,9 @@ export async function saveRecipeToFirestore(
 }
 
 export async function updateRecipeInFirestore(recipe: Recipe): Promise<void> {
+  if ([...recipe.items, ...(recipe.sideItems ?? [])].some(item => !Number.isFinite(item.defaultAmount) || item.defaultAmount < 0)) {
+    throw new Error('수량을 확인해 주세요. 계산할 수 없는 값은 저장할 수 없습니다.')
+  }
   const { id, items, sideItems, ...rest } = recipe
   const data: Record<string, unknown> = {
     ...rest,
