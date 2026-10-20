@@ -2,7 +2,8 @@ import { Input } from './ui/input'
 import { UnitSelect } from './UnitSelect'
 import { useLanguage } from '../context/LanguageContext'
 
-export function QuantityUnitCells({ amount, unit, units, label, amountLabel, onAmountChange, onUnitChange }: {
+export function QuantityUnitCells({ ingredientId, amount, unit, units, label, amountLabel, onAmountChange, onUnitChange }: {
+  ingredientId?: string
   amount: number
   unit: string
   units: string[]
@@ -15,6 +16,6 @@ export function QuantityUnitCells({ amount, unit, units, label, amountLabel, onA
   const ko = language === 'ko'
   return <>
     <td className="numeric"><Input density="quantity" type="number" min="0" step="0.1" aria-label={amountLabel ?? `${label} ${ko ? '양' : 'amount'}`} value={amount} onChange={event => onAmountChange(event.target.value)} /></td>
-    <td><UnitSelect aria-label={`${label} ${ko ? '단위' : 'unit'}`} language={language} size="quantity" value={unit} options={[...new Set([unit, ...units])]} onValueChange={onUnitChange} /></td>
+    <td><UnitSelect ingredientId={ingredientId} aria-label={`${label} ${ko ? '단위' : 'unit'}`} language={language} size="quantity" value={unit} options={[...new Set([unit, ...units])]} onValueChange={onUnitChange} /></td>
   </>
 }

@@ -2,10 +2,6 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
-table[data-ingredient-hug] :is(th, td):first-child:not([colspan]) { white-space: nowrap; }
-table[data-ingredient-hug] td:first-child:not([colspan]) > .table-cell-content { max-width: 100%; overflow-x: auto; white-space: nowrap; }
-table[data-ingredient-hug] td:first-child:not([colspan]) > .table-cell-content * { white-space: nowrap; }
-
 .ingredient-conversion-table [data-slot="table-container"] {
   overflow-x: auto;
   scrollbar-width: auto;
@@ -812,13 +808,13 @@ body {
 }
 
 .edit-inline__replace-cell {
-  min-width: max-content;
+  min-width: 0;
 }
 
 .edit-inline__replace-trigger {
   display: inline-flex;
-  max-width: none;
-  flex-shrink: 0;
+  max-width: 100%;
+  min-width: 0;
   align-items: center;
   gap: 4px;
   padding: 0;
@@ -827,7 +823,8 @@ body {
   text-align: left;
   text-decoration: underline;
   text-underline-offset: 2px;
-  white-space: nowrap;
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 
 .edit-inline__add {
@@ -1185,6 +1182,12 @@ body {
   background: #F6F5F1 !important;
 }
 
+.site-table.site-table .recipe-table__division-row > td,
+.site-table.site-table .recipe-table__division-row [data-slot="input"] {
+  opacity: 1;
+  color: var(--table-text-color);
+}
+
 
 
 /* Mobile — content layout adjustments */
@@ -1251,26 +1254,8 @@ body {
 }
 
 /* Add Recipe Page */
-.add-recipe__prompt-box {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 1rem 1.25rem;
-  margin-bottom: 1.5rem;
-}
 
-.add-recipe__select-subtitle {
-  color: var(--muted-foreground);
-  margin: 0 0 2rem 0;
-  font-size: 1rem;
-}
 
-.add-recipe__select-cards {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.25rem;
-  max-width: 680px;
-}
 
 .add-recipe__card {
   display: flex;
@@ -1320,36 +1305,11 @@ body {
 }
 
 
-@media (max-width: 500px) {
-  .add-recipe__select-cards {
-    grid-template-columns: 1fr;
-  }
-}
-
-.add-recipe__prompt-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 0.5rem;
-}
-
-.add-recipe__prompt-title {
-  margin: 0;
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--foreground);
-}
 
 
-.add-recipe__prompt-text {
-  margin: 0;
-  font-family: inherit;
-  font-size: 14px;
-  line-height: 1.7;
-  color: var(--foreground);
-  white-space: pre-wrap;
-  word-break: break-word;
-}
+
+
+
 
 .add-recipe__form {
   display: flex;
@@ -1371,11 +1331,6 @@ body {
   color: var(--foreground);
 }
 
-.add-recipe__hint {
-  font-size: 14px;
-  color: var(--muted-foreground);
-  margin: 0;
-}
 
 .add-recipe__input {
   padding: 10px 14px;
@@ -1776,96 +1731,6 @@ body {
   line-height: 1;
 }
 
-.signup-page {
-  max-width: 480px;
-}
-
-.signup-page__counter {
-  display: flex;
-  align-items: baseline;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
-}
-
-.signup-page__counter-number {
-  font-size: 3rem;
-  font-weight: 700;
-  color: var(--primary);
-  line-height: 1;
-}
-
-.signup-page__counter-label {
-  font-size: 1.1rem;
-  color: var(--muted-foreground);
-}
-
-.signup-page__goal {
-  font-size: 0.95rem;
-  color: var(--muted-foreground);
-  margin-bottom: 2rem;
-  line-height: 1.6;
-}
-
-.signup-page__label {
-  display: block;
-  font-size: 0.9rem;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-}
-
-.signup-page__row {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.signup-page__input {
-  flex: 1;
-  font: inherit;
-  font-size: 0.95rem;
-  padding: 0.55rem 0.85rem;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  background: #fff;
-}
-
-.signup-page__input:focus {
-  outline: 2px solid var(--primary);
-  outline-offset: 1px;
-}
-
-.signup-page__btn {
-  flex-shrink: 0;
-  padding: 0.55rem 1.25rem;
-  border: none;
-  border-radius: 0;
-  background: var(--primary);
-  color: #fff;
-  font: inherit;
-  font-size: 0.95rem;
-  font-weight: 600;
-  cursor: pointer;
-  white-space: nowrap;
-}
-
-.signup-page__btn:disabled {
-  opacity: 0.5;
-  cursor: default;
-}
-
-.signup-page__msg {
-  margin: 0.75rem 0 0;
-  font-size: 0.875rem;
-  line-height: 1.5;
-}
-
-.signup-page__msg--ok {
-  color: var(--success);
-}
-
-.signup-page__msg--warn {
-  color: var(--destructive);
-}
-
 .ing-report-btn {
   background: none;
   border: none;
@@ -2053,8 +1918,6 @@ html:lang(ko) .site-header {
 .mobile-menu > div { max-width: calc(100vw - 2 * var(--gutter)); box-shadow: none; border-color: var(--border); }
 .header-search { display: flex; min-width: 0; flex: 1 1 100%; order: 5; }
 .header-search > div { width: 100%; }
-.signup-link { display: inline-flex; align-items: center; justify-content: center; min-height: 40px; padding: 0 20px; border-radius: 0; background: var(--primary); color: var(--primary-foreground); font-family: var(--header-font); font-size: 14px; font-weight: 500; line-height: var(--header-button-leading); letter-spacing: var(--header-tracking); text-decoration: none; white-space: nowrap; margin-left: auto; }
-.signup-link:active { background: var(--accent-active); }
 .site-main, main:has(.recipe-grid) {
   flex: 1;
   width: 100%;
@@ -2068,7 +1931,7 @@ html:lang(ko) .site-header {
 .site-footer a { color: var(--on-dark); }
 .page { min-width: 0; }
 .eating-out-page { max-width: 800px; margin: 0 auto; }
-.page__heading, .recipe-block__heading, .signup-page__title {
+.page__heading, .recipe-block__heading {
   color: var(--foreground);
   font-family: var(--font-display);
   font-size: 48px;
@@ -2079,7 +1942,7 @@ html:lang(ko) .site-header {
   margin-bottom: 24px;
   overflow-wrap: anywhere;
 }
-html:lang(ko) :is(.page__heading, .recipe-block__heading, .signup-page__title) {
+html:lang(ko) :is(.page__heading, .recipe-block__heading) {
   font-family: var(--font-display);
   font-weight: 400;
   line-height: 1.5;
@@ -2140,16 +2003,8 @@ html:lang(ko) .recipe-card__name { line-height: 1.5; }
   box-shadow: none; border: 1px solid var(--border); border-radius: 12px;
 }
 [data-slot="toggle-group-item"] { border-radius: 0; }
-.add-recipe__select-cards { max-width: none; gap: 24px; }
-.add-recipe__select-cards > button {
-  border: 0; border-radius: 0; padding: 32px; background: var(--surface-card);
-  color: var(--foreground); box-shadow: none; transition: none;
-}
-.add-recipe__select-cards > button > span:first-child { font-size: 22px; }
-.add-recipe__prompt-box { background: var(--surface-soft); border: 0; padding: 32px; border-radius: 12px; }
 .add-recipe__mode-header { gap: 24px; flex-wrap: wrap; }
 .edit-bottom-bar { gap: 16px; flex-wrap: wrap; }
-.signup-page__form { background: var(--surface-soft); border-radius: 12px; padding: 32px; }
 .search-results { align-items: baseline; flex-wrap: wrap; gap: 16px; }
 .header-search [data-slot="button"] { padding: 0; width: 40px; border-radius: 0; }
 .header-search [data-slot="input"] { padding-right: 40px; }
@@ -2161,7 +2016,6 @@ html:lang(ko) .recipe-card__name { line-height: 1.5; }
   .recipe-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .header-search { order: 0; flex: 1; max-width: 240px; margin-left: auto; }
   .site-header__inner { flex-wrap: nowrap; }
-  .signup-link { margin-left: 0; }
 }
 @media (min-width: 1024px) {
   :root { --gutter: 32px; }
@@ -2176,12 +2030,9 @@ html:lang(ko) .recipe-card__name { line-height: 1.5; }
   .mobile-menu { display: none; }
 }
 @media (max-width: 767px) {
-  .page__heading, .recipe-block__heading, .signup-page__title { font-size: 32px; }
-  .signup-link { padding-inline: 12px; }
+  .page__heading, .recipe-block__heading { font-size: 32px; }
   .site-header__inner { gap: 8px 12px; }
-  .add-recipe__select-cards { grid-template-columns: minmax(0, 1fr); }
   .recipe-block__image-wrap, .recipe-memo, .table-container { margin-inline: 0; }
-  .signup-page__row { flex-wrap: wrap; }
 }
 @media (min-width: 1280px) {
   .site-header__inner { flex-wrap: nowrap; gap: 12px; }
@@ -2234,7 +2085,6 @@ button,
 .product-blend-photo,
 .recipe-roulette__selection,
 .reference-request,
-.signup-link,
 .catalog-primary,
 .product-purchase-link {
   border-radius: 0 !important;

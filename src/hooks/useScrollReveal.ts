@@ -54,7 +54,7 @@ export function useScrollReveal() {
     for (const section of page.querySelectorAll('section')) {
       // Animate image content, never the section background or its layout box.
       const groups = [
-        ...section.querySelectorAll('.story-photo img, .story-banner img'),
+        ...section.querySelectorAll('.story-photo img'),
         ...section.querySelectorAll('.story-panel > div, .story-reading'),
       ]
       groups.forEach((group, index) => {

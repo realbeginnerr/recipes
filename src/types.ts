@@ -18,6 +18,7 @@ export type Ingredient = {
 }
 
 export type RecipeItem = {
+  cookingGroup?: string
   ingredientId: string
   defaultAmount: number
   defaultUnit: string

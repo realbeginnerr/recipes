@@ -1,3 +1,4 @@
+import { INGREDIENT_UNITS, CONVERSION_FIELDS, type ConversionField } from '../constants/ingredientUnits'
 import { formatTableNumber } from '../utils/numberFormatting'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -16,26 +17,16 @@ import {
   getIngredientById,
   loadIngredientsFromFirestore,
   updateIngredientInFirestore,
+  saveIngredientToFirestore,
   type FirestoreIngredient,
 } from '../services/ingredientService'
 import { convertToRecipe, loadRecipesFromFirestore } from '../services/recipeService'
 
 type IngredientDraft = Omit<FirestoreIngredient, 'id'>
 type NumericField = 'baseAmount' | 'carbs' | 'protein' | 'fat'
-type ConversionField = 'gramsPerTbsp' | 'gramsPerTsp' | 'gramsPerCup' | 'gramsPerEach' | 'gramsPerCan' | 'gramsPerPack' | 'gramsPerHandful'
-
-const CONVERSION_FIELDS: { key: ConversionField; labelKo: string; labelEn: string }[] = [
-  { key: 'gramsPerTbsp', labelKo: 'T', labelEn: 'tbsp' },
-  { key: 'gramsPerTsp', labelKo: 't', labelEn: 'tsp' },
-  { key: 'gramsPerCup', labelKo: '컵', labelEn: 'cup' },
-  { key: 'gramsPerEach', labelKo: '개', labelEn: 'each' },
-  { key: 'gramsPerCan', labelKo: '캔', labelEn: 'can' },
-  { key: 'gramsPerHandful', labelKo: '줌', labelEn: 'handful' },
-  { key: 'gramsPerPack', labelKo: '팩', labelEn: 'pack' },
-]
-
 function initialDraft(ingredient: FirestoreIngredient): IngredientDraft {
   return {
+    ...Object.fromEntries(CONVERSION_FIELDS.map(({ key }) => [key, ingredient[key]])),
     name: ingredient.name,
     nameKo: ingredient.nameKo,
     baseAmount: ingredient.baseAmount,
@@ -62,18 +53,27 @@ function initialDraft(ingredient: FirestoreIngredient): IngredientDraft {
 }
 
 export function IngredientEditPage() {
+  return <IngredientEditor mode="edit" />
+}
+
+export function IngredientEditor({ mode }: { mode: 'create' | 'edit' }) {
+  const creating = mode === 'create'
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const { language } = useLanguage()
   const isKo = language === 'ko'
-  const [draft, setDraft] = useState<IngredientDraft | null>(null)
-  const [loading, setLoading] = useState(true)
+  const [draft, setDraft] = useState<IngredientDraft | null>(() => creating ? {
+    name: '', nameKo: '', baseAmount: 100, baseUnit: 'g', carbs: 0, protein: 0, fat: 0,
+    imageUrl: '', storageLocation: '',
+  } : null)
+  const [loading, setLoading] = useState(!creating)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
   const [conversionGrams, setConversionGrams] = useState('100')
   const [conversionAmounts, setConversionAmounts] = useState<Partial<Record<ConversionField, string>>>({})
 
   useEffect(() => {
+    if (creating) return
     let cancelled = false
     loadIngredientsFromFirestore()
       .then(() => {
@@ -95,7 +95,7 @@ export function IngredientEditPage() {
         if (!cancelled) setLoading(false)
       })
     return () => { cancelled = true }
-  }, [id, isKo])
+  }, [id, isKo, creating])
 
   function updateText(field: 'name' | 'nameKo' | 'imageUrl', value: string) {
     setDraft((current) => current ? { ...current, [field]: value } : current)
@@ -112,12 +112,12 @@ export function IngredientEditPage() {
 
   async function handleSave(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    if (!id || !draft || saving) return
+    if ((!creating && !id) || !draft || saving) return
     if (!draft.name.trim() || !draft.nameKo.trim()) {
       setError(isKo ? '한글 이름과 영문 이름을 입력해주세요.' : 'Enter both Korean and English names.')
       return
     }
-    if (draft.baseAmount <= 0 || [draft.carbs, draft.protein, draft.fat].some((value) => !Number.isFinite(value) || value < 0)) {
+    if (!Number.isFinite(draft.baseAmount) || draft.baseAmount <= 0 || [draft.carbs, draft.protein, draft.fat].some((value) => !Number.isFinite(value) || value < 0)) {
       setError(isKo ? '기준량은 0보다 커야 하고 탄단지는 0 이상이어야 합니다.' : 'Base amount must be above zero and macros cannot be negative.')
       return
     }
@@ -141,14 +141,16 @@ export function IngredientEditPage() {
       const conversions = Object.fromEntries(CONVERSION_FIELDS.map(({ key }) => [key,
         conversionAmounts[key] ? grams / Number(conversionAmounts[key]) : undefined,
       ]))
-      await updateIngredientInFirestore(id, {
+      const data: IngredientDraft = {
         ...draft,
         ...conversions,
         conversionGrams: grams,
         name: draft.name.trim(),
         nameKo: draft.nameKo.trim(),
         ...(draft.imageUrl !== undefined ? { imageUrl: draft.imageUrl.trim() } : {}),
-      })
+      }
+      if (creating) await saveIngredientToFirestore({ ...data, createdAt: Date.now() })
+      else await updateIngredientInFirestore(id!, data)
       navigate('/ingredients', { replace: true })
     } catch (saveError) {
       const code = typeof saveError === 'object' && saveError !== null && 'code' in saveError
@@ -199,7 +201,7 @@ export function IngredientEditPage() {
 
   return <section className="page" style={{ maxWidth: 760, margin: '0 auto', paddingBottom: 64 }}>
     <Button type="button" variant="ghost" size="sm" onClick={() => navigate('/ingredients')}>← {isKo ? '식재료 목록' : 'Ingredients'}</Button>
-    <h1 className="page__heading" style={{ marginTop: 20 }}>{isKo ? '식재료 수정' : 'Edit ingredient'}</h1>
+    <h1 className="page__heading" style={{ marginTop: 20 }}>{creating ? (isKo ? '식재료 추가' : 'Add ingredient') : (isKo ? '식재료 수정' : 'Edit ingredient')}</h1>
     <form className="flex flex-col gap-6" onSubmit={handleSave}>
       <div className="flex flex-col gap-2">
         <label htmlFor="ingredient-name-ko" className="text-sm font-medium">{isKo ? '한글 이름' : 'Korean name'}</label>
@@ -258,26 +260,30 @@ export function IngredientEditPage() {
       <fieldset className="flex min-w-0 flex-col gap-3">
         <legend className="text-sm font-semibold">{isKo ? '단위 환산 (선택)' : 'Unit conversions (optional)'}</legend>
         <div className="ingredient-conversion-table min-w-0 border">
-          <Table className="min-w-[700px] table-fixed" aria-label={isKo ? '단위 환산 (선택)' : 'Unit conversions (optional)'}>
+          <Table className="min-w-[1200px] table-fixed" aria-label={isKo ? '단위 환산 (선택)' : 'Unit conversions (optional)'}>
             <TableHeader className="bg-muted/50">
               <TableRow>
-                <TableHead scope="col"><label htmlFor="ingredient-conversion-grams">g</label></TableHead>
-                {CONVERSION_FIELDS.map(({ key, labelKo, labelEn }) => <TableHead key={key} scope="col">
-                  <label htmlFor={`ingredient-${key}`}>{isKo ? labelKo : labelEn}</label>
+                {INGREDIENT_UNITS.map(unit => <TableHead key={unit.ko} scope="col">
+                  <label htmlFor={unit.ko === 'g' ? 'ingredient-conversion-grams' : `ingredient-${'field' in unit ? unit.field : unit.ko || 'none'}`}>
+                    {(isKo ? unit.ko : unit.en) || (isKo ? '선택안함' : 'N/A')}
+                  </label>
                 </TableHead>)}
               </TableRow>
             </TableHeader>
             <TableBody>
               <TableRow>
-                <TableCell><Input id="ingredient-conversion-grams" type="number" min="0" step="any" required value={conversionGrams} onChange={event => setConversionGrams(event.target.value)} /></TableCell>
-                {CONVERSION_FIELDS.map(({ key }) => <TableCell key={key}>
-                  <Input id={`ingredient-${key}`} type="number" min="0" step="any" value={conversionAmounts[key] ?? ''} onChange={(event) => updateConversion(key, event.target.value)} />
+                {INGREDIENT_UNITS.map(unit => <TableCell key={unit.ko}>
+                  {unit.ko === 'g'
+                    ? <Input id="ingredient-conversion-grams" type="number" min="0" step="any" required value={conversionGrams} onChange={event => setConversionGrams(event.target.value)} />
+                    : 'field' in unit
+                      ? <Input id={`ingredient-${unit.field}`} type="number" min="0" step="any" value={conversionAmounts[unit.field] ?? ''} onChange={event => updateConversion(unit.field, event.target.value)} />
+                      : <Input id={`ingredient-${unit.ko || 'none'}`} type="text" readOnly disabled value={'grams' in unit && Number.isFinite(Number(conversionGrams)) && Number(conversionGrams) > 0 ? (Number(conversionGrams) / unit.grams).toFixed(1) : ''} placeholder="—" />}
                 </TableCell>)}
               </TableRow>
             </TableBody>
           </Table>
         </div>
-        <p className="text-sm text-muted-foreground">{isKo ? '각 열은 같은 양입니다. 예: g = 100, 컵 = 1이면 1컵은 100g입니다.' : 'Each column represents the same amount. For example, g = 100 and cup = 1 means 1 cup weighs 100g.'}</p>
+        <p className="text-sm text-muted-foreground">{isKo ? '각 열은 같은 양입니다. 예: g = 100, 컵 = 1이면 1컵은 100g입니다. oz·lbs는 g에서 자동 계산하며 선택안함은 환산 대상이 아닙니다.' : 'Each column represents the same amount. g = 100 and cup = 1 means 1 cup weighs 100g. oz/lbs are calculated from g; N/A has no conversion.'}</p>
       </fieldset>
 
       <fieldset className="flex flex-col gap-3">
@@ -298,7 +304,7 @@ export function IngredientEditPage() {
 
       {error && <p role="alert" className="text-sm text-destructive">{error}</p>}
       <div className="flex flex-wrap items-center justify-between gap-3 border-t pt-4">
-        <Button type="button" variant="destructive" onClick={handleDelete} disabled={saving}>{isKo ? '식재료 삭제' : 'Delete ingredient'}</Button>
+        {!creating && <Button type="button" variant="destructive" onClick={handleDelete} disabled={saving}>{isKo ? '식재료 삭제' : 'Delete ingredient'}</Button>}
         <div className="flex gap-2">
           <Button type="button" variant="outline" onClick={() => navigate('/ingredients')} disabled={saving}>{isKo ? '취소' : 'Cancel'}</Button>
           <Button type="submit" disabled={saving}>{saving ? (isKo ? '저장 중...' : 'Saving...') : (isKo ? '저장' : 'Save')}</Button>

@@ -1,4 +1,5 @@
 import { ContentState } from '../components/feedback/ContentState'
+import { RegistrationActions } from '../components/catalog/RegistrationRequestButton'
 import { useAddPageAccess } from '../components/AddPageAccessProvider'
 import { useAdmin } from '../context/AdminContext'
 import { IngredientCard } from '../components/ingredient/IngredientCard'
@@ -55,12 +56,9 @@ export function IngredientsPage() {
       window.removeEventListener('focus', refresh)
     }
   }, [])
-  const [view, setView] = useState<'grid' | 'list'>(() => {
-    try { return localStorage.getItem('ingredient-view') === 'list' ? 'list' : 'grid' } catch { return 'grid' }
-  })
+  const [view, setView] = useState<'grid' | 'list'>('grid')
   function changeView(next: 'grid' | 'list') {
     setView(next)
-    try { localStorage.setItem('ingredient-view', next) } catch { /* Keep switching available without storage. */ }
   }
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
@@ -118,7 +116,7 @@ export function IngredientsPage() {
     <div className="catalog-container catalog-results" id="ingredient-view-panel" role="tabpanel" aria-labelledby={`ingredient-view-${view}`} aria-busy={loading} tabIndex={0}>
       {!loading && <div className="catalog-count-row"><p className="catalog-count" role="status">{ko ? '식재료 ' : 'Ingredients '}<strong>{visible.length}{ko ? '개' : ''}</strong>{query && <span> · “{query}”</span>}</p>{isAdmin && <Button onClick={() => requestAccess('/add-ingredient')} variant="link" size="content" className="catalog-intro__subtle-action">{ko ? '식재료 추가' : 'Add ingredient'}</Button>}</div>}
       {error && <ContentState variant="inline" error title={ko ? '최신 정보를 불러오지 못했습니다. 저장된 정보를 표시합니다.' : 'Could not load the latest data. Showing available ingredients.'}><Button variant="ghost" size="content" onClick={() => setAttempt(value => value + 1)}>{ko ? '다시 시도' : 'Retry'}</Button></ContentState>}
-      {visible.length === 0 ? <ContentState icon="⌕" title={ko ? '찾으시는 재료가 아직 없어요.' : 'We could not find that ingredient.'} description={ko ? '다른 이름으로 검색하거나, 철자를 확인해 보세요.' : 'Try another name or check the spelling.'}></ContentState> :
+      {visible.length === 0 ? <ContentState icon="⌕" title={ko ? '찾으시는 재료가 아직 없어요.' : 'We could not find that ingredient.'} description={ko ? '다른 이름으로 검색하거나, 철자를 확인해 보세요.' : 'Try another name or check the spelling.'}><RegistrationActions kind="ingredient" /></ContentState> :
       view === 'list' ? <IngredientTable visibleIds={visible.map(ingredient => ingredient.id)} /> : <div className="ingredient-grid">{visible.map(ingredient => {
         const related = recipes.filter(recipe => !recipe.hidden && recipeContainsIngredient(recipe, ingredient.id))
         const details = presentation(ingredient)

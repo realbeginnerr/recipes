@@ -6,6 +6,7 @@ import { useAddPageAccess } from './AddPageAccessProvider'
 import { useLanguage } from '../context/LanguageContext'
 import { useSearch } from '../context/SearchContext'
 import './SiteHeader.css'
+import { CONTACT_URL } from '../constants/contact'
 
 export function SiteHeader() {
   const { pathname } = useLocation()
@@ -24,7 +25,7 @@ export function SiteHeader() {
   const navLinks = links.map(link => <NavLink key={link.to} to={link.to} end={link.end}
     className={({ isActive }) => isActive || (link.to === '/recipes' && pathname.startsWith('/recipe/')) || (link.to === '/blending-tea' && (pathname.startsWith('/product/') || pathname.startsWith('/products/') || pathname === '/shop-settings')) ? 'is-active' : ''}
     onClick={() => { if (link.to === '/recipes') resetHome(); setMenuOpen(false) }}>{link.label}</NavLink>)
-  const contactLink = <a href="https://linktr.ee/admin/links" target="_blank" rel="noopener noreferrer" onClick={() => setMenuOpen(false)}>Contact</a>
+  const contactLink = <a href={CONTACT_URL} target="_blank" rel="noopener noreferrer" onClick={() => setMenuOpen(false)}>Contact</a>
   const adminLink = <Button variant="ghost" size="content" className={`reference-admin-link${pathname === '/admin' ? ' is-active' : ''}`} onClick={() => { requestAccess('/admin'); setMenuOpen(false) }}>{ko ? '관리자' : 'Admin'}</Button>
   return <header className="reference-header" onKeyDown={event => { if (event.key === 'Escape') { setMenuOpen(false); menuButton.current?.focus() } }}>
       <div className="reference-container reference-header-inner">

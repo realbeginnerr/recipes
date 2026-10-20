@@ -1,10 +1,11 @@
+import { MEAL_TARGET as REC } from '../../constants/nutrition'
 import { formatTableNumber } from '../../utils/numberFormatting'
 import { useLanguage } from '../../context/LanguageContext'
 import type { CSSProperties } from 'react'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import type { BadgeLevel, MacroIssue, RecipeBadgeResult } from '../../utils/recipeBadge'
 
-const REC = { carbs: 75, protein: 33, fat: 22 }
+
 
 function macroColor(value: number, target: number): string {
   const diff = Math.abs(value - target)

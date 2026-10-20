@@ -3,6 +3,8 @@
 .catalog-empty > span { font-size: 60px; margin-bottom: 24px; }
 .catalog-empty h2 { font-size: 18px; font-weight: 500; margin: 0 0 8px; }
 .catalog-empty p { font-size: 14px; color: #899591; margin: 0 0 32px; }
+.catalog-empty-actions { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.catalog-registration-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
 .catalog-skeleton { background: #E9EBE8; border-radius: 12px; overflow: hidden; padding-bottom: 24px; }
 .catalog-skeleton > div { aspect-ratio: 4 / 3; background: #D4D9D7; }
 .catalog-skeleton > span { display: block; height: 24px; margin: 20px 20px 0; border-radius: 8px; background: #CBD4D2; }

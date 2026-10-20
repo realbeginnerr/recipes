@@ -1,3 +1,4 @@
+import { MEAL_TARGET as recommended, MEAL_TARGET_KCAL } from '../constants/nutrition'
 import { RecipeImagesEditor, recipeImageDrafts, type ImageDraft } from './RecipeImagesEditor'
 import { useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -130,6 +131,17 @@ export function RecipeTable({
 
   async function handleSave() {
     if (isSaving) return
+    const invalidItems = [...editItems, ...editSideItems].filter(item => !Number.isFinite(item.defaultAmount) || item.defaultAmount < 0)
+    if (invalidItems.length) {
+      const names = invalidItems.map(item => {
+        const ingredient = ingredientById.get(item.ingredientId)
+        return ingredient ? getIngredientDisplayName(ingredient, language) : item.ingredientId
+      }).join(', ')
+      showToast(language === 'ko'
+        ? `${names}: 저장된 수량이 올바르지 않습니다. 해당 재료의 수량을 다시 입력해 주세요.`
+        : `${names}: Invalid quantity. Please enter the quantity again.`, 'error')
+      return
+    }
     if (!Number.isSafeInteger(Number(divisionInput)) || Number(divisionInput) < 1) {
       showToast(language === 'ko' ? '기본 등분 수는 1 이상의 정수로 입력해주세요.' : 'Default portions must be a positive integer.', 'error')
       return
@@ -191,7 +203,13 @@ export function RecipeTable({
       } catch (error) {
         const code = error && typeof error === 'object' && 'code' in error ? String(error.code) : 'unknown'
         console.error('Recipe save failed', error)
-        const detail = code === 'storage/bucket-not-found'
+        const detail = code === 'recipe/missing-conversion' && error instanceof Error
+          ? ` ${error.message}`
+          : code === 'recipe/invalid-amount'
+          ? language === 'ko' ? ' 재료 또는 주식의 수량에 계산할 수 없는 값이 있습니다. 수량을 다시 입력해 주세요.' : ' An ingredient or side has an invalid quantity. Please enter its quantity again.'
+          : code === 'unknown' && error instanceof Error
+            ? ` ${error.message}`
+          : code === 'storage/bucket-not-found'
           ? language === 'ko' ? ' 사진 저장소를 찾을 수 없습니다. Firebase Console의 Storage에서 저장소 생성 여부와 설정된 버킷 주소를 확인해 주세요.' : ' Photo storage was not found. Check the bucket setup and address in Firebase Console.'
           : code === 'storage/network-unavailable' || code === 'storage/retry-limit-exceeded'
             ? language === 'ko' ? ' 사진 저장소에 연결하지 못했거나 업로드 제한 시간을 초과했습니다.' : ' Photo storage could not be reached or the upload timed out.'
@@ -290,7 +308,7 @@ export function RecipeTable({
   }
 
 
-  const recommended = { carbs: 75, protein: 33, fat: 22 }
+
 
   function macroColor(value: number, target: number): string {
     const diff = Math.abs(value - target)
@@ -485,26 +503,16 @@ export function RecipeTable({
         <RecipeImagesEditor images={editImages} onChange={setEditImages} disabled={isSaving} />
       )}
 
-      {!isCollapsed && isEditing && (
-        <div className="edit-inline__link-field">
-          <label htmlFor={`recipe-default-divisions-${activeRecipe.id}`} className="edit-inline__link-label">
-            {language === 'ko' ? '기본 등분 수' : 'Default portions'}
-          </label>
-          <Input id={`recipe-default-divisions-${activeRecipe.id}`} type="number" min={1} step={1} value={divisionInput} onChange={(event) => setDivisionInput(event.target.value)} disabled={isSaving} />
-        </div>
-      )}
-
       {!isCollapsed && <Table className="data-table recipe-table">
         <TableHeader>
           <TableRow>
+            {isEditing && <TableHead className="edit-inline__order-cell" aria-label={language === 'ko' ? '순서 변경' : 'Reorder'} />}
             <TableHead>{t.colIngredient}</TableHead>
             <TableHead>{t.colAmount}</TableHead>
             <TableHead>{t.colUnit}</TableHead>
             <TableHead>{t.colCarbs}</TableHead>
             <TableHead>{t.colProtein}</TableHead>
             <TableHead>{t.colFat}</TableHead>
-            {isEditing && <TableHead className="edit-inline__order-cell"></TableHead>}
-            {isEditing && <TableHead className="edit-inline__delete-cell"></TableHead>}
             {isEditing && (
               <TableHead className="edit-inline__delete-cell">
                 <Button
@@ -565,6 +573,7 @@ export function RecipeTable({
                         {getIngredientDisplayName(ingredient, language)}
                         <ArrowLeftRight size={14} aria-hidden="true" />
                       </Button>
+                      <Input className="mt-2" aria-label={language === 'ko' ? `${getIngredientDisplayName(ingredient, language)} 요리 그룹` : `${getIngredientDisplayName(ingredient, language)} cooking group`} placeholder={language === 'ko' ? '요리 그룹 (예: 양념장·반죽)' : 'Cooking group (e.g. sauce)'} value={item.cookingGroup ?? ''} disabled={isSaving} onChange={event => setEditItems(current => current.map((entry, i) => i === index ? { ...entry, cookingGroup: event.target.value } : entry))} />
                     </TableCell>
                     <TableCell>
                       <Input
@@ -572,12 +581,13 @@ export function RecipeTable({
                         className="h-7 w-20 text-sm"
                         min={0}
                         step="0.1"
-                        value={item.defaultAmount}
+                        value={Number.isFinite(item.defaultAmount) ? item.defaultAmount : ''}
+                        aria-invalid={!Number.isFinite(item.defaultAmount) || item.defaultAmount < 0}
                         onChange={(e) => handleEditAmountChange(index, e.target.value)}
                       />
                     </TableCell>
                     <TableCell>
-                      <UnitSelect
+                      <UnitSelect ingredientId={item.ingredientId}
                         value={item.defaultUnit}
                         onValueChange={(v) => handleEditUnitChange(index, v)}
                         language={language}
@@ -631,7 +641,7 @@ export function RecipeTable({
                       />
                     </TableCell>
                     <TableCell>
-                      <UnitSelect
+                      <UnitSelect ingredientId={row.ingredientId}
                         value={row.unit}
                         onValueChange={(v) => { startEditing(); onUnitChange(row.ingredientId, v) }}
                         language={language}
@@ -647,17 +657,16 @@ export function RecipeTable({
           </TableBody>
           <TableFooter>
             <TableRow className="recipe-table__total recipe-table__muted">
-              <TableCell colSpan={3}>
+              <TableCell colSpan={isEditing ? 4 : 3}>
                 {t.total}
               </TableCell>
               <TableCell className="macro">{formatMacro(totals.carbs)}</TableCell>
               <TableCell className="macro">{formatMacro(totals.protein)}</TableCell>
               <TableCell className="macro">{formatMacro(totals.fat)}</TableCell>
               {isEditing && <TableCell className="edit-inline__order-cell edit-inline__delete-cell"></TableCell>}
-              {isEditing && <TableCell className="edit-inline__order-cell edit-inline__delete-cell"></TableCell>}
             </TableRow>
-            <TableRow className="recipe-table__division-row recipe-table__muted">
-              <TableCell colSpan={3}>
+            <TableRow className="recipe-table__division-row">
+              <TableCell colSpan={isEditing ? 4 : 3}>
                 {language === 'en' ? (
                   <>
                     {t.divideByMeals}{' '}
@@ -719,7 +728,6 @@ export function RecipeTable({
               <TableCell className="macro">{formatMacro(totals.protein / effectiveDivision)}</TableCell>
               <TableCell className="macro">{formatMacro(totals.fat / effectiveDivision)}</TableCell>
               {isEditing && <TableCell className="edit-inline__order-cell edit-inline__delete-cell"></TableCell>}
-              {isEditing && <TableCell className="edit-inline__order-cell edit-inline__delete-cell"></TableCell>}
             </TableRow>
             {activeSideItems.map((item, index) => {
               const isRice = item.ingredientId === MULTIGRAIN_ID
@@ -776,7 +784,8 @@ export function RecipeTable({
                         className="h-7 w-20 text-sm"
                         min={0}
                         step="0.1"
-                        value={item.defaultAmount}
+                        value={Number.isFinite(item.defaultAmount) ? item.defaultAmount : ''}
+                        aria-invalid={!Number.isFinite(item.defaultAmount) || item.defaultAmount < 0}
                         onChange={(e) => handleSideAmountChange(index, e.target.value)}
                       />
                     ) : (
@@ -797,14 +806,14 @@ export function RecipeTable({
                   </TableCell>
                   <TableCell>
                     {isEditing ? (
-                      <UnitSelect
+                      <UnitSelect ingredientId={item.ingredientId}
                         value={item.defaultUnit}
                         onValueChange={(v) => handleSideUnitChange(index, v)}
                         language={language}
                         riceOnly={isRice}
                       />
                     ) : (
-                      <UnitSelect
+                      <UnitSelect ingredientId={item.ingredientId}
                         value={item.defaultUnit}
                         onValueChange={(v) => { startEditing(); if (isRice) onMultigrainRiceUnitChange(v) }}
                         language={language}
@@ -831,7 +840,7 @@ export function RecipeTable({
             })}
             {isEditing && !editSideItems.some((i) => i.ingredientId === MULTIGRAIN_ID) && (
               <TableRow className="recipe-table__multigrain-row">
-                <TableCell colSpan={9}>
+                <TableCell colSpan={8}>
                   <Button
                     type="button"
                     variant="outline"
@@ -852,9 +861,12 @@ export function RecipeTable({
               const dc = recommended.carbs - carbs
               const dp = recommended.protein - protein
               const df = recommended.fat - fat
-              const fmt = (d: number) => d > 0
-                ? `(+${formatTableNumber(Math.round(d), 0, 0)})`
-                : `(${formatTableNumber(Math.round(d), 0, 0)})`
+              const fmt = (d: number) => {
+                const grams = formatTableNumber(Math.round(Math.abs(d)), 0, 0)
+                return language === 'ko'
+                  ? `(${grams}g ${d > 0 ? '부족' : '초과'})`
+                  : `(${grams}g ${d > 0 ? 'below target' : 'above target'})`
+              }
               const show = (d: number) => Math.abs(d) > 3
               const renderCell = (value: number, target: number, delta: number) => {
                 const color = macroColor(value, target)
@@ -867,22 +879,21 @@ export function RecipeTable({
               }
               return (
                 <TableRow className="recipe-table__total">
-                  <TableCell colSpan={3}>
+                  <TableCell colSpan={isEditing ? 4 : 3}>
                     <strong>{t.combinedTotal} <span className="recipe-table__kcal">(kcal: {kcal})</span></strong>
                   </TableCell>
                   {renderCell(carbs, recommended.carbs, dc)}
                   {renderCell(protein, recommended.protein, dp)}
                   {renderCell(fat, recommended.fat, df)}
                   {isEditing && <TableCell></TableCell>}
-                  {isEditing && <TableCell></TableCell>}
                 </TableRow>
               )
             })()}
             <TableRow className="recipe-table__recommended">
-              <TableCell colSpan={3}>
+              <TableCell colSpan={isEditing ? 4 : 3}>
                 <strong>
                   {t.recommendedPerMeal}{' '}
-                  <span className="recipe-table__kcal">(kcal: {formatTableNumber(Math.round(75 * 4 + 33 * 4 + 22 * 9), 0, 0)})</span>
+                  <span className="recipe-table__kcal">(kcal: {formatTableNumber(MEAL_TARGET_KCAL, 0, 0)})</span>
                   <Button
                     type="button"
                     variant="ghost"
@@ -892,10 +903,9 @@ export function RecipeTable({
                   >ⓘ</Button>
                 </strong>
               </TableCell>
-              <TableCell className="macro"><strong>75.0</strong></TableCell>
-              <TableCell className="macro"><strong>33.0</strong></TableCell>
-              <TableCell className="macro"><strong>22.0</strong></TableCell>
-              {isEditing && <TableCell></TableCell>}
+              <TableCell className="macro"><strong>{formatMacro(recommended.carbs)}</strong></TableCell>
+              <TableCell className="macro"><strong>{formatMacro(recommended.protein)}</strong></TableCell>
+              <TableCell className="macro"><strong>{formatMacro(recommended.fat)}</strong></TableCell>
               {isEditing && <TableCell></TableCell>}
             </TableRow>
           </TableFooter>

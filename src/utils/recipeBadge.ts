@@ -1,3 +1,4 @@
+import { MEAL_TARGET as REC } from '../constants/nutrition'
 import { isRefinedCarb, isAddedSugarIngredient } from '../data/refinedCarbs'
 import { ingredientById } from '../data/ingredientCache'
 import { amountToGrams, calculateMacros } from './nutrition'
@@ -5,7 +6,7 @@ import type { Recipe } from '../types'
 
 const MULTIGRAIN_ID = '__multigrain_rice__'
 const ADDED_SUGAR_LIMIT_PER_MEAL = 8 // WHO: <25g/일 → ~8g/끼니
-const REC = { carbs: 75, protein: 33, fat: 22 }
+
 
 const FIBER_KEYWORDS = [
   '가지', '시금치', '브로콜리', '양파', '대파', '깻잎', '상추', '배추', '무',

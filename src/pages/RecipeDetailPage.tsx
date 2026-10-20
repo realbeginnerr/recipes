@@ -23,6 +23,7 @@ import { categoryEnglish, getRecipeCategories } from '../utils/recipeCategory'
 import type { Ingredient, Recipe, RecipeRowState } from '../types'
 import '../components/catalog/CatalogControls.css'
 import './RecipeDetailPage.css'
+import { recipeCookingGroups } from '../utils/recipeCookingGroups'
 import '../components/RecipeTitle.css'
 
 type Macros = { carbs: number; protein: number; fat: number }
@@ -96,7 +97,9 @@ function RecipeNutrition({ recipe }: { recipe: Recipe }) {
   const ko = language === 'ko'
   const name = ko ? recipe.nameKo : recipe.name
   const [rows, setRows] = useState<RecipeRowState[]>(() => initialRows(recipe))
+  const [tableMode, setTableMode] = useState<'storage' | 'cooking'>('storage')
   const [divisions, setDivisions] = useState(Math.max(1, recipe.divisionCount ?? 4))
+  const [divisionsInput, setDivisionsInput] = useState(() => String(divisions))
   const [sides, setSides] = useState<RecipeRowState[]>(() => (recipe.sideItems ?? []).map(item => ({ ingredientId: item.ingredientId, amount: item.defaultAmount, unit: item.defaultUnit })))
   const [memo] = useState(() => { try { return localStorage.getItem(`recipe-note:${recipe.id}`) ?? recipe.memo ?? '' } catch { return recipe.memo ?? '' } })
   const macros = rows.map(macrosFor)
@@ -110,6 +113,9 @@ function RecipeNutrition({ recipe }: { recipe: Recipe }) {
   })).filter(group => group.entries.length > 0)
   const storageLabels = { 냉장실: 'Fridge', 냉동실: 'Freezer', 실온보관: 'Room temperature', '': 'Unspecified' }
   const storageIcons = { 냉장실: '🗄️', 냉동실: '❄️', 실온보관: '🧂', '': '❓' }
+  const tableGroups = tableMode === 'storage'
+    ? storageGroups.map(({ location, entries }) => ({ key: location, title: ko ? location || '미지정' : storageLabels[location], icon: storageIcons[location], entries }))
+    : recipeCookingGroups(rows, recipe.items).map(({ name, entries }) => ({ key: name, title: name || (ko ? '기본 재료' : 'Basic ingredients'), icon: '', entries }))
   const total = sum(macros)
   const portion = { carbs: total.carbs / divisions, protein: total.protein / divisions, fat: total.fat / divisions }
   const meal = sum([portion, ...sides.map(macrosFor)])
@@ -126,7 +132,7 @@ function RecipeNutrition({ recipe }: { recipe: Recipe }) {
   }
   function quantityCells(row: RecipeRowState, index: number, side = false) {
     const ingredient = ingredientFor(row.ingredientId)
-    return <QuantityUnitCells amount={row.amount} unit={row.unit} units={ingredient?.allowedUnits ?? []} label={label(ingredient, row.ingredientId)} amountLabel={side ? (ko ? '주식 양' : 'Staple amount') : undefined} onAmountChange={value => updateRow(index, 'amount', value, side)} onUnitChange={value => updateRow(index, 'unit', value, side)} />
+    return <QuantityUnitCells ingredientId={row.ingredientId} amount={row.amount} unit={row.unit} units={ingredient?.allowedUnits ?? []} label={label(ingredient, row.ingredientId)} amountLabel={side ? (ko ? '주식 양' : 'Staple amount') : undefined} onAmountChange={value => updateRow(index, 'amount', value, side)} onUnitChange={value => updateRow(index, 'unit', value, side)} />
   }
 
   return <article className="nutrition-detail reference-container" lang={language}>
@@ -152,16 +158,32 @@ function RecipeNutrition({ recipe }: { recipe: Recipe }) {
         <StarRating label={ko ? '맛' : 'Taste'} value={recipe.tasteRating ?? 4} showLabel={false} />
       </div>
       <section className="detail-section" aria-labelledby="whole-recipe-title"><h2 id="whole-recipe-title" className="sr-only">{ko ? '전체 재료' : 'All ingredients'}</h2>
-      <NutritionTable total={total} labelledBy="whole-recipe-title">{storageGroups.flatMap(({ location, entries }) => [
-        <tr key={`storage-${location}`} className="detail-storage-group"><th colSpan={6}><span className="detail-storage-icon" aria-hidden="true">{storageIcons[location]}</span>{ko ? location || '미지정' : storageLabels[location]}</th></tr>,
+      <div className="detail-table-tabs" role="tablist" aria-label={ko ? '재료 보기 모드' : 'Ingredient view mode'}>
+        {(['storage', 'cooking'] as const).map((mode, index) => <button key={mode} type="button" role="tab" id={`ingredient-tab-${mode}`} aria-controls="ingredient-mode-panel" aria-selected={tableMode === mode} tabIndex={tableMode === mode ? 0 : -1} onClick={() => setTableMode(mode)} onKeyDown={event => {
+          if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return
+          event.preventDefault()
+          const next = event.key === 'Home' ? 'storage' : event.key === 'End' ? 'cooking' : index === 0 ? 'cooking' : 'storage'
+          setTableMode(next)
+          document.getElementById(`ingredient-tab-${next}`)?.focus()
+        }}>{mode === 'storage' ? (ko ? '재료 꺼낼 때' : 'Gather ingredients') : (ko ? '요리할 때' : 'Cook')}</button>)}
+      </div>
+      <div role="tabpanel" id="ingredient-mode-panel" aria-labelledby={`ingredient-tab-${tableMode}`}>
+      <NutritionTable total={total} labelledBy="whole-recipe-title">{tableGroups.flatMap(({ key, title, icon, entries }) => [
+        <tr key={`${tableMode}-${key}`} className="detail-storage-group"><th colSpan={6}>{icon && <span className="detail-storage-icon" aria-hidden="true">{icon}</span>}{title}</th></tr>,
         ...entries.map(({ row, index }, groupIndex) => <tr key={`${row.ingredientId}-${index}`} className={groupIndex % 2 === 0 ? 'table-row--white' : 'table-row--alternate'}><td>{label(ingredientFor(row.ingredientId), row.ingredientId)}</td>{quantityCells(row, index)}<MacroCells values={macros[index]} /></tr>),
       ])}</NutritionTable>
+      </div>
       <TableNutritionSummary total={total} />
       </section>
       <section className="detail-section" aria-labelledby="meal-title">
       <div className="detail-section-heading">
         <h2 id="meal-title"><label htmlFor="meal-divisions">{ko ? '몇 등분할까요?' : 'How many portions?'}</label></h2>
-        <div className="detail-divisions"><Input density="quantity" id="meal-divisions" type="number" min="1" step="1" value={divisions} onChange={event => setDivisions(Math.max(1, Math.floor(amount(event.target.value))))} /><span>{ko ? '등분' : 'portions'}</span></div>
+        <div className="detail-divisions"><Input density="quantity" id="meal-divisions" type="number" min="1" step="1" value={divisionsInput} onChange={event => {
+          const value = event.target.value
+          setDivisionsInput(value)
+          const parsed = Number(value)
+          if (Number.isFinite(parsed) && parsed >= 1) setDivisions(Math.floor(parsed))
+        }} onBlur={() => setDivisionsInput(String(divisions))} /><span>{ko ? '등분' : 'portions'}</span></div>
       </div>
       <NutritionTable total={meal} labelledBy="meal-title">
         <tr><td>{ko ? '전체 재료 합계' : 'All ingredients total'}</td><td className="numeric">1/{divisions}</td><td className="muted">{ko ? '분량' : 'batch'}</td><MacroCells values={portion} /></tr>

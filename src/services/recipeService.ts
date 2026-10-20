@@ -8,12 +8,14 @@ import {
   setDoc,
 } from 'firebase/firestore'
 import { db } from '../firebase'
+import { assertRecipeUnits } from '../utils/recipeUnitValidation'
 import { canonicalIngredientId } from '../data/ingredientCatalogOverrides'
 import type { Recipe } from '../types'
 import { getRecipeCategories, type RecipeCategory } from '../utils/recipeCategory'
 import type { TeaTag } from '../utils/teaCategory'
 
 export type FirestoreRecipeItem = {
+  cookingGroup?: string
   ingredientId: string
   amount: number
   unit: string
@@ -45,6 +47,7 @@ const COLLECTION = 'recipes'
 export async function saveRecipeToFirestore(
   recipe: Omit<FirestoreRecipe, 'id' | 'createdAt'>
 ): Promise<string> {
+  assertRecipeUnits([...recipe.items, ...(recipe.sideItems ?? [])])
   const docRef = await addDoc(collection(db, COLLECTION), {
     ...recipe,
     items: recipe.items.map(item => ({ ...item, ingredientId: canonicalIngredientId(item.ingredientId) })),
@@ -57,9 +60,10 @@ export async function saveRecipeToFirestore(
 
 export async function updateRecipeInFirestore(recipe: Recipe): Promise<void> {
   if ([...recipe.items, ...(recipe.sideItems ?? [])].some(item => !Number.isFinite(item.defaultAmount) || item.defaultAmount < 0)) {
-    throw new Error('수량을 확인해 주세요. 계산할 수 없는 값은 저장할 수 없습니다.')
+    throw Object.assign(new Error('수량을 확인해 주세요. 계산할 수 없는 값은 저장할 수 없습니다.'), { code: 'recipe/invalid-amount' })
   }
   const { id, items, sideItems, ...rest } = recipe
+  assertRecipeUnits([...items, ...(sideItems ?? [])].map(item => ({ ingredientId: item.ingredientId, unit: item.defaultUnit })))
   const data: Record<string, unknown> = {
     ...rest,
     categories: getRecipeCategories(recipe),
@@ -67,11 +71,13 @@ export async function updateRecipeInFirestore(recipe: Recipe): Promise<void> {
       ingredientId: canonicalIngredientId(item.ingredientId),
       amount: item.defaultAmount,
       unit: item.defaultUnit,
+      ...(item.cookingGroup?.trim() ? { cookingGroup: item.cookingGroup.trim() } : {}),
     })),
     sideItems: (sideItems ?? []).map((item) => ({
       ingredientId: canonicalIngredientId(item.ingredientId),
       amount: item.defaultAmount,
       unit: item.defaultUnit,
+      ...(item.cookingGroup?.trim() ? { cookingGroup: item.cookingGroup.trim() } : {}),
     })),
   }
   for (const key of Object.keys(data)) {
@@ -118,11 +124,13 @@ export function convertToRecipe(fs: FirestoreRecipe): Recipe {
       ingredientId: canonicalIngredientId(item.ingredientId),
       defaultAmount: item.amount,
       defaultUnit: item.unit,
+      ...(item.cookingGroup ? { cookingGroup: item.cookingGroup } : {}),
     })),
     sideItems: fs.sideItems?.map((item) => ({
       ingredientId: canonicalIngredientId(item.ingredientId),
       defaultAmount: item.amount,
       defaultUnit: item.unit,
+      ...(item.cookingGroup ? { cookingGroup: item.cookingGroup } : {}),
     })),
   }
 }

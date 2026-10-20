@@ -51,8 +51,16 @@
 .detail-section-heading h2 { margin: 0; }
 .detail-divisions { display: inline-flex; flex-shrink: 0; align-items: center; gap: 8px; font-size: 14px; color: #596B64; }
 .detail-divisions input[type=number] { width: 52px; }
+@media (max-width: 767px), (pointer: coarse) {
+  /* Keep iOS from zooming the page when the portions input receives focus. */
+  .detail-divisions input[type=number] { font-size: 16px; }
+}
 .detail-divisions > span { color: #899591; }
 .detail-nutrition-summary { margin-top: 16px; }
 .detail-storage-icon { display: inline-block; margin-right: 6px; font-size: 12px; line-height: 1; vertical-align: middle; }
+.detail-table-tabs { display: flex; justify-content: flex-start; gap: 0; margin-bottom: 16px; border-bottom: 1px solid var(--border); }
+.detail-table-tabs [role="tab"] { padding: 12px 16px; border: 0; border-bottom: 2px solid transparent; background: transparent; color: var(--muted-foreground); font: inherit; font-size: 14px; cursor: pointer; }
+.detail-table-tabs [role="tab"][aria-selected="true"] { color: var(--primary); border-bottom-color: var(--primary); font-weight: 600; }
+.detail-table-tabs [role="tab"]:focus-visible { outline: 2px solid var(--primary); outline-offset: -2px; }
 .detail-notes { margin-top: 32px; }
 .detail-notes p { margin: 0; max-width: 720px; font-size: 15px; color: #122B22; line-height: 1.75; letter-spacing: -.02em; white-space: pre-wrap; overflow-wrap: anywhere; }

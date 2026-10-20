@@ -1,5 +1,6 @@
 import { useAddPageAccess } from '../components/AddPageAccessProvider'
 import { ContentState, LoadingState } from '../components/feedback/ContentState'
+import { RegistrationActions } from '../components/catalog/RegistrationRequestButton'
 import { PageIntro, CatalogToolbar, CategoryFilter, SearchField, SortSelect } from '../components/catalog/CatalogControls'
 import { Button } from '@/components/ui/button'
 import { useEffect, useMemo, useRef, useState } from 'react'
@@ -118,7 +119,7 @@ export function RecipePage({ blendingTea = false }: { blendingTea?: boolean }) {
       {!loading && <div className="catalog-count-row"><p className="catalog-count" role="status">{itemLabel} <strong>{visibleRecipes.length}{ko ? '개' : ''}</strong>{appliedSearch && <span> · “{appliedSearch}”</span>}</p>{isAdmin && !blendingTea && <Button onClick={() => requestAccess('/add-recipe')} variant="link" size="content" className="catalog-intro__subtle-action">{ko ? '레시피 추가' : 'Add recipe'}</Button>}</div>}
       {loadFailed ? <ContentState error title={ko ? `${itemLabel}를 불러오지 못했습니다` : `Unable to load ${itemLabel.toLowerCase()}`}><Button className="catalog-primary" onClick={() => setLoadAttempt(n => n + 1)}>{ko ? '다시 시도' : 'Try again'}</Button></ContentState>
         : loading ? <LoadingState skeleton label={ko ? `${itemLabel} 불러오는 중` : `Loading ${itemLabel.toLowerCase()}`} />
-        : visibleRecipes.length === 0 ? <ContentState icon={blendingTea ? '🍵' : '🥗'} title={ko ? `조건에 맞는 ${blendingTea ? '차' : itemLabel}가 없어요` : `No ${itemLabel.toLowerCase()} match your selection`} description={ko ? '필터를 조정하거나 새로운 항목을 등록해보세요.' : 'Try adjusting your filters or adding a new item.'}><Button className="catalog-primary" onClick={() => { setCategory([]); setSearchParams({}); resetHome() }}>{ko ? '필터 초기화' : 'Reset filters'}</Button></ContentState>
+        : visibleRecipes.length === 0 ? <ContentState icon={blendingTea ? '🍵' : '🥗'} title={ko ? `조건에 맞는 ${blendingTea ? '차' : itemLabel}가 없어요` : `No ${itemLabel.toLowerCase()} match your selection`} description={ko ? '필터를 조정하거나 새로운 항목을 등록해보세요.' : 'Try adjusting your filters or adding a new item.'}><div className="catalog-empty-actions"><Button className="catalog-primary" onClick={() => { setCategory([]); setSearchParams({}); resetHome() }}>{ko ? '필터 초기화' : 'Reset filters'}</Button>{!blendingTea && <RegistrationActions kind="recipe" />}</div></ContentState>
         : <><RecipeGrid recipes={visibleRecipes.slice(0, limit)} variant={blendingTea ? 'product' : 'recipe'} /><div className="catalog-end" ref={sentinel}>{hasMore ? <Button variant="ghost" size="content" type="button" onClick={() => setLimit(n => n + 8)}>{ko ? `${itemLabel} 더 보기` : `Load more ${itemLabel.toLowerCase()}`}</Button> : <span>🎉 {ko ? blendingTea ? '차를 모두 둘러봤어요!' : '내가 만들어본 레시피 끝!' : `You’ve seen all the ${itemLabel.toLowerCase()}!`}</span>}</div></>}
     </div>
   </section>

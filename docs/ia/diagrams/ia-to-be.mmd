@@ -1,0 +1,96 @@
+flowchart TD
+  %% Generated from YAML; hierarchy only, not a user flow.
+  classDef depth0 fill:#E2E8F0,stroke:#475569,color:#0F172A;
+  classDef depth1 fill:#DBEAFE,stroke:#475569,color:#0F172A;
+  classDef depth2 fill:#DCFCE7,stroke:#475569,color:#0F172A;
+  classDef depth3 fill:#FEF3C7,stroke:#475569,color:#0F172A;
+  classDef depth4 fill:#FCE7F3,stroke:#475569,color:#0F172A;
+  ia_site["T’s Recipe | site | category | implemented"]:::depth0
+  ia_home["홈 · 사이트 이야기 | home | page | implemented | /"]:::depth1
+  ia_recipes["레시피 목록 | recipes | page | implemented | /recipes"]:::depth1
+  ia_ingredients["식재료 목록 | ingredients | page | implemented | /ingredients"]:::depth1
+  ia_shop["Shop | shop | page | implemented | /blending-tea"]:::depth1
+  ia_admin["관리자 | admin | page | implemented | /admin"]:::depth1
+  ia_admin_login["관리자 Google 로그인 | admin-login | modal | implemented"]:::depth1
+  ia_mobile_navigation["모바일 메뉴 | mobile-navigation | section | implemented"]:::depth1
+  ia_admin_recipes["레시피 수정 · 삭제 목록 | admin-recipes | section | implemented"]:::depth2
+  ia_home_story["사이트 이야기 · 기록의 이유 | home-story | section | implemented"]:::depth2
+  ia_ingredients_discovery["식재료 검색 · 분류 · 즐겨찾기 필터 | ingredients-discovery | section | implemented"]:::depth2
+  ia_recipes_discovery["레시피 검색 · 분류 · 정렬 | recipes-discovery | section | implemented"]:::depth2
+  ia_shop_discovery["상품 검색 · 분류 · 정렬 | shop-discovery | section | implemented"]:::depth2
+  ia_admin_ingredients["식재료 수정 · 삭제 목록 | admin-ingredients | section | implemented"]:::depth2
+  ia_home_resources["더 알아보기 | home-resources | section | planned"]:::depth2
+  ia_ingredients_grid["그리드 보기 | ingredients-grid | tab | implemented"]:::depth2
+  ia_product_detail["상품 상세 | product-detail | page | implemented | /product/:slug"]:::depth2
+  ia_recipe_detail["레시피 상세 · 영양 계산 | recipe-detail | page | implemented | /recipe/:id"]:::depth2
+  ia_admin_products["상품 수정 · 복제 · 삭제 목록 | admin-products | section | implemented"]:::depth2
+  ia_ingredients_list["목록 보기 | ingredients-list | tab | implemented"]:::depth2
+  ia_roulette["레시피 룰렛 | roulette | page | implemented | /recipe-roulette"]:::depth2
+  ia_recipe_create["레시피 추가 | recipe-create | page | implemented | /add-recipe"]:::depth2
+  ia_recipe_edit["레시피 수정 · 삭제 | recipe-edit | page | implemented | /recipe/:id/edit"]:::depth2
+  ia_ingredient_create["식재료 추가 | ingredient-create | page | implemented | /add-ingredient"]:::depth2
+  ia_ingredient_edit["식재료 수정 · 삭제 | ingredient-edit | page | implemented | /ingredient/:id/edit"]:::depth2
+  ia_ingredient_manage["식재료 일괄 관리 · 제보 확인 | ingredient-manage | page | implemented | /ingredients/manage"]:::depth2
+  ia_product_create["상품 추가 · 복제 | product-create | page | implemented | /products/new"]:::depth2
+  ia_product_edit["상품 수정 · 삭제 | product-edit | page | implemented | /products/:id/edit"]:::depth2
+  ia_shop_settings["배송 · 교환 · 반품 공통 정책 | shop-settings | page | implemented | /shop-settings"]:::depth2
+  ia_eating_guide["식사 가이드 | eating-guide | page | implemented | /eating-out"]:::depth3
+  ia_ingredient_picker["식재료 검색 · 선택 | ingredient-picker | modal | implemented"]:::depth3
+  ia_ingredient_reports["신고된 식재료 | ingredient-reports | section | implemented"]:::depth3
+  ia_policy_history["정책 변경 이력 | policy-history | section | implemented"]:::depth3
+  ia_product_delete["상품 삭제 확인 | product-delete | modal | implemented"]:::depth3
+  ia_product_form["상품 입력 · 공개 · 정책 설정 | product-form | section | implemented"]:::depth3
+  ia_product_info["상품 구성 · 상세 설명 · 기본 정보 | product-info | section | implemented"]:::depth3
+  ia_recipe_calculation["전체 재료 · 한 끼 영양 계산 | recipe-calculation | section | implemented"]:::depth3
+  ia_ingredient_report["식재료 정보 오류 신고 | ingredient-report | modal | implemented"]:::depth3
+  ia_product_policies["배송 · 교환 · 반품 안내 | product-policies | section | implemented"]:::depth3
+  ia_product_preview["고객 화면 미리보기 | product-preview | modal | implemented"]:::depth3
+  ia_recipe_gallery["이미지 확대 보기 | recipe-gallery | modal | implemented"]:::depth3
+  ia_ingredient_delete_warning["사용 중 식재료 삭제 경고 | ingredient-delete-warning | modal | implemented"]:::depth3
+  ia_policy_preview["고객 정책 안내 미리보기 | policy-preview | modal | implemented"]:::depth3
+  ia_picker_all["전체 식재료 | picker-all | tab | implemented"]:::depth4
+  ia_picker_favorites["즐겨찾기 식재료 | picker-favorites | tab | implemented"]:::depth4
+  ia_site --- ia_home
+  ia_site --- ia_recipes
+  ia_site --- ia_ingredients
+  ia_site --- ia_shop
+  ia_site --- ia_admin
+  ia_site --- ia_admin_login
+  ia_site --- ia_mobile_navigation
+  ia_admin --- ia_admin_recipes
+  ia_home --- ia_home_story
+  ia_ingredients --- ia_ingredients_discovery
+  ia_recipes --- ia_recipes_discovery
+  ia_shop --- ia_shop_discovery
+  ia_admin --- ia_admin_ingredients
+  ia_home --- ia_home_resources
+  ia_ingredients --- ia_ingredients_grid
+  ia_shop --- ia_product_detail
+  ia_recipes --- ia_recipe_detail
+  ia_admin --- ia_admin_products
+  ia_ingredients --- ia_ingredients_list
+  ia_recipes --- ia_roulette
+  ia_admin --- ia_recipe_create
+  ia_admin --- ia_recipe_edit
+  ia_admin --- ia_ingredient_create
+  ia_admin --- ia_ingredient_edit
+  ia_admin --- ia_ingredient_manage
+  ia_admin --- ia_product_create
+  ia_admin --- ia_product_edit
+  ia_admin --- ia_shop_settings
+  ia_home_resources --- ia_eating_guide
+  ia_recipe_create --- ia_ingredient_picker
+  ia_ingredient_manage --- ia_ingredient_reports
+  ia_shop_settings --- ia_policy_history
+  ia_product_edit --- ia_product_delete
+  ia_product_create --- ia_product_form
+  ia_product_detail --- ia_product_info
+  ia_recipe_detail --- ia_recipe_calculation
+  ia_ingredient_manage --- ia_ingredient_report
+  ia_product_detail --- ia_product_policies
+  ia_product_create --- ia_product_preview
+  ia_recipe_detail --- ia_recipe_gallery
+  ia_ingredient_manage --- ia_ingredient_delete_warning
+  ia_product_create --- ia_policy_preview
+  ia_ingredient_picker --- ia_picker_all
+  ia_ingredient_picker --- ia_picker_favorites

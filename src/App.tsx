@@ -12,7 +12,6 @@ const IngredientsPage = lazy(() => import('./pages/IngredientsPage').then(module
 const IngredientManagementPage = lazy(() => import('./pages/IngredientManagementPage').then(module => ({ default: module.IngredientsPage })))
 const IngredientEditPage = lazy(() => import('./pages/IngredientEditPage').then(module => ({ default: module.IngredientEditPage })))
 const AddIngredientPage = lazy(() => import('./pages/AddIngredientPage').then(module => ({ default: module.AddIngredientPage })))
-const SignupPage = lazy(() => import('./pages/SignupPage').then(module => ({ default: module.SignupPage })))
 const RecipeDetailPage = lazy(() => import('./pages/RecipeDetailPage').then(module => ({ default: module.RecipeDetailPage })))
 const RecipeManagementPage = lazy(() => import('./pages/RecipeManagementPage').then(module => ({ default: module.RecipeDetailPage })))
 const EatingOutPage = lazy(() => import('./pages/EatingOutPage').then(module => ({ default: module.EatingOutPage })))
@@ -42,7 +41,6 @@ export function App() {
         <Route path="add-ingredient" element={<AddPagePasswordGate key="add-ingredient"><AddIngredientPage /></AddPagePasswordGate>} />
         <Route path="recipe/:id" element={<RecipeDetailPage />} />
         <Route path="recipe/:id/edit" element={<AddPagePasswordGate key="edit-recipe"><RecipeManagementPage /></AddPagePasswordGate>} />
-        <Route path="signup" element={<SignupPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>
     </Routes>

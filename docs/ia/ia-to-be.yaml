@@ -1,0 +1,1071 @@
+schema_version: 1
+version: '1.1'
+snapshot_date: '2026-10-19'
+perspective: to-be
+scope: 검토용 제안. 기존 페이지 구현 여부와 구조 변경의 planned 상태를 구분. 실제 사이트 변경 없음.
+routing:
+  basename: /recipes/
+  redirects:
+    - path: /about
+      target: /
+      reason: 이전 소개 주소
+    - path: '*'
+      target: /
+      reason: 별도 404 페이지 없이 홈으로 이동
+access_model:
+  public: 비회원 및 관리자 모두 페이지 접근 가능. 데이터 공개 범위는 별도 규칙 적용.
+  admin: 관리자 인증이 필요한 화면. 화면 접근과 데이터 접근 정책은 별도 확인.
+navigation:
+  primary:
+    - home
+    - recipes
+    - ingredients
+    - shop
+  utility:
+    - admin
+    - admin-login
+  external:
+    - name: Contact
+      url: '[제출본 생략: 외부 문의 링크]'
+      note: 실제 코드의 외부 목적지가 공개 문의 목적에 맞는지 확인 필요
+  footer: 저작권 문구만 표시. 탐색 링크 없음
+  source_files:
+    - src/components/SiteHeader.tsx
+    - src/components/SiteFooter.tsx
+    - src/components/SiteHeader.css
+  proposal:
+    implementation: planned
+    reason: Shop의 공개 진입 경로와 표시명을 정리
+    issue_ids:
+      - IA-01
+      - IA-03
+cross_links:
+  - from: home
+    to: recipes
+    purpose: 이야기 끝 CTA
+  - from: ingredients-grid
+    to: recipe-detail
+    purpose: 관련 레시피 첫 항목
+  - from: ingredients-grid
+    to: recipes
+    purpose: '?ingredient=ID로 관련 레시피 더보기'
+  - from: shop
+    to: recipe-detail
+    purpose: 차 레시피 카드
+  - from: recipe-detail
+    to: recipe-edit
+    purpose: 관리자 수정 버튼
+  - from: ingredients-grid
+    to: ingredient-edit
+    purpose: 관리자 수정 버튼
+  - from: recipe-edit
+    to: ingredient-picker
+    purpose: 재료 선택 공유 모달
+  - from: product-edit
+    to: product-form
+    purpose: 상품 폼 공유
+  - from: product-edit
+    to: product-preview
+    purpose: 고객 미리보기 공유
+  - from: product-edit
+    to: policy-preview
+    purpose: 정책 미리보기 공유
+  - from: shop-settings
+    to: policy-preview
+    purpose: 정책 미리보기 공유
+  - from: roulette
+    to: recipe-detail
+    purpose: 새 탭에서 결과 열기
+  - from: product-detail
+    to: product-detail
+    purpose: 혼합차 구성 상품의 상세 링크
+  - from: recipes
+    to: roulette
+    purpose: 'planned: 레시피 선택 도구로 문맥 진입'
+state_inventory:
+  - nodes:
+      - recipes
+      - shop
+    states:
+      - loading
+      - load-error-retry
+      - no-results-reset
+    source_files:
+      - src/pages/RecipePage.tsx
+  - nodes:
+      - ingredients
+    states:
+      - inline-load-error-retry
+      - empty-or-no-results
+    source_files:
+      - src/pages/IngredientsPage.tsx
+    note: loading 중 visible 0이면 빈 결과 메시지가 나타날 수 있음. 사용자 인지 영향은 검증 필요
+  - nodes:
+      - recipe-detail
+      - product-detail
+      - ingredient-edit
+    states:
+      - loading
+      - unavailable
+      - error
+    source_files:
+      - src/pages/RecipeDetailPage.tsx
+      - src/pages/ProductDetailPage.tsx
+      - src/pages/IngredientEditPage.tsx
+  - nodes:
+      - roulette
+    states:
+      - loading
+      - error-retry
+      - empty
+      - spinning
+      - selected
+    source_files:
+      - src/pages/RecipeRoulettePage.tsx
+  - nodes:
+      - admin-login
+    states:
+      - auth-pending
+      - not-admin
+      - provider-error
+      - popup-error
+    source_files:
+      - src/components/AddPageAccessProvider.tsx
+      - src/components/AddPagePasswordGate.tsx
+  - nodes:
+      - recipe-edit
+    states:
+      - loading
+      - not-found
+    source_files:
+      - src/pages/RecipeManagementPage.tsx
+    note: 'load().catch(console.error): 사용자용 로드 실패 안내 부재 가능성'
+  - nodes:
+      - admin
+      - recipe-create
+      - ingredient-create
+      - ingredient-manage
+      - product-create
+      - product-edit
+      - shop-settings
+    states:
+      - loading-or-saving
+      - form-or-load-error
+    source_files:
+      - src/pages/AdminPage.tsx
+      - src/pages/AddRecipePage.tsx
+      - src/pages/AddIngredientPage.tsx
+      - src/pages/IngredientManagementPage.tsx
+      - src/pages/ProductEditPage.tsx
+      - src/pages/ShopSettingsPage.tsx
+excluded:
+  - source: src/components/RecipeEditModal.tsx
+    reason: 정의만 있고 src 내 호출/참조가 없음. 현재 IA의 접근 가능한 독립 화면에서 제외.
+  - source: src/components/RecipeTable.tsx
+    reason: 비회원 저장 안내 코드가 있지만 현재 마운트 위치는 관리자 전용 편집 라우트. 공개 상세의 모달로 취급하지 않음.
+nodes:
+  - id: site
+    name: T’s Recipe
+    parent: null
+    depth: 0
+    order: 1
+    type: category
+    path: null
+    access: public
+    description: 요리 기록·영양 계산·식재료 탐색과 관리자 운영을 제공하는 사이트
+    implementation: implemented
+    verification: code-confirmed
+    source_files:
+      - src/App.tsx
+      - src/components/Layout.tsx
+    notes: 정보 계층은 GNB와 다르다. 루트 자식 순서는 문서상 배열이며 메뉴 노출을 뜻하지 않는다.
+  - id: home
+    name: 홈 · 사이트 이야기
+    parent: site
+    depth: 1
+    order: 1
+    type: page
+    path: /
+    access: public
+    description: 사이트의 개인적 배경과 레시피 기록의 목적 소개
+    implementation: implemented
+    verification: code-confirmed
+    source_files:
+      - src/App.tsx
+      - src/pages/AboutPage.tsx
+    notes: ''
+  - id: home-story
+    name: 사이트 이야기 · 기록의 이유
+    parent: home
+    depth: 2
+    order: 1
+    type: section
+    path: null
+    access: public
+    description: 다섯 이야기 영역과 레시피 탐색 CTA
+    implementation: implemented
+    verification: code-confirmed
+    source_files:
+      - src/pages/AboutPage.tsx
+    notes: 각 문단/이미지는 별도 노드에서 제외
+  - id: recipes
+    name: 레시피 목록
+    parent: site
+    depth: 1
+    order: 2
+    type: page
+    path: /recipes
+    access: public
+    description: 카테고리·검색·정렬로 레시피 탐색
+    implementation: implemented
+    verification: code-confirmed
+    source_files:
+      - src/App.tsx
+      - src/pages/RecipePage.tsx
+    notes: q/ingredient는 URL 쿼리, category/sort는 로컬 상태. 8개씩 자동 추가 및 더보기 버튼
+  - id: recipes-discovery
+    name: 레시피 검색 · 분류 · 정렬
+    parent: recipes
+    depth: 2
+    order: 1
+    type: section
+    path: null
+    access: public
+    description: 이름·재료 검색, 카테고리와 식재료 포함 필터, 날짜/이름 정렬
+    implementation: implemented
+    verification: code-confirmed
+    source_files:
+      - src/pages/RecipePage.tsx
+    notes: ''
+  - id: recipe-detail
+    name: 레시피 상세 · 영양 계산
+    parent: recipes
+    depth: 2
+    order: 2
+    type: page
+    path: /recipe/:id
+    access: public
+    description: 재료 양·단위·등분을 바꾸며 영양을 계산하고 메모·원본 링크 조회
+    implementation: implemented
+    verification: code-confirmed
+    source_files:
+      - src/App.tsx
+      - src/pages/RecipeDetailPage.tsx
+    notes: 계산은 화면 내 상태. 관리자만 수정 버튼 표시. 화면 노출 정책과 데이터 접근 정책은 별도 확인.
+  - id: recipe-calculation
+    name: 전체 재료 · 한 끼 영양 계산
+    parent: recipe-detail
+    depth: 3
+    order: 1
+    type: section
+    path: null
+    access: public
+    description: 보관 장소별·요리 그룹별 보기 전환과 전체 재료·한 끼 분량 및 주식 영양 합계 계산
+    implementation: implemented
+    verification: code-confirmed
+    source_files:
+      - src/pages/RecipeDetailPage.tsx
+    notes: ''
+  - id: recipe-gallery
+    name: 이미지 확대 보기
+    parent: recipe-detail
+    depth: 3
+    order: 2
+    type: modal
+    path: null
+    access: public
+    description: 모바일 갤러리 이미지를 확대하고 넘겨보기
+    implementation: implemented
+    verification: code-confirmed
+    source_files:
+      - src/pages/RecipeDetailPage.tsx
+    notes: 데스크톱/모바일 표시 차이는 RecipeDetailPage.css. 실제 기기 제스처 검증 필요
+  - id: ingredients
+    name: 식재료 목록
+    parent: site
+    depth: 1
+    order: 3
+    type: page
+    path: /ingredients
+    access: public
+    description: 식재료 영양 정보와 관련 레시피 탐색
+    implementation: implemented
+    verification: code-confirmed
+    source_files:
+      - src/App.tsx
+      - src/pages/IngredientsPage.tsx
+    notes: 진입 시 기본은 그리드. 그리드/목록 전환은 현재 화면에서만 유지하며 저장하지 않음. 독립된 공개 식재료 상세 URL은 없음
+  - id: ingredients-discovery
+    name: 식재료 검색 · 분류 · 즐겨찾기 필터
+    parent: ingredients
+    depth: 2
+    order: 1
+    type: section
+    path: null
+    access: public
+    description: 이름 검색과 영양 분류·보관 위치·즐겨찾기 조건 선택
+    implementation: implemented
+    verification: code-confirmed
+    source_files:
+      - src/pages/IngredientsPage.tsx
+    notes: 필터 선택은 한 번에 한 값. 즐겨찾기 추가/해제는 관리자 식재료 선택/관리 UI에 존재하며 공개 그리드에는 없음
+  - id: ingredients-grid
+    name: 그리드 보기
+    parent: ingredients
+    depth: 2
+    order: 2
+    type: tab
+    path: null
+    access: public
+    description: 카드에서 용량별 영양 계산과 관련 레시피 조회
+    implementation: implemented
+    verification: code-confirmed
+    source_files:
+      - src/pages/IngredientsPage.tsx
+    notes: 카드 자체는 독립 상세 페이지가 아니다
+  - id: ingredients-list
+    name: 목록 보기
+    parent: ingredients
+    depth: 2
+    order: 3
+    type: tab
+    path: null
+    access: public
+    description: 공개 식재료 테이블 조회
+    implementation: implemented
+    verification: code-confirmed
+    source_files:
+      - src/components/IngredientCsvTable.tsx
+    notes: IngredientManagementPage의 embedded 분기는 IngredientCsvTable로 조기 반환. 관리자 편집/제보 모달은 공개 목록에 렌더되지 않음
+  - id: shop
+    name: Shop
+    parent: site
+    depth: 1
+    order: 4
+    type: page
+    path: /blending-tea
+    access: public
+    description: 상품 및 차 레시피를 카드로 탐색
+    implementation: implemented
+    verification: code-confirmed
+    source_files:
+      - src/App.tsx
+      - src/pages/RecipePage.tsx
+    notes: GNB에 없음. 제목 Shop, 내부 itemLabel은 차, 표시 필터는 전체/에코백/기타. 상품 데이터와 차 레시피가 함께 올 수 있음
+  - id: shop-discovery
+    name: 상품 검색 · 분류 · 정렬
+    parent: shop
+    depth: 2
+    order: 1
+    type: section
+    path: null
+    access: public
+    description: Shop 카탈로그의 검색·필터·정렬
+    implementation: implemented
+    verification: code-confirmed
+    source_files:
+      - src/pages/RecipePage.tsx
+    notes: 상품은 product 상세, 레시피는 recipe 상세로 이동하며 동일 페이지를 복제하지 않음
+  - id: product-detail
+    name: 상품 상세
+    parent: shop
+    depth: 2
+    order: 2
+    type: page
+    path: /product/:slug
+    access: public
+    description: 상품 정보·가격·설명·정책 및 외부 구매 링크 조회
+    implementation: implemented
+    verification: code-confirmed
+    source_files:
+      - src/App.tsx
+      - src/pages/ProductDetailPage.tsx
+    notes: 관리자는 비공개/임시 상품 미리보기 가능. 공개 여부는 페이지와 Firestore 규칙에서 각각 검사
+  - id: product-info
+    name: 상품 구성 · 상세 설명 · 기본 정보
+    parent: product-detail
+    depth: 3
+    order: 1
+    type: section
+    path: null
+    access: public
+    description: 혼합차 구성과 고시 정보 및 구성 상품 링크
+    implementation: implemented
+    verification: code-confirmed
+    source_files:
+      - src/components/product/ProductPreview.tsx
+    notes: ''
+  - id: product-policies
+    name: 배송 · 교환 · 반품 안내
+    parent: product-detail
+    depth: 3
+    order: 2
+    type: section
+    path: null
+    access: public
+    description: 유형에 따라 공통/개별 정책 또는 외부 판매처 안내
+    implementation: implemented
+    verification: code-confirmed
+    source_files:
+      - src/components/product/ProductPreview.tsx
+    notes: 주문·결제·환불 실행 화면 없음. 구매하기/공동 구매는 외부 링크
+  - id: roulette
+    name: 레시피 룰렛
+    parent: recipes
+    depth: 2
+    order: 3
+    type: page
+    path: /recipe-roulette
+    access: public
+    description: 무작위 레시피를 선택해 새 탭에서 상세 열기
+    implementation: implemented
+    verification: code-confirmed
+    source_files:
+      - src/App.tsx
+      - src/pages/RecipeRoulettePage.tsx
+    notes: 다른 화면의 진입 링크를 확인하지 못함. URL 직접 접근 가능 To-Be 계층과 진입 링크는 planned 제안이며 기존 페이지 구현은 유지.
+  - id: eating-guide
+    name: 식사 가이드
+    parent: home-resources
+    depth: 3
+    order: 1
+    type: page
+    path: /eating-out
+    access: public
+    description: 식사 관련 정적 안내 콘텐츠 조회
+    implementation: implemented
+    verification: code-confirmed
+    source_files:
+      - src/App.tsx
+      - src/pages/EatingOutPage.tsx
+    notes: 다른 화면의 진입 링크를 확인하지 못함. 콘텐츠의 영양/의학적 타당성은 이번 IA 분석 범위 밖 To-Be 계층과 진입 링크는 planned 제안이며 기존 페이지 구현은 유지.
+  - id: admin
+    name: 관리자
+    parent: site
+    depth: 1
+    order: 8
+    type: page
+    path: /admin
+    access: admin
+    description: 레시피·식재료·상품 운영 진입과 관리 항목 검색
+    implementation: implemented
+    verification: code-confirmed
+    source_files:
+      - src/App.tsx
+      - src/pages/AdminPage.tsx
+      - src/components/AddPagePasswordGate.tsx
+      - src/context/AdminContext.tsx
+    notes: 헤더 관리자는 비회원에게도 보이며 Google 관리자 로그인 후 진입. 로그아웃은 관리자 화면
+  - id: admin-recipes
+    name: 레시피 수정 · 삭제 목록
+    parent: admin
+    depth: 2
+    order: 1
+    type: section
+    path: null
+    access: admin
+    description: 검색한 레시피의 수정 화면 진입
+    implementation: implemented
+    verification: code-confirmed
+    source_files:
+      - src/pages/AdminPage.tsx
+    notes: ''
+  - id: admin-ingredients
+    name: 식재료 수정 · 삭제 목록
+    parent: admin
+    depth: 2
+    order: 2
+    type: section
+    path: null
+    access: admin
+    description: 검색한 식재료의 수정 화면 진입
+    implementation: implemented
+    verification: code-confirmed
+    source_files:
+      - src/pages/AdminPage.tsx
+    notes: ''
+  - id: admin-products
+    name: 상품 수정 · 복제 · 삭제 목록
+    parent: admin
+    depth: 2
+    order: 3
+    type: section
+    path: null
+    access: admin
+    description: 임시/비공개를 포함하는 상품 관리 진입
+    implementation: implemented
+    verification: code-confirmed
+    source_files:
+      - src/pages/AdminPage.tsx
+    notes: ''
+  - id: recipe-create
+    name: 레시피 추가
+    parent: admin
+    depth: 2
+    order: 4
+    type: page
+    path: /add-recipe
+    access: admin
+    description: 레시피 기본 정보·이미지·재료·분량을 입력해 저장
+    implementation: implemented
+    verification: code-confirmed
+    source_files:
+      - src/App.tsx
+      - src/pages/AddRecipePage.tsx
+      - src/components/AddPagePasswordGate.tsx
+      - src/context/AdminContext.tsx
+    notes: '?category=blending-tea는 동일 폼의 차 입력 변형으로 별도 페이지 ID를 만들지 않음'
+  - id: ingredient-picker
+    name: 식재료 검색 · 선택
+    parent: recipe-create
+    depth: 3
+    order: 1
+    type: modal
+    path: null
+    access: admin
+    description: 재료 검색·다중 선택과 즐겨찾기 관리
+    implementation: implemented
+    verification: code-confirmed
+    source_files:
+      - src/components/IngredientSearchModal.tsx
+    notes: 레시피 수정에서도 재사용하며 단일 ID 유지
+  - id: picker-all
+    name: 전체 식재료
+    parent: ingredient-picker
+    depth: 4
+    order: 1
+    type: tab
+    path: null
+    access: admin
+    description: 등록된 전체 재료에서 검색/선택
+    implementation: implemented
+    verification: code-confirmed
+    source_files:
+      - src/components/IngredientSearchModal.tsx
+    notes: ToggleGroup 기반 전환이며 ARIA tab 위젯 여부와 정보상 탭 분류는 다름
+  - id: picker-favorites
+    name: 즐겨찾기 식재료
+    parent: ingredient-picker
+    depth: 4
+    order: 2
+    type: tab
+    path: null
+    access: admin
+    description: 브라우저에 저장한 즐겨찾기 재료 선택
+    implementation: implemented
+    verification: code-confirmed
+    source_files:
+      - src/components/IngredientSearchModal.tsx
+    notes: ''
+  - id: recipe-edit
+    name: 레시피 수정 · 삭제
+    parent: admin
+    depth: 2
+    order: 5
+    type: page
+    path: /recipe/:id/edit
+    access: admin
+    description: RecipeTable 편집 상태에서 레시피 내용 저장 또는 삭제
+    implementation: implemented
+    verification: code-confirmed
+    source_files:
+      - src/App.tsx
+      - src/pages/RecipeManagementPage.tsx
+      - src/components/AddPagePasswordGate.tsx
+      - src/context/AdminContext.tsx
+    notes: 뒤로는 navigate(-1). 직접 진입 시 이전 페이지가 사이트 내부라는 보장 없음
+  - id: ingredient-create
+    name: 식재료 추가
+    parent: admin
+    depth: 2
+    order: 6
+    type: page
+    path: /add-ingredient
+    access: admin
+    description: 수정 화면과 동일한 폼으로 식재료 정보·영양·단위 환산을 입력해 등록
+    implementation: implemented
+    verification: code-confirmed
+    source_files:
+      - src/App.tsx
+      - src/pages/AddIngredientPage.tsx
+      - src/components/AddPagePasswordGate.tsx
+      - src/context/AdminContext.tsx
+    notes: ''
+  - id: ingredient-edit
+    name: 식재료 수정 · 삭제
+    parent: admin
+    depth: 2
+    order: 7
+    type: page
+    path: /ingredient/:id/edit
+    access: admin
+    description: 개별 식재료 정보를 수정하거나 삭제
+    implementation: implemented
+    verification: code-confirmed
+    source_files:
+      - src/App.tsx
+      - src/pages/IngredientEditPage.tsx
+      - src/components/AddPagePasswordGate.tsx
+      - src/context/AdminContext.tsx
+    notes: ''
+  - id: ingredient-manage
+    name: 식재료 일괄 관리 · 제보 확인
+    parent: admin
+    depth: 2
+    order: 8
+    type: page
+    path: /ingredients/manage
+    access: admin
+    description: 식재료 테이블 일괄 편집, 즐겨찾기와 제보 검토
+    implementation: implemented
+    verification: code-confirmed
+    source_files:
+      - src/App.tsx
+      - src/pages/IngredientManagementPage.tsx
+      - src/components/AddPagePasswordGate.tsx
+      - src/context/AdminContext.tsx
+    notes: 현재 라우트는 관리자 전용. 공개 목록 보기와 컴포넌트를 공유하지만 렌더링 분기가 다름
+  - id: ingredient-reports
+    name: 신고된 식재료
+    parent: ingredient-manage
+    depth: 3
+    order: 1
+    type: section
+    path: null
+    access: admin
+    description: 관리자 제보 목록 조회와 해결 처리
+    implementation: implemented
+    verification: code-confirmed
+    source_files:
+      - src/pages/IngredientManagementPage.tsx
+    notes: 보고된 항목이 있을 때만 표시
+  - id: ingredient-report
+    name: 식재료 정보 오류 신고
+    parent: ingredient-manage
+    depth: 3
+    order: 2
+    type: modal
+    path: null
+    access: admin
+    description: 오류 설명을 입력해 제보 저장
+    implementation: implemented
+    verification: code-confirmed
+    source_files:
+      - src/pages/IngredientManagementPage.tsx
+    notes: 현재 관리자 화면 안에서만 도달 가능. 제보 주체와 화면 진입·접근 정책의 정합성 확인 필요
+  - id: ingredient-delete-warning
+    name: 사용 중 식재료 삭제 경고
+    parent: ingredient-manage
+    depth: 3
+    order: 3
+    type: modal
+    path: null
+    access: admin
+    description: 관련 레시피를 확인하고 삭제 여부 결정
+    implementation: implemented
+    verification: code-confirmed
+    source_files:
+      - src/pages/IngredientManagementPage.tsx
+    notes: 연관 링크가 /recipes/#id 형식으로 현재 /recipe/:id 상세 주소와 다름
+  - id: product-create
+    name: 상품 추가 · 복제
+    parent: admin
+    depth: 2
+    order: 9
+    type: page
+    path: /products/new
+    access: admin
+    description: 상품 등록과 ?copy=ID를 통한 복제
+    implementation: implemented
+    verification: code-confirmed
+    source_files:
+      - src/App.tsx
+      - src/pages/ProductEditPage.tsx
+      - src/components/AddPagePasswordGate.tsx
+      - src/context/AdminContext.tsx
+    notes: 임시 저장 후 /products/:id/edit로 이동. 복제는 쿼리 변형으로 별도 노드 없음
+  - id: product-edit
+    name: 상품 수정 · 삭제
+    parent: admin
+    depth: 2
+    order: 10
+    type: page
+    path: /products/:id/edit
+    access: admin
+    description: 상품·옵션·공개 상태·정책을 수정하고 삭제
+    implementation: implemented
+    verification: code-confirmed
+    source_files:
+      - src/App.tsx
+      - src/pages/ProductEditPage.tsx
+      - src/components/AddPagePasswordGate.tsx
+      - src/context/AdminContext.tsx
+    notes: 상품 추가와 같은 폼. 미리보기/정책 미리보기는 두 페이지에서 공유
+  - id: product-form
+    name: 상품 입력 · 공개 · 정책 설정
+    parent: product-create
+    depth: 3
+    order: 1
+    type: section
+    path: null
+    access: admin
+    description: 앵커 내비게이션과 접기 영역으로 기본정보·가격·옵션·정책·SEO 입력
+    implementation: implemented
+    verification: code-confirmed
+    source_files:
+      - src/pages/ProductEditPage.tsx
+    notes: 추가/수정 폼 공유. 필드별 IA 노드는 제외
+  - id: product-preview
+    name: 고객 화면 미리보기
+    parent: product-create
+    depth: 3
+    order: 2
+    type: modal
+    path: null
+    access: admin
+    description: 저장 전 입력 내용을 고객 화면 형태로 확인
+    implementation: implemented
+    verification: code-confirmed
+    source_files:
+      - src/pages/ProductEditPage.tsx
+    notes: 상품 수정에서도 공유
+  - id: policy-preview
+    name: 고객 정책 안내 미리보기
+    parent: product-create
+    depth: 3
+    order: 3
+    type: modal
+    path: null
+    access: admin
+    description: 고객에게 표시되는 정책 문구 검토
+    implementation: implemented
+    verification: code-confirmed
+    source_files:
+      - src/pages/ProductEditPage.tsx
+    notes: 상품 수정과 공통 정책 설정에서도 동일 목적. 경로 중복 생성 안 함
+  - id: product-delete
+    name: 상품 삭제 확인
+    parent: product-edit
+    depth: 3
+    order: 1
+    type: modal
+    path: null
+    access: admin
+    description: 목록에서 제거하고 기록을 보관하는 삭제 확인
+    implementation: implemented
+    verification: code-confirmed
+    source_files:
+      - src/pages/ProductEditPage.tsx
+    notes: ''
+  - id: shop-settings
+    name: 배송 · 교환 · 반품 공통 정책
+    parent: admin
+    depth: 2
+    order: 11
+    type: page
+    path: /shop-settings
+    access: admin
+    description: 공통 정책·카테고리와 정책 변경 이력 관리
+    implementation: implemented
+    verification: code-confirmed
+    source_files:
+      - src/App.tsx
+      - src/pages/ShopSettingsPage.tsx
+      - src/components/AddPagePasswordGate.tsx
+      - src/context/AdminContext.tsx
+    notes: ''
+  - id: policy-history
+    name: 정책 변경 이력
+    parent: shop-settings
+    depth: 3
+    order: 1
+    type: section
+    path: null
+    access: admin
+    description: 기존 정책 변경 기록 확인
+    implementation: implemented
+    verification: code-confirmed
+    source_files:
+      - src/pages/ShopSettingsPage.tsx
+    notes: ''
+  - id: admin-login
+    name: 관리자 Google 로그인
+    parent: site
+    depth: 1
+    order: 9
+    type: modal
+    path: null
+    access: public
+    description: 허용된 관리자 계정 인증과 거부/팝업 오류 표시
+    implementation: implemented
+    verification: code-confirmed
+    source_files:
+      - src/components/AddPageAccessProvider.tsx
+    notes: 대상 경로를 보관해 로그인 후 이동. 관리자만 이용 가능해지는 인증 진입 자체는 공개
+  - id: mobile-navigation
+    name: 모바일 메뉴
+    parent: site
+    depth: 1
+    order: 10
+    type: section
+    path: null
+    access: public
+    description: 768px 미만에서 동일한 주 메뉴·Contact·관리자·언어 전환 제공
+    implementation: implemented
+    verification: code-confirmed
+    source_files:
+      - src/components/SiteHeader.tsx
+    notes: 오버레이 drawer가 아니라 헤더 아래 접히는 nav. Escape로 닫기. CSS 근거 src/components/SiteHeader.css
+  - id: home-resources
+    name: 더 알아보기
+    parent: home
+    depth: 2
+    order: 2
+    type: section
+    path: null
+    access: public
+    description: 식사 가이드의 목적을 소개하는 링크 영역
+    implementation: planned
+    verification: proposed
+    source_files:
+      - src/pages/AboutPage.tsx
+    notes: 신규 UI 제안. source_files는 수정 후보이지 구현 증거가 아님.
+changes:
+  - id: site
+    type: Unchanged
+    implementation: implemented
+    reason: 기존 정보 목적·ID·경로·권한 유지
+    issue_ids: []
+  - id: home
+    type: Unchanged
+    implementation: implemented
+    reason: 기존 정보 목적·ID·경로·권한 유지
+    issue_ids: []
+  - id: home-story
+    type: Unchanged
+    implementation: implemented
+    reason: 기존 정보 목적·ID·경로·권한 유지
+    issue_ids: []
+  - id: recipes
+    type: Unchanged
+    implementation: implemented
+    reason: 기존 정보 목적·ID·경로·권한 유지
+    issue_ids: []
+  - id: recipes-discovery
+    type: Unchanged
+    implementation: implemented
+    reason: 기존 정보 목적·ID·경로·권한 유지
+    issue_ids: []
+  - id: recipe-detail
+    type: Unchanged
+    implementation: implemented
+    reason: 기존 정보 목적·ID·경로·권한 유지
+    issue_ids: []
+  - id: recipe-calculation
+    type: Unchanged
+    implementation: implemented
+    reason: 기존 정보 목적·ID·경로·권한 유지
+    issue_ids: []
+  - id: recipe-gallery
+    type: Unchanged
+    implementation: implemented
+    reason: 기존 정보 목적·ID·경로·권한 유지
+    issue_ids: []
+  - id: ingredients
+    type: Unchanged
+    implementation: implemented
+    reason: 기존 정보 목적·ID·경로·권한 유지
+    issue_ids: []
+  - id: ingredients-discovery
+    type: Unchanged
+    implementation: implemented
+    reason: 기존 정보 목적·ID·경로·권한 유지
+    issue_ids: []
+  - id: ingredients-grid
+    type: Unchanged
+    implementation: implemented
+    reason: 기존 정보 목적·ID·경로·권한 유지
+    issue_ids: []
+  - id: ingredients-list
+    type: Unchanged
+    implementation: implemented
+    reason: 기존 정보 목적·ID·경로·권한 유지
+    issue_ids: []
+  - id: shop
+    type: Unchanged
+    implementation: implemented
+    reason: 기존 정보 목적·ID·경로·권한 유지
+    issue_ids: []
+  - id: shop-discovery
+    type: Unchanged
+    implementation: implemented
+    reason: 기존 정보 목적·ID·경로·권한 유지
+    issue_ids: []
+  - id: product-detail
+    type: Unchanged
+    implementation: implemented
+    reason: 기존 정보 목적·ID·경로·권한 유지
+    issue_ids: []
+  - id: product-info
+    type: Unchanged
+    implementation: implemented
+    reason: 기존 정보 목적·ID·경로·권한 유지
+    issue_ids: []
+  - id: product-policies
+    type: Unchanged
+    implementation: implemented
+    reason: 기존 정보 목적·ID·경로·권한 유지
+    issue_ids: []
+  - id: roulette
+    type: Moved
+    implementation: planned
+    reason: 목록에서 레시피 선택 도구를 발견할 수 있도록 배치
+    issue_ids:
+      - IA-01
+  - id: eating-guide
+    type: Moved
+    implementation: planned
+    reason: 현재 고립된 공개 정보를 홈의 관련 정보 영역에서 발견하도록 제안
+    issue_ids:
+      - IA-01
+  - id: admin
+    type: Unchanged
+    implementation: implemented
+    reason: 기존 정보 목적·ID·경로·권한 유지
+    issue_ids: []
+  - id: admin-recipes
+    type: Unchanged
+    implementation: implemented
+    reason: 기존 정보 목적·ID·경로·권한 유지
+    issue_ids: []
+  - id: admin-ingredients
+    type: Unchanged
+    implementation: implemented
+    reason: 기존 정보 목적·ID·경로·권한 유지
+    issue_ids: []
+  - id: admin-products
+    type: Unchanged
+    implementation: implemented
+    reason: 기존 정보 목적·ID·경로·권한 유지
+    issue_ids: []
+  - id: recipe-create
+    type: Unchanged
+    implementation: implemented
+    reason: 기존 정보 목적·ID·경로·권한 유지
+    issue_ids: []
+  - id: ingredient-picker
+    type: Unchanged
+    implementation: implemented
+    reason: 기존 정보 목적·ID·경로·권한 유지
+    issue_ids: []
+  - id: picker-all
+    type: Unchanged
+    implementation: implemented
+    reason: 기존 정보 목적·ID·경로·권한 유지
+    issue_ids: []
+  - id: picker-favorites
+    type: Unchanged
+    implementation: implemented
+    reason: 기존 정보 목적·ID·경로·권한 유지
+    issue_ids: []
+  - id: recipe-edit
+    type: Unchanged
+    implementation: implemented
+    reason: 기존 정보 목적·ID·경로·권한 유지
+    issue_ids: []
+  - id: ingredient-create
+    type: Unchanged
+    implementation: implemented
+    reason: 기존 정보 목적·ID·경로·권한 유지
+    issue_ids: []
+  - id: ingredient-edit
+    type: Unchanged
+    implementation: implemented
+    reason: 기존 정보 목적·ID·경로·권한 유지
+    issue_ids: []
+  - id: ingredient-manage
+    type: Unchanged
+    implementation: implemented
+    reason: 기존 정보 목적·ID·경로·권한 유지
+    issue_ids: []
+  - id: ingredient-reports
+    type: Unchanged
+    implementation: implemented
+    reason: 기존 정보 목적·ID·경로·권한 유지
+    issue_ids: []
+  - id: ingredient-report
+    type: Unchanged
+    implementation: implemented
+    reason: 기존 정보 목적·ID·경로·권한 유지
+    issue_ids: []
+  - id: ingredient-delete-warning
+    type: Unchanged
+    implementation: implemented
+    reason: 기존 정보 목적·ID·경로·권한 유지
+    issue_ids: []
+  - id: product-create
+    type: Unchanged
+    implementation: implemented
+    reason: 기존 정보 목적·ID·경로·권한 유지
+    issue_ids: []
+  - id: product-edit
+    type: Unchanged
+    implementation: implemented
+    reason: 기존 정보 목적·ID·경로·권한 유지
+    issue_ids: []
+  - id: product-form
+    type: Unchanged
+    implementation: implemented
+    reason: 기존 정보 목적·ID·경로·권한 유지
+    issue_ids: []
+  - id: product-preview
+    type: Unchanged
+    implementation: implemented
+    reason: 기존 정보 목적·ID·경로·권한 유지
+    issue_ids: []
+  - id: policy-preview
+    type: Unchanged
+    implementation: implemented
+    reason: 기존 정보 목적·ID·경로·권한 유지
+    issue_ids: []
+  - id: product-delete
+    type: Unchanged
+    implementation: implemented
+    reason: 기존 정보 목적·ID·경로·권한 유지
+    issue_ids: []
+  - id: shop-settings
+    type: Unchanged
+    implementation: implemented
+    reason: 기존 정보 목적·ID·경로·권한 유지
+    issue_ids: []
+  - id: policy-history
+    type: Unchanged
+    implementation: implemented
+    reason: 기존 정보 목적·ID·경로·권한 유지
+    issue_ids: []
+  - id: admin-login
+    type: Unchanged
+    implementation: implemented
+    reason: 기존 정보 목적·ID·경로·권한 유지
+    issue_ids: []
+  - id: mobile-navigation
+    type: Unchanged
+    implementation: implemented
+    reason: 기존 정보 목적·ID·경로·권한 유지
+    issue_ids: []
+  - id: home-resources
+    type: Added
+    implementation: planned
+    reason: 현재 고립된 공개 정보를 홈의 관련 정보 영역에서 발견하도록 제안
+    issue_ids:
+      - IA-01
+proposals_pending:
+  - issue_ids:
+      - IA-03
+    idea: Shop의 상품 범위와 용어를 확정한 뒤 분류를 재설계. 차/에코백/기타 데이터 사용 상황 검증 필요.
+  - issue_ids:
+      - IA-04
+    idea: 비회원 식재료 제보 진입 제공 여부 결정. 현재 권한은 변경하지 않음.
+  - issue_ids:
+      - IA-05
+    idea: 상세 복귀 및 필터 보존 정책을 사용자 테스트로 결정. 신규 화면은 만들지 않음.

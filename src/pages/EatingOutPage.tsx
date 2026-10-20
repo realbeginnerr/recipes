@@ -59,13 +59,13 @@ export function EatingOutPage() {
             고기 중 지방 비율 높은 것: 삼겹살, 꽃등심, 립아이, 곱창, 대창
           </p>
           <ul style={{ paddingLeft: '16px', listStyle: 'disc', display: 'flex', flexDirection: 'column', gap: '6px', marginBottom: '8px' }}>
-            <li style={{ fontSize: '0.92rem', color: 'var(--muted-foreground)' }}>삼겹살 1인분의 지방 함량은 한끼 섭취 권장량보다 약 2.5배 더 많아요.</li>
+            <li style={{ fontSize: '0.92rem', color: 'var(--muted-foreground)' }}>삼겹살 1인분의 지방 함량은 이 사이트의 한 끼 지방 기준보다 많아요.</li>
           </ul>
           <ul style={{ paddingLeft: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '6px', marginBottom: '16px' }}>
             {[
               '삼겹살 1인분: 200g 기준',
               '삼겹살 1인분의 지방 함량: 약 70~80g',
-              '한끼 섭취 권장량: 15~28g. 한국 성인 남성 기준',
+              `이 사이트의 한 끼 지방 기준: ${MEAL_TARGET.fat}g`,
             ].map((item, i) => (
               <li key={i} style={{ fontSize: '0.92rem', color: 'var(--muted-foreground)' }}>* {item}</li>
             ))}
@@ -151,3 +151,4 @@ export function EatingOutPage() {
     </div>
   )
 }
+import { MEAL_TARGET } from '../constants/nutrition'
