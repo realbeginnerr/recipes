@@ -8,7 +8,7 @@ export const aboutCopy = {
     "introLast": "",
     "tableAlt": "밥상",
     "storyLabel": "나를 아낀다는 것",
-    "storyTitleFirst": "수고한 나에게 선물을 줘야겠다",
+    "storyTitleFirst": "수고한 나에게 선물 주기",
     "storyTitleLast": "",
     "story": "다른 사람은 몰라도 나만큼은 그 노력을 알아줘야 한다. 나는 그 애가 얼마나 애썼는지 알고 있으니까. 애써준 고마운 나에게 직접 요리를 해주기로 했다.",
     "quote": "",
