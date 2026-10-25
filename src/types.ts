@@ -1,3 +1,4 @@
+import type { RecipeImage, RecipeProductTag } from './types/shoppable'
 import type { RecipeCategory } from './utils/recipeCategory'
 import type { TeaTag } from './utils/teaCategory'
 import type { Product } from './types/product'
@@ -38,12 +39,21 @@ export type Recipe = {
   nameKo: string
   imageUrl: string
   imageUrls?: string[]
+  images?: RecipeImage[]
+  productTags?: RecipeProductTag[]
   items: RecipeItem[]
   sideItems?: RecipeItem[]
   memo?: string
+  cookingGroupOrder?: string[]
+  cookingContent?: string
+  platingBlocks?: { id: string; type: 'text' | 'image'; value: string }[]
+  mealContent?: string
+  mealImages?: string[]
   tasteRating?: number
   timeRating?: number
   divisionCount?: number
+  cookingTimeMinutes?: number
+  lastCookedAt?: string
   createdAt?: number
   link?: string
   hidden?: boolean

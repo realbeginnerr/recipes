@@ -19,12 +19,12 @@ it('updates grams, water, ratios and renders linked composition in the customer 
   render(<MemoryRouter><Harness /></MemoryRouter>)
   expect(screen.getByText('75.0%')).toBeDefined()
   expect(screen.getByText('25.0%')).toBeDefined()
-  expect(screen.getByRole('link', { name: 'Black tea' }).getAttribute('href')).toBe('/product/a')
+  expect(screen.getByLabelText('Black tea 배합량')).toBeDefined()
   fireEvent.change(screen.getByLabelText('Black tea 배합량'), { target: { value: '1' } })
   expect(screen.getAllByText('50.0%')).toHaveLength(2)
   fireEvent.change(screen.getByLabelText('물 양'), { target: { value: '500' } })
-  expect(screen.getByText('총 배합량 2g · 물 500ml')).toBeDefined()
-  expect(screen.getByText('15,000원')).toBeDefined()
+  expect((screen.getByLabelText('물 양') as HTMLInputElement).value).toBe('500')
+  expect(screen.queryByText('15,000원')).toBeNull()
   fireEvent.click(screen.getByRole('button', { name: 'Black tea 제거' }))
   expect(screen.queryByRole('link', { name: 'Black tea' })).toBeNull()
 })
@@ -53,42 +53,33 @@ it('preserves the decimal point while typing fractional blend grams one key at a
   expect(screen.getByTestId('saved-grams').textContent).toBe('0.5')
 })
 
-it('shows the one-cup leaf basis and default brewing instructions without a custom description', () => {
-  const product = { ...emptyProduct(), compositionType: 'blend' as const, blend: { components: [], waterMl: 250 } }
-  render(<MemoryRouter><ProductPreview product={product} settings={null} /></MemoryRouter>)
-  expect(screen.getByText('아래 찻잎 양은 한 잔(물 250ml) 기준으로 작성했습니다.')).toBeDefined()
-  expect(screen.getByRole('heading', { name: '차 우리는 방법' })).toBeDefined()
-  expect(screen.getByText('재료를 넣고 계속 끓이는 것이 아닙니다.')).toBeDefined()
-})
-
-it('shows group-buy recruitment only for blended tea and keeps the purchase link on single tea', () => {
+it('renders the authored article instead of automatic tea brewing and selling sections', () => {
   const base = emptyProduct()
-  const product = { ...base, pricing: { ...base.pricing, regular: 10000 }, purchaseUrl: 'https://shop.example.com/tea' }
-  const { rerender } = render(<MemoryRouter><ProductPreview product={product} settings={null} /></MemoryRouter>)
-  expect(screen.queryByText('판매 중')).toBeNull()
+  const product = { ...base, name: '블로그 글', summary: '소개', description: '<h2>소제목</h2><p>직접 쓴 글</p>', compositionType: 'blend' as const, pricing: { ...base.pricing, regular: 10000 } }
+  render(<MemoryRouter><ProductPreview product={product} settings={null} /></MemoryRouter>)
+  expect(screen.getByRole('heading', { name: '블로그 글' })).toBeDefined()
+  expect(screen.getByText('직접 쓴 글')).toBeDefined()
+  expect(screen.queryByRole('heading', { name: '차 우리는 방법' })).toBeNull()
+  expect(screen.queryByText('10,000원')).toBeNull()
   expect(screen.queryByText('공동구매 모집 중')).toBeNull()
-  const link = screen.getByRole('link', { name: /구매하기/ })
-  expect(link.getAttribute('href')).toBe(product.purchaseUrl)
-  expect(link.className).toBe('product-purchase-link')
-  rerender(<MemoryRouter><ProductPreview product={{ ...product, compositionType: 'blend' }} settings={null} /></MemoryRouter>)
-  expect(screen.getByText('공동구매 모집 중')).toBeDefined()
-  const groupLink = screen.getByRole('link', { name: /공동 구매/ })
-  expect(groupLink.getAttribute('href')).toBe('https://open.kakao.com/o/paZVDnRi')
-  expect(groupLink.getAttribute('target')).toBe('_blank')
-  expect(groupLink.className).toBe('product-purchase-link')
-  expect(screen.queryByText('판매 중')).toBeNull()
 })
 
-it('keeps the purchase button visible and disabled when the price or purchase link is missing', () => {
-  const product = emptyProduct()
-  const { rerender } = render(<MemoryRouter><ProductPreview product={product} settings={null} /></MemoryRouter>)
-  expect((screen.getByRole('button', { name: '구매하기' }) as HTMLButtonElement).disabled).toBe(true)
-  rerender(<MemoryRouter><ProductPreview product={{ ...product, purchaseUrl: 'https://shop.example.com/bag' }} settings={null} /></MemoryRouter>)
-  expect((screen.getByRole('button', { name: '구매하기' }) as HTMLButtonElement).disabled).toBe(true)
-  rerender(<MemoryRouter><ProductPreview product={{ ...product, pricing: { ...product.pricing, regular: 10000 } }} settings={null} /></MemoryRouter>)
-  expect((screen.getByRole('button', { name: '구매하기' }) as HTMLButtonElement).disabled).toBe(true)
+it('keeps authored inline images in article order without duplicating the gallery photo', () => {
+  const photo = 'https://example.com/photo.jpg'
+  const product = { ...emptyProduct(), description: `<p>앞 글</p><img src="${photo}" alt="본문 사진"><p>뒤 글</p>`, images: [{ id: 'photo', url: photo, alt: '사진' }] }
+  const { container } = render(<MemoryRouter><ProductPreview product={product} settings={null} /></MemoryRouter>)
+  expect(container.querySelectorAll('img')).toHaveLength(1)
+  expect(screen.getByAltText('본문 사진')).toBeDefined()
+  expect(container.querySelector('.shop-journal-content')!.textContent).toBe('앞 글뒤 글')
 })
 
+it('does not render purchase controls in the blog layout', () => {
+  const base = emptyProduct()
+  const product = { ...base, purchaseUrl: 'https://example.com/buy', pricing: { ...base.pricing, regular: 10000 } }
+  render(<MemoryRouter><ProductPreview product={product} settings={null} /></MemoryRouter>)
+  expect(screen.queryByRole('button', { name: '구매하기' })).toBeNull()
+  expect(screen.queryByRole('link', { name: /구매하기|공동 구매/ })).toBeNull()
+})
 it('renders detail tea tags with the same chip classes as catalog cards', () => {
   const product = { ...emptyProduct(), teaTags: ['홍차', '카페인'] as const }
   const { container } = render(<MemoryRouter><ProductPreview product={{ ...product, teaTags: [...product.teaTags] }} settings={null} /></MemoryRouter>)

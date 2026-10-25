@@ -212,17 +212,6 @@ export function IngredientEditor({ mode }: { mode: 'create' | 'edit' }) {
         <Input id="ingredient-name-en" value={draft.name} onChange={(event) => updateText('name', event.target.value)} required />
       </div>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <div className="flex flex-col gap-2">
-          <label htmlFor="ingredient-base-amount" className="text-sm font-medium">{isKo ? '기준량' : 'Base amount'}</label>
-          <Input id="ingredient-base-amount" type="number" min="0.01" step="any" value={draft.baseAmount} onChange={(event) => updateNumber('baseAmount', event.target.value)} />
-        </div>
-        <div className="flex flex-col gap-2">
-          <label htmlFor="ingredient-base-unit" className="text-sm font-medium">{isKo ? '기준 단위' : 'Base unit'}</label>
-          <UnitSelect value={draft.baseUnit} onValueChange={(value) => setDraft((current) => current ? { ...current, baseUnit: value } : current)} language={language} />
-        </div>
-      </div>
-
       <fieldset className="space-y-2" disabled={saving}>
         <legend className="text-sm font-semibold">{isKo ? '식재료 분류' : 'Ingredient category'}</legend>
         <div className="flex flex-wrap gap-2">
@@ -242,6 +231,17 @@ export function IngredientEditor({ mode }: { mode: 'create' | 'edit' }) {
           ] as const).map(([value, labelKo, labelEn]) => <Button key={value} type="button" size="sm" variant={(draft.storageLocation ?? '') === value ? 'default' : 'outline'} aria-pressed={(draft.storageLocation ?? '') === value} onClick={() => setDraft(current => current ? { ...current, storageLocation: value } : current)}>{isKo ? labelKo : labelEn}</Button>)}
         </div>
       </fieldset>
+
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div className="flex flex-col gap-2">
+          <label htmlFor="ingredient-base-amount" className="text-sm font-medium">{isKo ? '기준량' : 'Base amount'}</label>
+          <Input id="ingredient-base-amount" type="number" min="0.01" step="any" value={draft.baseAmount} onChange={(event) => updateNumber('baseAmount', event.target.value)} />
+        </div>
+        <div className="flex flex-col gap-2">
+          <label htmlFor="ingredient-base-unit" className="text-sm font-medium">{isKo ? '기준 단위' : 'Base unit'}</label>
+          <UnitSelect value={draft.baseUnit} onValueChange={(value) => setDraft((current) => current ? { ...current, baseUnit: value } : current)} language={language} />
+        </div>
+      </div>
 
       <fieldset className="flex flex-col gap-3">
         <legend className="text-sm font-semibold">{isKo ? `탄단지 (기준 ${formatTableNumber(draft.baseAmount)}${draft.baseUnit})` : `Macros (per ${formatTableNumber(draft.baseAmount)} ${draft.baseUnit})`}</legend>

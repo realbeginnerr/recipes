@@ -17,6 +17,7 @@ const RecipeManagementPage = lazy(() => import('./pages/RecipeManagementPage').t
 const EatingOutPage = lazy(() => import('./pages/EatingOutPage').then(module => ({ default: module.EatingOutPage })))
 const ProductEditPage = lazy(() => import('./pages/ProductEditPage').then(module => ({ default: module.ProductEditPage })))
 const ProductDetailPage = lazy(() => import('./pages/ProductDetailPage').then(module => ({ default: module.ProductDetailPage })))
+const ShopPage = lazy(() => import('./pages/ShopPage').then(module => ({ default: module.ShopPage })))
 const ShopSettingsPage = lazy(() => import('./pages/ShopSettingsPage').then(module => ({ default: module.ShopSettingsPage })))
 
 export function App() {
@@ -26,7 +27,7 @@ export function App() {
         <Route index element={<AboutPage />} />
         <Route path="admin" element={<AddPagePasswordGate key="admin"><AdminPage /></AddPagePasswordGate>} />
         <Route path="recipes" element={<RecipePage key="recipes" />} />
-        <Route path="blending-tea" element={<RecipePage key="blending-tea" blendingTea />} />
+        <Route path="blending-tea" element={<ShopPage />} />
         <Route path="products/new" element={<AddPagePasswordGate key="new-product"><ProductEditPage /></AddPagePasswordGate>} />
         <Route path="products/:id/edit" element={<AddPagePasswordGate key="edit-product"><ProductEditPage /></AddPagePasswordGate>} />
         <Route path="product/:slug" element={<ProductDetailPage />} />

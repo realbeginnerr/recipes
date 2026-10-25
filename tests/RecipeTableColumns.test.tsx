@@ -26,15 +26,15 @@ it.each([true, false])('aligns headers, ingredients, sides and footer columns (e
     multigrainRiceAmount={100} multigrainRiceUnit="g" onMultigrainRiceAmountChange={vi.fn()} onMultigrainRiceUnitChange={vi.fn()} onSaveRecipe={vi.fn()}
   /></LanguageProvider></MemoryRouter>)
   const table = screen.getByRole('table') as HTMLTableElement
-  const expected = editing ? 8 : 6
+  const expected = editing ? 9 : 6
   const rows = table.querySelectorAll('tr')
   expect(rows.length).toBeGreaterThan(4)
   for (const row of rows) {
     expect(Array.from(row.querySelectorAll<HTMLTableCellElement>(':scope > th, :scope > td')).reduce((sum, cell) => sum + cell.colSpan, 0)).toBe(expected)
   }
   const headers = table.querySelectorAll('thead th')
-  expect(headers[editing ? 1 : 0].textContent).toContain('식재료')
-  expect(table.querySelectorAll('tbody tr:first-child td')[editing ? 1 : 0].textContent).toContain('가지')
+  expect(headers[0].textContent).toContain('식재료')
+  expect(table.querySelectorAll('tbody tr:first-child td')[0].textContent).toContain('가지')
   expect(table.textContent).toContain('(54g 부족)')
   expect(table.textContent).not.toContain('(+54)')
   const target = table.querySelector('.recipe-table__recommended')!

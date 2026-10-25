@@ -51,3 +51,23 @@ describe('saving a recipe with existing invalid quantities', () => {
     ] }))
   })
 })
+
+it('persists image IDs and product references without embedding product details', async () => {
+  const corrected = recipe()
+  corrected.items[0].defaultAmount = 30
+  corrected.imageUrl = 'https://example.com/photo.jpg'
+  corrected.images = [{ id: 'photo-1', url: corrected.imageUrl }]
+  corrected.productTags = [{ id: 'tag-1', imageId: 'photo-1', productId: 'product-1', positionX: 20, positionY: 80 }]
+  await updateRecipeInFirestore(corrected)
+  expect(setDoc).toHaveBeenCalledWith('recipe-ref', expect.objectContaining({
+    images: corrected.images, productTags: corrected.productTags,
+  }))
+})
+
+it('persists authored group order when saving a recipe', async () => {
+  const corrected = recipe()
+  corrected.items[0].defaultAmount = 30
+  corrected.cookingGroupOrder = ['반죽', '양념장']
+  await updateRecipeInFirestore(corrected)
+  expect(setDoc).toHaveBeenCalledWith('recipe-ref', expect.objectContaining({ cookingGroupOrder: ['반죽', '양념장'] }))
+})

@@ -1,14 +1,15 @@
+import { recipeGalleryImages } from '../utils/recipeGallery'
 import { useEffect, useState } from 'react'
 import type { Recipe } from '../types'
 import { useLanguage } from '../context/LanguageContext'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 
-export type ImageDraft = { url: string; file?: File }
+export type ImageDraft = { id?: string; url: string; file?: File }
 
 export function recipeImageDrafts(recipe: Recipe): ImageDraft[] {
-  const urls = [...new Set([recipe.imageUrl, ...(recipe.imageUrls ?? [])].map(url => url.trim()).filter(Boolean))]
-  return urls.length ? urls.map(url => ({ url })) : [{ url: '' }]
+  const images = recipeGalleryImages(recipe)
+  return images.length ? images : [{ id: crypto.randomUUID(), url: '' }]
 }
 
 function ImagePreview({ image, alt }: { image: ImageDraft; alt: string }) {
@@ -32,7 +33,7 @@ export function RecipeImagesEditor({ images, onChange, disabled = false, allowFi
   const ko = language === 'ko'
   const [error, setError] = useState('')
   function update(index: number, image: ImageDraft) {
-    onChange(images.map((value, i) => i === index ? image : value))
+    onChange(images.map((value, i) => i === index ? { ...image, id: crypto.randomUUID() } : value))
   }
   return <fieldset className="edit-inline__image-field" disabled={disabled}>
     <legend className="text-sm font-medium">{ko ? '레시피 사진 (최대 5장)' : 'Recipe photos (up to 5)'}</legend>
@@ -53,12 +54,12 @@ export function RecipeImagesEditor({ images, onChange, disabled = false, allowFi
           update(index, { url: '', file })
         }} /></label>}
         {image.file && <span className="text-sm">{image.file.name}</span>}
-        <Button type="button" variant="ghost" size="sm" onClick={() => onChange(images.length === 1 ? [{ url: '' }] : images.filter((_, i) => i !== index))}>{ko ? '사진 삭제' : 'Remove photo'}</Button>
+        <Button type="button" variant="ghost" size="sm" onClick={() => onChange(images.length === 1 ? [{ id: crypto.randomUUID(), url: '' }] : images.filter((_, i) => i !== index))}>{ko ? '사진 삭제' : 'Remove photo'}</Button>
         {index > 0 && <Button type="button" variant="outline" size="sm" onClick={() => onChange([image, ...images.filter((_, i) => i !== index)])}>{ko ? '대표 사진으로' : 'Use as cover'}</Button>}
       </div>
       <ImagePreview image={image} alt={ko ? `사진 ${index + 1} 미리보기` : `Photo ${index + 1} preview`} />
     </div>)}
     {error && <p role="alert">{error}</p>}
-    <Button type="button" variant="outline" size="sm" disabled={images.length >= 5} onClick={() => onChange([...images, { url: '' }])}>{ko ? '사진 추가' : 'Add photo'}</Button>
+    <Button type="button" variant="outline" size="sm" className="w-fit self-start" disabled={images.length >= 5} onClick={() => onChange([...images, { id: crypto.randomUUID(), url: '' }])}>{ko ? '사진 추가' : 'Add photo'}</Button>
   </fieldset>
 }

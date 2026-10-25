@@ -1,0 +1,13 @@
+﻿.product-tag-editor { margin: 24px 0; padding: 20px; border: 1px solid var(--border); display: flex; flex-direction: column; gap: 20px; min-width: 0; }
+.product-tag-editor legend { font-size: 16px; font-weight: 500; }
+.product-tag-editor p { margin: 0; font-size: 14px; line-height: 1.75; }
+.product-tag-editor label { display: flex; flex-direction: column; gap: 8px; font-size: 14px; }
+.product-tag-editor select { min-height: 44px; width: 100%; background: var(--background); color: var(--foreground); border: 1px solid var(--border); padding: 8px; }
+.product-tag-editor [role=alert] { color: var(--destructive); }
+.product-tag-form { display: flex; flex-direction: column; gap: 20px; }
+.product-tag-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.product-tag-canvas { position: relative; width: 100%; max-width: 500px; cursor: crosshair; }
+.product-tag-canvas img { width: 100%; height: auto; display: block; }
+.product-tag-marker { position: absolute; transform: translate(-50%, -50%); width: 44px; height: 44px; border: 2px solid white; border-radius: 50%; background: var(--primary); color: white; cursor: pointer; }
+.product-tag-marker[aria-pressed=true] { outline: 3px solid var(--primary); outline-offset: 2px; }
+.product-tag-marker:focus-visible { outline: 3px solid var(--foreground); outline-offset: 3px; }

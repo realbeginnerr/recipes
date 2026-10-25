@@ -1,3 +1,5 @@
+import { CookingGroupOrderEditor } from '../components/CookingGroupOrderEditor'
+import { cookingGroupOrder } from '../utils/recipeCookingGroups'
 import { MEAL_TARGET as RECOMMENDED } from '../constants/nutrition'
 import { useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
@@ -23,6 +25,7 @@ import { UnitSelect } from '../components/UnitSelect'
 import { Table, TableHeader, TableBody, TableFooter, TableRow, TableHead, TableCell } from '@/components/ui/table'
 import { recipeCategories, categoryEnglish, type RecipeCategory } from '../utils/recipeCategory'
 import { formatTableNumber } from '../utils/numberFormatting'
+import { missingDraftRecipeUnits } from '../utils/recipeUnitValidation'
 
 type ParsedRow = {
   name: string
@@ -132,6 +135,7 @@ export function AddRecipePage() {
   const [recipeLink, setRecipeLink] = useState('')
   const [recipeImageUrl, setRecipeImageUrl] = useState('')
   const [categories, setCategories] = useState<RecipeCategory[]>(blendingTea ? ['차'] : [])
+  const [groupOrder, setGroupOrder] = useState<string[]>([])
   const [resolvedRows, setResolvedRows] = useState<ResolvedRow[]>([])
   const [enRows, setEnRows] = useState<EnRow[]>([])
   const [translating, setTranslating] = useState(false)
@@ -139,6 +143,7 @@ export function AddRecipePage() {
   const [divisionCount, setDivisionCount] = useState(4)
   const [divisionInput, setDivisionInput] = useState('4')
   const [sideRows, setSideRows] = useState<{ ingredientId: string; amount: number; unit: string }[]>([])
+  const [unitErrors, setUnitErrors] = useState<Set<string>>(new Set())
   const [isAddMainModalOpen, setIsAddMainModalOpen] = useState(false)
   const [isAddSideModalOpen, setIsAddSideModalOpen] = useState(false)
   const [nameError, setNameError] = useState('')
@@ -173,6 +178,7 @@ export function AddRecipePage() {
   }
 
   function handleRowUnitChange(index: number, value: string) {
+    setUnitErrors((prev) => { const next = new Set(prev); const row = resolvedRows[index]; if (row?.ingredientId) next.delete(`${row.ingredientId}\u0000${row.unit}`); return next })
     setResolvedRows((prev) => prev.map((row, i) => {
       if (i !== index) return row
       const updated = { ...row, unit: value }
@@ -278,7 +284,7 @@ export function AddRecipePage() {
   }
 
   function handleAddMainIngredient(ingredient: Ingredient) {
-    if (resolvedRows.some((r) => r.ingredientId === ingredient.id)) return
+    setUnitErrors((prev) => { const next = new Set(prev); for (const key of next) if (key.startsWith(`${ingredient.id}\u0000`)) next.delete(key); return next })
     setResolvedRows((prev) => [...prev, {
       name: ingredient.nameKo || ingredient.name,
       amount: String(ingredient.baseAmount),
@@ -297,16 +303,30 @@ export function AddRecipePage() {
 
   function handleAddSideIngredient(ingredient: Ingredient) {
     if (sideRows.some((r) => r.ingredientId === ingredient.id)) return
+    setUnitErrors((prev) => { const next = new Set(prev); for (const key of next) if (key.startsWith(`${ingredient.id}\u0000`)) next.delete(key); return next })
     setSideRows((prev) => [...prev, { ingredientId: ingredient.id, amount: ingredient.baseAmount, unit: ingredient.baseUnit }])
   }
 
   async function handleSave() {
+    setSaving(true)
+    try {
+      await loadIngredientsFromFirestore()
+    } catch {
+      // The save path will surface the Firestore error below.
+    }
+    const invalidUnits = missingDraftRecipeUnits([
+      ...resolvedRows.map(row => ({ ingredientId: row.ingredientId ?? '', unit: row.unit || 'g', isNew: row.isNew, baseUnit: row.unit || 'g' })),
+      ...sideRows.map(row => ({ ingredientId: row.ingredientId, unit: row.unit })),
+    ])
+    setUnitErrors(invalidUnits)
+    if (invalidUnits.size) { setSaving(false); return }
     let hasNameError = false
     if (!recipeName.trim()) { setNameError(isKo ? '레시피 이름(영문)을 입력해주세요.' : 'Please enter a recipe name (EN).'); hasNameError = true } else setNameError('')
     if (!recipeNameKo.trim()) { setNameKoError(isKo ? '레시피 이름(한글)을 입력해주세요.' : 'Please enter a recipe name (KO).'); hasNameError = true } else setNameKoError('')
-    if (hasNameError) return
+    if (hasNameError) { setSaving(false); return }
     if (!Number.isSafeInteger(Number(divisionInput)) || Number(divisionInput) < 1) {
       showToast(isKo ? '인분 수는 1 이상의 정수로 입력해 주세요.' : 'Enter a positive whole number of portions.', 'error')
+      setSaving(false)
       return
     }
     if (recipeImageUrl.trim()) {
@@ -321,7 +341,6 @@ export function AddRecipePage() {
       showToast(isKo ? '새 식재료의 영양소를 입력해주세요.' : 'Enter nutrition for new ingredients.', 'error')
       return
     }
-    setSaving(true)
     try {
       const ingredientIds: string[] = []
       for (let i = 0; i < resolvedRows.length; i++) {
@@ -350,6 +369,7 @@ export function AddRecipePage() {
         imageUrl: recipeImageUrl.trim(),
         link: recipeLink.trim(),
         memo: '',
+        cookingGroupOrder: cookingGroupOrder(resolvedRows, groupOrder),
         tasteRating: 4,
         divisionCount,
         items: resolvedRows.map((row, i) => ({
@@ -382,6 +402,30 @@ export function AddRecipePage() {
       const code = typeof err === 'object' && err !== null && 'code' in err
         ? String(err.code)
         : ''
+      if (code === 'recipe/missing-conversion') {
+        const matched = new Set<string>()
+        const detail = err instanceof Error ? err.message.toLocaleLowerCase() : ''
+        const hasResolvableIngredient = [...resolvedRows.map(row => row.ingredientId ?? ''), ...sideRows.map(row => row.ingredientId)].some(id => ingredientById.has(id))
+        for (const row of resolvedRows) {
+          const id = row.ingredientId ?? ''
+          const ingredient = ingredientById.get(id)
+          const itemKey = `${id}\u0000${row.unit || 'g'}`
+          const nameMatches = detail.includes(row.name.toLocaleLowerCase()) || Boolean(ingredient && detail.includes((ingredient.nameKo || ingredient.name).toLocaleLowerCase()))
+          if (nameMatches || (ingredient && !ingredient.conversions[row.unit || 'g'])) matched.add(itemKey)
+        }
+        for (const row of sideRows) {
+          const ingredient = ingredientById.get(row.ingredientId)
+          const name = ingredient?.nameKo || ingredient?.name || row.ingredientId
+          if (detail.includes(name.toLocaleLowerCase()) || (ingredient && !ingredient.conversions[row.unit])) matched.add(`${row.ingredientId}\u0000${row.unit}`)
+        }
+        // If the server reports an ID that is absent from the local catalog, point to all draft rows
+        // so the user still gets an actionable inline warning instead of a toast only.
+        if (!matched.size && !hasResolvableIngredient) {
+          for (const row of resolvedRows) matched.add(`${row.ingredientId ?? ''}\u0000${row.unit || 'g'}`)
+          for (const row of sideRows) matched.add(`${row.ingredientId}\u0000${row.unit}`)
+        }
+        if (matched.size) setUnitErrors(matched)
+      }
       const message = code === 'recipe/missing-conversion' && err instanceof Error
         ? err.message
         : code === 'permission-denied'
@@ -451,7 +495,7 @@ export function AddRecipePage() {
           const sideFat = (row.amount * ing.fat / ing.baseAmount * 100) / 100
           return (
             <TableRow key={row.ingredientId} className="recipe-table__multigrain-row">
-              <TableCell>{isKoTable ? (ing.nameKo || ing.name) : ing.name}</TableCell>
+              <TableCell>{isKoTable ? (ing.nameKo || ing.name) : ing.name}{unitErrors.has(`${row.ingredientId}\u0000${row.unit}`) && <p role="alert" className="add-recipe__field-error">{isKoTable ? `${ing.nameKo || ing.name} (${row.unit}): 단위 환산 정보가 없습니다. 환산 정보를 등록하거나 다른 단위를 선택해 주세요.` : `${ing.name} (${row.unit}): No unit conversion is available. Register a conversion or choose another unit.`}</p>}</TableCell>
               <TableCell>
                 <Input type="number" className="h-7 w-20 text-sm" min={0} step={1}
                   value={row.amount}
@@ -561,6 +605,7 @@ export function AddRecipePage() {
             <Input id="recipe-image-url" type="url" value={recipeImageUrl} onChange={(e) => setRecipeImageUrl(e.target.value)} placeholder="https://..." disabled={saving} />
           </div>
 
+          <CookingGroupOrderEditor items={resolvedRows} order={groupOrder} onChange={setGroupOrder} ko={isKo} disabled={saving} />
           {(() => {
             const koTable = (first: boolean) => (
               <div style={first ? undefined : { marginTop: '2rem' }}>
@@ -586,7 +631,8 @@ export function AddRecipePage() {
                       <TableRow key={i} style={{ background: row.isNew ? '#fffbeb' : undefined }}>
                         <TableCell>
                           <Input className="h-7 text-sm" value={row.name} onChange={(e) => handleRowNameChange(i, e.target.value)} />
-                          <Input className="mt-2" aria-label={`${row.name} 요리 그룹`} placeholder="요리 그룹 (예: 양념장·반죽)" value={row.cookingGroup ?? ''} onChange={event => setResolvedRows(current => current.map((entry, index) => index === i ? { ...entry, cookingGroup: event.target.value } : entry))} />
+                          <Input className="mt-2 cooking-group-input" aria-label={`${row.name} 요리 그룹`} placeholder="요리 그룹 (예: 양념장·반죽)" value={row.cookingGroup ?? ''} onChange={event => setResolvedRows(current => current.map((entry, index) => index === i ? { ...entry, cookingGroup: event.target.value } : entry))} />
+                          {unitErrors.has(`${row.ingredientId ?? ''}\u0000${row.unit || 'g'}`) && <p role="alert" className="add-recipe__field-error">{isKo ? `${row.name} (${row.unit || 'g'}): 단위 환산 정보가 없습니다. 환산 정보를 등록하거나 다른 단위를 선택해 주세요.` : `${row.name} (${row.unit || 'g'}): No unit conversion is available. Register a conversion or choose another unit.`}</p>}
                           {row.isNew && <span style={{ display: 'block', fontSize: '14px', color: '#b45309', fontWeight: 600, marginTop: '2px' }}>새 식재료</span>}
                         </TableCell>
                         <TableCell><Input type="number" className="h-7 w-20 text-sm" min={0} step={0.1} value={row.amount} onChange={(e) => handleRowAmountChange(i, e.target.value)} /></TableCell>
@@ -637,7 +683,7 @@ export function AddRecipePage() {
                         <TableRow key={i} style={{ background: resolvedRows[i]?.isNew ? '#fffbeb' : undefined }}>
                           <TableCell>
                             <Input className="h-7 text-sm" value={row.nameEn} onChange={(e) => setEnRows((prev) => prev.map((r, j) => j === i ? { ...r, nameEn: e.target.value } : r))} />
-                            <Input className="mt-2" aria-label={`${row.nameEn} cooking group`} placeholder="Cooking group (e.g. sauce)" value={resolvedRows[i]?.cookingGroup ?? ''} onChange={event => setResolvedRows(current => current.map((entry, index) => index === i ? { ...entry, cookingGroup: event.target.value } : entry))} />
+                            <Input className="mt-2 cooking-group-input" aria-label={`${row.nameEn} cooking group`} placeholder="Cooking group (e.g. sauce)" value={resolvedRows[i]?.cookingGroup ?? ''} onChange={event => setResolvedRows(current => current.map((entry, index) => index === i ? { ...entry, cookingGroup: event.target.value } : entry))} />
                             {resolvedRows[i]?.isNew && <span style={{ display: 'block', fontSize: '14px', color: '#b45309', fontWeight: 600, marginTop: '2px' }}>New</span>}
                           </TableCell>
                           <TableCell><Input type="number" className="h-7 w-20 text-sm" min={0} step={0.1} value={row.amount.toFixed(1)} onChange={(e) => setEnRows((prev) => prev.map((r, j) => j === i ? { ...r, amount: Number.parseFloat(e.target.value) || 0 } : r))} /></TableCell>
@@ -691,6 +737,7 @@ export function AddRecipePage() {
         onIngredientSelect={handleAddMainIngredient}
         existingIngredientIds={new Set(resolvedRows.map((r) => r.ingredientId).filter(Boolean) as string[])}
         multiSelect
+        countSelection
       />
       <IngredientSearchModal
         isOpen={isAddSideModalOpen}

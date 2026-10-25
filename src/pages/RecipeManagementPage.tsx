@@ -15,6 +15,7 @@ import { loadRecipesFromFirestore, mergeStaticAndFirestoreRecipes, deleteRecipeF
 import { loadIngredientsFromFirestore } from '../services/ingredientService'
 import type { Recipe } from '../types'
 import { Button } from '@/components/ui/button'
+import './RecipeDetailPage.css'
 
 export function RecipeDetailPage() {
   const { id } = useParams<{ id: string }>()
@@ -125,10 +126,7 @@ export function RecipeDetailPage() {
   }
 
   return (
-    <section className="page" style={{ paddingBottom: 100 }}>
-      <Button type="button" variant="ghost" size="sm" onClick={() => navigate(-1)}>
-        {language === 'ko' ? '← 뒤로' : '← Back'}
-      </Button>
+    <section className="page recipe-body-container" lang={language}>
       <RecipeTable
         key={recipe.id}
         defaultEditing

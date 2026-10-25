@@ -113,3 +113,29 @@
 .product-blend-row > div:nth-child(2) { flex: 1; min-width: 0; }
 .product-blend-photo { width: 64px; height: 64px; flex-shrink: 0; border-radius: 0; background: #E9EBE8; }
 .product-blend-photo img { width: 100%; height: 100%; object-fit: cover; }
+
+/* Shop posts share one reading column in both the page and editor preview. */
+.shop-journal { width: 100%; max-width: 760px; margin: 0 auto; padding: 24px 0; color: var(--foreground, #25352d); }
+.shop-journal-header { margin-bottom: 40px; }
+.shop-journal-back { display: inline-block; margin-bottom: 40px; color: #596B64; font-size: 14px; text-decoration: none; }
+.shop-journal-header h1 { margin: 16px 0; font-size: clamp(28px, 4vw, 42px); line-height: 1.35; font-weight: 500; letter-spacing: -.04em; overflow-wrap: anywhere; }
+.shop-journal-summary { margin: 16px 0 0; color: #596B64; font-size: 18px; line-height: 1.8; white-space: pre-wrap; }
+.shop-journal :is(figure, .shop-journal-content) { margin: 0 0 40px; }
+.shop-journal img, .product-richtext-editor img { display: block; max-width: 100%; height: auto; margin-inline: auto; }
+.shop-journal-cover img, .shop-journal-photo img { width: 100%; }
+.shop-journal-content, .product-richtext-editor { font-size: 16px; line-height: 1.95; overflow-wrap: anywhere; }
+.shop-journal-content p { margin: 0 0 1.5em; white-space: pre-wrap; }
+.shop-journal-content :is(h2, h3) { margin: 2em 0 .8em; font-weight: 500; line-height: 1.5; }
+.shop-journal-content h2 { font-size: 26px; }
+.shop-journal-content h3 { font-size: 21px; }
+.shop-journal-content :is(ul, ol) { padding-left: 24px; margin: 0 0 24px; list-style: revert; }
+.shop-journal-content img { margin-block: 32px; }
+.shop-journal-content a { color: #255A46; text-decoration: underline; text-underline-offset: 4px; }
+.shop-journal-content blockquote, .product-richtext-editor blockquote { border-left: 2px solid #899591; padding-left: 24px; margin: 32px 0; color: #596B64; }
+.shop-journal-content hr { border: 0; border-top: 1px solid #DEE3E1; margin: 40px 0; }
+.shop-journal figcaption { margin-top: 12px; color: #596B64; font-size: 13px; text-align: center; }
+.shop-journal-footer { padding-top: 28px; border-top: 1px solid #DEE3E1; font-size: 14px; }
+.product-inline-image-picker { padding: 12px; border-bottom: 1px solid #DEE3E1; display: flex; flex-wrap: wrap; gap: 8px; }
+.product-inline-image-picker p { width: 100%; margin: 0 0 4px; color: #596B64; font-size: 13px; }
+.product-inline-image-picker img { width: 64px; height: 64px; object-fit: cover; }
+@media (max-width: 639px) { .shop-journal { padding-top: 0; } .shop-journal-header { margin-bottom: 28px; } .shop-journal-back { margin-bottom: 28px; } .shop-journal-summary { font-size: 16px; } }

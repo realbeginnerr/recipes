@@ -22,6 +22,7 @@ type IngredientSearchModalProps = {
   onIngredientSelect: (ingredient: Ingredient) => void
   existingIngredientIds?: Set<string>
   multiSelect?: boolean
+  countSelection?: boolean
   title?: string
 }
 
@@ -31,12 +32,13 @@ export function IngredientSearchModal({
   onIngredientSelect,
   existingIngredientIds = new Set(),
   multiSelect = false,
+  countSelection = false,
   title,
 }: IngredientSearchModalProps) {
   const { language, t } = useLanguage()
   const [searchQuery, setSearchQuery] = useState('')
   const [duplicateError, setDuplicateError] = useState('')
-  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
+  const [selectedCounts, setSelectedCounts] = useState<Map<string, number>>(new Map())
   const [tab, setTab] = useState<'all' | 'favorites'>('all')
   const [favorites, setFavorites] = useState<Set<string>>(loadFavoriteIngredientIds)
   const [loadingIngredients, setLoadingIngredients] = useState(false)
@@ -76,14 +78,14 @@ export function IngredientSearchModal({
   function handleClose() {
     setSearchQuery('')
     setDuplicateError('')
-    setSelectedIds(new Set())
+    setSelectedCounts(new Map())
     onClose()
   }
 
   function handleConfirmMulti() {
-    for (const id of selectedIds) {
+    for (const [id, count] of selectedCounts) {
       const ing = ingredientById.get(id)
-      if (ing) onIngredientSelect(ing)
+      if (ing) for (let i = 0; i < count; i += 1) onIngredientSelect(ing)
     }
     handleClose()
   }
@@ -103,10 +105,21 @@ export function IngredientSearchModal({
       return
     }
     setDuplicateError('')
-    setSelectedIds((prev) => {
-      const next = new Set(prev)
-      if (next.has(ingredient.id)) next.delete(ingredient.id)
-      else next.add(ingredient.id)
+    setSelectedCounts((prev) => {
+      const next = new Map(prev)
+      const count = next.get(ingredient.id) ?? 0
+      if (count <= 1) next.delete(ingredient.id)
+      else next.set(ingredient.id, count - 1)
+      return next
+    })
+  }
+
+  function changeCount(id: string, count: number) {
+    setSelectedCounts((prev) => {
+      const next = new Map(prev)
+      const safeCount = Number.isFinite(count) ? Math.max(0, Math.min(99, Math.floor(count))) : 0
+      if (safeCount === 0) next.delete(id)
+      else next.set(id, safeCount)
       return next
     })
   }
@@ -170,7 +183,8 @@ export function IngredientSearchModal({
           ) : (
             <div className="pb-2">
               {visibleIngredients.map((ingredient) => {
-                const isSelected = selectedIds.has(ingredient.id)
+                const count = selectedCounts.get(ingredient.id) ?? 0
+                const isSelected = count > 0
                 const isExisting = existingIngredientIds.has(ingredient.id)
                 const isFav = favorites.has(ingredient.id)
                 return (
@@ -178,7 +192,7 @@ export function IngredientSearchModal({
                     <Button
                       type="button"
                       variant="outline"
-                      onClick={() => multiSelect ? handleToggle(ingredient) : handleSingleClick(ingredient)}
+                      onClick={() => multiSelect && countSelection ? undefined : multiSelect ? handleToggle(ingredient) : handleSingleClick(ingredient)}
                       className="flex-1 justify-between px-3 h-auto py-[0.65rem] text-sm font-normal"
                       style={{
                         borderColor: isSelected ? 'var(--primary)' : undefined,
@@ -193,6 +207,11 @@ export function IngredientSearchModal({
                         : (multiSelect && isSelected && <span style={{ color: 'var(--primary)', fontWeight: 700 }}>✓</span>)
                       }
                     </Button>
+                    {multiSelect && countSelection && !isExisting && <div className="flex items-center gap-1">
+                      <Button type="button" variant="outline" size="icon-sm" aria-label={`Decrease ${getIngredientDisplayName(ingredient, language)} count`} disabled={count === 0} onClick={() => changeCount(ingredient.id, count - 1)}>−</Button>
+                      <Input type="number" min={0} max={99} step={1} value={count} aria-label={`${getIngredientDisplayName(ingredient, language)} count`} onChange={(e) => changeCount(ingredient.id, Number(e.target.value))} className="w-14 text-center" />
+                      <Button type="button" variant="outline" size="icon-sm" aria-label={`Increase ${getIngredientDisplayName(ingredient, language)} count`} onClick={() => changeCount(ingredient.id, count + 1)}>+</Button>
+                    </div>}
                     <Button
                       type="button"
                       variant="ghost"
@@ -216,8 +235,9 @@ export function IngredientSearchModal({
             <Button variant="outline" onClick={handleClose}>
               {language === 'ko' ? '취소' : 'Cancel'}
             </Button>
-            <Button onClick={handleConfirmMulti} disabled={selectedIds.size === 0}>
-              {language === 'ko' ? `추가 (${selectedIds.size})` : `Add (${selectedIds.size})`}
+            {countSelection && selectedCounts.size > 0 && <div className="w-full text-sm text-muted-foreground" aria-live="polite">{language === 'ko' ? '선택: ' : 'Selected: '}{[...selectedCounts].map(([id, count]) => `${getIngredientDisplayName(ingredientById.get(id)!, language)} × ${count}`).join(', ')}</div>}
+            <Button onClick={handleConfirmMulti} disabled={selectedCounts.size === 0}>
+              {language === 'ko' ? `추가 (${[...selectedCounts.values()].reduce((sum, count) => sum + count, 0)})` : `Add (${[...selectedCounts.values()].reduce((sum, count) => sum + count, 0)})`}
             </Button>
           </div>
         )}

@@ -130,7 +130,10 @@ function registerIngredient(ing: FirestoreIngredient) {
     conversions: buildConversions(ing),
     allowedUnits: buildAllowedUnits(ing),
   }
-  cacheIngredient(cached, normalized.legacyIds, normalized.retired)
+  const legacyAliases = Object.entries({ PXOUpHYxTe4s8zIGKTaD: 'FToK9wdNj0aE6TkYUjRj' })
+    .filter(([, canonicalId]) => canonicalId === ing.id)
+    .map(([legacyId]) => legacyId)
+  cacheIngredient(cached, [...(normalized.legacyIds ?? []), ...legacyAliases], normalized.retired)
 }
 
 const OZ_TO_G = 28.3495

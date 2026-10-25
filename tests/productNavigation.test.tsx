@@ -1,3 +1,4 @@
+vi.mock('../src/services/taggedProductService', () => ({ searchTaggedProducts: async () => [{ id: 'shared-cup', productName: '등록한 상품', thumbnailUrl: '', productUrl: 'https://example.com/buy', price: 10000, deleted: false, updatedAt: 0 }] }))
 import { fireEvent, render, screen } from '@testing-library/react'
 import { createMemoryRouter, RouterProvider } from 'react-router-dom'
 import { beforeEach, expect, it, vi } from 'vitest'

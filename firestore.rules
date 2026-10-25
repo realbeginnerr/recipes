@@ -13,6 +13,22 @@ service cloud.firestore {
       allow create, update, delete: if isAdmin();
     }
 
+    match /taggedProducts/{productId} {
+      allow read: if true;
+      allow create, update: if isAdmin()
+        && request.resource.data.id == productId
+        && request.resource.data.productName is string
+        && request.resource.data.productName.size() > 0
+        && request.resource.data.productUrl is string
+        && request.resource.data.productUrl.matches('https?://[^ ].+')
+        && request.resource.data.thumbnailUrl is string
+        && (request.resource.data.thumbnailUrl == '' || request.resource.data.thumbnailUrl.matches('https?://[^ ].+'))
+        && request.resource.data.deleted is bool
+        && request.resource.data.updatedAt is number
+        && (!('brandName' in request.resource.data) || request.resource.data.brandName is string)
+        && (!('price' in request.resource.data) || (request.resource.data.price is number && request.resource.data.price >= 0));
+      allow delete: if isAdmin();
+    }
     match /ingredients/{ingredientId} {
       allow read: if true;
       allow create, update, delete: if isAdmin();

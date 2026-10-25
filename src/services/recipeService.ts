@@ -1,3 +1,5 @@
+import type { RecipeImage, RecipeProductTag } from '../types/shoppable'
+import { reconcileRecipeGallery } from '../utils/recipeGallery'
 import {
   collection,
   addDoc,
@@ -32,10 +34,19 @@ export type FirestoreRecipe = {
   nameKo: string
   imageUrl: string
   imageUrls?: string[]
+  images?: RecipeImage[]
+  productTags?: RecipeProductTag[]
   link?: string
   memo: string
+  cookingGroupOrder?: string[]
+  cookingContent?: string
+  platingBlocks?: { id: string; type: 'text' | 'image'; value: string }[]
+  mealContent?: string
+  mealImages?: string[]
   tasteRating: number
   divisionCount?: number
+  cookingTimeMinutes?: number
+  lastCookedAt?: string
   createdAt: number
   items: FirestoreRecipeItem[]
   sideItems?: FirestoreRecipeItem[]
@@ -50,6 +61,7 @@ export async function saveRecipeToFirestore(
   assertRecipeUnits([...recipe.items, ...(recipe.sideItems ?? [])])
   const docRef = await addDoc(collection(db, COLLECTION), {
     ...recipe,
+    ...reconcileRecipeGallery({ ...recipe, id: '' }),
     items: recipe.items.map(item => ({ ...item, ingredientId: canonicalIngredientId(item.ingredientId) })),
     ...(recipe.sideItems ? { sideItems: recipe.sideItems.map(item => ({ ...item, ingredientId: canonicalIngredientId(item.ingredientId) })) } : {}),
     categories: getRecipeCategories(recipe),
@@ -66,6 +78,7 @@ export async function updateRecipeInFirestore(recipe: Recipe): Promise<void> {
   assertRecipeUnits([...items, ...(sideItems ?? [])].map(item => ({ ingredientId: item.ingredientId, unit: item.defaultUnit })))
   const data: Record<string, unknown> = {
     ...rest,
+    ...reconcileRecipeGallery(recipe),
     categories: getRecipeCategories(recipe),
     items: items.map((item) => ({
       ingredientId: canonicalIngredientId(item.ingredientId),
@@ -98,6 +111,7 @@ export async function loadRecipesFromFirestore(): Promise<FirestoreRecipe[]> {
     ...(doc.data() as Omit<FirestoreRecipe, 'id'>),
   })).map(recipe => ({
     ...recipe,
+    ...reconcileRecipeGallery({ ...recipe, id: '' }),
     items: recipe.items.map(item => ({ ...item, ingredientId: canonicalIngredientId(item.ingredientId) })),
     sideItems: recipe.sideItems?.map(item => ({ ...item, ingredientId: canonicalIngredientId(item.ingredientId) })),
   }))
@@ -114,9 +128,17 @@ export function convertToRecipe(fs: FirestoreRecipe): Recipe {
     nameKo: fs.nameKo || fs.name,
     imageUrl: fs.imageUrl || '',
     imageUrls: fs.imageUrls,
+    ...reconcileRecipeGallery({ ...fs, id: fs.id ?? '' }),
     memo: fs.memo,
+    cookingGroupOrder: fs.cookingGroupOrder,
+    cookingContent: fs.cookingContent,
+    platingBlocks: fs.platingBlocks,
+    mealContent: fs.mealContent,
+    mealImages: fs.mealImages,
     tasteRating: fs.tasteRating,
     divisionCount: fs.divisionCount,
+    cookingTimeMinutes: fs.cookingTimeMinutes,
+    lastCookedAt: fs.lastCookedAt,
     createdAt: fs.createdAt,
     link: fs.link,
     hidden: fs.hidden,

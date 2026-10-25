@@ -125,13 +125,21 @@ export function validateProduct(product: Product, cost: number | null, draft = f
 // Only the editor's allowlisted markup is retained in stored and previewed descriptions.
 export function sanitizeProductHtml(html: string) {
   const parsed = new DOMParser().parseFromString(html, 'text/html')
-  const allowed = new Set(['P', 'BR', 'STRONG', 'B', 'EM', 'I', 'U', 'H2', 'H3', 'UL', 'OL', 'LI', 'A', 'BLOCKQUOTE'])
+  const allowed = new Set(['P', 'BR', 'STRONG', 'B', 'EM', 'I', 'U', 'H2', 'H3', 'UL', 'OL', 'LI', 'A', 'BLOCKQUOTE', 'IMG', 'FIGURE', 'FIGCAPTION', 'HR'])
   for (const element of Array.from(parsed.body.querySelectorAll('*'))) {
     if (['SCRIPT', 'STYLE', 'IFRAME', 'OBJECT', 'SVG', 'MATH'].includes(element.tagName)) { element.remove(); continue }
     if (!allowed.has(element.tagName)) { element.replaceWith(...element.childNodes); continue }
     const href = element.getAttribute('href')
+    const src = element.getAttribute('src')
+    const alt = element.getAttribute('alt')
     for (const attribute of Array.from(element.attributes)) element.removeAttribute(attribute.name)
     if (element.tagName === 'A' && href && validWebUrl(href)) { element.setAttribute('href', href); element.setAttribute('target', '_blank'); element.setAttribute('rel', 'noopener noreferrer') }
+    if (element.tagName === 'IMG') {
+      if (!src || !validWebUrl(src)) { element.remove(); continue }
+      element.setAttribute('src', src)
+      element.setAttribute('alt', alt ?? '')
+      element.setAttribute('loading', 'lazy')
+    }
   }
   return parsed.body.innerHTML
 }

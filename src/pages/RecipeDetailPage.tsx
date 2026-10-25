@@ -1,3 +1,6 @@
+import { RelatedImageProducts } from '../components/recipe/RelatedImageProducts'
+import { ShoppableImage } from '../components/recipe/ShoppableImage'
+import { recipeGalleryImages } from '../utils/recipeGallery'
 import { NutritionTable, MacroCells } from '../components/NutritionTable'
 import { NutritionSummary } from '../components/NutritionSummary'
 import { StarRating } from '../components/recipe/StarRating'
@@ -8,7 +11,7 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { useEffect, useRef, useState } from 'react'
 import { Dialog as ImageDialog } from '@base-ui/react/dialog'
-import { X } from 'lucide-react'
+import { X, ChevronLeft, ChevronRight } from 'lucide-react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { BackLink } from '../components/BackLink'
 import { useLanguage } from '../context/LanguageContext'
@@ -18,7 +21,6 @@ import { recipes as staticRecipes } from '../data/recipe'
 import { getIngredientById, loadIngredientsFromFirestore } from '../services/ingredientService'
 import { loadRecipesFromFirestore, mergeStaticAndFirestoreRecipes } from '../services/recipeService'
 import { amountToGrams, calculateMacros, convertUnit } from '../utils/nutrition'
-import { resolveRecipeImage } from '../utils/recipeImage'
 import { categoryEnglish, getRecipeCategories } from '../utils/recipeCategory'
 import type { Ingredient, Recipe, RecipeRowState } from '../types'
 import '../components/catalog/CatalogControls.css'
@@ -44,12 +46,12 @@ function TableNutritionSummary({ total, showRatio = false }: { total: Macros; sh
 }
 
 function RecipeImageGallery({ recipe, name, ko }: { recipe: Recipe; name: string; ko: boolean }) {
-  const primary = resolveRecipeImage(recipe)
-  const images = [...new Set([primary, ...(recipe.imageUrls ?? [])].filter(url => typeof url === 'string' && url.trim()))].slice(0, 5)
-  if (recipe.id === 'WcLik1YkmcONHWKo7Njg') images.splice(1, images.length > 1 ? 1 : 0, `${import.meta.env.BASE_URL}images/recipes/soybeansoup (0).png`)
+  const galleryImages = recipeGalleryImages(recipe)
+  const images = galleryImages.map(image => image.url)
   const [selected, setSelected] = useState(0)
   const [open, setOpen] = useState(false)
   const touchStart = useRef<{ x: number; y: number } | null>(null)
+  const swiped = useRef(false)
   useEffect(() => {
     const query = window.matchMedia('(max-width: 767px)')
     const closeOnDesktop = () => { if (!query.matches) setOpen(false) }
@@ -59,34 +61,40 @@ function RecipeImageGallery({ recipe, name, ko }: { recipe: Recipe; name: string
   const activeIndex = selected < images.length ? selected : 0
   const active = images[activeIndex]
   const step = (direction: number) => setSelected(Math.max(0, Math.min(images.length - 1, activeIndex + direction)))
-  return <div className="detail-gallery">
-    <div className="detail-image-frame detail-gallery-desktop"><FoodImage src={active} alt={name} className="detail-image" /></div>
+  const navigation = (location: string) => images.length > 1 && <div className="recipe-photo-navigation" role="group" aria-label={ko ? `${location} 사진 전환` : `${location} photo navigation`}>
+    <Button type="button" variant="ghost" size="icon" disabled={activeIndex === 0} aria-label={ko ? '이전 사진' : 'Previous photo'} onClick={() => step(-1)}><ChevronLeft aria-hidden="true" /></Button>
+    <span aria-live="polite" aria-atomic="true">{activeIndex + 1} / {images.length}</span>
+    <Button type="button" variant="ghost" size="icon" disabled={activeIndex === images.length - 1} aria-label={ko ? '다음 사진' : 'Next photo'} onClick={() => step(1)}><ChevronRight aria-hidden="true" /></Button>
+  </div>
+  return <div className="detail-gallery" onTouchStart={event => {
+    swiped.current = false
+    if ((event.target as HTMLElement).closest('.shoppable-tag, .shoppable-popover, .related-image-products, .recipe-photo-navigation')) { touchStart.current = null; return }
+    touchStart.current = event.touches.length === 1 ? { x: event.touches[0].clientX, y: event.touches[0].clientY } : null
+  }} onTouchCancel={() => { touchStart.current = null }} onTouchEnd={event => {
+    const start = touchStart.current
+    touchStart.current = null
+    if (!start || !event.changedTouches[0]) return
+    const dx = event.changedTouches[0].clientX - start.x
+    const dy = event.changedTouches[0].clientY - start.y
+    if (Math.abs(dx) >= 40 && Math.abs(dx) > Math.abs(dy)) { swiped.current = true; step(dx < 0 ? 1 : -1) }
+  }} onClickCapture={event => { if (swiped.current) { swiped.current = false; event.preventDefault(); event.stopPropagation() } }}>
+    <div className="detail-image-frame detail-gallery-desktop">{galleryImages[activeIndex] ? <ShoppableImage key={galleryImages[activeIndex].id} image={galleryImages[activeIndex]} tags={recipe.productTags ?? []} alt={name} ko={ko} square /> : <FoodImage src={active} alt={name} className="detail-image" />}</div>
     <ImageDialog.Root open={open} onOpenChange={setOpen}>
-      <ImageDialog.Trigger className="detail-image-frame detail-gallery-mobile" disabled={!active} aria-label={ko ? `${name} 이미지 크게 보기` : `Enlarge ${name} image`}><FoodImage src={active} alt={name} className="detail-image" /></ImageDialog.Trigger>
+      <div className="detail-image-frame detail-gallery-mobile">{galleryImages[activeIndex] ? <ShoppableImage key={galleryImages[activeIndex].id} image={galleryImages[activeIndex]} tags={recipe.productTags ?? []} alt={name} ko={ko} square onImageClick={() => setOpen(true)} /> : <FoodImage src={active} alt={name} className="detail-image" />}</div>
       <ImageDialog.Portal>
         <ImageDialog.Backdrop className="detail-lightbox-backdrop" />
         <ImageDialog.Popup className="detail-lightbox" onKeyDown={event => {
           if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') { event.preventDefault(); step(event.key === 'ArrowLeft' ? -1 : 1) }
         }}>
           <div className="detail-lightbox-topbar"><ImageDialog.Title className="detail-lightbox-title">{name}</ImageDialog.Title><ImageDialog.Close className="detail-lightbox-close" aria-label={ko ? '이미지 닫기' : 'Close image'}><X size={24} aria-hidden="true" /></ImageDialog.Close></div>
-          <ImageDialog.Description className="sr-only">{ko ? '이미지를 좌우로 밀거나 아래 썸네일을 눌러 다른 이미지를 볼 수 있습니다.' : 'Swipe left or right, or select a thumbnail to view another image.'}</ImageDialog.Description>
-          <div className="detail-lightbox-image" onTouchStart={event => {
-            touchStart.current = event.touches.length === 1 ? { x: event.touches[0].clientX, y: event.touches[0].clientY } : null
-          }} onTouchCancel={() => { touchStart.current = null }} onTouchEnd={event => {
-            const start = touchStart.current
-            touchStart.current = null
-            if (!start || !event.changedTouches[0]) return
-            const dx = event.changedTouches[0].clientX - start.x
-            const dy = event.changedTouches[0].clientY - start.y
-            if (Math.abs(dx) >= 40 && Math.abs(dx) > Math.abs(dy)) step(dx < 0 ? 1 : -1)
-          }}><FoodImage src={active} alt={name} /></div>
-          <div className="detail-lightbox-footer"><p className="detail-lightbox-counter" aria-live="polite">{activeIndex + 1} / {images.length}</p><div className="detail-image-thumbnails" role="group" aria-label={ko ? '레시피 이미지 선택' : 'Choose recipe image'}>{images.map((src, index) => <button key={`${src}-${index}`} type="button" className="detail-image-thumbnail" aria-pressed={activeIndex === index} aria-label={ko ? `이미지 ${index + 1} 보기` : `View image ${index + 1}`} onClick={() => setSelected(index)}><FoodImage src={src} alt="" /></button>)}</div></div>
+          <ImageDialog.Description className="sr-only">{ko ? '이미지를 좌우로 밀거나 사진 전환 버튼을 눌러 다른 이미지를 볼 수 있습니다.' : 'Swipe left or right, or use the photo navigation buttons to view another image.'}</ImageDialog.Description>
+          <div className="detail-lightbox-image">{galleryImages[activeIndex] && <ShoppableImage key={galleryImages[activeIndex].id} image={galleryImages[activeIndex]} tags={recipe.productTags ?? []} alt={name} ko={ko} />}</div>
+          <div className="detail-lightbox-footer">{navigation(ko ? '확대' : 'Enlarged')}</div>
         </ImageDialog.Popup>
       </ImageDialog.Portal>
     </ImageDialog.Root>
-    {images.length > 0 && <div className="detail-image-thumbnails" role="group" aria-label={ko ? '레시피 이미지 선택' : 'Choose recipe image'}>
-      {images.map((src, index) => <button key={`${src}-${index}`} type="button" className="detail-image-thumbnail" aria-pressed={activeIndex === index} aria-label={ko ? `${name} 이미지 ${index + 1} 보기` : `View ${name} image ${index + 1}`} onClick={() => setSelected(index)}><FoodImage src={src} alt="" /></button>)}
-    </div>}
+    {navigation(ko ? '메인' : 'Main')}
+    {galleryImages[activeIndex] && <RelatedImageProducts key={galleryImages[activeIndex].id} imageId={galleryImages[activeIndex].id} tags={recipe.productTags ?? []} ko={ko} />}
   </div>
 }
 
@@ -97,7 +105,7 @@ function RecipeNutrition({ recipe }: { recipe: Recipe }) {
   const ko = language === 'ko'
   const name = ko ? recipe.nameKo : recipe.name
   const [rows, setRows] = useState<RecipeRowState[]>(() => initialRows(recipe))
-  const [tableMode, setTableMode] = useState<'storage' | 'cooking'>('storage')
+  const [tableMode, setTableMode] = useState<'storage' | 'cooking' | 'meal'>('storage')
   const [divisions, setDivisions] = useState(Math.max(1, recipe.divisionCount ?? 4))
   const [divisionsInput, setDivisionsInput] = useState(() => String(divisions))
   const [sides, setSides] = useState<RecipeRowState[]>(() => (recipe.sideItems ?? []).map(item => ({ ingredientId: item.ingredientId, amount: item.defaultAmount, unit: item.defaultUnit })))
@@ -115,11 +123,22 @@ function RecipeNutrition({ recipe }: { recipe: Recipe }) {
   const storageIcons = { 냉장실: '🗄️', 냉동실: '❄️', 실온보관: '🧂', '': '❓' }
   const tableGroups = tableMode === 'storage'
     ? storageGroups.map(({ location, entries }) => ({ key: location, title: ko ? location || '미지정' : storageLabels[location], icon: storageIcons[location], entries }))
-    : recipeCookingGroups(rows, recipe.items).map(({ name, entries }) => ({ key: name, title: name || (ko ? '기본 재료' : 'Basic ingredients'), icon: '', entries }))
+    : recipeCookingGroups(rows, recipe.items, recipe.cookingGroupOrder).map(({ name, entries }) => ({ key: name, title: name || (ko ? '기본 재료' : 'Basic ingredients'), icon: '', entries }))
+  const platingBlocks = (recipe.platingBlocks ?? [
+    ...(recipe.mealImages ?? []).map((value, index) => ({ id: 'legacy-image-' + index, type: 'image' as const, value })),
+    { id: 'legacy-text', type: 'text' as const, value: recipe.mealContent ?? '' },
+  ]).filter(block => block.value.trim())
   const total = sum(macros)
   const portion = { carbs: total.carbs / divisions, protein: total.protein / divisions, fat: total.fat / divisions }
   const meal = sum([portion, ...sides.map(macrosFor)])
   const label = (ingredient: Ingredient | undefined, fallback: string) => ingredient ? (ko ? ingredient.nameKo ?? ingredient.name : ingredient.name) : fallback
+  function ingredientNameCell(row: RecipeRowState) {
+    const ingredient = ingredientFor(row.ingredientId)
+    const displayName = label(ingredient, row.ingredientId)
+    return isAdmin && ingredient
+      ? <a className="detail-ingredient-edit-link" href={`${import.meta.env.BASE_URL}ingredient/${ingredient.id}/edit`} target="_blank" rel="noopener noreferrer">{displayName}</a>
+      : displayName
+  }
   function updateRow(index: number, field: 'amount' | 'unit', value: string, side = false) {
     const update = side ? setSides : setRows
     update(current => current.map((row, i) => {
@@ -135,7 +154,7 @@ function RecipeNutrition({ recipe }: { recipe: Recipe }) {
     return <QuantityUnitCells ingredientId={row.ingredientId} amount={row.amount} unit={row.unit} units={ingredient?.allowedUnits ?? []} label={label(ingredient, row.ingredientId)} amountLabel={side ? (ko ? '주식 양' : 'Staple amount') : undefined} onAmountChange={value => updateRow(index, 'amount', value, side)} onUnitChange={value => updateRow(index, 'unit', value, side)} />
   }
 
-  return <article className="nutrition-detail reference-container" lang={language}>
+  return <article className="nutrition-detail reference-container recipe-body-container" lang={language}>
     <div className="detail-layout">
       <header className="detail-heading">
         <RecipeImageGallery recipe={recipe} name={name} ko={ko} />
@@ -159,23 +178,31 @@ function RecipeNutrition({ recipe }: { recipe: Recipe }) {
       </div>
       <section className="detail-section" aria-labelledby="whole-recipe-title"><h2 id="whole-recipe-title" className="sr-only">{ko ? '전체 재료' : 'All ingredients'}</h2>
       <div className="detail-table-tabs" role="tablist" aria-label={ko ? '재료 보기 모드' : 'Ingredient view mode'}>
-        {(['storage', 'cooking'] as const).map((mode, index) => <button key={mode} type="button" role="tab" id={`ingredient-tab-${mode}`} aria-controls="ingredient-mode-panel" aria-selected={tableMode === mode} tabIndex={tableMode === mode ? 0 : -1} onClick={() => setTableMode(mode)} onKeyDown={event => {
+        {(['storage', 'cooking', 'meal'] as const).map((mode, index) => <button key={mode} type="button" role="tab" id={`ingredient-tab-${mode}`} aria-controls="ingredient-mode-panel" aria-selected={tableMode === mode} tabIndex={tableMode === mode ? 0 : -1} onClick={() => setTableMode(mode)} onKeyDown={event => {
           if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return
           event.preventDefault()
-          const next = event.key === 'Home' ? 'storage' : event.key === 'End' ? 'cooking' : index === 0 ? 'cooking' : 'storage'
+          const modes = ['storage', 'cooking', 'meal'] as const
+          const next = event.key === 'Home' ? 'storage' : event.key === 'End' ? 'meal' : modes[(index + (event.key === 'ArrowRight' ? 1 : modes.length - 1)) % modes.length]
           setTableMode(next)
           document.getElementById(`ingredient-tab-${next}`)?.focus()
-        }}>{mode === 'storage' ? (ko ? '재료 꺼낼 때' : 'Gather ingredients') : (ko ? '요리할 때' : 'Cook')}</button>)}
+        }}>{mode === 'storage' ? (ko ? '재료 꺼낼 때' : 'Gather ingredients') : mode === 'cooking' ? (ko ? '요리할 때' : 'Cook') : (ko ? '플레이팅' : 'Plating')}</button>)}
       </div>
       <div role="tabpanel" id="ingredient-mode-panel" aria-labelledby={`ingredient-tab-${tableMode}`}>
-      <NutritionTable total={total} labelledBy="whole-recipe-title">{tableGroups.flatMap(({ key, title, icon, entries }) => [
+      {tableMode === 'meal' ? (
+        <article className="meal-blog" aria-label={ko ? '플레이팅' : 'Plating'}>
+          {platingBlocks.length ? <div className="plating-block-content">{platingBlocks.map((block, index) => block.type === 'text'
+            ? <div key={block.id} className="meal-blog__prose"><p>{block.value}</p></div>
+            : <div key={block.id} className="meal-blog__images"><figure><img src={block.value} alt={ko ? `플레이팅 사진 ${index + 1}` : `Plating photo ${index + 1}`} loading="lazy" /></figure></div>)}</div>
+            : <p className="meal-blog__empty">{ko ? '작성한 내용 없음' : 'No content yet'}</p>}
+        </article>
+      ) : <NutritionTable total={total} labelledBy="whole-recipe-title">{tableGroups.flatMap(({ key, title, icon, entries }) => [
         <tr key={`${tableMode}-${key}`} className="detail-storage-group"><th colSpan={6}>{icon && <span className="detail-storage-icon" aria-hidden="true">{icon}</span>}{title}</th></tr>,
-        ...entries.map(({ row, index }, groupIndex) => <tr key={`${row.ingredientId}-${index}`} className={groupIndex % 2 === 0 ? 'table-row--white' : 'table-row--alternate'}><td>{label(ingredientFor(row.ingredientId), row.ingredientId)}</td>{quantityCells(row, index)}<MacroCells values={macros[index]} /></tr>),
-      ])}</NutritionTable>
+        ...entries.map(({ row, index }, groupIndex) => <tr key={`${row.ingredientId}-${index}`} className={groupIndex % 2 === 0 ? 'table-row--white' : 'table-row--alternate'}><td>{ingredientNameCell(row)}</td>{quantityCells(row, index)}<MacroCells values={macros[index]} /></tr>),
+      ])}</NutritionTable>}
       </div>
-      <TableNutritionSummary total={total} />
+      {(tableMode === 'storage' || tableMode === 'cooking') && <TableNutritionSummary total={total} />}
       </section>
-      <section className="detail-section" aria-labelledby="meal-title">
+      {(tableMode === 'storage' || tableMode === 'cooking') && <section className="detail-section" aria-labelledby="meal-title">
       <div className="detail-section-heading">
         <h2 id="meal-title"><label htmlFor="meal-divisions">{ko ? '몇 등분할까요?' : 'How many portions?'}</label></h2>
         <div className="detail-divisions"><Input density="quantity" id="meal-divisions" type="number" min="1" step="1" value={divisionsInput} onChange={event => {
@@ -188,13 +215,13 @@ function RecipeNutrition({ recipe }: { recipe: Recipe }) {
       <NutritionTable total={meal} labelledBy="meal-title">
         <tr><td>{ko ? '전체 재료 합계' : 'All ingredients total'}</td><td className="numeric">1/{divisions}</td><td className="muted">{ko ? '분량' : 'batch'}</td><MacroCells values={portion} /></tr>
         {sides.map((row, index) => {
-          const current = ingredientFor(row.ingredientId)
-          return <tr key={index}><td>{label(current, row.ingredientId)}</td>{quantityCells(row, index, true)}<MacroCells values={macrosFor(row)} /></tr>
+          return <tr key={index}><td>{ingredientNameCell(row)}</td>{quantityCells(row, index, true)}<MacroCells values={macrosFor(row)} /></tr>
         })}
       </NutritionTable>
       <TableNutritionSummary total={meal} showRatio />
-      {memo.trim() && <section className="detail-notes"><h2>{ko ? '메모' : 'Notes'}</h2><p>{memo}</p></section>}
-      </section>
+      {tableMode === 'cooking' && recipe.cookingContent?.trim() && <section className="detail-notes"><h2>{ko ? '메모' : 'Notes'}</h2><div className="meal-blog__prose"><p>{recipe.cookingContent}</p></div></section>}
+      {tableMode === 'storage' && memo.trim() && <section className="detail-notes"><h2>{ko ? '메모' : 'Notes'}</h2><p>{memo}</p></section>}
+      </section>}
       </div>
     </div>
   </article>
@@ -213,6 +240,11 @@ export function RecipeDetailPage() {
     setLoading(true); setError(false)
     async function load() {
       try {
+        if (import.meta.env.DEV && id === '__shoppable-demo__') {
+          const { demoRecipe } = await import('../dev/shoppableDemo')
+          if (!cancelled) setRecipes([demoRecipe])
+          return
+        }
         await loadIngredientsFromFirestore()
         const docs = await loadRecipesFromFirestore()
         if (!cancelled) setRecipes(mergeStaticAndFirestoreRecipes(staticRecipes, docs))
@@ -221,7 +253,7 @@ export function RecipeDetailPage() {
     }
     void load()
     return () => { cancelled = true }
-  }, [attempt])
+  }, [attempt, id])
   const recipe = recipes.find(value => value.id === id && (isAdmin || !value.hidden))
   if (loading) return <LoadingState label={language === 'ko' ? '불러오는 중...' : 'Loading...'} />
   if (!recipe) return <ContentState variant="detail" error={error} title={language === 'ko' ? (error ? '레시피를 불러오지 못했습니다.' : '레시피를 찾을 수 없습니다.') : 'Recipe unavailable.'}>{error && <Button variant="ghost" size="content" onClick={() => setAttempt(value => value + 1)}>{language === 'ko' ? '다시 시도' : 'Retry'}</Button>}<BackLink /></ContentState>
