@@ -1,3 +1,5 @@
+import { safeProductUrl } from './recipe/ShoppableImage'
+import { shopFeatures } from '../constants/shopFeatures'
 import { ProductTagEditor } from './recipe/ProductTagEditor'
 import { reconcileRecipeGallery } from '../utils/recipeGallery'
 import type { RecipeProductTag } from '../types/shoppable'
@@ -88,6 +90,8 @@ export function RecipeTable({
   const [isEditing, setIsEditing] = useState(defaultEditing)
   const [editImages, setEditImages] = useState<ImageDraft[]>(() => recipeImageDrafts(activeRecipe))
   const [editProductTags, setEditProductTags] = useState<RecipeProductTag[]>(activeRecipe.productTags ?? [])
+  const [editPhotoProductDescription, setEditPhotoProductDescription] = useState(activeRecipe.photoProductDescription ?? '')
+  const [editPhotoProductUrl, setEditPhotoProductUrl] = useState(activeRecipe.photoProductUrl ?? '')
   const [tagBusy, setTagBusy] = useState(false)
   const imageFile = editImages.some(image => image.file)
   const [editLink, setEditLink] = useState(activeRecipe.link ?? '')
@@ -151,6 +155,8 @@ export function RecipeTable({
     if (isEditing) return
     setEditImages(recipeImageDrafts(activeRecipe))
     setEditProductTags(activeRecipe.productTags ?? [])
+    setEditPhotoProductDescription(activeRecipe.photoProductDescription ?? '')
+    setEditPhotoProductUrl(activeRecipe.photoProductUrl ?? '')
     setEditLink(activeRecipe.link ?? '')
     setEditCategories(getRecipeCategories(activeRecipe))
     const regularItems = activeRecipe.items.map((item) => {
@@ -175,12 +181,19 @@ export function RecipeTable({
     setDivisionInput(String(activeRecipe.divisionCount ?? divisionCount))
     setEditImages(recipeImageDrafts(activeRecipe))
     setEditProductTags(activeRecipe.productTags ?? [])
+    setEditPhotoProductDescription(activeRecipe.photoProductDescription ?? '')
+    setEditPhotoProductUrl(activeRecipe.photoProductUrl ?? '')
     setNewlyAddedIds(new Set())
     setIsEditing(false)
   }
 
   async function handleSave() {
     if (isSaving || tagBusy) return
+    if (!shopFeatures.enabled && editPhotoProductUrl.trim() && !safeProductUrl(editPhotoProductUrl.trim())) {
+      showToast(language === 'ko' ? '상품 구매 링크는 http 또는 https 주소로 입력해 주세요.' : 'Enter an http or https product purchase URL.', 'error')
+      document.getElementById(`photo-product-url-${recipe.id}`)?.focus()
+      return
+    }
     const invalidItems = [...editItems, ...editSideItems].filter(item => !Number.isFinite(item.defaultAmount) || item.defaultAmount < 0)
     if (invalidItems.length) {
       const names = invalidItems.map(item => {
@@ -204,7 +217,7 @@ export function RecipeTable({
     const parsedDivision = Number.parseInt(divisionInput, 10)
     const validDivision = !Number.isNaN(parsedDivision) && parsedDivision > 0 ? parsedDivision : divisionCount
     onDivisionCountChange(validDivision)
-    const updated = { ...activeRecipe, name: editName.trim() || activeRecipe.name, nameKo: editNameKo.trim() || activeRecipe.nameKo, categories: editCategories, imageUrl: editImages.map(image => image.url.trim()).filter(Boolean)[0] ?? '', imageUrls: editImages.map(image => image.url.trim()).filter(Boolean).slice(1), images: activeRecipe.images ?? [], productTags: editProductTags, link: editLink, items: editItems, sideItems: editSideItems, memo: editMemo, cookingGroupOrder: cookingGroupOrder(editItems, editGroupOrder), cookingContent: editCookingContent, platingBlocks: editPlatingBlocks, tasteRating: editTasteRating, divisionCount: validDivision, cookingTimeMinutes: editCookingTime === '' ? undefined : Math.max(0, Number(editCookingTime)), lastCookedAt: editLastCookedAt || undefined }
+    const updated = { ...activeRecipe, name: editName.trim() || activeRecipe.name, nameKo: editNameKo.trim() || activeRecipe.nameKo, categories: editCategories, imageUrl: editImages.map(image => image.url.trim()).filter(Boolean)[0] ?? '', imageUrls: editImages.map(image => image.url.trim()).filter(Boolean).slice(1), images: activeRecipe.images ?? [], productTags: editProductTags, photoProductDescription: editPhotoProductDescription, photoProductUrl: editPhotoProductUrl.trim(), link: editLink, items: editItems, sideItems: editSideItems, memo: editMemo, cookingGroupOrder: cookingGroupOrder(editItems, editGroupOrder), cookingContent: editCookingContent, platingBlocks: editPlatingBlocks, tasteRating: editTasteRating, divisionCount: validDivision, cookingTimeMinutes: editCookingTime === '' ? undefined : Math.max(0, Number(editCookingTime)), lastCookedAt: editLastCookedAt || undefined }
     if (canSave) {
       setIsSaving(true)
       showToast(
@@ -638,7 +651,15 @@ export function RecipeTable({
         }} disabled={isSaving || tagBusy} />
       )}
 
-      {!isCollapsed && isEditing && isAdmin && <ProductTagEditor images={editImages} tags={editProductTags} onChange={setEditProductTags} disabled={isSaving} onBusyChange={setTagBusy} />}
+      {!isCollapsed && isEditing && isAdmin && !shopFeatures.enabled && <fieldset className="product-tag-editor" disabled={isSaving || tagBusy}>
+        <legend>{language === 'ko' ? '사진 속 상품' : 'Products in this photo'}</legend>
+        <label htmlFor={`photo-product-description-${recipe.id}`}>{language === 'ko' ? '상품 설명' : 'Product information'}</label>
+        <Textarea id={`photo-product-description-${recipe.id}`} value={editPhotoProductDescription} onChange={event => setEditPhotoProductDescription(event.target.value)} rows={5} aria-describedby={`photo-product-description-hint-${recipe.id}`} />
+        <p id={`photo-product-description-hint-${recipe.id}`}>{language === 'ko' ? '제품명과 설명을 자유롭게 적어주세요. 레시피를 저장하면 상세 페이지에 표시됩니다.' : 'Enter product names and details. Save the recipe to display this information on the detail page.'}</p>
+        <label htmlFor={`photo-product-url-${recipe.id}`}>{language === 'ko' ? '상품 구매 링크' : 'Product purchase URL'}</label>
+        <Input id={`photo-product-url-${recipe.id}`} type="url" value={editPhotoProductUrl} onChange={event => setEditPhotoProductUrl(event.target.value)} placeholder="https://..." aria-invalid={!!editPhotoProductUrl.trim() && !safeProductUrl(editPhotoProductUrl.trim())} />
+      </fieldset>}
+      {!isCollapsed && isEditing && isAdmin && shopFeatures.enabled && <ProductTagEditor images={editImages} tags={editProductTags} onChange={setEditProductTags} disabled={isSaving} onBusyChange={setTagBusy} />}
       {!isCollapsed && isEditing && <section className="recipe-edit-tabs">
         <div className="detail-table-tabs recipe-edit-tablist" role="tablist" aria-label={language === 'ko' ? '탭별 내용 수정' : 'Edit tab content'}>
           {(['storage', 'cooking', 'meal'] as const).map((tab, index) => <button key={tab} type="button" role="tab" id={`edit-tab-${recipe.id}-${tab}`} aria-selected={editTab === tab} tabIndex={editTab === tab ? 0 : -1} aria-controls={`edit-tab-panel-${recipe.id}`} onClick={() => setEditTab(tab)} disabled={isSaving || tagBusy} onKeyDown={event => {

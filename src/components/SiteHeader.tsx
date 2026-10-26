@@ -8,6 +8,7 @@ import { useSearch } from '../context/SearchContext'
 import { useAdmin } from '../context/AdminContext'
 import './SiteHeader.css'
 import { CONTACT_URL } from '../constants/contact'
+import { shopFeatures } from '../constants/shopFeatures'
 
 export function SiteHeader() {
   const { pathname } = useLocation()
@@ -23,7 +24,7 @@ export function SiteHeader() {
     { to: '/', label: ko ? '홈' : 'Home', end: true },
     { to: '/recipes', label: ko ? '레시피' : 'Recipes', end: false },
     { to: '/ingredients', label: ko ? '식재료' : 'Ingredients', end: false },
-    { to: '/blending-tea', label: 'Shop', end: false },
+    ...(shopFeatures.enabled ? [{ to: '/blending-tea', label: 'Shop', end: false }] : []),
   ]
   useEffect(() => { setMenuOpen(false) }, [pathname])
   const navLinks = links.map(link => <NavLink key={link.to} to={link.to} end={link.end}

@@ -68,6 +68,7 @@ export function IngredientEditor({ mode }: { mode: 'create' | 'edit' }) {
   } : null)
   const [loading, setLoading] = useState(!creating)
   const [saving, setSaving] = useState(false)
+  const [numericInputs, setNumericInputs] = useState<Partial<Record<NumericField, string>>>({})
   const [error, setError] = useState('')
   const [conversionGrams, setConversionGrams] = useState('100')
   const [conversionAmounts, setConversionAmounts] = useState<Partial<Record<ConversionField, string>>>({})
@@ -80,6 +81,7 @@ export function IngredientEditor({ mode }: { mode: 'create' | 'edit' }) {
         const ingredient = id ? getIngredientById(id) : undefined
         if (!cancelled && ingredient) {
           setDraft(initialDraft(ingredient))
+          setNumericInputs({})
           const grams = ingredient.conversionGrams ?? (ingredient.baseUnit === 'g' ? ingredient.baseAmount : 100)
           setConversionGrams(String(grams))
           setConversionAmounts(Object.fromEntries(CONVERSION_FIELDS.map(({ key }) => [key,
@@ -102,6 +104,7 @@ export function IngredientEditor({ mode }: { mode: 'create' | 'edit' }) {
   }
 
   function updateNumber(field: NumericField, value: string) {
+    setNumericInputs(current => ({ ...current, [field]: value }))
     const amount = value === '' ? 0 : Number(value)
     setDraft((current) => current ? { ...current, [field]: Number.isFinite(amount) ? amount : 0 } : current)
   }
@@ -117,7 +120,7 @@ export function IngredientEditor({ mode }: { mode: 'create' | 'edit' }) {
       setError(isKo ? '한글 이름과 영문 이름을 입력해주세요.' : 'Enter both Korean and English names.')
       return
     }
-    if (!Number.isFinite(draft.baseAmount) || draft.baseAmount <= 0 || [draft.carbs, draft.protein, draft.fat].some((value) => !Number.isFinite(value) || value < 0)) {
+    if (Object.values(numericInputs).some(value => value.trim() === '') || !Number.isFinite(draft.baseAmount) || draft.baseAmount <= 0 || [draft.carbs, draft.protein, draft.fat].some((value) => !Number.isFinite(value) || value < 0)) {
       setError(isKo ? '기준량은 0보다 커야 하고 탄단지는 0 이상이어야 합니다.' : 'Base amount must be above zero and macros cannot be negative.')
       return
     }
@@ -235,7 +238,7 @@ export function IngredientEditor({ mode }: { mode: 'create' | 'edit' }) {
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div className="flex flex-col gap-2">
           <label htmlFor="ingredient-base-amount" className="text-sm font-medium">{isKo ? '기준량' : 'Base amount'}</label>
-          <Input id="ingredient-base-amount" type="number" min="0.01" step="any" value={draft.baseAmount} onChange={(event) => updateNumber('baseAmount', event.target.value)} />
+          <Input id="ingredient-base-amount" type="number" min="0.01" step="any" value={numericInputs.baseAmount ?? draft.baseAmount} onChange={(event) => updateNumber('baseAmount', event.target.value)} />
         </div>
         <div className="flex flex-col gap-2">
           <label htmlFor="ingredient-base-unit" className="text-sm font-medium">{isKo ? '기준 단위' : 'Base unit'}</label>
@@ -252,7 +255,7 @@ export function IngredientEditor({ mode }: { mode: 'create' | 'edit' }) {
             ['fat', isKo ? '지방 (g)' : 'Fat (g)'],
           ] as const).map(([field, label]) => <div key={field} className="flex flex-col gap-2">
             <label htmlFor={`ingredient-${field}`} className="text-sm font-medium">{label}</label>
-            <Input id={`ingredient-${field}`} type="number" min="0" step="any" value={draft[field]} onChange={(event) => updateNumber(field, event.target.value)} />
+            <Input id={`ingredient-${field}`} type="number" min="0" step="any" value={numericInputs[field] ?? draft[field]} onChange={(event) => updateNumber(field, event.target.value)} />
           </div>)}
         </div>
       </fieldset>

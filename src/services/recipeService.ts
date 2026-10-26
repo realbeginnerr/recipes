@@ -36,6 +36,8 @@ export type FirestoreRecipe = {
   imageUrls?: string[]
   images?: RecipeImage[]
   productTags?: RecipeProductTag[]
+  photoProductDescription?: string
+  photoProductUrl?: string
   link?: string
   memo: string
   cookingGroupOrder?: string[]
@@ -130,6 +132,8 @@ export function convertToRecipe(fs: FirestoreRecipe): Recipe {
     imageUrls: fs.imageUrls,
     ...reconcileRecipeGallery({ ...fs, id: fs.id ?? '' }),
     memo: fs.memo,
+    photoProductDescription: fs.photoProductDescription,
+    photoProductUrl: fs.photoProductUrl,
     cookingGroupOrder: fs.cookingGroupOrder,
     cookingContent: fs.cookingContent,
     platingBlocks: fs.platingBlocks,

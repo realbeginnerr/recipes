@@ -94,7 +94,7 @@ function RecipeImageGallery({ recipe, name, ko }: { recipe: Recipe; name: string
       </ImageDialog.Portal>
     </ImageDialog.Root>
     {navigation(ko ? '메인' : 'Main')}
-    {galleryImages[activeIndex] && <RelatedImageProducts key={galleryImages[activeIndex].id} imageId={galleryImages[activeIndex].id} tags={recipe.productTags ?? []} ko={ko} />}
+    {galleryImages[activeIndex] && <RelatedImageProducts key={galleryImages[activeIndex].id} imageId={galleryImages[activeIndex].id} tags={recipe.productTags ?? []} ko={ko} description={recipe.photoProductDescription} purchaseUrl={recipe.photoProductUrl} />}
   </div>
 }
 

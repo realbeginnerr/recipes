@@ -4,6 +4,7 @@ import { createMemoryRouter, RouterProvider } from 'react-router-dom'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { ProductEditPage } from '../src/pages/ProductEditPage'
 import { emptyShopSettings } from '../src/utils/shopPolicy'
+import { emptyProduct } from '../src/utils/product'
 
 vi.mock('../src/firebase', () => ({ auth: { currentUser: { uid: 'qa-admin' } } }))
 vi.mock('../src/services/productService', () => ({
@@ -14,6 +15,22 @@ const { saveProduct } = await import('../src/services/productService')
 beforeEach(() => { sessionStorage.clear(); vi.clearAllMocks() })
 async function showEditor() { render(<RouterProvider router={createMemoryRouter([{ path: '/products/new', element: <ProductEditPage /> }, { path: '/blending-tea', element: <h1>상품 목록</h1> }], { initialEntries: ['/products/new'] })} />); await screen.findByRole('heading', { name: '상품 추가', level: 1 }) }
 describe('product editor flows', () => {
+  it('restores old tea drafts as general products without blend restrictions', async () => {
+    const product = { ...emptyProduct(), id: 'qa-product', name: '상품', compositionType: 'blend', teaTags: ['혼합차'], pricing: { ...emptyProduct().pricing, regular: 1000 } }
+    sessionStorage.setItem('tea-product-draft:qa-admin:new', JSON.stringify({ product, privateData: { cost: null } }))
+    vi.mocked(saveProduct).mockImplementationOnce(async next => ({ ...next, version: 1 }))
+    await showEditor()
+    expect((screen.getByLabelText('정상 판매가 (필수)') as HTMLInputElement).disabled).toBe(false)
+    fireEvent.change(screen.getByLabelText('이미지 URL로 추가'), { target: { value: 'https://example.com/product.png' } })
+    fireEvent.click(screen.getByRole('button', { name: '이미지 추가', exact: true }))
+    fireEvent.click(screen.getByRole('button', { name: '상품 등록', exact: true }))
+    await screen.findByRole('heading', { name: '상품 목록' })
+    await waitFor(() => expect(saveProduct).toHaveBeenCalled())
+    const saved = vi.mocked(saveProduct).mock.calls[0][0]
+    expect(saved.compositionType).toBe('single')
+    expect(saved.teaTags).not.toContain('혼합차')
+    expect(saved.blend).toBeUndefined()
+  })
   it('registers a valid private product and returns to the product list', async () => {
     vi.mocked(saveProduct).mockImplementationOnce(async product => ({ ...product, version: 1 }))
     await showEditor()
@@ -23,7 +40,7 @@ describe('product editor flows', () => {
     fireEvent.click(screen.getByRole('button', { name: '이미지 추가', exact: true }))
     fireEvent.click(screen.getByRole('button', { name: '상품 등록' }))
     await screen.findByRole('heading', { name: '상품 목록' })
-    expect(saveProduct).toHaveBeenCalledWith(expect.objectContaining({ name: '새 홍차', draft: false, visibility: 'private' }), { cost: null }, 0)
+    expect(saveProduct).toHaveBeenCalledWith(expect.objectContaining({ name: '새 홍차', draft: false, visibility: 'private', compositionType: 'single' }), { cost: null }, 0)
   })
   it('blocks navigation when unsaved changes are kept and preserves inputs when leaving', async () => {
     await showEditor()
@@ -39,9 +56,13 @@ describe('product editor flows', () => {
   })
   it('opens the product form directly and focuses missing required input without saving', async () => {
     await showEditor()
+    expect(screen.queryByLabelText('차 구성 유형')).toBeNull()
+    expect(screen.queryByRole('button', { name: '혼합차', exact: true })).toBeNull()
+    expect(document.getElementById('blend')).toBeNull()
+    expect((screen.getByLabelText('정상 판매가 (필수)') as HTMLInputElement).disabled).toBe(false)
     expect(screen.queryByLabelText('검색용 태그')).toBeNull()
     expect(screen.queryByLabelText('상품 동영상 URL')).toBeNull()
-    expect(screen.getByRole('heading', { name: '차 종류·카페인 태그' })).toBeDefined()
+    expect(screen.getByRole('heading', { name: '상품 분류·태그' })).toBeDefined()
     fireEvent.click(screen.getByRole('button', { name: '상품 등록' }))
     await screen.findByText('상품명을 입력해 주세요.')
     expect(saveProduct).not.toHaveBeenCalled()

@@ -32,7 +32,10 @@
 .detail-lightbox-footer .recipe-photo-navigation button { color: inherit; }
 .detail-image-frame .shoppable-image { touch-action: pan-y pinch-zoom; }
 .related-image-products { max-width: 400px; margin-top: 20px; }
-.related-image-products-title { margin: 0 0 12px; color: var(--muted-foreground); font-size: 13px; }
+.related-image-products-title { margin: 0 0 4px; color: var(--muted-foreground); font-size: 13px; }
+.related-image-products-description { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; font-size: 14px; line-height: 1.75; }
+.related-image-products .related-image-products-description a { display: inline; text-decoration: underline; }
+.related-image-products .related-image-products-purchase { display: inline-flex; margin-top: 20px; text-decoration: none; }
 .related-image-products ul { display: flex; gap: 12px; overflow-x: auto; list-style: none; padding: 0 0 8px; margin: 0; }
 .related-image-products li { flex: 0 0 72px; min-width: 0; }
 .related-image-products a { display: flex; flex-direction: column; gap: 8px; color: var(--foreground); text-decoration: none; }

@@ -5,9 +5,16 @@ import { cn } from "@/lib/utils"
 
 function Input({ className, type, density = "default", ...props }: React.ComponentProps<"input"> & { density?: "default" | "compact" | "quantity" }) {
   const [focused, setFocused] = React.useState(false)
+  // Keep the text being edited separate from the parent's parsed/clamped number.
+  // Otherwise Number(''), ignored empty changes, or toFixed() can prevent clearing
+  // a field or entering decimals. Blur returns to the screen's committed value.
+  const [numericDraft, setNumericDraft] = React.useState<string | null>(null)
+  const editableNumber = type === 'number' && props.value !== undefined && !props.readOnly && !props.disabled
   const numeric = type === 'number' && props.value !== '' && props.value !== undefined && props.value !== null
     ? Number(props.value) : NaN
-  const displayValue = !focused && Number.isFinite(numeric)
+  const displayValue = editableNumber && focused && numericDraft !== null
+    ? numericDraft
+    : !focused && Number.isFinite(numeric)
     ? new Intl.NumberFormat('en-US', { useGrouping: false, maximumFractionDigits: 1 }).format(numeric)
     : props.value
   return (
@@ -21,8 +28,20 @@ function Input({ className, type, density = "default", ...props }: React.Compone
       )}
       {...props}
       value={displayValue}
-      onFocus={event => { setFocused(true); props.onFocus?.(event) }}
-      onBlur={event => { setFocused(false); props.onBlur?.(event) }}
+      onFocus={event => {
+        setFocused(true)
+        if (editableNumber) setNumericDraft(String(props.value ?? ''))
+        props.onFocus?.(event)
+      }}
+      onChange={event => {
+        if (editableNumber) setNumericDraft(event.target.value)
+        props.onChange?.(event)
+      }}
+      onBlur={event => {
+        setFocused(false)
+        setNumericDraft(null)
+        props.onBlur?.(event)
+      }}
     />
   )
 }

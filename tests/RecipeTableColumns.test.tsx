@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import { afterEach, expect, it, vi } from 'vitest'
 import { RecipeTable } from '../src/components/RecipeTable'
@@ -14,6 +14,24 @@ vi.mock('../src/components/useIngredientColumnWidth', async () => {
   return { useIngredientColumnWidth: () => useRef(null) }
 })
 afterEach(() => ingredientById.clear())
+
+it('edits and saves temporary photo product information with the recipe', async () => {
+  const onSaveRecipe = vi.fn()
+  render(<MemoryRouter><LanguageProvider><RecipeTable defaultEditing
+    recipe={{ id: 'test', name: 'Test', nameKo: '테스트', imageUrl: '', items: [], photoProductDescription: '기존 설명' }}
+    rows={[]} appliedSearch="" divisionCount={4} onDivisionCountChange={vi.fn()} onAmountChange={vi.fn()} onUnitChange={vi.fn()}
+    multigrainRiceAmount={100} multigrainRiceUnit="g" onMultigrainRiceAmountChange={vi.fn()} onMultigrainRiceUnitChange={vi.fn()} onSaveRecipe={onSaveRecipe}
+  /></LanguageProvider></MemoryRouter>)
+  const input = screen.getByLabelText('상품 설명') as HTMLTextAreaElement
+  expect(input.value).toBe('기존 설명')
+  fireEvent.change(screen.getByLabelText('상품 구매 링크'), { target: { value: 'javascript:alert(1)' } })
+  fireEvent.click(screen.getAllByRole('button', { name: '저장', exact: true })[0])
+  expect(onSaveRecipe).not.toHaveBeenCalled()
+  fireEvent.change(screen.getByLabelText('상품 구매 링크'), { target: { value: 'https://example.com/buy' } })
+  fireEvent.change(input, { target: { value: '컵 설명\nhttps://example.com/cup' } })
+  fireEvent.click(screen.getAllByRole('button', { name: '저장', exact: true })[0])
+  await waitFor(() => expect(onSaveRecipe).toHaveBeenCalledWith(expect.objectContaining({ photoProductDescription: '컵 설명\nhttps://example.com/cup', photoProductUrl: 'https://example.com/buy' })))
+})
 
 it.each([true, false])('aligns headers, ingredients, sides and footer columns (editing=%s)', editing => {
   const ingredient = { id: 'eggplant', name: 'Eggplant', nameKo: '가지', baseAmount: 100, baseUnit: 'g', carbs: 5, protein: 1, fat: 0, allowedUnits: ['g'], conversions: { g: 1 } }

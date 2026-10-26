@@ -9,7 +9,7 @@ vi.mock('firebase/firestore', () => ({
 }))
 
 import { setDoc } from 'firebase/firestore'
-import { updateRecipeInFirestore } from '../src/services/recipeService'
+import { updateRecipeInFirestore, convertToRecipe, type FirestoreRecipe } from '../src/services/recipeService'
 
 const recipe = (): Recipe => ({
   id: 'eggplant', name: 'Eggplant Stir-Fry', nameKo: '가지볶음', imageUrl: '',
@@ -70,4 +70,19 @@ it('persists authored group order when saving a recipe', async () => {
   corrected.cookingGroupOrder = ['반죽', '양념장']
   await updateRecipeInFirestore(corrected)
   expect(setDoc).toHaveBeenCalledWith('recipe-ref', expect.objectContaining({ cookingGroupOrder: ['반죽', '양념장'] }))
+})
+
+it('persists, loads and clears temporary photo product information', async () => {
+  const corrected = recipe()
+  corrected.items[0].defaultAmount = 30
+  corrected.photoProductDescription = '컵 설명\nhttps://example.com/cup'
+  corrected.photoProductUrl = 'https://example.com/buy'
+  await updateRecipeInFirestore(corrected)
+  const stored = vi.mocked(setDoc).mock.calls[0][1] as unknown as FirestoreRecipe
+  expect(convertToRecipe(stored).photoProductDescription).toBe(corrected.photoProductDescription)
+  expect(convertToRecipe(stored).photoProductUrl).toBe(corrected.photoProductUrl)
+  corrected.photoProductDescription = ''
+  corrected.photoProductUrl = ''
+  await updateRecipeInFirestore(corrected)
+  expect(setDoc).toHaveBeenLastCalledWith('recipe-ref', expect.objectContaining({ photoProductDescription: '', photoProductUrl: '' }))
 })

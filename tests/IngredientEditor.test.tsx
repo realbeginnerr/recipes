@@ -82,3 +82,23 @@ it('keeps the edit workflow and its stored conversion values', async () => {
   await waitFor(() => expect(updateIngredientInFirestore).toHaveBeenCalledWith('existing', expect.objectContaining({ gramsPerCup: 100 })))
   expect(saveIngredientToFirestore).not.toHaveBeenCalled()
 })
+
+it('allows clearing numeric fields and saving replacement numbers', async () => {
+  show('edit')
+  await screen.findByRole('heading', { name: '식재료 수정' })
+  const replacements = [
+    ['기준량', '200'], ['탄수화물 (g)', '25.5'],
+    ['단백질 (g)', '12'], ['지방 (g)', '0'],
+  ]
+  for (const [label, value] of replacements) {
+    change(label, '')
+    expect((screen.getByLabelText(label) as HTMLInputElement).value).toBe('')
+    fireEvent.submit(screen.getByRole('button', { name: '저장', exact: true }).closest('form')!)
+    expect(updateIngredientInFirestore).not.toHaveBeenCalled()
+    change(label, value)
+  }
+  fireEvent.click(screen.getByRole('button', { name: '저장', exact: true }))
+  await waitFor(() => expect(updateIngredientInFirestore).toHaveBeenCalledWith('existing', expect.objectContaining({
+    baseAmount: 200, carbs: 25.5, protein: 12, fat: 0,
+  })))
+})

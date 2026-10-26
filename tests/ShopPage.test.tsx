@@ -4,6 +4,10 @@ import { ShopPage } from '../src/pages/ShopPage'
 import { LanguageProvider } from '../src/context/LanguageContext'
 import { searchTaggedProducts } from '../src/services/taggedProductService'
 vi.mock('../src/services/taggedProductService', () => ({ searchTaggedProducts: vi.fn() }))
+const { requestAccess, admin } = vi.hoisted(() => ({ requestAccess: vi.fn(), admin: { isAdmin: false } }))
+vi.mock('../src/context/AdminContext', () => ({ useAdmin: () => admin }))
+vi.mock('../src/components/AddPageAccessProvider', () => ({ useAddPageAccess: () => ({ requestAccess }) }))
+beforeEach(() => { admin.isAdmin = false; requestAccess.mockClear() })
 beforeEach(() => vi.mocked(searchTaggedProducts).mockResolvedValue([
   { id: 'cup', productName: '등록한 그릇', brandName: '브랜드', category: '그릇', thumbnailUrl: '', productUrl: 'https://example.com/buy', price: 1000, deleted: false, updatedAt: 2 },
   { id: 'legacy', productName: '기존 상품', thumbnailUrl: '', productUrl: 'https://example.com/legacy', deleted: false, updatedAt: 1 },
@@ -17,8 +21,19 @@ it('등록 상품 카드는 상세페이지 대신 구매 URL을 새 탭으로 �
   expect(link.getAttribute('target')).toBe('_blank')
   expect(link.getAttribute('rel')).toBe('noopener noreferrer')
   expect(screen.getAllByRole('link')).toHaveLength(2)
+  expect(screen.queryByRole('button', { name: '상품 등록' })).toBeNull()
   fireEvent.click(screen.getByRole('button', { name: '그릇', exact: true }))
   expect(screen.queryByRole('link', { name: /기존 상품/ })).toBeNull()
   fireEvent.click(screen.getByRole('button', { name: '기타', exact: true }))
   expect(screen.getByRole('link', { name: /기존 상품/ })).toBeDefined()
+})
+
+it('shows the matching registration action beside the count for admins', async () => {
+  admin.isAdmin = true
+  render(<LanguageProvider><ShopPage /></LanguageProvider>)
+  const button = await screen.findByRole('button', { name: '상품 등록' })
+  expect(button.classList.contains('catalog-intro__subtle-action')).toBe(true)
+  expect(button.parentElement?.className).toBe('catalog-count-row')
+  fireEvent.click(button)
+  expect(requestAccess).toHaveBeenCalledWith('/products/new')
 })

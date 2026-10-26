@@ -3,9 +3,9 @@ import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { auth } from '../firebase'
 import type { Product, ProductAdminData, ShopSettings } from '../types/product'
 import type { ShopPolicies } from '../types/shopPolicy'
-import { emptyProduct, generatedSku, generateVariants, priceSummary, productSlug, validateProduct, resolveBlend, isExternalProduct, isGroupBuyProduct, groupBuyPolicies } from '../utils/product'
+import { emptyProduct, generatedSku, generateVariants, priceSummary, productSlug, validateProduct, isExternalProduct, isGroupBuyProduct, groupBuyPolicies } from '../utils/product'
 import { effectivePolicies, validatePolicies } from '../utils/shopPolicy'
-import { deleteProduct, loadProduct, loadProducts, loadShopSettings, newProductId, ProductSaveError, saveProduct } from '../services/productService'
+import { deleteProduct, loadProduct, loadShopSettings, newProductId, ProductSaveError, saveProduct } from '../services/productService'
 import { getTeaTags, teaCategories, type TeaTag } from '../utils/teaCategory'
 import { Button } from '../components/ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '../components/ui/dialog'
@@ -13,7 +13,6 @@ import { ContentState, LoadingState } from '../components/feedback/ContentState'
 import { Toast, useToast } from '../components/feedback/Toast'
 import { FormSection, TextField, NumberField, SelectField, CheckField } from '../components/product/ProductFields'
 import { ProductRichText } from '../components/product/ProductRichText'
-import { ProductBlendFields } from '../components/product/ProductBlendFields'
 import { ProductImages } from '../components/product/ProductImages'
 import { ShippingPolicyFields, ExchangePolicyFields, RefundPolicyFields, ReturnAddressFields } from '../components/product/PolicyFields'
 import { PolicyPreview } from '../components/product/PolicyPreview'
@@ -22,8 +21,15 @@ import { ProductPreview } from '../components/product/ProductPreview'
 import { useUnsavedProduct } from '../hooks/useUnsavedProduct'
 import './ProductAdmin.css'
 
-const sectionLinks = [['blend', '차 구성'], ['basic', '기본 정보'], ['media', '이미지'], ['pricing', '가격'], ['options', '옵션'], ['inventory', '재고'], ['shipping', '배송'], ['exchange', '교환'], ['refund', '반품·환불'], ['disclosure', '상품 고시'], ['seo', 'SEO'], ['visibility', '판매·노출']]
+const sectionLinks = [['basic', '기본 정보'], ['media', '이미지'], ['pricing', '가격'], ['options', '옵션'], ['inventory', '재고'], ['shipping', '배송'], ['exchange', '교환'], ['refund', '반품·환불'], ['disclosure', '상품 고시'], ['seo', 'SEO'], ['visibility', '판매·노출']]
 const splitTags = (value: string) => [...new Set(value.split(',').map(tag => tag.trim()).filter(Boolean))]
+// Retire tea composition behavior when opening or saving the general editor.
+// Keep legacy readers compatible without requiring a database migration.
+function generalProduct(product: Product): Product {
+  const next = { ...product, compositionType: 'single' as const, teaTags: getTeaTags(product).filter(tag => tag !== '혼합차') }
+  delete next.blend
+  return next
+}
 export function ProductEditPage() {
   const { id } = useParams()
   const [searchParams] = useSearchParams()
@@ -31,8 +37,6 @@ export function ProductEditPage() {
   const navigate = useNavigate()
   const [product, setProduct] = useState<Product>(() => ({ ...emptyProduct(), id: id ?? newProductId() }))
   const [privateData, setPrivateData] = useState<ProductAdminData>({ cost: null })
-  const [blendCatalog, setBlendCatalog] = useState<Product[]>([])
-  const [blendError, setBlendError] = useState(false)
   const [settings, setSettings] = useState<ShopSettings | null>(null)
   const [loading, setLoading] = useState(true)
   const [loadError, setLoadError] = useState('')
@@ -75,8 +79,6 @@ export function ProductEditPage() {
             next = { ...next, id: newProductId(), name: `${next.name} (복사)`, sku: generatedSku(), version: 0, createdAt: 0, updatedAt: 0, visibility: 'private', draft: true, seo: { ...next.seo, title: '', slug: '' }, variants: next.variants.map((variant, index) => ({ ...variant, id: crypto.randomUUID(), sku: `COPY-${crypto.randomUUID().slice(0, 8)}-${index + 1}` })) }
           }
         }
-        const catalog = await loadProducts(true).catch(() => { if (!cancelled) setBlendError(true); return [] as Product[] })
-        if (!cancelled) setBlendCatalog(catalog)
         const common = await loadShopSettings().catch(() => { if (!cancelled) setSettingsError(true); return null })
         if (!cancelled) {
           setSettings(common)
@@ -90,7 +92,7 @@ export function ProductEditPage() {
               else { setRestored(true); setOlderDraft(saved) }
             } catch { sessionStorage.removeItem(storageKey) }
           }
-          setProduct(resolveBlend({ ...next, compositionType: next.compositionType ?? 'single', teaTags: getTeaTags(next) }, catalog)); setPrivateData(adminData); setBaseline(serverBaseline)
+          setProduct(generalProduct(next)); setPrivateData(adminData); setBaseline(serverBaseline)
         }
       } catch (cause) { if (!cancelled) setLoadError(cause instanceof Error ? cause.message : '상품을 불러오지 못했어요.') }
       finally { if (!cancelled) setLoading(false) }
@@ -114,12 +116,11 @@ export function ProductEditPage() {
   }
   async function save(draft: boolean) {
     const shipping = policies.shipping
-    const next: Product = { ...resolveBlend(product, blendCatalog), draft, policies: structuredClone(policies), policyVersion: settings?.version ?? product.policyVersion, seo: { title: product.seo.title || product.name, description: product.seo.description || descriptionText, slug: product.seo.slug || productSlug(product.name) || product.id }, shipping: { ...product.shipping, type: shipping.type, carrier: shipping.carrier, feeType: shipping.feeType, fee: shipping.fee, freeThreshold: shipping.freeThreshold, extraFee: shipping.remoteFee, leadDays: shipping.leadDays, bundle: shipping.bundle } }
+    const next: Product = { ...generalProduct(product), draft, policies: structuredClone(policies), policyVersion: settings?.version ?? product.policyVersion, seo: { title: product.seo.title || product.name, description: product.seo.description || descriptionText, slug: product.seo.slug || productSlug(product.name) || product.id }, shipping: { ...product.shipping, type: shipping.type, carrier: shipping.carrier, feeType: shipping.feeType, fee: shipping.fee, freeThreshold: shipping.freeThreshold, extraFee: shipping.remoteFee, leadDays: shipping.leadDays, bundle: shipping.bundle } }
     if (isGroupBuyProduct(next)) { next.policies = groupBuyPolicies(next); next.policySelection = { shipping: 'individual', exchange: 'individual', refund: 'individual' } }
     const specialFulfillment = isExternalProduct(next) || isGroupBuyProduct(next)
     const validation = validateProduct(next, privateData.cost, draft)
     const publicProduct = !draft && product.visibility !== 'private'
-    if (publicProduct && product.compositionType === 'blend' && product.blend?.components.some(item => { const source = blendCatalog.find(candidate => candidate.id === item.productId); return !source || source.draft || source.visibility === 'private' || source.publicAfter > Date.now() || source.publicUntil < Date.now() })) validation.blend = '공개할 혼합차의 구성은 현재 공개된 단일차로 선택해 주세요.'
     // Shipping policies, rather than duplicated logistics inputs, validate fees.
     delete validation['shipping.fee']; delete validation['shipping.freeThreshold']
     Object.assign(validation, Object.fromEntries(Object.entries(validatePolicies(next.policies, publicProduct && !specialFulfillment)).map(([key, value]) => [`policy.${key}`, value])))
@@ -158,21 +159,20 @@ export function ProductEditPage() {
     <header className="product-admin-heading"><div><Link to="/blending-tea">← Shop</Link><p className="product-eyebrow">Shop · 상품 관리</p><h1>{id ? '상품 수정' : copyId ? '상품 복제' : '상품 추가'}</h1><p>기본 정보와 사진, 가격을 먼저 입력하고 필요한 설정을 펼쳐보세요.</p></div><Link className="product-settings-link" to="/shop-settings">배송·교환·반품 공통 정책</Link></header>
     {(restored || settingsError || errors.policies || errors.conflict) && <div className="product-notice" role="status">
       {restored && <p>{olderDraft ? '서버에 더 최신 상품이 있어요. 현재 화면은 최신 저장본이며, 이전 입력은 별도로 보관했어요.' : '이 브라우저에 보관된 입력 내용을 복구했어요.'}</p>}
-      {olderDraft && <Button variant="outline" onClick={() => { if (window.confirm('이전 입력으로 현재 폼을 채울까요? 서버에는 아직 저장하지 않으며, 저장 시 최신 상품을 변경하게 돼요.')) { setProduct({ ...olderDraft.product, version: product.version, updatedAt: product.updatedAt }); setPrivateData(olderDraft.privateData); setOlderDraft(null) } }}>보관된 이전 입력 가져오기</Button>}
+      {olderDraft && <Button variant="outline" onClick={() => { if (window.confirm('이전 입력으로 현재 폼을 채울까요? 서버에는 아직 저장하지 않으며, 저장 시 최신 상품을 변경하게 돼요.')) { setProduct(generalProduct({ ...olderDraft.product, version: product.version, updatedAt: product.updatedAt })); setPrivateData(olderDraft.privateData); setOlderDraft(null) } }}>보관된 이전 입력 가져오기</Button>}
       {settingsError && <p>공통 정책을 불러오지 못했어요. 개별 정책으로 입력하거나 연결을 확인한 뒤 다시 불러와 주세요.</p>}
       {(errors.policies || errors.conflict) && <p className="product-error">{errors.policies || errors.conflict}</p>}
       <Button variant="outline" onClick={() => { if (!dirty || window.confirm('현재 입력을 별도로 보관하고 서버의 최신 정보로 다시 불러올까요?')) { const savedInput = current.current; setOlderDraft(savedInput); sessionStorage.removeItem(storageKey); setRestored(true); setAttempt(value => value + 1) } }}>다시 불러오기</Button>
     </div>}
     <div className="product-editor-layout"><nav className="product-section-nav" aria-label="상품 입력 섹션">{sectionLinks.filter(([key]) => !(isExternalProduct(product) || isGroupBuyProduct(product)) || !['exchange', 'refund'].includes(key)).map(([key, label]) => <a key={key} href={`#${key}`} onClick={() => { const section = document.getElementById(key); if (section instanceof HTMLDetailsElement) section.open = true }}>{label}</a>)}</nav>
     <form className="product-editor-form" noValidate onSubmit={event => { event.preventDefault(); void save(false) }}>
-      <FormSection id="blend" title="차 구성"><ProductBlendFields product={product} catalog={blendCatalog} error={errors.blend} participantsError={errors['groupBuy.participants']} loadError={blendError} onChange={next => setProduct(resolveBlend(next, blendCatalog))} /></FormSection>
       <FormSection id="basic" title="기본 정보" description="상품명은 필수예요. SKU는 자동 생성되며 직접 바꿀 수 있어요.">
         <TextField label="상품명" required value={product.name} onChange={value => update('name', value)} error={errors.name} />
         <div><TextField label="상품 코드 (SKU)" value={product.sku} onChange={value => update('sku', value)} error={errors.sku} /><Button type="button" variant="link" onClick={() => update('sku', generatedSku())}>SKU 자동 생성</Button></div>
         {product.categories.map((value, index) => <TextField key={index} label={['대분류', '중분류', '소분류'][index]} value={value} onChange={next => { const categories: Product['categories'] = [...product.categories]; categories[index] = next; for (let i = index + 1; i < 3; i++) categories[i] = ''; update('categories', categories) }} hint={settings?.categoryPaths.length ? [...new Set(settings.categoryPaths.filter(path => index === 0 || path.slice(0, index).every((part, i) => part === product.categories[i])).map(path => path[index]))].join(' · ') : '카테고리 체계가 미정이면 비워둘 수 있어요.'} />)}
         <TextField label="브랜드" value={product.brand} onChange={value => update('brand', value)} />
         <TextField label="제조사" value={product.manufacturer} onChange={value => update('manufacturer', value)} />
-        <div className="product-full"><h3>차 종류·카페인 태그</h3><div className="product-tag-choices">{teaCategories.filter((value): value is TeaTag => value !== '전체').map(value => <Button type="button" key={value} variant="filter" size="compact" aria-pressed={product.teaTags.includes(value)} onClick={() => { const caffeine = ['카페인', '무카페인']; const nextTags = product.teaTags.includes(value) ? product.teaTags.filter(tag => tag !== value) : [...product.teaTags.filter(tag => !caffeine.includes(value) || !caffeine.includes(tag)), value]; setProduct(resolveBlend({ ...product, teaTags: nextTags, compositionType: value === '혼합차' ? (nextTags.includes('혼합차') ? 'blend' : 'single') : product.compositionType }, blendCatalog)) }}>{value}</Button>)}</div>{errors.teaTags && <p className="product-error">{errors.teaTags}</p>}</div>
+        <div className="product-full"><h3>상품 분류·태그</h3><div className="product-tag-choices">{teaCategories.filter((value): value is TeaTag => value !== '전체' && value !== '혼합차').map(value => <Button type="button" key={value} variant="filter" size="compact" aria-pressed={product.teaTags.includes(value)} onClick={() => { const caffeine = ['카페인', '무카페인']; const nextTags = product.teaTags.includes(value) ? product.teaTags.filter(tag => tag !== value) : [...product.teaTags.filter(tag => !caffeine.includes(value) || !caffeine.includes(tag)), value]; update('teaTags', nextTags) }}>{value}</Button>)}</div>{errors.teaTags && <p className="product-error">{errors.teaTags}</p>}</div>
         <div className="product-full"><TextField label="구매 링크" type="url" value={product.purchaseUrl ?? ''} onChange={value => update('purchaseUrl', value)} error={errors.purchaseUrl} hint="고객이 주문·결제할 외부 판매 페이지의 http 또는 https 주소를 입력해 주세요." /></div>
         <div className="product-full"><h3>본문</h3><p className="product-hint">글과 이미지를 원하는 순서로 넣어보세요. 아래에서 업로드한 이미지나 이미지 URL을 본문 중간에 삽입할 수 있어요.</p><ProductRichText value={product.description} images={product.images} onChange={value => update('description', value)} /></div>
       </FormSection>
@@ -180,8 +180,8 @@ export function ProductEditPage() {
         <ProductImages productId={product.id} images={product.images} onChange={value => update('images', value)} onBusyChange={setUploading} error={errors.images} />
       </FormSection>
       <FormSection id="pricing" title="가격 정보">
-        <NumberField label="정상 판매가" disabled={product.compositionType === 'blend'} required value={product.pricing.regular} onChange={value => updateGroup('pricing', { regular: value })} unit="원" error={errors['pricing.regular']} />
-        <NumberField label="할인 판매가" disabled={product.compositionType === 'blend'} value={product.pricing.discount} onChange={value => updateGroup('pricing', { discount: value })} unit="원" error={errors['pricing.discount']} />
+        <NumberField label="정상 판매가" required value={product.pricing.regular} onChange={value => updateGroup('pricing', { regular: value })} unit="원" error={errors['pricing.regular']} />
+        <NumberField label="할인 판매가" value={product.pricing.discount} onChange={value => updateGroup('pricing', { discount: value })} unit="원" error={errors['pricing.discount']} />
         <NumberField label="매입 원가 (관리자 전용)" value={privateData.cost} onChange={cost => setPrivateData({ cost })} unit="원" error={errors.cost} />
         <SelectField label="과세 여부" value={product.pricing.tax} options={[{ value: 'taxable', label: '과세' }, { value: 'exempt', label: '면세' }]} onChange={value => updateGroup('pricing', { tax: value })} />
         <TextField label="할인 시작일" type="datetime-local" value={product.pricing.discountStart} onChange={value => updateGroup('pricing', { discountStart: value })} error={errors['pricing.discountStart']} />
@@ -223,7 +223,7 @@ export function ProductEditPage() {
       <FormSection id="exchange" title="교환 정책" collapsible>{policyChoice('exchange')}{product.policySelection.exchange === 'individual' && <ExchangePolicyFields value={product.policies.exchange} onChange={value => updatePolicy('exchange', value)} errors={policyErrors} />}</FormSection>
       <FormSection id="refund" title="반품·환불 정책" collapsible>{policyChoice('refund')}{product.policySelection.refund === 'individual' && <><RefundPolicyFields value={product.policies.refund} onChange={value => updatePolicy('refund', value)} errors={policyErrors} /><div className="product-full"><h3>반품 주소·고객센터</h3></div><ReturnAddressFields value={product.policies.address} onChange={value => updatePolicy('address', value)} errors={policyErrors} /></>}<div className="product-full"><Button type="button" variant="outline" onClick={() => setPolicyPreview(true)}>고객 정책 안내 미리보기</Button>{Object.entries(policyErrors).filter(([key]) => product.policySelection[key.split('.')[0] as 'shipping' | 'exchange' | 'refund'] === 'common').map(([key, value]) => <p className="product-error" key={key}>{value} · 공통 정책 설정에서 수정하세요.</p>)}</div></FormSection>
       </>}
-      <FormSection id="disclosure" title="상품 고시·상세 정보" collapsible description="차 상품의 식품 정보를 입력하세요. 수입 상품 등 해당하는 항목을 채워주세요.">
+      <FormSection id="disclosure" title="상품 고시·상세 정보" collapsible description="상품 정보를 입력하세요. 수입 상품 등 해당하는 항목을 채워주세요.">
         {(['country', 'foodType', 'manufactureDate', 'expiryDate', 'material', 'capacity', 'contents', 'storage', 'precautions', 'certification', 'support', 'importer', 'nutrition', 'allergens', 'gmo', 'additional'] as const).map((key, index) => <TextField key={key} label={['제조국·원산지', '식품 유형', '제조일자', '유통기한·소비기한', '원재료·소재', '크기·용량', '구성품', '사용·보관 방법', '주의사항', '인증·허가 정보', 'A/S·소비자 상담 연락처', '수입업체', '영양정보', '알레르기 정보', '유전자변형식품 표시', '추가 상품 고시'][index]} value={product.disclosure[key]} onChange={value => updateGroup('disclosure', { [key]: value })} type={['manufactureDate', 'expiryDate'].includes(key) ? 'date' : 'text'} multiline={['storage', 'precautions', 'nutrition', 'additional'].includes(key)} error={errors[`disclosure.${key}`]} />)}
       </FormSection>
       <FormSection id="seo" title="검색 엔진 최적화 (SEO)" collapsible>

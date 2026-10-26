@@ -20,6 +20,12 @@ export function RecipeCard({ recipe, openInNewTab = false, variant = 'recipe' }:
   const navigate = useNavigate()
   const { language } = useLanguage()
   const name = language === 'ko' ? recipe.nameKo : recipe.name
+  const minutes = recipe.cookingTimeMinutes
+  const cookingTime = minutes === undefined
+    ? (language === 'ko' ? '확인필요' : 'To be confirmed')
+    : minutes < 60
+      ? `${minutes}${language === 'ko' ? '분' : ' min'}`
+      : [`${Math.floor(minutes / 60)}${language === 'ko' ? '시간' : ' hr'}`, ...(minutes % 60 ? [`${minutes % 60}${language === 'ko' ? '분' : ' min'}`] : [])].join(' ')
   const imageUrl = resolveRecipeImage(recipe)
   const categories = variant === 'product'
     ? getTeaTags(recipe).map(tag => ({ key: tag, label: language === 'ko' ? tag : teaCategoryEnglish[tag] }))
@@ -58,7 +64,7 @@ export function RecipeCard({ recipe, openInNewTab = false, variant = 'recipe' }:
           <div className="recipe-card__rating"><StarRating label={language === 'ko' ? '맛' : 'Taste'} value={recipe.tasteRating ?? 4} showLabel={false} /></div>
           <p className="recipe-card__macro-grams">{language === 'ko' ? '탄단지(g)' : 'C/P/F(g)'} <span>{formatTableNumber(macros.carbs)} / {formatTableNumber(macros.protein)} / {formatTableNumber(macros.fat)}</span></p>
           <NutritionSummary {...macros} perMeal showRatio={false} />
-          <p className="recipe-card__cooking-time">{language === 'ko' ? '조리시간' : 'Cooking time'} <span>{recipe.cookingTimeMinutes === undefined ? (language === 'ko' ? '확인필요' : 'To be confirmed') : `${recipe.cookingTimeMinutes}${language === 'ko' ? '분' : ' min'}`}</span></p>
+          <p className="recipe-card__cooking-time">{language === 'ko' ? '조리시간' : 'Cooking time'} <span>{cookingTime}</span></p>
         </>}
       </div>
     </>

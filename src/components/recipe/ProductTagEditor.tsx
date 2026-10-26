@@ -80,17 +80,17 @@ export function ProductTagEditor({ images, tags, onChange, disabled, onBusyChang
   }
   return <fieldset className="product-tag-editor" disabled={disabled || busy}>
     <legend>사진 속 상품 태그</legend>
+    <div className="product-tag-actions">
+      <Button type="button" variant="outline" onClick={() => { setEditingId(undefined); setForm(blankProduct()); setFile(null); setFormOpen(true) }}>새 상품 등록</Button>
+      <Button type="button" variant="outline" disabled={!selectedProduct} onClick={() => { if (!selectedProduct) return; setEditingId(selectedProduct.id); setForm({ category: selectedProduct.category ?? '기타', productName: selectedProduct.productName, brandName: selectedProduct.brandName ?? '', thumbnailUrl: selectedProduct.thumbnailUrl, productUrl: selectedProduct.productUrl, price: selectedProduct.price === undefined ? '' : String(selectedProduct.price) }); setFile(null); setFormOpen(true) }}>공용 상품 수정</Button>
+      <Button type="button" variant="destructive" disabled={!selectedProduct} onClick={() => void removeProduct()}>공용 상품 삭제</Button>
+    </div>
     <p>공용 상품은 즉시 저장되며 다른 레시피에서도 함께 사용됩니다. 태그 추가·위치·삭제는 레시피를 저장해야 반영됩니다.</p>
     {error && <p role="alert">{error}</p>}{notice && <p role="status">{notice}</p>}
     <Button type="button" variant="outline" onClick={() => setRevision(value => value + 1)}>상품 목록 다시 불러오기</Button>
     <label>레시피 사진 선택<select value={photo?.id ?? ''} onChange={event => { setPhotoId(event.target.value); setTagId('') }}><option value="" disabled>사진을 선택하세요</option>{available.map((image, index) => <option key={image.id} value={image.id}>사진 {index + 1}</option>)}</select></label>
     <label>기존 상품 검색<Input value={search} onChange={event => setSearch(event.target.value)} placeholder="상품명 또는 브랜드" /></label>
     <label>기존 상품 선택<select value={productId} onChange={event => { setProductId(event.target.value); setFormOpen(false) }}><option value="">상품을 선택하세요</option>{catalog.filter(product => `${product.productName} ${product.brandName ?? ''}`.toLocaleLowerCase().includes(search.toLocaleLowerCase())).map(product => <option key={product.id} value={product.id}>{product.productName}{product.brandName ? ` · ${product.brandName}` : ''}</option>)}</select></label>
-    <div className="product-tag-actions">
-      <Button type="button" variant="outline" onClick={() => { setEditingId(undefined); setForm(blankProduct()); setFile(null); setFormOpen(true) }}>새 상품 등록</Button>
-      <Button type="button" variant="outline" disabled={!selectedProduct} onClick={() => { if (!selectedProduct) return; setEditingId(selectedProduct.id); setForm({ category: selectedProduct.category ?? '기타', productName: selectedProduct.productName, brandName: selectedProduct.brandName ?? '', thumbnailUrl: selectedProduct.thumbnailUrl, productUrl: selectedProduct.productUrl, price: selectedProduct.price === undefined ? '' : String(selectedProduct.price) }); setFile(null); setFormOpen(true) }}>공용 상품 수정</Button>
-      <Button type="button" variant="destructive" disabled={!selectedProduct} onClick={() => void removeProduct()}>공용 상품 삭제</Button>
-    </div>
     {formOpen && <div className="product-tag-form">
       <label>상품 분류<select value={form.category} onChange={event => setForm(current => ({ ...current, category: event.target.value as NonNullable<TaggedProduct['category']> }))}>{(['그릇', '수저', '매트', '기타'] as const).map(category => <option key={category} value={category}>{category}</option>)}</select></label>
       {editingId && <p>이 상품을 수정하면 사용하는 모든 레시피에 반영됩니다.</p>}

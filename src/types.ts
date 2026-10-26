@@ -41,6 +41,8 @@ export type Recipe = {
   imageUrls?: string[]
   images?: RecipeImage[]
   productTags?: RecipeProductTag[]
+  photoProductDescription?: string
+  photoProductUrl?: string
   items: RecipeItem[]
   sideItems?: RecipeItem[]
   memo?: string

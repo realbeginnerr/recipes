@@ -3,7 +3,7 @@ import { isExternalProduct, discountedPrice } from '../../utils/product'
 import { GROUP_PURCHASE_URL } from '../../constants/shop'
 
 export function FulfillmentPolicyPreview({ product }: { product: Product }) {
-  if (isExternalProduct(product)) return <section className="product-policy-preview"><h2>구매·배송 안내</h2><p>이 페이지는 외부 판매처의 차 상품을 소개합니다. 주문과 결제는 연결된 판매처에서 진행하며, 배송·교환·반품·환불은 해당 판매처의 안내와 관련 법령에 따릅니다. 문의는 구매한 판매처로 접수해 주세요.</p></section>
+  if (isExternalProduct(product)) return <section className="product-policy-preview"><h2>구매·배송 안내</h2><p>이 페이지는 외부 판매처의 상품을 소개합니다. 주문과 결제는 연결된 판매처에서 진행하며, 배송·교환·반품·환불은 해당 판매처의 안내와 관련 법령에 따릅니다. 문의는 구매한 판매처로 접수해 주세요.</p></section>
   const participants = product.groupBuy?.participants ?? null
   const total = discountedPrice(product)
   return <div className="product-policy-preview">
