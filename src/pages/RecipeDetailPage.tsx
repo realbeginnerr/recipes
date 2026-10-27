@@ -1,4 +1,6 @@
 import { RelatedImageProducts } from '../components/recipe/RelatedImageProducts'
+import { CookingSteps } from '../components/CookingSteps'
+import { recipeCookingSteps } from '../utils/cookingSteps'
 import { ShoppableImage } from '../components/recipe/ShoppableImage'
 import { recipeGalleryImages } from '../utils/recipeGallery'
 import { NutritionTable, MacroCells } from '../components/NutritionTable'
@@ -11,7 +13,10 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { useEffect, useRef, useState } from 'react'
 import { Dialog as ImageDialog } from '@base-ui/react/dialog'
-import { X, ChevronLeft, ChevronRight } from 'lucide-react'
+import { X, ChevronLeft, ChevronRight, Copy, RotateCcw } from 'lucide-react'
+import { scaleRecipeRows } from '../utils/recipeScaling'
+import { INGREDIENT_UNITS } from '../constants/ingredientUnits'
+import { Toast, useToast } from '../components/feedback/Toast'
 import { useNavigate, useParams } from 'react-router-dom'
 import { BackLink } from '../components/BackLink'
 import { useLanguage } from '../context/LanguageContext'
@@ -101,10 +106,13 @@ function RecipeImageGallery({ recipe, name, ko }: { recipe: Recipe; name: string
 function RecipeNutrition({ recipe }: { recipe: Recipe }) {
   const { language } = useLanguage()
   const { isAdmin } = useAdmin()
+  const { toast, showToast, closeToast } = useToast()
   const navigate = useNavigate()
   const ko = language === 'ko'
   const name = ko ? recipe.nameKo : recipe.name
   const [rows, setRows] = useState<RecipeRowState[]>(() => initialRows(recipe))
+  const [adjustmentMode, setAdjustmentMode] = useState<'all' | 'single'>('all')
+  const amountEdit = useRef<RecipeRowState[] | null>(null)
   const [tableMode, setTableMode] = useState<'storage' | 'cooking' | 'meal'>('storage')
   const [divisions, setDivisions] = useState(Math.max(1, recipe.divisionCount ?? 4))
   const [divisionsInput, setDivisionsInput] = useState(() => String(divisions))
@@ -140,6 +148,11 @@ function RecipeNutrition({ recipe }: { recipe: Recipe }) {
       : displayName
   }
   function updateRow(index: number, field: 'amount' | 'unit', value: string, side = false) {
+    if (!side && field === 'amount' && adjustmentMode === 'all') {
+      const baseline = amountEdit.current ?? rows
+      setRows(scaleRecipeRows(baseline, index, amount(value)))
+      return
+    }
     const update = side ? setSides : setRows
     update(current => current.map((row, i) => {
       if (i !== index) return row
@@ -151,7 +164,26 @@ function RecipeNutrition({ recipe }: { recipe: Recipe }) {
   }
   function quantityCells(row: RecipeRowState, index: number, side = false) {
     const ingredient = ingredientFor(row.ingredientId)
-    return <QuantityUnitCells ingredientId={row.ingredientId} amount={row.amount} unit={row.unit} units={ingredient?.allowedUnits ?? []} label={label(ingredient, row.ingredientId)} amountLabel={side ? (ko ? '주식 양' : 'Staple amount') : undefined} onAmountChange={value => updateRow(index, 'amount', value, side)} onUnitChange={value => updateRow(index, 'unit', value, side)} />
+    return <QuantityUnitCells ingredientId={row.ingredientId} amount={row.amount} unit={row.unit} units={ingredient?.allowedUnits ?? []} label={label(ingredient, row.ingredientId)} amountLabel={side ? (ko ? '주식 양' : 'Staple amount') : undefined} onAmountFocus={() => { if (!side) amountEdit.current = rows }} onAmountBlur={() => { amountEdit.current = null }} onAmountChange={value => updateRow(index, 'amount', value, side)} onUnitChange={value => updateRow(index, 'unit', value, side)} />
+  }
+  async function copyIngredients() {
+    const rowText = (row: RecipeRowState) => {
+      const unit = INGREDIENT_UNITS.find(unit => unit.ko === row.unit || unit.en === row.unit)
+      const displayUnit = unit ? (ko ? unit.ko : unit.en) : row.unit
+      return `${label(ingredientFor(row.ingredientId), row.ingredientId)}: ${row.amount}${displayUnit}`
+    }
+    const text = [
+      ...tableGroups.map(group => [`[${group.title}]`, ...group.entries.map(({ row }) => rowText(row))].join('\n')),
+      [ko ? `[${divisions}등분해서 소분하기]` : `[Divide into ${divisions} portions]`,
+        ko ? `전체 재료 합계: 1/${divisions}분량` : `All ingredients total: 1/${divisions} batch`,
+        ...sides.map(rowText)].join('\n'),
+    ].join('\n\n')
+    try {
+      await navigator.clipboard.writeText(text)
+      showToast(ko ? '재료를 복사했어요.' : 'Ingredients copied.', 'success')
+    } catch {
+      showToast(ko ? '복사하지 못했어요. 브라우저의 클립보드 권한을 확인해 주세요.' : 'Could not copy. Check your browser clipboard permission.', 'error')
+    }
   }
 
   return <article className="nutrition-detail reference-container recipe-body-container" lang={language}>
@@ -177,6 +209,7 @@ function RecipeNutrition({ recipe }: { recipe: Recipe }) {
         <StarRating label={ko ? '맛' : 'Taste'} value={recipe.tasteRating ?? 4} showLabel={false} />
       </div>
       <section className="detail-section" aria-labelledby="whole-recipe-title"><h2 id="whole-recipe-title" className="sr-only">{ko ? '전체 재료' : 'All ingredients'}</h2>
+      <div className="detail-table-toolbar">
       <div className="detail-table-tabs" role="tablist" aria-label={ko ? '재료 보기 모드' : 'Ingredient view mode'}>
         {(['storage', 'cooking', 'meal'] as const).map((mode, index) => <button key={mode} type="button" role="tab" id={`ingredient-tab-${mode}`} aria-controls="ingredient-mode-panel" aria-selected={tableMode === mode} tabIndex={tableMode === mode ? 0 : -1} onClick={() => setTableMode(mode)} onKeyDown={event => {
           if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return
@@ -187,6 +220,24 @@ function RecipeNutrition({ recipe }: { recipe: Recipe }) {
           document.getElementById(`ingredient-tab-${next}`)?.focus()
         }}>{mode === 'storage' ? (ko ? '재료 꺼낼 때' : 'Gather ingredients') : mode === 'cooking' ? (ko ? '요리할 때' : 'Cook') : (ko ? '플레이팅' : 'Plating')}</button>)}
       </div>
+      </div>
+      {tableMode !== 'meal' && <div className="detail-adjustment">
+        <div className="detail-adjustment-actions">
+          <div className="detail-adjustment-modes" role="group" aria-label={ko ? '재료 양 조절 방식' : 'Ingredient adjustment mode'}>
+            <button type="button" aria-pressed={adjustmentMode === 'all'} onClick={() => setAdjustmentMode('all')}>{ko ? '일괄조절' : 'Scale all'}</button>
+            <button type="button" aria-pressed={adjustmentMode === 'single'} onClick={() => setAdjustmentMode('single')}>{ko ? '개별조절' : 'Adjust one'}</button>
+          </div>
+          <Button type="button" variant="ghost" size="icon" className="detail-reset-button" aria-label={ko ? '원래 분량으로' : 'Reset quantities'} title={ko ? '원래 분량으로' : 'Reset quantities'} onClick={() => {
+            amountEdit.current = null
+            setRows(initialRows(recipe))
+            setSides((recipe.sideItems ?? []).map(item => ({ ingredientId: item.ingredientId, amount: item.defaultAmount, unit: item.defaultUnit })))
+            const originalDivisions = Math.max(1, recipe.divisionCount ?? 4)
+            setDivisions(originalDivisions)
+            setDivisionsInput(String(originalDivisions))
+          }}><RotateCcw size={18} aria-hidden="true" /></Button>
+          <Button type="button" variant="ghost" size="icon" className="detail-copy-button" aria-label={ko ? '클립보드에 복사하기' : 'Copy to clipboard'} title={ko ? '클립보드에 복사하기' : 'Copy to clipboard'} onClick={copyIngredients}><Copy size={18} aria-hidden="true" /></Button>
+        </div>
+      </div>}
       <div role="tabpanel" id="ingredient-mode-panel" aria-labelledby={`ingredient-tab-${tableMode}`}>
       {tableMode === 'meal' ? (
         <article className="meal-blog" aria-label={ko ? '플레이팅' : 'Plating'}>
@@ -219,11 +270,12 @@ function RecipeNutrition({ recipe }: { recipe: Recipe }) {
         })}
       </NutritionTable>
       <TableNutritionSummary total={meal} showRatio />
-      {tableMode === 'cooking' && recipe.cookingContent?.trim() && <section className="detail-notes"><h2>{ko ? '메모' : 'Notes'}</h2><div className="meal-blog__prose"><p>{recipe.cookingContent}</p></div></section>}
+      <div hidden={tableMode !== 'cooking'}><CookingSteps recipeId={recipe.id} steps={recipeCookingSteps(recipe)} ko={ko} /></div>
       {tableMode === 'storage' && memo.trim() && <section className="detail-notes"><h2>{ko ? '메모' : 'Notes'}</h2><p>{memo}</p></section>}
       </section>}
       </div>
     </div>
+    {toast && <Toast {...toast} onClose={closeToast} />}
   </article>
 }
 
