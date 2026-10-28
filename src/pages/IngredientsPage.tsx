@@ -96,7 +96,7 @@ export function IngredientsPage() {
 
   return <section className="recipe-catalog ingredient-catalog" lang={language}>
     <PageIntro
-      backgroundImage={`${import.meta.env.BASE_URL}images/04.jpg`}
+      backgroundImage={`${import.meta.env.BASE_URL}images/service/04.jpg`}
       title={ko ? '식재료' : 'Organizing ingredient info is a chore.. But it has to be done..'}
       description={ko ? '' : 'Search ingredients to find their nutrition and recipes that use them.'}
     />

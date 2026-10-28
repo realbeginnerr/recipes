@@ -3,100 +3,100 @@ const base = import.meta.env.BASE_URL
 
 export const ingredientPresentation: Record<string, { image: string; category: string; preferImage?: boolean }> = {
   "냉면 사리": {
-    "image": `${base}images/냉면사리 (면사랑, 함흥냉면).png`,
+    "image": `${base}images/ingredients/냉면사리 (면사랑, 함흥냉면).png`,
     "preferImage": true,
     "category": "탄수화물"
   },
   "뇨끼": {
-    "image": `${base}images/뇨끼 (파타타).png`,
+    "image": `${base}images/ingredients/뇨끼 (파타타).png`,
     "preferImage": true,
     "category": "탄수화물"
   },
   "다진마늘": {
-    "image": `${base}images/다진마늘.png`,
+    "image": `${base}images/ingredients/다진마늘.png`,
     "preferImage": true,
     "category": "채소"
   },
   "다짐육 (호주산 소고기. 냉동. 지방함량 보통 15%)": {
-    "image": `${base}images/다짐육 (호주산 소고기냉동지방함량보통.png`,
+    "image": `${base}images/ingredients/다짐육 (호주산 소고기냉동지방함량보통.png`,
     "preferImage": true,
     "category": "단백질"
   },
   "다짐육 (돼지 뒷다리살)": {
-    "image": `${base}images/다짐육 (돼지 뒷다리살).png`,
+    "image": `${base}images/ingredients/다짐육 (돼지 뒷다리살).png`,
     "preferImage": true,
     "category": "단백질"
   },
   "단무지": {
-    "image": `${base}images/단무지.png`,
+    "image": `${base}images/ingredients/단무지.png`,
     "preferImage": true,
     "category": "채소"
   },
   "단백질파우더": {
-    "image": `${base}images/단백질파우서.png`,
+    "image": `${base}images/ingredients/단백질파우서.png`,
     "preferImage": true,
     "category": "단백질"
   },
   "단백질 파우더": {
-    "image": `${base}images/단백질파우서.png`,
+    "image": `${base}images/ingredients/단백질파우서.png`,
     "preferImage": true,
     "category": "단백질"
   },
   "강력분 (백설. 밀가루)": {
-    "image": `${base}images/강력분 (백설. 밀가루).jpg`,
+    "image": `${base}images/ingredients/강력분 (백설. 밀가루).jpg`,
     "preferImage": true,
     "category": "탄수화물"
   },
   "고추장 (저당. 해찬들)": {
-    "image": `${base}images/고추장 (저당. 해찬들).png`,
+    "image": `${base}images/ingredients/고추장 (저당. 해찬들).png`,
     "category": "기타"
   },
   "고추장": {
-    "image": `${base}images/고추장.png`,
+    "image": `${base}images/ingredients/고추장.png`,
     "category": "기타"
   },
   "굴소스 (저당. 청정원)": {
-    "image": `${base}images/굴소스 (저당. 청정원).png`,
+    "image": `${base}images/ingredients/굴소스 (저당. 청정원).png`,
     "category": "기타"
   },
   "그린커리 페이스트 카레 (LOBO)": {
-    "image": `${base}images/그린커리 페이스트 카레 (LOBO).jpg`,
+    "image": `${base}images/ingredients/그린커리 페이스트 카레 (LOBO).jpg`,
     "category": "기타"
   },
   "김 (조미)": {
-    "image": `${base}images/김 (조미).png`,
+    "image": `${base}images/ingredients/김 (조미).png`,
     "category": "기타"
   },
   "김밥김": {
-    "image": `${base}images/김밥김.png`,
+    "image": `${base}images/ingredients/김밥김.png`,
     "category": "기타"
   },
   "까나리액젓": {
-    "image": `${base}images/까나리액젓.png`,
+    "image": `${base}images/ingredients/까나리액젓.png`,
     "category": "기타"
   },
   "깨 (들깨가루)": {
-    "image": `${base}images/깨 (들깨가루).png`,
+    "image": `${base}images/ingredients/깨 (들깨가루).png`,
     "category": "기타"
   },
   "깨 (참깨. 통깨)": {
-    "image": `${base}images/깨 (참깨. 통깨).png`,
+    "image": `${base}images/ingredients/깨 (참깨. 통깨).png`,
     "category": "기타"
   },
   "깻잎": {
-    "image": `${base}images/깻잎.png`,
+    "image": `${base}images/ingredients/깻잎.png`,
     "category": "기타"
   },
   "꽈리고추": {
-    "image": `${base}images/꽈리고추.png`,
+    "image": `${base}images/ingredients/꽈리고추.png`,
     "category": "기타"
   },
   "꿀": {
-    "image": `${base}images/꿀.jpg`,
+    "image": `${base}images/ingredients/꿀.jpg`,
     "category": "기타"
   },
   "양파": {
-    "image": `${base}images/양파.jpg`,
+    "image": `${base}images/ingredients/양파.jpg`,
     "category": "채소류"
   },
   "가지": {
@@ -104,19 +104,19 @@ export const ingredientPresentation: Record<string, { image: string; category: s
     "category": "채소류"
   },
   "감자": {
-    "image": `${base}images/감자.jpg`,
+    "image": `${base}images/ingredients/감자.jpg`,
     "category": "탄수화물"
   },
   "고등어": {
-    "image": `${base}images/고등어.jpg`,
+    "image": `${base}images/ingredients/고등어.jpg`,
     "category": "기타"
   },
   "고춧가루": {
-    "image": `${base}images/고춧가루.jpg`,
+    "image": `${base}images/ingredients/고춧가루.jpg`,
     "category": "기타"
   },
   "밀가루": {
-    "image": `${base}images/강력분 (백설. 밀가루).jpg`,
+    "image": `${base}images/ingredients/강력분 (백설. 밀가루).jpg`,
     "category": "탄수화물"
   },
   "닭가슴살": {
@@ -136,7 +136,7 @@ export const ingredientPresentation: Record<string, { image: string; category: s
     "category": "기타"
   },
   "계란": {
-    "image": `${base}images/계란.jpg`,
+    "image": `${base}images/ingredients/계란.jpg`,
     "category": "기타"
   },
   "소고기": {
@@ -148,7 +148,7 @@ export const ingredientPresentation: Record<string, { image: string; category: s
     "category": "채소류"
   },
   "고구마": {
-    "image": `${base}images/고구마.jpg`,
+    "image": `${base}images/ingredients/고구마.jpg`,
     "category": "채소류"
   },
   "아보카도": {
