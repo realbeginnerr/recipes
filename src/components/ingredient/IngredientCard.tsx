@@ -7,7 +7,7 @@ import { Input } from '../ui/input'
 import { Button } from '../ui/button'
 import { UnitSelect } from '../UnitSelect'
 import { FoodImage } from '../FoodImage'
-import { MacroSummary } from '../MacroDisplay'
+import { formatTableNumber } from '../../utils/numberFormatting'
 import { NutritionSummary } from '../NutritionSummary'
 import { RelatedRecipes } from './RelatedRecipes'
 import { Pencil } from 'lucide-react'
@@ -52,8 +52,8 @@ export function IngredientCard({ ingredient, image, category, storageLocation, r
         <span className="ingredient-basis-label">{ko ? '기준' : 'serving'}</span>
         {changed && <Button type="button" variant="ghost" size="content" aria-label={`${name} ${ko ? '용량 초기화' : 'reset amount'}`} onClick={() => { setQuantity(String(defaultAmount)); setUnit(defaultUnit) }}>{ko ? '초기화' : 'Reset'}</Button>}
       </div>
-      <MacroSummary macros={macros} />
-      <NutritionSummary carbs={macros.carbs} protein={macros.protein} fat={macros.fat} />
+      <p className="ingredient-macro-text">{ko ? '탄단지(g)' : 'C/P/F(g)'}: {formatTableNumber(macros.carbs)} · {formatTableNumber(macros.protein)} · {formatTableNumber(macros.fat)}</p>
+      <NutritionSummary carbs={macros.carbs} protein={macros.protein} fat={macros.fat} showRatio={false} />
       <RelatedRecipes recipes={related} ingredientId={ingredient.id} />
     </div>
   </article>

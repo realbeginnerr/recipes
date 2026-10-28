@@ -1,0 +1,585 @@
+[
+  {
+    "name": "projects/recipes-5a663/databases/(default)/documents/products/shop-eco-bag",
+    "fields": {
+      "shipping": {
+        "mapValue": {
+          "fields": {
+            "width": {
+              "nullValue": null
+            },
+            "type": {
+              "stringValue": "parcel"
+            },
+            "feeType": {
+              "stringValue": "paid"
+            },
+            "extraFee": {
+              "nullValue": null
+            },
+            "depth": {
+              "nullValue": null
+            },
+            "freeThreshold": {
+              "nullValue": null
+            },
+            "height": {
+              "nullValue": null
+            },
+            "fee": {
+              "nullValue": null
+            },
+            "leadDays": {
+              "nullValue": null
+            },
+            "weight": {
+              "nullValue": null
+            },
+            "bundle": {
+              "booleanValue": false
+            },
+            "carrier": {
+              "stringValue": ""
+            }
+          }
+        }
+      },
+      "optionsEnabled": {
+        "booleanValue": false
+      },
+      "variants": {
+        "arrayValue": {}
+      },
+      "inventory": {
+        "mapValue": {
+          "fields": {
+            "soldOutThreshold": {
+              "integerValue": "0"
+            },
+            "enabled": {
+              "booleanValue": false
+            },
+            "preorder": {
+              "booleanValue": false
+            },
+            "safetyStock": {
+              "integerValue": "0"
+            },
+            "stock": {
+              "integerValue": "0"
+            },
+            "stopWhenSoldOut": {
+              "booleanValue": true
+            },
+            "status": {
+              "stringValue": "available"
+            },
+            "restockDate": {
+              "stringValue": ""
+            }
+          }
+        }
+      },
+      "perPersonLimit": {
+        "nullValue": null
+      },
+      "policySelection": {
+        "mapValue": {
+          "fields": {
+            "exchange": {
+              "stringValue": "common"
+            },
+            "shipping": {
+              "stringValue": "common"
+            },
+            "refund": {
+              "stringValue": "common"
+            }
+          }
+        }
+      },
+      "policyVersion": {
+        "integerValue": "0"
+      },
+      "sku": {
+        "stringValue": "SHOP-ECO-BAG"
+      },
+      "manufacturer": {
+        "stringValue": ""
+      },
+      "disclosure": {
+        "mapValue": {
+          "fields": {
+            "material": {
+              "stringValue": ""
+            },
+            "precautions": {
+              "stringValue": ""
+            },
+            "gmo": {
+              "stringValue": ""
+            },
+            "country": {
+              "stringValue": ""
+            },
+            "nutrition": {
+              "stringValue": ""
+            },
+            "allergens": {
+              "stringValue": ""
+            },
+            "manufactureDate": {
+              "stringValue": ""
+            },
+            "expiryDate": {
+              "stringValue": ""
+            },
+            "importer": {
+              "stringValue": ""
+            },
+            "foodType": {
+              "stringValue": ""
+            },
+            "certification": {
+              "stringValue": ""
+            },
+            "contents": {
+              "stringValue": ""
+            },
+            "additional": {
+              "stringValue": ""
+            },
+            "support": {
+              "stringValue": ""
+            },
+            "storage": {
+              "stringValue": ""
+            },
+            "capacity": {
+              "stringValue": ""
+            }
+          }
+        }
+      },
+      "name": {
+        "stringValue": "에코백"
+      },
+      "groupBuy": {
+        "mapValue": {
+          "fields": {
+            "participants": {
+              "nullValue": null
+            }
+          }
+        }
+      },
+      "teaTags": {
+        "arrayValue": {
+          "values": [
+            {
+              "stringValue": "에코백"
+            }
+          ]
+        }
+      },
+      "images": {
+        "arrayValue": {
+          "values": [
+            {
+              "mapValue": {
+                "fields": {
+                  "alt": {
+                    "stringValue": "에코백"
+                  },
+                  "url": {
+                    "stringValue": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2EdhCJht1WNRWnknjFRiR4xnYKMAM5SwGAQ5UAX302g&s=10"
+                  },
+                  "id": {
+                    "stringValue": "cover"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      "saleEnd": {
+        "stringValue": ""
+      },
+      "saleStatus": {
+        "stringValue": "active"
+      },
+      "updatedAt": {
+        "integerValue": "1791856451933"
+      },
+      "policies": {
+        "mapValue": {
+          "fields": {
+            "exchange": {
+              "mapValue": {
+                "fields": {
+                  "defectFee": {
+                    "integerValue": "0"
+                  },
+                  "inspection": {
+                    "stringValue": ""
+                  },
+                  "guidance": {
+                    "stringValue": ""
+                  },
+                  "payer": {
+                    "stringValue": "buyer"
+                  },
+                  "changeFee": {
+                    "nullValue": null
+                  },
+                  "enabled": {
+                    "booleanValue": true
+                  },
+                  "remoteFee": {
+                    "nullValue": null
+                  },
+                  "reasons": {
+                    "stringValue": ""
+                  },
+                  "reshipping": {
+                    "stringValue": ""
+                  },
+                  "days": {
+                    "nullValue": null
+                  },
+                  "collectionMethod": {
+                    "stringValue": ""
+                  },
+                  "method": {
+                    "stringValue": ""
+                  }
+                }
+              }
+            },
+            "refund": {
+              "mapValue": {
+                "fields": {
+                  "exceptionNotice": {
+                    "booleanValue": false
+                  },
+                  "reasons": {
+                    "stringValue": ""
+                  },
+                  "method": {
+                    "stringValue": ""
+                  },
+                  "enabled": {
+                    "booleanValue": true
+                  },
+                  "inspection": {
+                    "stringValue": ""
+                  },
+                  "defectFee": {
+                    "integerValue": "0"
+                  },
+                  "days": {
+                    "nullValue": null
+                  },
+                  "collectionMethod": {
+                    "stringValue": ""
+                  },
+                  "changeFee": {
+                    "nullValue": null
+                  },
+                  "guidance": {
+                    "stringValue": ""
+                  },
+                  "settlement": {
+                    "stringValue": ""
+                  },
+                  "payer": {
+                    "stringValue": "buyer"
+                  },
+                  "refundMethod": {
+                    "stringValue": "original"
+                  },
+                  "partial": {
+                    "booleanValue": true
+                  },
+                  "refundDays": {
+                    "nullValue": null
+                  },
+                  "customConsent": {
+                    "booleanValue": false
+                  },
+                  "exceptions": {
+                    "arrayValue": {}
+                  },
+                  "remoteFee": {
+                    "nullValue": null
+                  }
+                }
+              }
+            },
+            "shipping": {
+              "mapValue": {
+                "fields": {
+                  "remoteFee": {
+                    "nullValue": null
+                  },
+                  "carrier": {
+                    "stringValue": ""
+                  },
+                  "originAddress": {
+                    "stringValue": ""
+                  },
+                  "fee": {
+                    "nullValue": null
+                  },
+                  "type": {
+                    "stringValue": "parcel"
+                  },
+                  "jejuFee": {
+                    "nullValue": null
+                  },
+                  "feeType": {
+                    "stringValue": "paid"
+                  },
+                  "cutoffTime": {
+                    "stringValue": ""
+                  },
+                  "holidays": {
+                    "stringValue": ""
+                  },
+                  "quantityFee": {
+                    "nullValue": null
+                  },
+                  "freeThreshold": {
+                    "nullValue": null
+                  },
+                  "leadDays": {
+                    "nullValue": null
+                  },
+                  "regions": {
+                    "stringValue": ""
+                  },
+                  "guidance": {
+                    "stringValue": ""
+                  },
+                  "bundle": {
+                    "booleanValue": false
+                  },
+                  "individualFee": {
+                    "booleanValue": false
+                  },
+                  "delayNotice": {
+                    "stringValue": ""
+                  },
+                  "international": {
+                    "booleanValue": false
+                  },
+                  "estimatedDays": {
+                    "stringValue": ""
+                  }
+                }
+              }
+            },
+            "address": {
+              "mapValue": {
+                "fields": {
+                  "carrier": {
+                    "stringValue": ""
+                  },
+                  "notice": {
+                    "stringValue": ""
+                  },
+                  "phone": {
+                    "stringValue": ""
+                  },
+                  "recipient": {
+                    "stringValue": ""
+                  },
+                  "address": {
+                    "stringValue": ""
+                  },
+                  "detail": {
+                    "stringValue": ""
+                  },
+                  "customerService": {
+                    "stringValue": ""
+                  },
+                  "postcode": {
+                    "stringValue": ""
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "publishAt": {
+        "stringValue": ""
+      },
+      "id": {
+        "stringValue": "shop-eco-bag"
+      },
+      "options": {
+        "arrayValue": {}
+      },
+      "newProduct": {
+        "booleanValue": true
+      },
+      "visibility": {
+        "stringValue": "public"
+      },
+      "summary": {
+        "stringValue": ""
+      },
+      "exposureStart": {
+        "stringValue": ""
+      },
+      "seo": {
+        "mapValue": {
+          "fields": {
+            "title": {
+              "stringValue": "에코백"
+            },
+            "slug": {
+              "stringValue": "eco-bag"
+            },
+            "description": {
+              "stringValue": ""
+            }
+          }
+        }
+      },
+      "blend": {
+        "mapValue": {
+          "fields": {
+            "components": {
+              "arrayValue": {}
+            },
+            "waterMl": {
+              "integerValue": "250"
+            }
+          }
+        }
+      },
+      "draft": {
+        "booleanValue": false
+      },
+      "deleted": {
+        "booleanValue": false
+      },
+      "order": {
+        "integerValue": "0"
+      },
+      "createdAt": {
+        "integerValue": "1791856451933"
+      },
+      "pricing": {
+        "mapValue": {
+          "fields": {
+            "discountStart": {
+              "stringValue": ""
+            },
+            "tax": {
+              "stringValue": "taxable"
+            },
+            "regular": {
+              "nullValue": null
+            },
+            "discount": {
+              "nullValue": null
+            },
+            "discountEnd": {
+              "stringValue": ""
+            }
+          }
+        }
+      },
+      "brand": {
+        "stringValue": ""
+      },
+      "exposureEnd": {
+        "stringValue": ""
+      },
+      "featured": {
+        "booleanValue": false
+      },
+      "publicUntil": {
+        "integerValue": "8640000000000000"
+      },
+      "version": {
+        "integerValue": "1"
+      },
+      "type": {
+        "stringValue": "physical"
+      },
+      "purchaseUrl": {
+        "stringValue": ""
+      },
+      "publicAfter": {
+        "integerValue": "0"
+      },
+      "saleStart": {
+        "stringValue": ""
+      },
+      "categories": {
+        "arrayValue": {
+          "values": [
+            {
+              "stringValue": "에코백"
+            },
+            {
+              "stringValue": ""
+            },
+            {
+              "stringValue": ""
+            }
+          ]
+        }
+      },
+      "description": {
+        "stringValue": ""
+      },
+      "minQuantity": {
+        "integerValue": "1"
+      },
+      "maxQuantity": {
+        "nullValue": null
+      },
+      "compositionType": {
+        "stringValue": "single"
+      }
+    },
+    "createTime": "2026-10-13T01:54:24.611303Z",
+    "updateTime": "2026-10-13T01:54:24.611303Z"
+  },
+  {
+    "name": "projects/recipes-5a663/databases/(default)/documents/productAdmin/shop-eco-bag",
+    "fields": {
+      "cost": {
+        "nullValue": null
+      }
+    },
+    "createTime": "2026-10-13T01:54:24.611303Z",
+    "updateTime": "2026-10-13T01:54:24.611303Z"
+  },
+  {
+    "name": "projects/recipes-5a663/databases/(default)/documents/productSkus/SHOP-ECO-BAG",
+    "fields": {
+      "productId": {
+        "stringValue": "shop-eco-bag"
+      }
+    },
+    "createTime": "2026-10-13T01:54:24.611303Z",
+    "updateTime": "2026-10-13T01:54:24.611303Z"
+  },
+  {
+    "name": "projects/recipes-5a663/databases/(default)/documents/productSlugs/ECO-BAG",
+    "fields": {
+      "productId": {
+        "stringValue": "shop-eco-bag"
+      }
+    },
+    "createTime": "2026-10-13T01:54:24.611303Z",
+    "updateTime": "2026-10-13T01:54:24.611303Z"
+  }
+]

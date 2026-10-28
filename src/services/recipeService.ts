@@ -42,6 +42,7 @@ export type FirestoreRecipe = {
   memo: string
   cookingGroupOrder?: string[]
   cookingContent?: string
+  cookingSteps?: import('../utils/cookingSteps').CookingStep[]
   platingBlocks?: { id: string; type: 'text' | 'image'; value: string }[]
   mealContent?: string
   mealImages?: string[]
@@ -136,6 +137,7 @@ export function convertToRecipe(fs: FirestoreRecipe): Recipe {
     photoProductUrl: fs.photoProductUrl,
     cookingGroupOrder: fs.cookingGroupOrder,
     cookingContent: fs.cookingContent,
+    cookingSteps: fs.cookingSteps,
     platingBlocks: fs.platingBlocks,
     mealContent: fs.mealContent,
     mealImages: fs.mealImages,

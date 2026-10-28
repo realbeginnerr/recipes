@@ -58,10 +58,22 @@
 .detail-divisions > span { color: #899591; }
 .detail-nutrition-summary { margin-top: 16px; }
 .detail-storage-icon { display: inline-block; margin-right: 6px; font-size: 12px; line-height: 1; vertical-align: middle; }
-.detail-table-tabs { display: flex; justify-content: flex-start; gap: 0; margin-bottom: 16px; border-bottom: 1px solid var(--border); }
+.detail-table-toolbar { display: flex; align-items: center; gap: 4px; margin-bottom: 16px; border-bottom: 1px solid var(--border); }
+.detail-table-tabs { display: flex; justify-content: flex-start; gap: 0; min-width: 0; }
+.detail-copy-button { margin-left: auto; flex-shrink: 0; }
+.detail-reset-button, .detail-copy-button { color: var(--foreground); }
+.detail-adjustment { margin-bottom: 16px; }
+.detail-adjustment-actions { display: flex; align-items: center; justify-content: flex-start; gap: 8px; }
+.detail-adjustment-modes { display: inline-grid; grid-template-columns: repeat(2, 1fr); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
+.detail-adjustment-modes button { padding: 8px 12px; border: 0; background: transparent; color: var(--muted-foreground); font: inherit; font-size: 13px; cursor: pointer; }
+.detail-adjustment-modes button[aria-pressed="true"] { background: #255A46; color: white; }
+.detail-adjustment-modes button:focus-visible { outline: 2px solid var(--primary); outline-offset: -3px; }
 .detail-table-tabs [role="tab"] { padding: 12px 16px; border: 0; border-bottom: 2px solid transparent; background: transparent; color: var(--muted-foreground); font: inherit; font-size: 14px; cursor: pointer; }
 .detail-table-tabs [role="tab"][aria-selected="true"] { color: var(--primary); border-bottom-color: var(--primary); font-weight: 600; }
 .detail-table-tabs [role="tab"]:focus-visible { outline: 2px solid var(--primary); outline-offset: -2px; }
+@media (max-width: 400px) {
+  .detail-table-tabs [role="tab"] { padding-inline: 10px; }
+}
 .recipe-edit-tablist { padding-block: 30px; border-bottom: 0; }
 .meal-blog { width: 100%; max-width: none; margin: 0; padding: 0; background: transparent; border: 0; }
 .meal-blog__prose { color: #263b33; font-size: 15px; line-height: 1.75; letter-spacing: -.02em; }
@@ -72,6 +84,19 @@
 .meal-blog__images figure { width: 100%; margin: 0; }
 .meal-blog__images img { display: block; width: 100%; height: auto; }
 .detail-notes { margin-top: 32px; }
+.cooking-steps-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+.cooking-steps-heading h2 { margin: 0; }
+.cooking-steps-heading h2 span { margin-left: 6px; color: var(--muted-foreground); font-size: 13px; }
+.cooking-steps ol { list-style: none; margin: 0; padding: 0; }
+.cooking-steps li { margin-bottom: 8px; border: 1px solid transparent; border-radius: 8px; }
+.cooking-steps li.is-next { background: #edf5ef; border-color: #aac6b3; }
+.cooking-steps li.is-complete { color: var(--muted-foreground); }
+.cooking-steps li label { display: flex; align-items: flex-start; gap: 10px; padding: 14px 12px; min-height: 48px; cursor: pointer; }
+.cooking-steps input { flex: 0 0 20px; width: 20px; height: 20px; margin-top: 3px; accent-color: #255A46; }
+.cooking-step-text { flex: 1; min-width: 0; white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.7; }
+.cooking-step-number { padding-top: 2px; font-weight: 600; }
+.cooking-step-next { flex-shrink: 0; padding-top: 4px; color: #255A46; font-size: 12px; }
+.cooking-steps input:focus-visible { outline: 2px solid var(--primary); outline-offset: 3px; }
 .detail-notes p { margin: 0; max-width: 720px; font-size: 15px; color: #122B22; line-height: 1.75; letter-spacing: -.02em; white-space: pre-wrap; overflow-wrap: anywhere; }
 .detail-ingredient-edit-link {
   display: inline-block;

@@ -48,6 +48,7 @@ export type Recipe = {
   memo?: string
   cookingGroupOrder?: string[]
   cookingContent?: string
+  cookingSteps?: import('./utils/cookingSteps').CookingStep[]
   platingBlocks?: { id: string; type: 'text' | 'image'; value: string }[]
   mealContent?: string
   mealImages?: string[]

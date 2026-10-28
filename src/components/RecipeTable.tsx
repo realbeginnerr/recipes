@@ -1,3 +1,5 @@
+import { CookingStepsEditor } from './CookingSteps'
+import { recipeCookingSteps } from '../utils/cookingSteps'
 import { safeProductUrl } from './recipe/ShoppableImage'
 import { shopFeatures } from '../constants/shopFeatures'
 import { ProductTagEditor } from './recipe/ProductTagEditor'
@@ -102,7 +104,7 @@ export function RecipeTable({
   const [editSideItems, setEditSideItems] = useState<RecipeItem[]>(activeRecipe.sideItems ?? [])
   const [editTab, setEditTab] = useState<'storage' | 'cooking' | 'meal'>('storage')
   const [editGroupOrder, setEditGroupOrder] = useState(activeRecipe.cookingGroupOrder ?? [])
-  const [editCookingContent, setEditCookingContent] = useState(activeRecipe.cookingContent ?? '')
+  const [editCookingSteps, setEditCookingSteps] = useState(() => recipeCookingSteps(activeRecipe))
   const initialPlatingBlocks = () => activeRecipe.platingBlocks ?? [
     ...(activeRecipe.mealImages?.length ? activeRecipe.mealImages : ['']).map((value, index) => ({ id: "legacy-image-" + index, type: 'image' as const, value })),
     { id: 'legacy-text', type: 'text' as const, value: activeRecipe.mealContent ?? '' },
@@ -166,7 +168,7 @@ export function RecipeTable({
     setEditItems(regularItems)
     setEditSideItems(activeRecipe.sideItems ?? [])
     setEditGroupOrder(activeRecipe.cookingGroupOrder ?? [])
-    setEditCookingContent(activeRecipe.cookingContent ?? '')
+    setEditCookingSteps(recipeCookingSteps(activeRecipe))
     setEditPlatingBlocks(initialPlatingBlocks())
     setEditMemo(activeRecipe.memo ?? '')
     setEditCookingTime(activeRecipe.cookingTimeMinutes === undefined ? '' : String(activeRecipe.cookingTimeMinutes))
@@ -217,7 +219,7 @@ export function RecipeTable({
     const parsedDivision = Number.parseInt(divisionInput, 10)
     const validDivision = !Number.isNaN(parsedDivision) && parsedDivision > 0 ? parsedDivision : divisionCount
     onDivisionCountChange(validDivision)
-    const updated = { ...activeRecipe, name: editName.trim() || activeRecipe.name, nameKo: editNameKo.trim() || activeRecipe.nameKo, categories: editCategories, imageUrl: editImages.map(image => image.url.trim()).filter(Boolean)[0] ?? '', imageUrls: editImages.map(image => image.url.trim()).filter(Boolean).slice(1), images: activeRecipe.images ?? [], productTags: editProductTags, photoProductDescription: editPhotoProductDescription, photoProductUrl: editPhotoProductUrl.trim(), link: editLink, items: editItems, sideItems: editSideItems, memo: editMemo, cookingGroupOrder: cookingGroupOrder(editItems, editGroupOrder), cookingContent: editCookingContent, platingBlocks: editPlatingBlocks, tasteRating: editTasteRating, divisionCount: validDivision, cookingTimeMinutes: editCookingTime === '' ? undefined : Math.max(0, Number(editCookingTime)), lastCookedAt: editLastCookedAt || undefined }
+    const updated = { ...activeRecipe, name: editName.trim() || activeRecipe.name, nameKo: editNameKo.trim() || activeRecipe.nameKo, categories: editCategories, imageUrl: editImages.map(image => image.url.trim()).filter(Boolean)[0] ?? '', imageUrls: editImages.map(image => image.url.trim()).filter(Boolean).slice(1), images: activeRecipe.images ?? [], productTags: editProductTags, photoProductDescription: editPhotoProductDescription, photoProductUrl: editPhotoProductUrl.trim(), link: editLink, items: editItems, sideItems: editSideItems, memo: editMemo, cookingGroupOrder: cookingGroupOrder(editItems, editGroupOrder), cookingContent: editCookingSteps.map(step => step.text).join('\n'), cookingSteps: editCookingSteps.filter(step => step.text.trim()), platingBlocks: editPlatingBlocks, tasteRating: editTasteRating, divisionCount: validDivision, cookingTimeMinutes: editCookingTime === '' ? undefined : Math.max(0, Number(editCookingTime)), lastCookedAt: editLastCookedAt || undefined }
     if (canSave) {
       setIsSaving(true)
       showToast(
@@ -1144,8 +1146,7 @@ export function RecipeTable({
           </TableFooter>
         </Table>}
       {!isCollapsed && isEditing && editTab === 'cooking' && <div className="recipe-tab-text-field recipe-tab-text-field--below-table">
-        <label className="edit-inline__link-label" htmlFor={`cooking-content-${recipe.id}`}>{language === 'ko' ? '메모' : 'Notes'}</label>
-        <Textarea id={`cooking-content-${recipe.id}`} value={editCookingContent} onChange={event => setEditCookingContent(event.target.value)} rows={7} disabled={isSaving || tagBusy} />
+        <CookingStepsEditor steps={editCookingSteps} onChange={setEditCookingSteps} disabled={isSaving || tagBusy} ko={language === 'ko'} />
       </div>}
 
       <IngredientSearchModal

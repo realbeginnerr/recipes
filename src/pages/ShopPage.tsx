@@ -34,7 +34,7 @@ export function ShopPage() {
   const visible = useMemo(() => products.filter(product => category === '전체' || (product.category ?? '기타') === category)
     .filter(product => `${product.productName} ${product.brandName ?? ''}`.toLocaleLowerCase().includes(search.trim().toLocaleLowerCase()))
     .sort((a, b) => sort.startsWith('alpha') ? a.productName.localeCompare(b.productName, language) * (sort === 'alpha-asc' ? 1 : -1) : (a.updatedAt - b.updatedAt) * (sort === 'date-asc' ? 1 : -1)), [products, category, search, sort, language])
-  return <section className="recipe-catalog recipe-list-catalog" lang={language}>
+  return <section className="recipe-catalog recipe-list-catalog shop-catalog" lang={language}>
     <PageIntro title="나중에 사려고 찜해둔 것들" description="" backgroundImage={`${import.meta.env.BASE_URL}images/service/tea-header.png`} />
     <CatalogToolbar>
       <CategoryFilter label={ko ? '상품 분류' : 'Product categories'} value={category} options={categories.map(value => ({ value, label: ko ? value : ({ 전체: 'All', 그릇: 'Tableware', 수저: 'Cutlery', 매트: 'Placemats', 기타: 'Other' })[value] }))} onValueChange={setCategory} />

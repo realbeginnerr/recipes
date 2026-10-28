@@ -2,7 +2,7 @@
 .ingredient-photo { position: relative; aspect-ratio: 1 / 1; overflow: hidden; }
 .ingredient-photo img { width: 100%; height: 100%; object-fit: cover; }
 .ingredient-card-body { padding: 16px 0; }
-.ingredient-card .catalog-macros { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.ingredient-macro-text { margin: 0 0 4px; font-size: 14px; line-height: 1.6; font-variant-numeric: tabular-nums; }
 .ingredient-card .catalog-card-summary { margin-bottom: 12px; }
 .ingredient-card-heading { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 29px; margin-bottom: 12px; }
 .ingredient-card-heading h2 { font-family: inherit; font-size: 15px; font-weight: 500; margin: 0; overflow-wrap: anywhere; }

@@ -134,21 +134,21 @@
 
 | 적용 대상                          | 영어 `en`                                | 한국어 `ko`                              |
 | ---------------------------------- | ---------------------------------------- | ---------------------------------------- |
-| 큰 제목 `display-*`                | 고운바탕체, `typography.display-*`    | 고운바탕체, `typography-kr.display-*` |
+| 큰 제목 `display-*`                | Pretendard, `typography.display-*`    | Pretendard, `typography-kr.display-*` |
 | 카드·소제목 `title-*`              | StyreneB → Inter, `typography.title-*`   | Pretendard, `typography-kr.title-*`      |
 | 본문·메뉴·버튼·캡션                | StyreneB → Inter, 해당 `typography` 토큰 | Pretendard, 해당 `typography-kr` 토큰    |
 | 표·카드의 영양 수치·중량·계산 결과 | Inter, `typography.numeric`              | Inter, `typography.numeric`              |
-| 홈 섹션 번호 01–04                 | 고운바탕체, 72px                      | 고운바탕체, 72px                      |
+| 홈 섹션 번호 01–04                 | Pretendard, 72px                      | Pretendard, 72px                      |
 
 ### 2. 영어 전용 정책
 
-- **큰 제목 `display-*`은 고운바탕체 (Gowun Batang)를 웹폰트로 사용한다.** 사용자 기기의 폰트 설치 여부에 의존하지 않는다.
+- **큰 제목 `display-*`은 Pretendard (Pretendard)를 웹폰트로 사용한다.** 사용자 기기의 폰트 설치 여부에 의존하지 않는다.
 - 굵기는 `400`, 합성 굵기는 사용하지 않는다. 크기·행간·자간은 해당 `typography.display-*` 토큰을 따른다.
 - 카드·소제목, 본문, 메뉴, 버튼, 캡션은 StyreneB를 사용하고, 없으면 Inter를 로드한다. Pretendard를 영어 UI의 대체 글꼴로 선택하지 않는다.
 
 ### 3. 한국어 전용 정책
 
-- **큰 제목 `display-*`은 고운바탕체, 카드·소제목과 본문·메뉴·버튼·캡션은 Pretendard를 사용한다.** 모두 웹폰트로 실제 로드한다.
+- **큰 제목 `display-*`은 Pretendard, 카드·소제목과 본문·메뉴·버튼·캡션은 Pretendard를 사용한다.** 모두 웹폰트로 실제 로드한다.
 - 모든 속성은 해당 `typography-kr` 토큰을 따른다. 행간은 `1.5`, 자간은 `-0.04em`이다.
 - 큰 제목 `display-*`의 굵기는 `400`, 카드·소제목 `title-*`은 `500`, 본문 `body-*`는 `400`, 메뉴·버튼·캡션은 `500`이다.
 - 영문 제목의 좁은 행간과 px 자간을 한글에 적용하지 않는다.
@@ -157,21 +157,21 @@
 ### 4. 혼합 문장과 숫자
 
 - 한 문장 안에 영문 약어·단위·숫자가 섞여 있어도 **문장 전체는 해당 텍스트 요소의 언어 정책**을 따른다. 글자마다 자동으로 영문·한글 스타일을 번갈아 적용하지 않는다.
-- 예: 한국어 큰 제목 `AI로 만드는 레시피 3개`는 `AI`와 `3`까지 고운바탕체다. 영어 큰 제목 `Recipes for 3`도 전체가 고운바탕체이며 영문 `display-*` 정책을 따른다.
+- 예: 한국어 큰 제목 `AI로 만드는 레시피 3개`는 `AI`와 `3`까지 Pretendard다. 영어 큰 제목 `Recipes for 3`도 전체가 Pretendard이며 영문 `display-*` 정책을 따른다.
 - 한 화면에서 한국어 제목과 독립된 영어 부제목을 함께 사용할 때는 각 요소에 `ko`, `en`을 명시하고 각자의 토큰을 적용한다. HTML에서는 요소의 `lang` 또는 이에 대응하는 명시적 언어 클래스로 구분한다.
-- **표와 카드의 영양 수치·열량·중량·계산 결과, 수량 입력에는 공통 숫자 글꼴 Inter를 사용한다.** `typography.numeric`의 글꼴을 적용하고, 역할별 크기와 행간은 해당 컴포넌트 스타일을 따른다. 숫자 정렬이 필요한 영역에는 `font-variant-numeric: tabular-nums`를 명시해 숫자 폭을 일정하게 유지한다. 제목·본문 속 숫자, 메뉴, 표의 식재료 이름에는 적용하지 않는다. 홈 섹션 번호 01–04는 디스플레이 글꼴인 고운바탕체를 사용하며 크기는 72px로 유지한다.
+- **표와 카드의 영양 수치·열량·중량·계산 결과, 수량 입력에는 공통 숫자 글꼴 Inter를 사용한다.** `typography.numeric`의 글꼴을 적용하고, 역할별 크기와 행간은 해당 컴포넌트 스타일을 따른다. 숫자 정렬이 필요한 영역에는 `font-variant-numeric: tabular-nums`를 명시해 숫자 폭을 일정하게 유지한다. 제목·본문 속 숫자, 메뉴, 표의 식재료 이름에는 적용하지 않는다. 홈 섹션 번호 01–04는 디스플레이 글꼴인 Pretendard를 사용하며 크기는 72px로 유지한다.
 
 ### 5. 적용 예시와 확인 기준
 
 | 예시                             | 적용 결과                                                 |
 | -------------------------------- | --------------------------------------------------------- |
-| 영어 큰 제목, `display-lg`       | 고운바탕체 / 48px / 굵기 400 / 행간 1.1 / 자간 -1px    |
-| 한국어 큰 제목, `display-lg`     | 고운바탕체 / 48px / 굵기 400 / 행간 1.5 / 자간 -0.04em |
+| 영어 큰 제목, `display-lg`       | Pretendard / 48px / 굵기 400 / 행간 1.1 / 자간 -1px    |
+| 한국어 큰 제목, `display-lg`     | Pretendard / 48px / 굵기 400 / 행간 1.5 / 자간 -0.04em |
 | 영어 본문, `body-md`, Inter 사용 | 16px / 굵기 400 / 행간 1.55 / 자간 0                      |
 | 한국어 본문, `body-md`           | Pretendard / 16px / 굵기 400 / 행간 1.5 / 자간 -0.04em    |
 
 - 언어 전환 시 글꼴 이름만 바꾸지 않았는지 확인한다. 행간·자간·굵기도 해당 언어의 값으로 바뀌어야 한다.
-- 영문·한글 큰 제목에 고운바탕체가 로드되는지 확인한다. 굵기는 `400`이며 합성 굵기를 사용하지 않는다.
+- 영문·한글 큰 제목에 Pretendard가 로드되는지 확인한다. 굵기는 `400`이며 합성 굵기를 사용하지 않는다.
 - 강조는 과도한 굵기보다 크기와 여백으로 만든다. 아래 YAML의 정확한 수치를 따른다.
 
 ### 6. 보이스 톤
@@ -659,7 +659,7 @@ Reference: [Carbon Design System — Motion overview](https://www.carbondesignsy
 최신 화면 기준은 https://ethics-code-82488462.figma.site/ 이며, 아래 구성은 이전의 일반 가이드보다 우선한다.
 
 - 공통 헤더는 높이 64px, 전체 너비이며 공통 gutter를 적용한다. `T's Recipe / 홈 / 레시피 / 식재료`와 오른쪽 `티백 소분하기`로 구성한다. 선택 메뉴는 초록 밑줄로 표시한다. 768px 미만은 접이식 메뉴를 사용한다. 검색은 목록의 필터 줄에 배치한다.
-- 홈은 전체 화면 사진의 히어로, 이야기 소개, 번호 01–04 섹션으로 구성한다. 첫 섹션 캡션은 `T's Recipe`, 두 번째 섹션 캡션은 `나를 아낀다는 것`이다. 영문은 각각 `T's Recipe`, `What it means to care for myself`이며 `src/i18n/about.ts`에서 관리한다. 제목은 고운바탕체 400, 히어로 26–52px, 나머지 섹션 제목은 40px다.
+- 홈은 전체 화면 사진의 히어로, 이야기 소개, 번호 01–04 섹션으로 구성한다. 첫 섹션 캡션은 `T's Recipe`, 두 번째 섹션 캡션은 `나를 아낀다는 것`이다. 영문은 각각 `T's Recipe`, `What it means to care for myself`이며 `src/i18n/about.ts`에서 관리한다. 제목은 Pretendard 400, 히어로 26–52px, 나머지 섹션 제목은 40px다.
 - 레시피 목록은 소개 영역, 분류·검색·정렬 줄, 모바일 2열·태블릿 2열·데스크톱 3열 카드 순서다. 식재료는 같은 소개·도구 구조에 2/3/4/5열 사진 카드를 사용한다. 레시피는 1440px 이상에서 카드 최소 너비 300px, 식재료는 1600px 이상에서 최소 너비 240px 기준으로 열 수를 자동으로 늘린다.
 - 레시피 상세에는 뒤로가기·목록 복귀 버튼을 표시하지 않는다. 브라우저 뒤로가기는 기본 동작에 맡기며 직접 진입 시 별도 목록 이동을 강제하지 않는다. 제목·원본 링크, 전체 재료 표, 등분 수·주식을 포함하는 한 끼 표, 메모를 제공한다. 사진은 현재 상세 갤러리·모바일 확대 기능을 유지하며, 기존 평점 영역은 상세의 기본 화면에 표시하지 않는다.
 - 공통 푸터에는 `© 2026 T's Recipe. All rights reserved.` 문구만 표시하고 가로 중앙 정렬한다. 로고·브랜드 소개·메뉴·소셜은 표시하지 않는다.
@@ -724,25 +724,25 @@ typography:
     extends: "{typography.display-xl}"
     fontSize: 32px
   display-xl:
-    fontFamily: "Gowun Batang, Pretendard Variable, Inter, serif"
+    fontFamily: "Pretendard Variable, Pretendard, sans-serif"
     fontSize: 64px
     fontWeight: 400
     lineHeight: 1.05
     letterSpacing: -1.5px
   display-lg:
-    fontFamily: "Gowun Batang, Pretendard Variable, Inter, serif"
+    fontFamily: "Pretendard Variable, Pretendard, sans-serif"
     fontSize: 48px
     fontWeight: 400
     lineHeight: 1.1
     letterSpacing: -1px
   display-md:
-    fontFamily: "Gowun Batang, Pretendard Variable, Inter, serif"
+    fontFamily: "Pretendard Variable, Pretendard, sans-serif"
     fontSize: 36px
     fontWeight: 400
     lineHeight: 1.15
     letterSpacing: -0.5px
   display-sm:
-    fontFamily: "Gowun Batang, Pretendard Variable, Inter, serif"
+    fontFamily: "Pretendard Variable, Pretendard, sans-serif"
     fontSize: 28px
     fontWeight: 400
     lineHeight: 1.2
@@ -818,25 +818,25 @@ typography-kr:
     extends: "{typography-kr.display-xl}"
     fontSize: 32px
   display-xl:
-    fontFamily: "Gowun Batang, Pretendard Variable, Inter, serif"
+    fontFamily: "Pretendard Variable, Pretendard, sans-serif"
     fontSize: 64px
     fontWeight: 400
     lineHeight: 1.5
     letterSpacing: -0.04em
   display-lg:
-    fontFamily: "Gowun Batang, Pretendard Variable, Inter, serif"
+    fontFamily: "Pretendard Variable, Pretendard, sans-serif"
     fontSize: 48px
     fontWeight: 400
     lineHeight: 1.5
     letterSpacing: -0.04em
   display-md:
-    fontFamily: "Gowun Batang, Pretendard Variable, Inter, serif"
+    fontFamily: "Pretendard Variable, Pretendard, sans-serif"
     fontSize: 36px
     fontWeight: 400
     lineHeight: 1.5
     letterSpacing: -0.04em
   display-sm:
-    fontFamily: "Gowun Batang, Pretendard Variable, Inter, serif"
+    fontFamily: "Pretendard Variable, Pretendard, sans-serif"
     fontSize: 28px
     fontWeight: 400
     lineHeight: 1.5
@@ -920,12 +920,12 @@ font-substitutions:
   display:
     languages: [en, ko]
     applies-to: [typography.display-*, typography-kr.display-*]
-    preferred: Gowun Batang
-    fallback: Pretendard Variable / Inter / serif
+    preferred: Pretendard
+    fallback: Pretendard Variable / sans-serif
     font-weight: 400
     font-synthesis: none
-    webfont-url: "https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400&display=swap"
-    source: "https://github.com/yangheeryu/Gowun-Batang"
+    webfont-url: "https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.css"
+    source: "https://github.com/orioncactus/pretendard"
 
 layout:
   recipe-card-column-gap: 18px

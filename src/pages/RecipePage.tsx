@@ -100,8 +100,8 @@ export function RecipePage({ blendingTea = false }: { blendingTea?: boolean }) {
 
   return <section className="recipe-catalog recipe-list-catalog" lang={language}>
     <PageIntro
-      backgroundImage={blendingTea ? `${import.meta.env.BASE_URL}images/service/tea-header.png` : `${import.meta.env.BASE_URL}images/service/home-care.png`}
-      title={blendingTea ? '나중에 사려고 찜해둔 것들' : (ko ? '나에게 해준 요리, 해줄 요리' : 'Gotta eat something tasty tomorrow too')}
+      backgroundImage={blendingTea ? `${import.meta.env.BASE_URL}images/service/tea-header.png` : `${import.meta.env.BASE_URL}images/04.jpg`}
+      title={blendingTea ? '나중에 사려고 찜해둔 것들' : (ko ? '레시피' : 'Gotta eat something tasty tomorrow too')}
       description={blendingTea ? '' : (ko ? '' : 'Find the recipe you’re craving with categories and search.')}
     />
     <CatalogToolbar>

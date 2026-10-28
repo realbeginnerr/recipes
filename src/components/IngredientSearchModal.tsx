@@ -107,9 +107,8 @@ export function IngredientSearchModal({
     setDuplicateError('')
     setSelectedCounts((prev) => {
       const next = new Map(prev)
-      const count = next.get(ingredient.id) ?? 0
-      if (count <= 1) next.delete(ingredient.id)
-      else next.set(ingredient.id, count - 1)
+      if (next.has(ingredient.id)) next.delete(ingredient.id)
+      else next.set(ingredient.id, 1)
       return next
     })
   }

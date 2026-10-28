@@ -42,7 +42,7 @@
   --gutter: 16px;
   --section-space: 96px;
   --font-body: 'Pretendard Hangul', 'Inter', 'Pretendard Variable', sans-serif;
-  --font-display: 'Gowun Batang', 'Pretendard Variable', serif;
+  --font-display: 'Pretendard Variable', 'Pretendard', sans-serif;
   --font-numeric: 'Inter', sans-serif;
   --focus-ring: 0 0 0 3px rgba(37, 90, 70, 0.15);
 }
