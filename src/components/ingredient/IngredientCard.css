@@ -6,9 +6,11 @@
 .ingredient-card .catalog-card-summary { margin-bottom: 12px; }
 .ingredient-card-heading { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 29px; margin-bottom: 12px; }
 .ingredient-card-heading h2 { font-family: inherit; font-size: 15px; font-weight: 500; margin: 0; overflow-wrap: anywhere; }
-.ingredient-card-heading > [data-slot="button"][data-size="icon-sm"] { width: 29px; height: 29px; min-height: 29px; color: #D9D8D3; }
+.ingredient-card-actions > [data-slot="button"][data-size="icon-sm"] { width: 29px; height: 29px; min-height: 29px; color: #D9D8D3; }
 .ingredient-basis { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 0 0 12px; font-size: 14px; color: var(--muted-foreground); }
 .ingredient-basis [data-slot="input"] { width: 72px; background: var(--background); border-color: var(--border); }
 .ingredient-basis [data-slot="select-trigger"] { width: 76px; background: var(--background); }
 .ingredient-basis [data-slot="button"] { padding: 4px; font-size: 14px; }
 @media (max-width: 420px) { .ingredient-card-body { padding: 12px 0; } }
+
+.ingredient-card-actions { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }

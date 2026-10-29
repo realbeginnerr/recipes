@@ -1,3 +1,4 @@
+import { IngredientOrderControls, moveIngredient } from './IngredientOrderControls'
 import { CookingStepsEditor } from './CookingSteps'
 import { recipeCookingSteps } from '../utils/cookingSteps'
 import { safeProductUrl } from './recipe/ShoppableImage'
@@ -10,7 +11,7 @@ import { cookingGroupOrder } from '../utils/recipeCookingGroups'
 import { MEAL_TARGET as recommended, MEAL_TARGET_KCAL } from '../constants/nutrition'
 import { RecipeImagesEditor, recipeImageDrafts, type ImageDraft } from './RecipeImagesEditor'
 import { useState, useRef } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { ArrowLeftRight } from 'lucide-react'
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
 import { useLanguage } from '../context/LanguageContext'
@@ -695,9 +696,9 @@ export function RecipeTable({
       {!isCollapsed && (!isEditing || editTab !== 'meal') && <Table className="data-table recipe-table">
         <TableHeader>
           <TableRow>
+            {isEditing && <TableHead className="edit-inline__order-cell" aria-label={language === 'ko' ? '순서 변경' : 'Reorder'} />}
             <TableHead>{t.colIngredient}</TableHead>
             {isEditing && <TableHead>{language === 'ko' ? '요리 그룹' : 'Cooking group'}</TableHead>}
-            {isEditing && <TableHead className="edit-inline__order-cell" aria-label={language === 'ko' ? '순서 변경' : 'Reorder'} />}
             <TableHead>{t.colAmount}</TableHead>
             <TableHead>{t.colUnit}</TableHead>
             <TableHead>{t.colCarbs}</TableHead>
@@ -722,12 +723,12 @@ export function RecipeTable({
               editItems.map((item, index) => {
               const ingredient = ingredientById.get(item.ingredientId)
               if (!ingredient) return (
-                <TableRow key={item.ingredientId} className="edit-row--new">
+                <TableRow key={item.ingredientId} className="edit-row--new"><TableCell className="edit-inline__order-cell">{index + 1}</TableCell>
                   <TableCell className="edit-inline__replace-cell">
                     <span>{ingredientNameForId(item.ingredientId)}</span>
                     {unitErrorIds.has(item.ingredientId) && ingredientNameForId(item.ingredientId) !== '알 수 없는 식재료' && <p role="alert" className="add-recipe__field-error">{language === 'ko' ? `${ingredientNameForId(item.ingredientId)} (${item.defaultUnit}): 단위 환산 정보가 없습니다. 식재료 환산 정보를 등록하거나 다른 단위를 선택해 주세요.` : `${ingredientNameForId(item.ingredientId)} (${item.defaultUnit}): No conversion is available. Register a conversion or choose another unit.`}</p>}
                   </TableCell>
-<TableCell><Input aria-label="요리 그룹" value={item.cookingGroup ?? ''} disabled={isSaving || tagBusy} onChange={event => setEditItems(current => current.map((entry, i) => i === index ? { ...entry, cookingGroup: event.target.value } : entry))} /></TableCell><TableCell className="edit-inline__order-cell">{index + 1}</TableCell>
+<TableCell><Input aria-label="요리 그룹" value={item.cookingGroup ?? ''} disabled={isSaving || tagBusy} onChange={event => setEditItems(current => current.map((entry, i) => i === index ? { ...entry, cookingGroup: event.target.value } : entry))} /></TableCell>
 
                   <TableCell><Input type="number" className="h-7 w-20 text-sm" value={item.defaultAmount} readOnly /></TableCell>
                   <TableCell><UnitSelect ingredientId={item.ingredientId} value={item.defaultUnit} onValueChange={(v) => handleEditUnitChange(index, v)} language={language} /></TableCell>
@@ -740,27 +741,7 @@ export function RecipeTable({
                 const macros = calculateMacros(grams, ingredient)
                 return (
                   <TableRow key={item.ingredientId} className={isNew ? 'edit-row--new' : ''}>
-                    <TableCell
-                      className="edit-inline__replace-cell"
-                      style={{ fontWeight: isNew ? 700 : undefined, color: isAddedSugarIngredient(ingredient.nameKo) ? 'var(--destructive)' : isRefinedCarb(ingredient.nameKo, ingredient.name, ingredient.isRefinedCarb) ? 'var(--warning)' : undefined }}
-                    >
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="content"
-                        className="edit-inline__replace-trigger"
-                        aria-label={language === 'ko' ? `${getIngredientDisplayName(ingredient, language)} 식재료 교체` : `Replace ${getIngredientDisplayName(ingredient, language)}`}
-                        title={language === 'ko' ? '클릭하여 식재료 교체' : 'Click to replace ingredient'}
-                        onClick={() => { setReplaceSide(false); setReplaceTargetIndex(index) }}
-                      >
-                        {getIngredientDisplayName(ingredient, language)}
-                        <ArrowLeftRight size={14} aria-hidden="true" />
-                      </Button>
-                      {unitErrorIds.has(item.ingredientId) && <p role="alert" className="add-recipe__field-error">{language === 'ko' ? `${getIngredientDisplayName(ingredient, language)} (${item.defaultUnit}): 단위 환산 정보가 없습니다. 식재료 환산 정보를 등록하거나 다른 단위를 선택해 주세요.` : `${getIngredientDisplayName(ingredient, language)} (${item.defaultUnit}): No unit conversion is available. Register a conversion or choose another unit.`}</p>}
-                    </TableCell>
-<TableCell><Input className="cooking-group-input" aria-label="요리 그룹" placeholder="예: 양념장·반죽" value={item.cookingGroup ?? ''} disabled={isSaving || tagBusy} onChange={event => setEditItems(current => current.map((entry, i) => i === index ? { ...entry, cookingGroup: event.target.value } : entry))} /></TableCell>
-                    <TableCell
-                      className={`edit-inline__order-cell edit-inline__drag-handle${dragOverIndex === index ? ' edit-inline__drag-over' : ''}`}
+                    <TableCell className="edit-inline__order-cell"><div className="ingredient-order-layout"><span className={`edit-inline__drag-handle${dragOverIndex === index ? ' edit-inline__drag-over' : ''}`}
                       draggable
                       onDragStart={() => { dragItemIndex.current = index }}
                       onDragOver={(e) => { e.preventDefault(); setDragOverIndex(index) }}
@@ -778,7 +759,28 @@ export function RecipeTable({
                       }}
                       onDragEnd={() => { dragItemIndex.current = null; setDragOverIndex(null) }}
                       aria-label="Drag to reorder"
-                    >⠿</TableCell>
+                    >⠿</span><IngredientOrderControls index={index} count={editItems.length} name={ingredientNameForId(item.ingredientId)} ko={language === 'ko'} disabled={isSaving || tagBusy} onMove={direction => { setEditItems(current => moveIngredient(current, index, direction)); setAmountDrafts({}) }} /></div></TableCell>
+                    <TableCell
+                      className="edit-inline__replace-cell"
+                      style={{ fontWeight: isNew ? 700 : undefined, color: isAddedSugarIngredient(ingredient.nameKo) ? 'var(--destructive)' : isRefinedCarb(ingredient.nameKo, ingredient.name, ingredient.isRefinedCarb) ? 'var(--warning)' : undefined }}
+                    >
+                      <div className="ingredient-name-actions"><Link to={`/ingredient/${encodeURIComponent(ingredient.id)}/edit`} target="_blank" rel="noopener noreferrer" title={language === 'ko' ? '식재료 수정 (새 탭)' : 'Edit ingredient (new tab)'}>
+                        {getIngredientDisplayName(ingredient, language)}
+                      </Link>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="content"
+                        className="edit-inline__replace-trigger"
+                        aria-label={language === 'ko' ? `${getIngredientDisplayName(ingredient, language)} 식재료 교체` : `Replace ${getIngredientDisplayName(ingredient, language)}`}
+                        title={language === 'ko' ? '클릭하여 식재료 교체' : 'Click to replace ingredient'}
+                        onClick={() => { setReplaceSide(false); setReplaceTargetIndex(index) }}
+                      >
+                        <ArrowLeftRight size={14} aria-hidden="true" />
+                      </Button></div>
+                      {unitErrorIds.has(item.ingredientId) && <p role="alert" className="add-recipe__field-error">{language === 'ko' ? `${getIngredientDisplayName(ingredient, language)} (${item.defaultUnit}): 단위 환산 정보가 없습니다. 식재료 환산 정보를 등록하거나 다른 단위를 선택해 주세요.` : `${getIngredientDisplayName(ingredient, language)} (${item.defaultUnit}): No unit conversion is available. Register a conversion or choose another unit.`}</p>}
+                    </TableCell>
+<TableCell><Input className="cooking-group-input" aria-label="요리 그룹" placeholder="예: 양념장·반죽" value={item.cookingGroup ?? ''} disabled={isSaving || tagBusy} onChange={event => setEditItems(current => current.map((entry, i) => i === index ? { ...entry, cookingGroup: event.target.value } : entry))} /></TableCell>
 
                     <TableCell>
                       <Input
@@ -947,7 +949,7 @@ export function RecipeTable({
               const isRice = item.ingredientId === MULTIGRAIN_ID
               const ing = isRice ? null : ingredientById.get(item.ingredientId)
               if (!isRice && !ing) return (
-                <TableRow key={item.ingredientId} className="recipe-table__multigrain-row">
+                <TableRow key={item.ingredientId} className="recipe-table__multigrain-row">{isEditing && <TableCell className="edit-inline__order-cell" />}
                   <TableCell>{ingredientNameForId(item.ingredientId)}{unitErrorIds.has(item.ingredientId) && ingredientNameForId(item.ingredientId) !== '알 수 없는 식재료' && <p role="alert" className="add-recipe__field-error">{language === 'ko' ? `${ingredientNameForId(item.ingredientId)} (${item.defaultUnit}): 단위 환산 정보가 없습니다. 식재료 환산 정보를 등록하거나 다른 단위를 선택해 주세요.` : `${ingredientNameForId(item.ingredientId)} (${item.defaultUnit}): No conversion is available. Register a conversion or choose another unit.`}</p>}</TableCell>
 {isEditing && <TableCell><Input aria-label="요리 그룹" value={item.cookingGroup ?? ''} disabled={isSaving || tagBusy} onChange={event => setEditSideItems(current => current.map((entry, i) => i === index ? { ...entry, cookingGroup: event.target.value } : entry))} /></TableCell>}
 
@@ -958,30 +960,8 @@ export function RecipeTable({
               )
               const macros = computeSideMacros(item)
               return (
-                <TableRow key={item.ingredientId} className="recipe-table__multigrain-row">
-                  <TableCell
-                    className={!isRice && isEditing ? 'edit-inline__replace-cell' : undefined}
-                    style={{ color: !isRice && ing ? (isAddedSugarIngredient(ing.nameKo) ? 'var(--destructive)' : isRefinedCarb(ing.nameKo, ing.name, ing.isRefinedCarb) ? 'var(--warning)' : undefined) : undefined }}
-                  >
-                    {isRice
-                      ? (language === 'ko' ? '잡곡밥 (쌀:잡곡=2:1)' : 'Multigrain rice (rice:grains=2:1)')
-                      : isEditing ? <><Button
-                        type="button"
-                        variant="ghost"
-                        size="content"
-                        className="edit-inline__replace-trigger"
-                        aria-label={language === 'ko' ? `${getIngredientDisplayName(ing!, language)} 식재료 교체` : `Replace ${getIngredientDisplayName(ing!, language)}`}
-                        title={language === 'ko' ? '클릭하여 식재료 교체' : 'Click to replace ingredient'}
-                        onClick={() => { setReplaceSide(true); setReplaceTargetIndex(index) }}
-                      >
-                        {getIngredientDisplayName(ing!, language)}
-                        <ArrowLeftRight size={14} aria-hidden="true" />
-                      </Button>{unitErrorIds.has(item.ingredientId) && <p role="alert" className="add-recipe__field-error">{language === 'ko' ? `${getIngredientDisplayName(ing!, language)} (${item.defaultUnit}): 단위 환산 정보가 없습니다. 식재료 환산 정보를 등록하거나 다른 단위를 선택해 주세요.` : `${getIngredientDisplayName(ing!, language)} (${item.defaultUnit}): No unit conversion is available. Register a conversion or choose another unit.`}</p>}</> : getIngredientDisplayName(ing!, language)}
-                  </TableCell>
-{isEditing && <TableCell><Input aria-label="요리 그룹" value={item.cookingGroup ?? ''} disabled={isSaving || tagBusy} onChange={event => setEditSideItems(current => current.map((entry, i) => i === index ? { ...entry, cookingGroup: event.target.value } : entry))} /></TableCell>}
-                  {isEditing && (
-                    <TableCell
-                      className={`edit-inline__order-cell edit-inline__drag-handle${dragOverSideIndex === index ? ' edit-inline__drag-over' : ''}`}
+                <TableRow key={item.ingredientId} className="recipe-table__multigrain-row">{isEditing && (
+                    <TableCell className="edit-inline__order-cell"><div className="ingredient-order-layout"><span className={`edit-inline__drag-handle${dragOverSideIndex === index ? ' edit-inline__drag-over' : ''}`}
                       draggable
                       onDragStart={() => { dragSideItemIndex.current = index }}
                       onDragOver={(e) => { e.preventDefault(); setDragOverSideIndex(index) }}
@@ -999,8 +979,29 @@ export function RecipeTable({
                       }}
                       onDragEnd={() => { dragSideItemIndex.current = null; setDragOverSideIndex(null) }}
                       aria-label="Drag to reorder"
-                    >⠿</TableCell>
-                  )}
+                    >⠿</span><IngredientOrderControls index={index} count={editSideItems.length} name={ingredientNameForId(item.ingredientId)} ko={language === 'ko'} disabled={isSaving || tagBusy} onMove={direction => { setEditSideItems(current => moveIngredient(current, index, direction)); setAmountDrafts({}) }} /></div></TableCell>)}
+                  <TableCell
+                    className={!isRice && isEditing ? 'edit-inline__replace-cell' : undefined}
+                    style={{ color: !isRice && ing ? (isAddedSugarIngredient(ing.nameKo) ? 'var(--destructive)' : isRefinedCarb(ing.nameKo, ing.name, ing.isRefinedCarb) ? 'var(--warning)' : undefined) : undefined }}
+                  >
+                    {isRice
+                      ? (language === 'ko' ? '잡곡밥 (쌀:잡곡=2:1)' : 'Multigrain rice (rice:grains=2:1)')
+                      : isEditing ? <><div className="ingredient-name-actions"><Link to={`/ingredient/${encodeURIComponent(ing!.id)}/edit`} target="_blank" rel="noopener noreferrer" title={language === 'ko' ? '식재료 수정 (새 탭)' : 'Edit ingredient (new tab)'}>
+                        {getIngredientDisplayName(ing!, language)}
+                      </Link><Button
+                        type="button"
+                        variant="ghost"
+                        size="content"
+                        className="edit-inline__replace-trigger"
+                        aria-label={language === 'ko' ? `${getIngredientDisplayName(ing!, language)} 식재료 교체` : `Replace ${getIngredientDisplayName(ing!, language)}`}
+                        title={language === 'ko' ? '클릭하여 식재료 교체' : 'Click to replace ingredient'}
+                        onClick={() => { setReplaceSide(true); setReplaceTargetIndex(index) }}
+                      >
+                        <ArrowLeftRight size={14} aria-hidden="true" />
+                      </Button></div>{unitErrorIds.has(item.ingredientId) && <p role="alert" className="add-recipe__field-error">{language === 'ko' ? `${getIngredientDisplayName(ing!, language)} (${item.defaultUnit}): 단위 환산 정보가 없습니다. 식재료 환산 정보를 등록하거나 다른 단위를 선택해 주세요.` : `${getIngredientDisplayName(ing!, language)} (${item.defaultUnit}): No unit conversion is available. Register a conversion or choose another unit.`}</p>}</> : getIngredientDisplayName(ing!, language)}
+                  </TableCell>
+{isEditing && <TableCell><Input aria-label="요리 그룹" value={item.cookingGroup ?? ''} disabled={isSaving || tagBusy} onChange={event => setEditSideItems(current => current.map((entry, i) => i === index ? { ...entry, cookingGroup: event.target.value } : entry))} /></TableCell>}
+                  
 
                   <TableCell>
                     {isEditing ? (
@@ -1226,6 +1227,25 @@ export function RecipeTable({
         actions={[{ label: language === 'ko' ? '닫기' : 'Close', onClick: () => setIsRecommendedInfoOpen(false) }]}
       />
 
+      {!isCollapsed && isEditing && editTab === 'storage' && (
+        <div className="recipe-ingredient-actions" role="group" aria-label={language === 'ko' ? '식재료 추가 및 불러오기' : 'Add and import ingredients'}>
+<div className="edit-bottom-bar__left">
+            <Button type="button" variant="outline" size="sm" onClick={handleOpenRecipePicker} disabled={loadingRecipeList || isSaving}>
+              {loadingRecipeList ? (language === 'ko' ? '불러오는 중…' : 'Loading…') : (language === 'ko' ? '다른 레시피 불러오기' : 'Load another recipe')}
+            </Button>
+          </div>
+          <div className="edit-bottom-bar__add">
+            <Button type="button" variant="outline" size="sm" onClick={() => setIsAddSideModalOpen(true)}>
+              + {language === 'ko' ? '부재료 추가' : 'Add side ingredient'}
+            </Button>
+            <Button type="button" size="sm" onClick={() => setIsAddModalOpen(true)}>
+              + {language === 'ko' ? '주재료 추가' : 'Add main ingredient'}
+            </Button>
+          </div>
+          
+        </div>
+      )}
+
       {!isCollapsed && (!isEditing || editTab === 'storage') && (isEditing || activeRecipe.memo) && (
         <div className={isEditing ? 'recipe-tab-text-field recipe-tab-text-field--below-table' : 'recipe-memo'}>
           {isEditing ? (
@@ -1248,20 +1268,7 @@ export function RecipeTable({
 
       {!isCollapsed && isEditing && (
         <div className="edit-bottom-bar">
-          {editTab === 'storage' && <><div className="edit-bottom-bar__left">
-            <Button type="button" variant="outline" size="sm" onClick={handleOpenRecipePicker} disabled={loadingRecipeList || isSaving}>
-              {loadingRecipeList ? (language === 'ko' ? '불러오는 중…' : 'Loading…') : (language === 'ko' ? '다른 레시피 불러오기' : 'Load another recipe')}
-            </Button>
-          </div>
-          <div className="edit-bottom-bar__add">
-            <Button type="button" variant="outline" size="sm" onClick={() => setIsAddSideModalOpen(true)}>
-              + {language === 'ko' ? '부재료 추가' : 'Add side ingredient'}
-            </Button>
-            <Button type="button" size="sm" onClick={() => setIsAddModalOpen(true)}>
-              + {language === 'ko' ? '주재료 추가' : 'Add main ingredient'}
-            </Button>
-          </div>
-          </>}
+
           <div className="edit-bottom-bar__actions">
             {isAdmin && onDeleteRecipe && <Button type="button" variant="destructive" size="sm" disabled={isSaving || tagBusy} onClick={() => {
               const message = language === 'ko'

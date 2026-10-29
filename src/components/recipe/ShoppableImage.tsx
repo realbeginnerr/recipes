@@ -1,16 +1,16 @@
 import { useEffect, useState } from 'react'
-import { Plus, ExternalLink, ImageOff } from 'lucide-react'
+import { Plus, ExternalLink } from 'lucide-react'
 import { Popover, PopoverTrigger, PopoverContent, PopoverTitle } from '../ui/popover'
 import { loadTaggedProduct } from '../../services/taggedProductService'
 import type { RecipeImage, RecipeProductTag, TaggedProduct } from '../../types/shoppable'
 import './ShoppableImage.css'
+import { FoodImage } from '../FoodImage'
 
 export function safeProductUrl(value: string) {
   try { return ['https:', 'http:'].includes(new URL(value).protocol) } catch { return false }
 }
 export function ProductPhoto({ product }: { product: TaggedProduct }) {
-  const [failed, setFailed] = useState(false)
-  return !failed && safeProductUrl(product.thumbnailUrl) ? <img className="shoppable-product-photo" src={product.thumbnailUrl} alt="" onError={() => setFailed(true)} /> : <span className="shoppable-product-photo shoppable-product-placeholder"><ImageOff aria-hidden="true" /></span>
+  return <FoodImage className="shoppable-product-photo" src={safeProductUrl(product.thumbnailUrl) ? product.thumbnailUrl : undefined} alt="" />
 }
 
 export function squareTagPosition(x: number, y: number, ratio: number) {
@@ -37,7 +37,7 @@ export function ShoppableImage({ image, tags, alt, ko, onImageClick, square = fa
     const element = event.target
     if (element instanceof HTMLImageElement && element.getAttribute('src') === image.url && element.naturalWidth && element.naturalHeight) setRatio(element.naturalWidth / element.naturalHeight)
   }}>
-    {onImageClick ? <button type="button" className="shoppable-image-open" onClick={onImageClick} aria-label={ko ? `${alt} 이미지 크게 보기` : `Enlarge ${alt} image`}><img src={image.url} alt={alt} onError={() => setFailed(true)} /></button> : <img src={image.url} alt={alt} onError={() => setFailed(true)} />}
+    {onImageClick ? <button type="button" className="shoppable-image-open" onClick={onImageClick} aria-label={ko ? `${alt} 이미지 크게 보기` : `Enlarge ${alt} image`}><FoodImage src={image.url} alt={alt} onError={() => setFailed(true)} /></button> : <FoodImage src={image.url} alt={alt} onError={() => setFailed(true)} />}
     {failed && <span className="shoppable-image-error">{ko ? '이미지를 불러오지 못했어요.' : 'Image unavailable.'}</span>}
     {!failed && visible.map(tag => {
       const product = products[tag.productId]

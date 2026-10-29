@@ -10,9 +10,9 @@ import { FoodImage } from '../FoodImage'
 import { formatTableNumber } from '../../utils/numberFormatting'
 import { NutritionSummary } from '../NutritionSummary'
 import { RelatedRecipes } from './RelatedRecipes'
-import { Pencil } from 'lucide-react'
+import { Pencil, Trash2 } from 'lucide-react'
 
-export function IngredientCard({ ingredient, image, category, storageLocation, related, onEdit }: { ingredient: Ingredient; image?: string; category: string; storageLocation?: string; related: Recipe[]; onEdit?: () => void }) {
+export function IngredientCard({ ingredient, image, category, storageLocation, related, onEdit, onDelete, deleting = false }: { ingredient: Ingredient; image?: string; category: string; storageLocation?: string; related: Recipe[]; onEdit?: () => void; onDelete?: () => void; deleting?: boolean }) {
   const { language } = useLanguage()
   const ko = language === 'ko'
   const name = ko ? ingredient.nameKo ?? ingredient.name : ingredient.name
@@ -41,7 +41,7 @@ export function IngredientCard({ ingredient, image, category, storageLocation, r
   return <article className="ingredient-card">
     <div className="ingredient-photo card-photo"><FoodImage src={image} alt={name} /></div>
     <div className="ingredient-card-body">
-      <div className="ingredient-card-heading"><h2>{name}</h2>{onEdit && <Button type="button" variant="ghost" size="icon-sm" aria-label={ko ? `${name} 수정` : `Edit ${name}`} title={ko ? '식재료 수정' : 'Edit ingredient'} onClick={onEdit}><Pencil aria-hidden="true" /></Button>}</div>
+      <div className="ingredient-card-heading"><h2>{name}</h2><div className="ingredient-card-actions">{onDelete && <Button type="button" variant="ghost" size="icon-sm" aria-label={ko ? `${name} 삭제` : `Delete ${name}`} title={ko ? '식재료 삭제' : 'Delete ingredient'} disabled={deleting} onClick={onDelete}><Trash2 aria-hidden="true" /></Button>}{onEdit && <Button type="button" variant="ghost" size="icon-sm" aria-label={ko ? `${name} 수정` : `Edit ${name}`} title={ko ? '식재료 수정' : 'Edit ingredient'} onClick={onEdit}><Pencil aria-hidden="true" /></Button>}</div></div>
       <div className="catalog-card-categories"><span className="catalog-category">{category}</span>{storageLocation && <span className="catalog-category">{storageLocation}</span>}</div>
       <div className="ingredient-basis">
         <Input density="quantity" type="number" min="0" step="any" aria-label={`${name} ${ko ? '용량' : 'amount'}`} value={quantity} onChange={event => {

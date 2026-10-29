@@ -1,23 +1,20 @@
-import { afterEach, expect, it, vi } from 'vitest'
-import { ingredientById } from '../src/data/ingredientCache'
-import { saveIngredientToFirestore } from '../src/services/ingredientService'
+import { expect, it, vi } from 'vitest'
+import { buildConversions } from '../src/services/ingredientService'
 import { amountToGrams, calculateMacros } from '../src/utils/nutrition'
+import { hasNutritionConversion } from '../src/utils/recipeUnitValidation'
 
 vi.mock('../src/firebase', () => ({ db: {} }))
-vi.mock('firebase/firestore', () => ({
-  collection: vi.fn(), addDoc: vi.fn(async () => ({ id: 'unit-test-ingredient' })),
-  getDocs: vi.fn(), setDoc: vi.fn(), deleteDoc: vi.fn(), doc: vi.fn(),
-}))
-afterEach(() => ingredientById.clear())
 
-it('registers ml and pinch conversions and supports fixed oz/lbs weights', async () => {
-  await saveIngredientToFirestore({ name: 'Unit test ingredient', nameKo: '테스트 재료', baseAmount: 100, baseUnit: 'g', carbs: 80, protein: 0, fat: 0, gramsPerMl: 1.25, gramsPerPinch: 5 })
-  const ingredient = ingredientById.get('unit-test-ingredient')!
-  expect(ingredient.conversions.ml).toBe(1.25)
-  expect(ingredient.conversions['꼬집']).toBe(5)
-  expect(ingredient.conversions.pinch).toBe(5)
-  expect(ingredient.conversions.lbs).toBe(453.592)
-  expect(ingredient.allowedUnits).toContain('꼬집')
-  expect(calculateMacros(amountToGrams(2, '꼬집', ingredient.conversions), ingredient).carbs).toBe(8)
-  expect(calculateMacros(amountToGrams(80, 'ml', ingredient.conversions), ingredient).carbs).toBe(80)
+it('calculates gram-based nutrition from per-piece nutrition and grams per piece', () => {
+  const ingredient = { id: 'fish', name: 'Mackerel', baseAmount: 1, baseUnit: '개', carbs: 0, protein: 40, fat: 20, allowedUnits: [], conversions: buildConversions({ baseUnit: '개', gramsPerEach: 200 }) }
+  expect(hasNutritionConversion(ingredient, 'g')).toBe(true)
+  expect(ingredient.conversions.each).toBe(200)
+  expect(calculateMacros(amountToGrams(100, 'g', ingredient.conversions), ingredient)).toEqual({ carbs: 0, protein: 20, fat: 10 })
+  expect(calculateMacros(amountToGrams(1, '개', ingredient.conversions), ingredient).protein).toBe(40)
+})
+
+it('does not invent gram conversion for a piece with no known weight', () => {
+  expect(buildConversions({ baseUnit: '개' }).g).toBeUndefined()
+  expect(buildConversions({ baseUnit: '개', gramsPerEach: 0 }).g).toBeUndefined()
+  expect(buildConversions({ baseUnit: 'g', gramsPerEach: 200 }).g).toBe(1)
 })

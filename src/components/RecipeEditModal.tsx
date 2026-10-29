@@ -1,3 +1,5 @@
+import { IngredientOrderControls, moveIngredient } from './IngredientOrderControls'
+import { Link } from 'react-router-dom'
 import { RecipeImagesEditor, recipeImageDrafts } from './RecipeImagesEditor'
 import { useState } from 'react'
 import { ingredientById, ingredients } from '../data/ingredientCache'
@@ -90,7 +92,7 @@ export function RecipeEditModal({ recipe, onSave, onClose }: Props) {
             <Table className="edit-modal__table min-w-[600px]">
               <TableHeader>
                 <TableRow>
-                  <TableHead>식재료</TableHead>
+                  <TableHead className="edit-inline__order-cell" aria-label="Reorder" /><TableHead>식재료</TableHead>
                   <TableHead>양</TableHead>
                   <TableHead>단위</TableHead>
                   <TableHead></TableHead>
@@ -102,7 +104,7 @@ export function RecipeEditModal({ recipe, onSave, onClose }: Props) {
                   if (!ing) return null
                   return (
                     <TableRow key={item.ingredientId}>
-                      <TableCell>{getIngredientDisplayName(ing, language)}</TableCell>
+                      <TableCell className="edit-inline__order-cell"><IngredientOrderControls index={index} count={items.length} name={getIngredientDisplayName(ing, language)} ko={language === 'ko'} onMove={direction => setItems(current => moveIngredient(current, index, direction))} /></TableCell><TableCell><Link to={`/ingredient/${encodeURIComponent(ing.id)}/edit`} target="_blank" rel="noopener noreferrer">{getIngredientDisplayName(ing, language)}</Link></TableCell>
                       <TableCell>
                         <Input
                           type="number"

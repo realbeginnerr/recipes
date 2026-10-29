@@ -8,12 +8,12 @@ import { ContentSwitcher, Switch } from '@carbon/react'
 import { LayoutGrid, List } from 'lucide-react'
 import { PageIntro, CatalogToolbar, CategoryFilter, SearchField } from '../components/catalog/CatalogControls'
 import { Button } from '@/components/ui/button'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useLanguage } from '../context/LanguageContext'
 import { ingredients as ingredientCache } from '../data/ingredientCache'
 import { recipes as staticRecipes } from '../data/recipe'
 import { ingredientPresentation } from '../data/ingredientPresentation'
-import { ingredientByName, loadIngredientsFromFirestore } from '../services/ingredientService'
+import { deleteIngredientFromFirestore, ingredientByName, loadIngredientsFromFirestore } from '../services/ingredientService'
 import { loadRecipesFromFirestore, mergeStaticAndFirestoreRecipes } from '../services/recipeService'
 import type { Ingredient, Recipe } from '../types'
 import './RecipePage.css'
@@ -44,6 +44,24 @@ export function IngredientsPage() {
   const ko = language === 'ko'
   const [ingredients, setIngredients] = useState<Ingredient[]>([])
   const [recipes, setRecipes] = useState<Recipe[]>(staticRecipes)
+  const deletingIds = useRef(new Set<string>())
+  const [deleting, setDeleting] = useState<Set<string>>(new Set())
+  const [deleteError, setDeleteError] = useState('')
+  async function deleteIngredient(id: string) {
+    if (!isAdmin || deletingIds.current.has(id)) return
+    deletingIds.current.add(id)
+    setDeleting(new Set(deletingIds.current))
+    setDeleteError('')
+    try {
+      await deleteIngredientFromFirestore(id)
+      setIngredients(current => current.filter(ingredient => ingredient.id !== id))
+    } catch {
+      setDeleteError(ko ? '식재료를 삭제하지 못했습니다. 다시 시도해주세요.' : 'Unable to delete the ingredient. Please try again.')
+    } finally {
+      deletingIds.current.delete(id)
+      setDeleting(new Set(deletingIds.current))
+    }
+  }
   const [query, setQuery] = useState('')
   const [category, setCategory] = useState<string[]>([])
   const [favorites, setFavorites] = useState(loadFavoriteIngredientIds)
@@ -115,12 +133,13 @@ export function IngredientsPage() {
     </CatalogToolbar>
     <div className="catalog-container catalog-results" id="ingredient-view-panel" role="tabpanel" aria-labelledby={`ingredient-view-${view}`} aria-busy={loading} tabIndex={0}>
       {!loading && <div className="catalog-count-row"><p className="catalog-count" role="status">{ko ? '식재료 ' : 'Ingredients '}<strong>{visible.length}{ko ? '개' : ''}</strong>{query && <span> · “{query}”</span>}</p>{isAdmin && <Button onClick={() => requestAccess('/add-ingredient')} variant="link" size="content" className="catalog-intro__subtle-action">{ko ? '식재료 추가' : 'Add ingredient'}</Button>}</div>}
+      {deleteError && <p role="alert">{deleteError}</p>}
       {error && <ContentState variant="inline" error title={ko ? '최신 정보를 불러오지 못했습니다. 저장된 정보를 표시합니다.' : 'Could not load the latest data. Showing available ingredients.'}><Button variant="ghost" size="content" onClick={() => setAttempt(value => value + 1)}>{ko ? '다시 시도' : 'Retry'}</Button></ContentState>}
       {visible.length === 0 ? <ContentState icon="⌕" title={ko ? '찾으시는 재료가 아직 없어요.' : 'We could not find that ingredient.'} description={ko ? '다른 이름으로 검색하거나, 철자를 확인해 보세요.' : 'Try another name or check the spelling.'}><RegistrationActions kind="ingredient" /></ContentState> :
       view === 'list' ? <IngredientTable visibleIds={visible.map(ingredient => ingredient.id)} /> : <div className="ingredient-grid">{visible.map(ingredient => {
         const related = recipes.filter(recipe => !recipe.hidden && recipeContainsIngredient(recipe, ingredient.id))
         const details = presentation(ingredient)
-        return <IngredientCard key={ingredient.id} ingredient={ingredient} image={details.image} category={ko ? details.category : english[details.category]} storageLocation={details.storageLocation ? ko ? details.storageLocation : english[details.storageLocation] : undefined} related={related} onEdit={isAdmin ? () => requestAccess(`/ingredient/${ingredient.id}/edit`) : undefined} />
+        return <IngredientCard key={ingredient.id} ingredient={ingredient} image={details.image} category={ko ? details.category : english[details.category]} storageLocation={details.storageLocation ? ko ? details.storageLocation : english[details.storageLocation] : undefined} related={related} deleting={deleting.has(ingredient.id)} onDelete={isAdmin ? () => { void deleteIngredient(ingredient.id) } : undefined} onEdit={isAdmin ? () => requestAccess(`/ingredient/${ingredient.id}/edit`) : undefined} />
       })}</div>}
     </div>
   </section>

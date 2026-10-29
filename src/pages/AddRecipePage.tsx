@@ -1,3 +1,4 @@
+import { IngredientOrderControls, moveIngredient } from '../components/IngredientOrderControls'
 import { CookingGroupOrderEditor } from '../components/CookingGroupOrderEditor'
 import { cookingGroupOrder } from '../utils/recipeCookingGroups'
 import { MEAL_TARGET as RECOMMENDED } from '../constants/nutrition'
@@ -459,14 +460,14 @@ export function AddRecipePage() {
     return (
       <TableFooter>
         <TableRow className="recipe-table__total recipe-table__muted">
-          <TableCell colSpan={3}>{isKoTable ? '합계' : 'Total'}</TableCell>
+          <TableCell colSpan={4}>{isKoTable ? '합계' : 'Total'}</TableCell>
           <TableCell className="macro">{fmt(totals.carbs)}</TableCell>
           <TableCell className="macro">{fmt(totals.protein)}</TableCell>
           <TableCell className="macro">{fmt(totals.fat)}</TableCell>
           <TableCell />
         </TableRow>
         <TableRow className="recipe-table__division-row">
-          <TableCell colSpan={3}>
+          <TableCell colSpan={4}>
             {isKoTable ? (
               <><Input type="number" aria-label="인분 수" className="h-7 w-16 text-sm inline-flex" min={1} step={1} value={divisionInput}
                 onChange={(e) => {
@@ -486,7 +487,7 @@ export function AddRecipePage() {
           <TableCell className="macro">{fmt(totals.fat / divisionCount)}</TableCell>
           <TableCell />
         </TableRow>
-        {sideRows.map((row) => {
+        {sideRows.map((row, index) => {
           const ing = ingredientById.get(row.ingredientId)
           if (!ing) return null
           const carbsPer100 = ing.carbs / ing.baseAmount * 100
@@ -495,7 +496,7 @@ export function AddRecipePage() {
           const sideFat = (row.amount * ing.fat / ing.baseAmount * 100) / 100
           return (
             <TableRow key={row.ingredientId} className="recipe-table__multigrain-row">
-              <TableCell>{isKoTable ? (ing.nameKo || ing.name) : ing.name}{unitErrors.has(`${row.ingredientId}\u0000${row.unit}`) && <p role="alert" className="add-recipe__field-error">{isKoTable ? `${ing.nameKo || ing.name} (${row.unit}): 단위 환산 정보가 없습니다. 환산 정보를 등록하거나 다른 단위를 선택해 주세요.` : `${ing.name} (${row.unit}): No unit conversion is available. Register a conversion or choose another unit.`}</p>}</TableCell>
+              <TableCell className="edit-inline__order-cell"><IngredientOrderControls index={index} count={sideRows.length} name={ing.nameKo || ing.name} ko={isKoTable} disabled={saving} onMove={direction => setSideRows(current => moveIngredient(current, index, direction))} /></TableCell><TableCell>{isKoTable ? (ing.nameKo || ing.name) : ing.name}{unitErrors.has(`${row.ingredientId}\u0000${row.unit}`) && <p role="alert" className="add-recipe__field-error">{isKoTable ? `${ing.nameKo || ing.name} (${row.unit}): 단위 환산 정보가 없습니다. 환산 정보를 등록하거나 다른 단위를 선택해 주세요.` : `${ing.name} (${row.unit}): No unit conversion is available. Register a conversion or choose another unit.`}</p>}</TableCell>
               <TableCell>
                 <Input type="number" className="h-7 w-20 text-sm" min={0} step={1}
                   value={row.amount}
@@ -537,7 +538,7 @@ export function AddRecipePage() {
           }
           return (
             <TableRow className="recipe-table__total">
-              <TableCell colSpan={3}><strong>{isKoTable ? '1끼 합계' : 'Per meal'}</strong></TableCell>
+              <TableCell colSpan={4}><strong>{isKoTable ? '1끼 합계' : 'Per meal'}</strong></TableCell>
               <TableCell className="macro"><strong style={{ color: macroColor(combined.carbs, RECOMMENDED.carbs) }}>{fmt(combined.carbs)}</strong></TableCell>
               <TableCell className="macro"><strong style={{ color: macroColor(combined.protein, RECOMMENDED.protein) }}>{fmt(combined.protein)}</strong></TableCell>
               <TableCell className="macro"><strong style={{ color: macroColor(combined.fat, RECOMMENDED.fat) }}>{fmt(combined.fat)}</strong></TableCell>
@@ -546,7 +547,7 @@ export function AddRecipePage() {
           )
         })()}
         <TableRow className="recipe-table__recommended">
-          <TableCell colSpan={3}><strong>{isKoTable ? '한끼 권장량' : 'Recommended per meal'}</strong></TableCell>
+          <TableCell colSpan={4}><strong>{isKoTable ? '한끼 권장량' : 'Recommended per meal'}</strong></TableCell>
           <TableCell className="macro"><strong>{fmt(RECOMMENDED.carbs)}</strong></TableCell>
           <TableCell className="macro"><strong>{fmt(RECOMMENDED.protein)}</strong></TableCell>
           <TableCell className="macro"><strong>{fmt(RECOMMENDED.fat)}</strong></TableCell>
@@ -615,7 +616,7 @@ export function AddRecipePage() {
                 <Table className="data-table recipe-table">
                   <TableHeader>
                     <TableRow>
-                      <TableHead>식재료</TableHead>
+                      <TableHead className="edit-inline__order-cell" aria-label="Reorder" /><TableHead>식재료</TableHead>
                       <TableHead>양</TableHead>
                       <TableHead>단위</TableHead>
                       <TableHead>탄수화물</TableHead>
@@ -629,7 +630,7 @@ export function AddRecipePage() {
                   <TableBody>
                     {resolvedRows.map((row, i) => (
                       <TableRow key={i} style={{ background: row.isNew ? '#fffbeb' : undefined }}>
-                        <TableCell>
+                        <TableCell className="edit-inline__order-cell"><IngredientOrderControls index={i} count={resolvedRows.length} name={row.name} ko={true} disabled={saving} onMove={direction => { setResolvedRows(current => moveIngredient(current, i, direction)); setEnRows(current => moveIngredient(current, i, direction)) }} /></TableCell><TableCell>
                           <Input className="h-7 text-sm" value={row.name} onChange={(e) => handleRowNameChange(i, e.target.value)} />
                           <Input className="mt-2 cooking-group-input" aria-label={`${row.name} 요리 그룹`} placeholder="요리 그룹 (예: 양념장·반죽)" value={row.cookingGroup ?? ''} onChange={event => setResolvedRows(current => current.map((entry, index) => index === i ? { ...entry, cookingGroup: event.target.value } : entry))} />
                           {unitErrors.has(`${row.ingredientId ?? ''}\u0000${row.unit || 'g'}`) && <p role="alert" className="add-recipe__field-error">{isKo ? `${row.name} (${row.unit || 'g'}): 단위 환산 정보가 없습니다. 환산 정보를 등록하거나 다른 단위를 선택해 주세요.` : `${row.name} (${row.unit || 'g'}): No unit conversion is available. Register a conversion or choose another unit.`}</p>}
@@ -667,7 +668,7 @@ export function AddRecipePage() {
                   <Table className="data-table recipe-table">
                     <TableHeader>
                       <TableRow>
-                        <TableHead>Ingredient</TableHead>
+                        <TableHead className="edit-inline__order-cell" aria-label="Reorder" /><TableHead>Ingredient</TableHead>
                         <TableHead>Amount</TableHead>
                         <TableHead>Unit</TableHead>
                         <TableHead>Carbs</TableHead>
@@ -681,8 +682,8 @@ export function AddRecipePage() {
                     <TableBody>
                       {enRows.map((row, i) => (
                         <TableRow key={i} style={{ background: resolvedRows[i]?.isNew ? '#fffbeb' : undefined }}>
-                          <TableCell>
-                            <Input className="h-7 text-sm" value={row.nameEn} onChange={(e) => setEnRows((prev) => prev.map((r, j) => j === i ? { ...r, nameEn: e.target.value } : r))} />
+                          <TableCell className="edit-inline__order-cell"><IngredientOrderControls index={i} count={resolvedRows.length} name={row.nameEn} ko={false} disabled={saving} onMove={direction => { setResolvedRows(current => moveIngredient(current, i, direction)); setEnRows(current => moveIngredient(current, i, direction)) }} /></TableCell><TableCell>
+                          <Input className="h-7 text-sm" value={row.nameEn} onChange={(e) => setEnRows((prev) => prev.map((r, j) => j === i ? { ...r, nameEn: e.target.value } : r))} />
                             <Input className="mt-2 cooking-group-input" aria-label={`${row.nameEn} cooking group`} placeholder="Cooking group (e.g. sauce)" value={resolvedRows[i]?.cookingGroup ?? ''} onChange={event => setResolvedRows(current => current.map((entry, index) => index === i ? { ...entry, cookingGroup: event.target.value } : entry))} />
                             {resolvedRows[i]?.isNew && <span style={{ display: 'block', fontSize: '14px', color: '#b45309', fontWeight: 600, marginTop: '2px' }}>New</span>}
                           </TableCell>
@@ -704,7 +705,7 @@ export function AddRecipePage() {
             )
 
             const bottomBar = (
-              <div className="edit-bottom-bar">
+              <div className="recipe-ingredient-actions" role="group" aria-label="Add and import ingredients">
                 <div className="edit-bottom-bar__left">
                     <Button type="button" variant="outline" size="sm" onClick={handleOpenRecipeList} disabled={loadingRecipes}>
                       {loadingRecipes ? (isKo ? '불러오는 중...' : 'Loading...') : (isKo ? '기존 레시피 불러오기' : 'Load from existing')}
@@ -722,8 +723,8 @@ export function AddRecipePage() {
             )
 
             return isKo
-              ? <>{koTable(true)}{bottomBar}{enTable(false)}</>
-              : <>{enTable(true)}{bottomBar}{koTable(false)}</>
+              ? <>{koTable(true)}{enTable(false)}{bottomBar}</>
+              : <>{enTable(true)}{koTable(false)}{bottomBar}</>
           })()}
 
           <Button type="button" size="lg" onClick={handleSave} disabled={saving || translating} className="w-full mt-4">

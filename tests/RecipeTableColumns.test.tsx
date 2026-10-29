@@ -51,8 +51,17 @@ it.each([true, false])('aligns headers, ingredients, sides and footer columns (e
     expect(Array.from(row.querySelectorAll<HTMLTableCellElement>(':scope > th, :scope > td')).reduce((sum, cell) => sum + cell.colSpan, 0)).toBe(expected)
   }
   const headers = table.querySelectorAll('thead th')
-  expect(headers[0].textContent).toContain('식재료')
-  expect(table.querySelectorAll('tbody tr:first-child td')[0].textContent).toContain('가지')
+  const nameColumn = editing ? 1 : 0
+  expect(headers[nameColumn].textContent).toContain('식재료')
+  expect(table.querySelectorAll('tbody tr:first-child td')[nameColumn].textContent).toContain('가지')
+  if (editing) {
+    const orderCell = table.querySelector('tbody tr:first-child td')!
+    expect(orderCell.querySelector('.edit-inline__drag-handle')).not.toBeNull()
+    expect(orderCell.querySelectorAll('.ingredient-order-arrows button')).toHaveLength(2)
+    const nameCell = table.querySelector('.ingredient-name-actions')!
+    expect(nameCell.querySelector('a[target="_blank"]')).not.toBeNull()
+    expect(nameCell.querySelector('.edit-inline__replace-trigger')).not.toBeNull()
+  }
   expect(table.textContent).toContain('(54g 부족)')
   expect(table.textContent).not.toContain('(+54)')
   const target = table.querySelector('.recipe-table__recommended')!

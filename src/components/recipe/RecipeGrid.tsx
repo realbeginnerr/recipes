@@ -9,7 +9,7 @@ import type { Recipe } from '../../types'
 import { resolveRecipeImage } from '../../utils/recipeImage'
 import { useLanguage } from '../../context/LanguageContext'
 import { trackRecipeView } from '../../utils/analytics'
-import { recipeMealMacros } from '../../utils/recipeNutrition'
+import { recipeMealMacros, recipeProteinPowderGrams } from '../../utils/recipeNutrition'
 import { categoryEnglish, getRecipeCategories } from '../../utils/recipeCategory'
 import { getTeaTags, teaCategoryEnglish } from '../../utils/teaCategory'
 import { discountedPrice, sanitizeProductHtml } from '../../utils/product'
@@ -32,6 +32,7 @@ export function RecipeCard({ recipe, openInNewTab = false, variant = 'recipe' }:
     : getRecipeCategories(recipe).map(category => ({ key: category, label: language === 'ko' ? category : categoryEnglish[category] }))
   const detailPath = recipe.productId ? `/product/${encodeURIComponent(recipe.productId)}` : `/recipe/${encodeURIComponent(recipe.id)}`
   const macros = variant === 'recipe' ? recipeMealMacros(recipe) : null
+  const powderGrams = variant === 'recipe' ? recipeProteinPowderGrams(recipe) : 0
   const price = recipe.productPricing ? discountedPrice({ pricing: recipe.productPricing }) : null
   const regularPrice = recipe.productPricing?.regular ?? null
   const description = variant === 'product' ? (new DOMParser().parseFromString(sanitizeProductHtml(recipe.productDescription ?? recipe.memo ?? '').replace(/<\/(?:p|div|li|h[1-6])>|<br\s*\/?>/gi, ' '), 'text/html').body.textContent ?? '').replace(/\s+/g, ' ').trim() : ''
@@ -43,14 +44,7 @@ export function RecipeCard({ recipe, openInNewTab = false, variant = 'recipe' }:
 
   const content = <>
       <div className="recipe-card__image-wrap card-photo">
-        <FoodImage src={imageUrl} alt={name} className="recipe-card__image" empty={<div className="recipe-card__placeholder">
-            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/>
-              <path d="M7 2v20"/>
-              <path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Z"/>
-              <path d="M21 15v7"/>
-            </svg>
-          </div>} />
+        <FoodImage src={imageUrl} alt={name} className="recipe-card__image" />
       </div>
       <div className="recipe-card__footer">
         <h2 className="recipe-card__name">{name}</h2>
@@ -62,7 +56,7 @@ export function RecipeCard({ recipe, openInNewTab = false, variant = 'recipe' }:
         </div>}
         {variant === 'recipe' && macros && <>
           <div className="recipe-card__rating"><StarRating label={language === 'ko' ? '맛' : 'Taste'} value={recipe.tasteRating ?? 4} showLabel={false} /></div>
-          <p className="recipe-card__macro-grams">{language === 'ko' ? '탄단지(g)' : 'C/P/F(g)'} <span>{formatTableNumber(macros.carbs)} / {formatTableNumber(macros.protein)} / {formatTableNumber(macros.fat)}</span></p>
+          <p className="recipe-card__macro-grams">{language === 'ko' ? '탄단지(g)' : 'C/P/F(g)'} <span>{formatTableNumber(macros.carbs)} <span className="recipe-card__macro-separator">•</span> {formatTableNumber(macros.protein)}{powderGrams > 0 && <span className="recipe-card__powder-grams" title={language === 'ko' ? `단백질 파우더 섭취량: ${formatTableNumber(powderGrams)}g` : `Protein powder serving: ${formatTableNumber(powderGrams)}g`}> ({formatTableNumber(powderGrams)})</span>} <span className="recipe-card__macro-separator">•</span> {formatTableNumber(macros.fat)}</span></p>
           <NutritionSummary {...macros} perMeal showRatio={false} />
           <p className="recipe-card__cooking-time">{language === 'ko' ? '조리시간' : 'Cooking time'} <span>{cookingTime}</span></p>
         </>}

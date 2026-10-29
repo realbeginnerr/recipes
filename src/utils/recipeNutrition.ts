@@ -2,6 +2,17 @@ import { ingredientById } from '../data/ingredientCache'
 import type { Recipe, RecipeItem } from '../types'
 import { amountToGrams, calculateMacros } from './nutrition'
 
+export function recipeProteinPowderGrams(recipe: Recipe): number {
+  return (recipe.sideItems ?? []).reduce((total, item) => {
+    const ingredient = ingredientById.get(item.ingredientId)
+    if (!ingredient) return total
+    const names = `${ingredient.nameKo ?? ''} ${ingredient.name}`.replace(/\s+/g, '').toLowerCase()
+    if (!/단백질파우[더서]|proteinpowder/.test(names)) return total
+    const grams = amountToGrams(item.defaultAmount, item.defaultUnit, ingredient.conversions)
+    return Number.isFinite(grams) && grams > 0 ? total + grams : total
+  }, 0)
+}
+
 export function recipeMealMacros(recipe: Recipe) {
   const totals = { carbs: 0, protein: 0, fat: 0 }
   const divisions = Math.max(1, recipe.divisionCount ?? 4)

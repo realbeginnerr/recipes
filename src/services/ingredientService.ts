@@ -138,7 +138,7 @@ function registerIngredient(ing: FirestoreIngredient) {
 
 const OZ_TO_G = 28.3495
 
-function buildConversions(ing: Pick<FirestoreIngredient, 'baseUnit' | 'gramsPerMl' | 'gramsPerPinch' | 'gramsPerTbsp' | 'gramsPerTsp' | 'gramsPerCup' | 'gramsPerEach' | 'gramsPerCan' | 'gramsPerPack' | 'gramsPerHandful'>): Record<string, number> {
+export function buildConversions(ing: Pick<FirestoreIngredient, 'baseUnit' | 'gramsPerMl' | 'gramsPerPinch' | 'gramsPerTbsp' | 'gramsPerTsp' | 'gramsPerCup' | 'gramsPerEach' | 'gramsPerCan' | 'gramsPerPack' | 'gramsPerHandful'>): Record<string, number> {
   const { baseUnit } = ing
   let base: Record<string, number>
   if (baseUnit === 'g' || baseUnit === 'ml') base = { g: 1, ml: 1, oz: OZ_TO_G }
@@ -160,6 +160,13 @@ function buildConversions(ing: Pick<FirestoreIngredient, 'baseUnit' | 'gramsPerM
       base[labelKo] = factor
       base[labelEn] = factor
     }
+  }
+  const baseConversion = CONVERSION_FIELDS.find(({ labelKo, labelEn }) => baseUnit === labelKo || baseUnit === labelEn)
+  const baseGrams = baseConversion ? ing[baseConversion.key] : undefined
+  if (baseGrams !== undefined && Number.isFinite(baseGrams) && baseGrams > 0) {
+    base.g = 1
+    base.oz = OZ_TO_G
+    base.lbs = 453.592
   }
   return base
 }
