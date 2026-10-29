@@ -723,7 +723,7 @@ export function RecipeTable({
               editItems.map((item, index) => {
               const ingredient = ingredientById.get(item.ingredientId)
               if (!ingredient) return (
-                <TableRow key={item.ingredientId} className="edit-row--new"><TableCell className="edit-inline__order-cell">{index + 1}</TableCell>
+                <TableRow key={item.ingredientId} className="edit-row--new"><TableCell className="edit-inline__order-cell"><IngredientOrderControls index={index} count={editItems.length} name={ingredientNameForId(item.ingredientId)} ko={language === 'ko'} disabled={isSaving || tagBusy} onMove={direction => { setEditItems(current => moveIngredient(current, index, direction)); setAmountDrafts({}) }} /></TableCell>
                   <TableCell className="edit-inline__replace-cell">
                     <span>{ingredientNameForId(item.ingredientId)}</span>
                     {unitErrorIds.has(item.ingredientId) && ingredientNameForId(item.ingredientId) !== '알 수 없는 식재료' && <p role="alert" className="add-recipe__field-error">{language === 'ko' ? `${ingredientNameForId(item.ingredientId)} (${item.defaultUnit}): 단위 환산 정보가 없습니다. 식재료 환산 정보를 등록하거나 다른 단위를 선택해 주세요.` : `${ingredientNameForId(item.ingredientId)} (${item.defaultUnit}): No conversion is available. Register a conversion or choose another unit.`}</p>}
@@ -949,7 +949,7 @@ export function RecipeTable({
               const isRice = item.ingredientId === MULTIGRAIN_ID
               const ing = isRice ? null : ingredientById.get(item.ingredientId)
               if (!isRice && !ing) return (
-                <TableRow key={item.ingredientId} className="recipe-table__multigrain-row">{isEditing && <TableCell className="edit-inline__order-cell" />}
+                <TableRow key={item.ingredientId} className="recipe-table__multigrain-row">{isEditing && <TableCell className="edit-inline__order-cell"><IngredientOrderControls index={index} count={editSideItems.length} name={ingredientNameForId(item.ingredientId)} ko={language === 'ko'} disabled={isSaving || tagBusy} onMove={direction => { setEditSideItems(current => moveIngredient(current, index, direction)); setAmountDrafts({}) }} /></TableCell>}
                   <TableCell>{ingredientNameForId(item.ingredientId)}{unitErrorIds.has(item.ingredientId) && ingredientNameForId(item.ingredientId) !== '알 수 없는 식재료' && <p role="alert" className="add-recipe__field-error">{language === 'ko' ? `${ingredientNameForId(item.ingredientId)} (${item.defaultUnit}): 단위 환산 정보가 없습니다. 식재료 환산 정보를 등록하거나 다른 단위를 선택해 주세요.` : `${ingredientNameForId(item.ingredientId)} (${item.defaultUnit}): No conversion is available. Register a conversion or choose another unit.`}</p>}</TableCell>
 {isEditing && <TableCell><Input aria-label="요리 그룹" value={item.cookingGroup ?? ''} disabled={isSaving || tagBusy} onChange={event => setEditSideItems(current => current.map((entry, i) => i === index ? { ...entry, cookingGroup: event.target.value } : entry))} /></TableCell>}
 

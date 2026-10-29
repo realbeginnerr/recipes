@@ -15,6 +15,27 @@ vi.mock('../src/components/useIngredientColumnWidth', async () => {
 })
 afterEach(() => ingredientById.clear())
 
+it.each([true, false])('keeps reorder controls usable with ingredient metadata loaded=%s', loaded => {
+  const items = ['first', 'second'].map((id, index) => {
+    if (loaded) ingredientById.set(id, { id, name: id, nameKo: id, baseAmount: 100, baseUnit: 'g', carbs: 5, protein: 1, fat: 0, allowedUnits: ['g'], conversions: { g: 1 } })
+    return { ingredientId: id, defaultAmount: index + 1, defaultUnit: 'g' }
+  })
+  render(<MemoryRouter><LanguageProvider><RecipeTable defaultEditing
+    recipe={{ id: 'test', name: 'Test', nameKo: '테스트', imageUrl: '', items, sideItems: items }}
+    rows={items.map(item => ({ ingredientId: item.ingredientId, amount: item.defaultAmount, unit: 'g' }))} appliedSearch="" divisionCount={4}
+    onDivisionCountChange={vi.fn()} onAmountChange={vi.fn()} onUnitChange={vi.fn()}
+    multigrainRiceAmount={100} multigrainRiceUnit="g" onMultigrainRiceAmountChange={vi.fn()} onMultigrainRiceUnitChange={vi.fn()} onSaveRecipe={vi.fn()}
+  /></LanguageProvider></MemoryRouter>)
+  const table = screen.getByRole('table')
+  const orderRows = () => Array.from(table.querySelectorAll('tr')).filter(row => row.querySelector('.ingredient-order-arrows'))
+  expect(orderRows()).toHaveLength(4)
+  fireEvent.click(orderRows()[0].querySelectorAll('button')[1])
+  expect(orderRows()[0].querySelectorAll('td')[3].querySelector('input')?.value).toBe('2')
+  fireEvent.click(orderRows()[2].querySelectorAll('button')[1])
+  const sideAmount = orderRows()[2].querySelectorAll('td')[3]
+  expect(sideAmount.querySelector('input')?.value ?? sideAmount.textContent).toBe('2')
+})
+
 it('edits and saves temporary photo product information with the recipe', async () => {
   const onSaveRecipe = vi.fn()
   render(<MemoryRouter><LanguageProvider><RecipeTable defaultEditing

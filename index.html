@@ -12,13 +12,14 @@
     <title>T's Recipe</title>
   <script>
     (function(l) {
-      if (l.search[1] === '/') {
+      if (l.search.indexOf('?p=/') === 0 || l.search[1] === '/') {
+        var named = l.search.indexOf('?p=/') === 0
         var decoded = l.search.slice(1).split('&').map(function(s) {
           return s.replace(/~and~/g, '&')
         })
         window.history.replaceState(null, null,
-          l.pathname.slice(0, -1) + decoded[0] +
-          (decoded[1] ? '?' + decoded[1] : '') + l.hash
+          l.pathname.replace(/\/$/, '') + (named ? decoded[0].slice(2) : decoded[0]) +
+          (decoded[1] ? '?' + (named ? decoded[1].replace(/^q=/, '') : decoded[1]) : '') + l.hash
         )
       }
     }(window.location))

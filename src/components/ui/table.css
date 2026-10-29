@@ -42,7 +42,9 @@
   max-width: 112px;
   padding: 8px;
   white-space: nowrap;
-  position: static;
+  position: sticky;
+  left: 0;
+  z-index: 1;
 }
 .site-table.site-table:has(thead .edit-inline__order-cell) thead th:nth-child(2) {
   width: 260px;

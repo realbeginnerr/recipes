@@ -1,0 +1,8 @@
+# Project working rules
+
+- The user tests this project locally. Assume localhost when investigating UI bugs; do not routinely ask whether the issue is on the deployed site. Inspect local source, configuration, and logs first. Ask for the exact local URL only when it is necessary to distinguish running servers.
+- Use `npm run dev` at `http://localhost:5173/recipes/` for normal local testing. `npm run preview` rebuilds before serving at `http://localhost:4173/recipes/`. Do not serve an old `dist` folder as if it reflected current source. Do not silently switch to another port when a port is occupied.
+- Start by reviewing `git status` and preserve existing user changes. Do not reset, restore, checkout, or replace files to resolve a bug unless the user has authorized that specific rollback. Do not restore intentionally deleted photos or introduce fallback images for them.
+- Investigate a reported regression using the exact sequence the user describes. Preserve a regression test for behavioral fixes. Relevant baseline checks are `npm run test:regressions`; use `npm run build` when updating the local preview build.
+- Distinguish source changes, test results, local build updates, browser verification, production data writes, and deployment in status reports. Passing a component test does not prove the user's live browser is fixed. Do not claim a rollback or a stale running server without evidence.
+- Before larger changes, offer a scoped Git checkpoint of the completed work. Do not automatically commit unrelated user changes. Keep each checkpoint focused so future regressions can be compared against a known working version.

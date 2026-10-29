@@ -23,8 +23,8 @@ type UnitSelectProps = {
 export function UnitSelect({ ingredientId, value, onValueChange, language, riceOnly = false, options, className, size = 'sm', 'aria-label': ariaLabel, disabled }: UnitSelectProps) {
   const [rejectedUnit, setRejectedUnit] = useState<string | null>(null)
   const ingredient = ingredientId ? recipeIngredient(ingredientId) : undefined
-  const invalid = ingredientId !== undefined && !hasNutritionConversion(ingredient, value)
-  const warning = rejectedUnit ?? (invalid ? value : null)
+  const invalid = value !== '' && ingredientId !== undefined && !hasNutritionConversion(ingredient, value)
+  const warning = rejectedUnit || (invalid ? value : null)
   const noneLabel = language === 'ko' ? '선택안함' : 'N/A'
   const index = language === 'ko' ? 0 : 1
   const available = riceOnly ? ['g', 'oz'] : options
@@ -34,7 +34,7 @@ export function UnitSelect({ ingredientId, value, onValueChange, language, riceO
   const selectItems = selected && !items.some(item => item.value === selected) ? [...items, { value: selected, label: selected, disabled: false }] : items
   return <><Select value={selected || UNIT_NONE} items={selectItems} disabled={disabled} onValueChange={unit => {
     const next = unit === UNIT_NONE || unit === null ? '' : unit
-    if (ingredientId !== undefined && !hasNutritionConversion(ingredient, next)) { setRejectedUnit(next); return }
+    if (next !== '' && ingredientId !== undefined && !hasNutritionConversion(ingredient, next)) { setRejectedUnit(next); return }
     setRejectedUnit(null)
     onValueChange(next)
   }}>

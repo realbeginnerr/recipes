@@ -28,7 +28,10 @@ jobs:
       - name: Check local image references
         run: node scripts/check-public-images.mjs
 
-      - name: Build
+      - name: Check regressions
+        run: npm run test:regressions
+
+      - name: Build site
         run: npm run build
 
       - name: Upload artifact

@@ -4,9 +4,11 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --port 5173 --strictPort",
     "build": "tsc && vite build",
-    "preview": "vite preview",
+    "prepreview": "npm run build",
+    "preview": "vite preview --port 4173 --strictPort",
+    "test:regressions": "vitest run tests/UnitConversionWarning.test.tsx tests/IngredientOrderControls.test.tsx tests/RecipeTableColumns.test.tsx tests/refreshRoute.test.ts tests/recipeGallery.test.ts",
     "test": "vitest run",
     "test:product-rules": "node scripts/check-product-rules.mjs"
   },

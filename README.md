@@ -47,14 +47,25 @@ npm install
 npm run dev
 ```
 
-Open the URL shown in the terminal (typically `http://localhost:5173`).
+일상적인 테스트는 **로컬 개발 서버** `http://localhost:5173/recipes/`를 사용합니다. 소스 수정이 바로 반영됩니다. 5173 포트가 사용 중이면 다른 포트로 바꾸지 않고 오류로 중단하므로, 기존 서버가 어느 프로젝트인지 먼저 확인합니다.
 
 ## Build
 
 ```bash
-npm run build
 npm run preview
 ```
+
+`npm run preview`는 매번 최신 소스를 빌드한 뒤 `http://localhost:4173/recipes/`에서 실행합니다. 이전 `dist` 폴더를 별도 정적 서버로 실행하면 수정 전 화면이 보일 수 있습니다. 개발 서버와 미리보기 서버를 혼동하지 않도록 주소를 고정합니다.
+
+## 회귀 방지
+
+```bash
+npm run test:regressions
+```
+
+단위 경고 해제, 식재료 순서 변경, 새로고침 경로 복원, 사진 삭제 후 참조 정리를 확인합니다. 배포 빌드 전에도 같은 테스트를 실행하며 실패하면 배포를 중단합니다. 테스트 통과와 실제 브라우저 확인은 구분합니다.
+
+큰 변경 전에는 확인된 수정만 별도 Git 커밋으로 남기고, 이후 문제 발생 시 그 시점과 비교합니다. 작업 중인 다른 변경이나 의도적으로 삭제한 파일을 일괄 복원하지 않습니다. 작업자의 로컬 테스트 기준은 [AGENTS.md](AGENTS.md)에 기록되어 있습니다.
 
 ## Data
 
