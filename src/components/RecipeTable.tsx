@@ -1,4 +1,5 @@
 import { IngredientOrderControls, moveIngredient } from './IngredientOrderControls'
+import { duplicateRecipeNameFields, duplicateRecipeNameMessage, type RecipeNameField } from '../utils/recipeNameValidation'
 import { CookingStepsEditor } from './CookingSteps'
 import { recipeCookingSteps } from '../utils/cookingSteps'
 import { safeProductUrl } from './recipe/ShoppableImage'
@@ -117,6 +118,7 @@ export function RecipeTable({
   const [editTasteRating, setEditTasteRating] = useState(activeRecipe.tasteRating ?? 4)
   const [editName, setEditName] = useState(activeRecipe.name)
   const [editNameKo, setEditNameKo] = useState(activeRecipe.nameKo)
+  const [nameErrors, setNameErrors] = useState<RecipeNameField[]>([])
   const [editCategories, setEditCategories] = useState<RecipeCategory[]>(() => getRecipeCategories(activeRecipe))
   const [isCollapsed, setIsCollapsed] = useState(defaultEditing ? false : recipe.hidden ?? false)
   const [divisionInput, setDivisionInput] = useState(String(activeRecipe.divisionCount ?? divisionCount))
@@ -271,6 +273,12 @@ export function RecipeTable({
             onClick: () => navigate(`/recipe/${updated.id}`),
           })
       } catch (error) {
+        const duplicateFields = duplicateRecipeNameFields(error)
+        if (duplicateFields.length) {
+          setNameErrors(duplicateFields)
+          showToast(language === 'ko' ? duplicateRecipeNameMessage : 'This name already exists. Please choose another name.', 'error')
+          return
+        }
         const code = error && typeof error === 'object' && 'code' in error ? String(error.code) : 'unknown'
         console.error('Recipe save failed', error)
         if (code === 'recipe/missing-conversion') {
@@ -543,16 +551,20 @@ export function RecipeTable({
                 <Input
                   id={`recipe-name-ko-${recipe.id}`}
                   value={editNameKo}
-                  onChange={(e) => setEditNameKo(e.target.value)}
+                  aria-invalid={nameErrors.includes('nameKo') || undefined}
+                  onChange={(e) => { setEditNameKo(e.target.value); setNameErrors(current => current.filter(field => field !== 'nameKo')) }}
                 />
+                {nameErrors.includes('nameKo') && <p role="alert" className="add-recipe__field-error">{language === 'ko' ? duplicateRecipeNameMessage : 'This name already exists. Please choose another name.'}</p>}
               </div>
               <div className="recipe-block__title-edit-field">
                 <label htmlFor={`recipe-name-en-${recipe.id}`}>{language === 'ko' ? '영문 이름' : 'English name'}</label>
                 <Input
                   id={`recipe-name-en-${recipe.id}`}
                   value={editName}
-                  onChange={(e) => setEditName(e.target.value)}
+                  aria-invalid={nameErrors.includes('name') || undefined}
+                  onChange={(e) => { setEditName(e.target.value); setNameErrors(current => current.filter(field => field !== 'name')) }}
                 />
+                {nameErrors.includes('name') && <p role="alert" className="add-recipe__field-error">{language === 'ko' ? duplicateRecipeNameMessage : 'This name already exists. Please choose another name.'}</p>}
               </div>
             </div>
           ) : (

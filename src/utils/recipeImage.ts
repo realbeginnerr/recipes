@@ -11,7 +11,6 @@ const placeholderRecipes = new Set([
 ].map(name => name.replace(/\s+/g, '')))
 
 const localImageMap: Record<string, string> = {
-  '버섯 토스트': `${base}images/버섯 토스트.png`,
   '고추바사삭': `${base}images/ingredients/고추바사삭.jpg`,
   '칠리콘카르네': `${base}images/ingredients/칠리콘카르네.jpg`,
 }

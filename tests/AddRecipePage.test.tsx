@@ -48,3 +48,17 @@ it('opens the recipe form directly and saves selected ingredients without SNS en
   })))
   expect(screen.getByPlaceholderText('한글 이름')).toBeDefined()
 })
+
+it.each(['nameKo', 'name'] as const)('marks the duplicate %s field and keeps the draft on save rejection', async field => {
+  vi.mocked(saveRecipeToFirestore).mockRejectedValueOnce(Object.assign(new Error('duplicate'), { code: 'recipe/duplicate-name', fields: [field] }))
+  render(<LanguageProvider><RouterProvider router={createMemoryRouter([{ path: '/add-recipe', element: <AddRecipePage /> }], { initialEntries: ['/add-recipe'] })} /></LanguageProvider>)
+  fireEvent.change(screen.getByPlaceholderText('한글 이름'), { target: { value: '중복 이름' } })
+  fireEvent.change(screen.getByPlaceholderText('English name'), { target: { value: 'Duplicate' } })
+  fireEvent.click(screen.getByRole('button', { name: '레시피 추가', exact: true }))
+  const input = screen.getByPlaceholderText(field === 'nameKo' ? '한글 이름' : 'English name') as HTMLInputElement
+  await waitFor(() => expect(input.getAttribute('aria-invalid')).toBe('true'))
+  expect(document.querySelector('p.add-recipe__field-error[role="alert"]')?.textContent).toBe('이미 존재하는 이름이에요. 다른 이름을 입력해 주세요.')
+  expect(input.value).toBe(field === 'nameKo' ? '중복 이름' : 'Duplicate')
+  fireEvent.change(input, { target: { value: '수정한 이름' } })
+  expect(input.getAttribute('aria-invalid')).toBeNull()
+})

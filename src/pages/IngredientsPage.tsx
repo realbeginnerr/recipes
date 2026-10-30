@@ -49,6 +49,10 @@ export function IngredientsPage() {
   const [deleteError, setDeleteError] = useState('')
   async function deleteIngredient(id: string) {
     if (!isAdmin || deletingIds.current.has(id)) return
+    const ingredient = ingredients.find(item => item.id === id)
+    if (!ingredient) return
+    const name = ko ? ingredient.nameKo ?? ingredient.name : ingredient.name
+    if (!window.confirm(ko ? `'${name}' 식재료를 정말 삭제할까요?` : `Are you sure you want to delete '${name}'?`)) return
     deletingIds.current.add(id)
     setDeleting(new Set(deletingIds.current))
     setDeleteError('')

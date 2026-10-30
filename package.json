@@ -8,7 +8,7 @@
     "build": "tsc && vite build",
     "prepreview": "npm run build",
     "preview": "vite preview --port 4173 --strictPort",
-    "test:regressions": "vitest run tests/UnitConversionWarning.test.tsx tests/IngredientOrderControls.test.tsx tests/RecipeTableColumns.test.tsx tests/refreshRoute.test.ts tests/recipeGallery.test.ts",
+    "test:regressions": "vitest run tests/UnitConversionWarning.test.tsx tests/IngredientOrderControls.test.tsx tests/RecipeTableColumns.test.tsx tests/refreshRoute.test.ts tests/recipeGallery.test.ts tests/recipeSave.test.ts tests/AddRecipePage.test.tsx tests/SearchField.test.tsx",
     "test": "vitest run",
     "test:product-rules": "node scripts/check-product-rules.mjs"
   },

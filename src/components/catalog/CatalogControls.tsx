@@ -78,7 +78,36 @@ export function SearchField({ label, value, onValueChange }: {
   value: string
   onValueChange: (value: string) => void
 }) {
-  return <div className="catalog-search"><span aria-hidden="true">⌕</span><Input density="compact" type="search" aria-label={label} placeholder={label} value={value} onChange={event => onValueChange(event.target.value)} /></div>
+  // Router navigation may update `value` asynchronously. Keep keystrokes local
+  // so React never restores a stale URL value into an active IME composition.
+  const [draft, setDraft] = useState(value)
+  const composing = useRef(false)
+  const published = useRef(value)
+  useLayoutEffect(() => {
+    if (!composing.current) {
+      setDraft(value)
+      published.current = value
+    }
+  }, [value])
+  function publish(next: string) {
+    if (next === published.current) return
+    published.current = next
+    onValueChange(next)
+  }
+  return <div className="catalog-search"><span aria-hidden="true">⌕</span><Input
+    density="compact" type="search" aria-label={label} placeholder={label} value={draft}
+    onCompositionStart={() => { composing.current = true }}
+    onCompositionEnd={event => {
+      composing.current = false
+      setDraft(event.currentTarget.value)
+      publish(event.currentTarget.value)
+    }}
+    onChange={event => {
+      const next = event.currentTarget.value
+      setDraft(next)
+      if (!composing.current && !(event.nativeEvent as InputEvent).isComposing) publish(next)
+    }}
+  /></div>
 }
 
 export function SortSelect({ label, value, options, onValueChange }: {

@@ -2,12 +2,12 @@ import type { RecipeImage, RecipeProductTag } from '../types/shoppable'
 import { reconcileRecipeGallery } from '../utils/recipeGallery'
 import {
   collection,
-  addDoc,
   doc,
   getDocs,
+  getDocsFromServer,
+  runTransaction,
   orderBy,
   query,
-  setDoc,
 } from 'firebase/firestore'
 import { db } from '../firebase'
 import { assertRecipeUnits } from '../utils/recipeUnitValidation'
@@ -15,6 +15,8 @@ import { canonicalIngredientId } from '../data/ingredientCatalogOverrides'
 import type { Recipe } from '../types'
 import { getRecipeCategories, type RecipeCategory } from '../utils/recipeCategory'
 import type { TeaTag } from '../utils/teaCategory'
+import { recipes as staticRecipes } from '../data/recipe'
+import { assertUniqueRecipeNames } from '../utils/recipeNameValidation'
 
 export type FirestoreRecipeItem = {
   cookingGroup?: string
@@ -58,11 +60,32 @@ export type FirestoreRecipe = {
 
 const COLLECTION = 'recipes'
 
+// No createdAt: this deleted metadata document is excluded from the ordered
+// recipe list. Reading/writing it serializes name scans across concurrent saves
+// without requiring a new collection or a production security-rule change.
+const NAME_GUARD = '__recipe_name_guard__'
+async function writeRecipeWithUniqueNames(id: string, data: Record<string, unknown> & { name: string; nameKo: string }) {
+  await runTransaction(db, async transaction => {
+    const guardRef = doc(db, COLLECTION, NAME_GUARD)
+    const guard = await transaction.get(guardRef)
+    // Use the server, never an offline cache, for the duplicate check. All app
+    // recipe writes update the guard so a concurrent commit retries this scan.
+    const snapshot = await getDocsFromServer(collection(db, COLLECTION))
+    const stored = snapshot.docs.filter(item => item.id !== NAME_GUARD).map(item => ({ ...item.data(), id: item.id } as FirestoreRecipe))
+    assertUniqueRecipeNames({ id, name: data.name, nameKo: data.nameKo }, [
+      ...staticRecipes.filter(item => !stored.some(saved => saved.id === item.id || (saved.name === item.name && saved.nameKo === item.nameKo))), ...stored,
+    ])
+    transaction.set(guardRef, { deleted: true, items: [], revision: (guard.data()?.revision ?? 0) + 1 })
+    transaction.set(doc(db, COLLECTION, id), data)
+  })
+}
+
 export async function saveRecipeToFirestore(
   recipe: Omit<FirestoreRecipe, 'id' | 'createdAt'>
 ): Promise<string> {
   assertRecipeUnits([...recipe.items, ...(recipe.sideItems ?? [])])
-  const docRef = await addDoc(collection(db, COLLECTION), {
+  const docRef = doc(collection(db, COLLECTION))
+  await writeRecipeWithUniqueNames(docRef.id, {
     ...recipe,
     ...reconcileRecipeGallery({ ...recipe, id: '' }),
     items: recipe.items.map(item => ({ ...item, ingredientId: canonicalIngredientId(item.ingredientId) })),
@@ -99,11 +122,16 @@ export async function updateRecipeInFirestore(recipe: Recipe): Promise<void> {
   for (const key of Object.keys(data)) {
     if (data[key] === undefined) delete data[key]
   }
-  await setDoc(doc(db, COLLECTION, id), data)
+  await writeRecipeWithUniqueNames(id, { ...data, name: recipe.name.trim(), nameKo: recipe.nameKo.trim() })
 }
 
 export async function deleteRecipeFromFirestore(id: string): Promise<void> {
-  await setDoc(doc(db, COLLECTION, id), { deleted: true }, { merge: true })
+  await runTransaction(db, async transaction => {
+    const guardRef = doc(db, COLLECTION, NAME_GUARD)
+    const guard = await transaction.get(guardRef)
+    transaction.set(guardRef, { deleted: true, items: [], revision: (guard.data()?.revision ?? 0) + 1 })
+    transaction.set(doc(db, COLLECTION, id), { deleted: true }, { merge: true })
+  })
 }
 
 export async function loadRecipesFromFirestore(): Promise<FirestoreRecipe[]> {

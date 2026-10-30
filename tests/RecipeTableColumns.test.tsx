@@ -15,6 +15,23 @@ vi.mock('../src/components/useIngredientColumnWidth', async () => {
 })
 afterEach(() => ingredientById.clear())
 
+it.each(['nameKo', 'name'] as const)('shows a duplicate %s error on the edit form without discarding the draft', async field => {
+  const onSaveRecipe = vi.fn().mockRejectedValue(Object.assign(new Error('duplicate'), { code: 'recipe/duplicate-name', fields: [field] }))
+  render(<MemoryRouter><LanguageProvider><RecipeTable defaultEditing
+    recipe={{ id: 'test', name: 'Test', nameKo: '테스트', imageUrl: '', items: [] }}
+    rows={[]} appliedSearch="" divisionCount={4} onDivisionCountChange={vi.fn()} onAmountChange={vi.fn()} onUnitChange={vi.fn()}
+    multigrainRiceAmount={100} multigrainRiceUnit="g" onMultigrainRiceAmountChange={vi.fn()} onMultigrainRiceUnitChange={vi.fn()} onSaveRecipe={onSaveRecipe}
+  /></LanguageProvider></MemoryRouter>)
+  const input = screen.getByLabelText(field === 'nameKo' ? '한글 이름' : '영문 이름') as HTMLInputElement
+  fireEvent.change(input, { target: { value: '중복 이름' } })
+  fireEvent.click(screen.getAllByRole('button', { name: '저장', exact: true })[0])
+  await waitFor(() => expect(input.getAttribute('aria-invalid')).toBe('true'))
+  expect(input.parentElement?.querySelector('[role="alert"]')?.textContent).toBe('이미 존재하는 이름이에요. 다른 이름을 입력해 주세요.')
+  expect(input.value).toBe('중복 이름')
+  fireEvent.change(input, { target: { value: '다른 이름' } })
+  expect(input.getAttribute('aria-invalid')).toBeNull()
+})
+
 it.each([true, false])('keeps reorder controls usable with ingredient metadata loaded=%s', loaded => {
   const items = ['first', 'second'].map((id, index) => {
     if (loaded) ingredientById.set(id, { id, name: id, nameKo: id, baseAmount: 100, baseUnit: 'g', carbs: 5, protein: 1, fat: 0, allowedUnits: ['g'], conversions: { g: 1 } })

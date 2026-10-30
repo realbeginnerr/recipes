@@ -100,7 +100,7 @@ export const ingredientPresentation: Record<string, { image: string; category: s
     "category": "채소류"
   },
   "가지": {
-    "image": `${base}images/가지.jpg`,
+    "image": "",
     "category": "채소류"
   },
   "감자": {

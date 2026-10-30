@@ -6,6 +6,7 @@ import { useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useLanguage } from '../context/LanguageContext'
 import { saveRecipeToFirestore, loadRecipesFromFirestore, type FirestoreRecipe } from '../services/recipeService'
+import { duplicateRecipeNameFields, duplicateRecipeNameMessage } from '../utils/recipeNameValidation'
 import {
   loadIngredientsFromFirestore,
   saveIngredientToFirestore,
@@ -399,10 +400,10 @@ export function AddRecipePage() {
       setResolvedRows([])
       setEnRows([])
     } catch (err) {
-      console.error(err)
       const code = typeof err === 'object' && err !== null && 'code' in err
         ? String(err.code)
         : ''
+      if (code !== 'recipe/duplicate-name') console.error(err)
       if (code === 'recipe/missing-conversion') {
         const matched = new Set<string>()
         const detail = err instanceof Error ? err.message.toLocaleLowerCase() : ''
@@ -427,7 +428,11 @@ export function AddRecipePage() {
         }
         if (matched.size) setUnitErrors(matched)
       }
-      const message = code === 'recipe/missing-conversion' && err instanceof Error
+      const duplicateFields = duplicateRecipeNameFields(err)
+      const duplicateMessage = isKo ? duplicateRecipeNameMessage : 'This name already exists. Please choose another name.'
+      if (duplicateFields.includes('nameKo')) setNameKoError(duplicateMessage)
+      if (duplicateFields.includes('name')) setNameError(duplicateMessage)
+      const message = duplicateFields.length ? duplicateMessage : code === 'recipe/missing-conversion' && err instanceof Error
         ? err.message
         : code === 'permission-denied'
         ? (isKo
@@ -565,16 +570,18 @@ export function AddRecipePage() {
           <div className="recipe-block__title-edit" style={{ marginBottom: '1rem' }}>
             <Input
               value={recipeNameKo}
+              aria-invalid={Boolean(nameKoError) || undefined}
               onChange={(e) => { setRecipeNameKo(e.target.value); setNameKoError('') }}
               placeholder="한글 이름"
             />
             <Input
               value={recipeName}
+              aria-invalid={Boolean(nameError) || undefined}
               onChange={(e) => { setRecipeName(e.target.value); setNameError('') }}
               placeholder="English name"
             />
-            {nameKoError && <p className="add-recipe__field-error">{nameKoError}</p>}
-            {nameError && <p className="add-recipe__field-error">{nameError}</p>}
+            {nameKoError && <p role="alert" className="add-recipe__field-error">{nameKoError}</p>}
+            {nameError && <p role="alert" className="add-recipe__field-error">{nameError}</p>}
           </div>
 
           <fieldset className="mb-4 min-w-0" disabled={saving}>
