@@ -1,1 +1,1 @@
-export const CONTACT_URL = 'https://linktr.ee/admin/links'
+export const CONTACT_URL = 'https://linktr.ee/growyourbusinesstogether'

@@ -34,7 +34,8 @@
 .story-action .reference-request { letter-spacing: -.04em; line-height: 1.5; font-weight: 500; }
 @media (max-width: 767px) {
   .story-split { grid-template-columns: minmax(0, 1fr); }
-  #story-start > .story-photo img { right: 0; width: calc(100% - 2 * var(--photo-inset)); }
+  #story-start > .story-photo { --photo-inset: 0px; }
+  #story-start > .story-photo img { inset: 0; width: 100%; max-width: none; height: 100%; }
   .story-photo { min-height: 360px; }
   .story-panel { padding-inline: 24px; }
 }

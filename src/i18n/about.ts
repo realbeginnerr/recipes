@@ -3,8 +3,8 @@ export const aboutCopy = {
   "ko": {
     "eyebrow": "T's Recipe",
     "heroFirst": "",
-    "heroLast": "처치곤란 식재료, 냉장고 털기",
-    "introFirst": "냉장고에 지난번 쓰고 남은 돼지앞다리가 300g 있다.\n이 재료로 할 수 있는 레시피를 찾아보니 사용한 양이 다르다.\n이럴 때, 내가 갖고 있는 양만 입력하면 나머지 양념 재료 양이 자동으로 같이 조절된다.",
+    "heroLast": "고기 400g 레시피인데 1kg을 샀다면?",
+    "introFirst": "늘어난 양에 맞춰 양념을 한 번에 계산해드려요.\n물론 줄어든 양에 맞춰 계산하는 것도 가능해요.",
     "introLast": "",
     "tableAlt": "밥상",
     "storyLabel": "나를 아낀다는 것",
