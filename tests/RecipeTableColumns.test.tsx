@@ -1,11 +1,51 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import { afterEach, expect, it, vi } from 'vitest'
 import { RecipeTable } from '../src/components/RecipeTable'
 import { LanguageProvider } from '../src/context/LanguageContext'
 import { ingredientById } from '../src/data/ingredientCache'
 
-vi.mock('../src/firebase', () => ({ storage: {} }))
+vi.mock('../src/firebase', () => ({ storage: {}, db: {} }))
+vi.mock('firebase/firestore', () => ({
+  collection: vi.fn(() => 'recipes'),
+  doc: vi.fn((_db, collection, id) => {
+    if (/^__.*__$/.test(id)) throw Object.assign(new Error('Reserved document ID'), { code: 'invalid-argument' })
+    return `${collection}/${id}`
+  }),
+  getDocs: vi.fn(), orderBy: vi.fn(), query: vi.fn(),
+  getDocsFromServer: vi.fn(async () => ({ docs: [] })),
+  runTransaction: vi.fn(async (_db, callback) => callback({
+    get: async () => ({ data: () => ({ revision: 0 }) }),
+    set: vi.fn(),
+  })),
+}))
+import { runTransaction } from 'firebase/firestore'
+import { updateRecipeInFirestore } from '../src/services/recipeService'
+
+it('saves gamjatang after deleting potato from the ingredient editor', async () => {
+  const items = ['potato', 'pork'].map(id => {
+    ingredientById.set(id, { id, name: id, nameKo: id === 'potato' ? '감자' : '돼지고기', baseAmount: 100, baseUnit: 'g', carbs: 5, protein: 1, fat: 0, allowedUnits: ['g'], conversions: { g: 1 } })
+    return { ingredientId: id, defaultAmount: 100, defaultUnit: 'g' }
+  })
+  const set = vi.fn()
+  vi.mocked(runTransaction).mockImplementationOnce(async (_db, callback) => callback({
+    get: async () => ({ data: () => ({ revision: 0 }) }), set,
+  } as never))
+  const onSaveRecipe = vi.fn(updateRecipeInFirestore)
+  render(<MemoryRouter><LanguageProvider><RecipeTable defaultEditing
+    recipe={{ id: 'gamjatang', name: 'Gamjatang', nameKo: '감자탕', imageUrl: '', items }}
+    rows={items.map(item => ({ ingredientId: item.ingredientId, amount: item.defaultAmount, unit: 'g' }))}
+    appliedSearch="" divisionCount={4} onDivisionCountChange={vi.fn()} onAmountChange={vi.fn()} onUnitChange={vi.fn()}
+    multigrainRiceAmount={100} multigrainRiceUnit="g" onMultigrainRiceAmountChange={vi.fn()} onMultigrainRiceUnitChange={vi.fn()} onSaveRecipe={onSaveRecipe}
+  /></LanguageProvider></MemoryRouter>)
+  fireEvent.click(within(screen.getByText('감자').closest('tr')!).getByRole('button', { name: '✕' }))
+  fireEvent.click(screen.getAllByRole('button', { name: '저장', exact: true })[0])
+  await waitFor(() => expect(set).toHaveBeenCalledWith('recipes/gamjatang', expect.objectContaining({
+    items: [{ ingredientId: 'pork', amount: 100, unit: 'g' }],
+  })))
+  await waitFor(() => expect(screen.queryByRole('button', { name: '저장', exact: true })).toBeNull())
+  expect(onSaveRecipe).toHaveBeenCalledTimes(1)
+})
 vi.mock('../src/context/AdminContext', () => ({ useAdmin: () => ({ isAdmin: true }) }))
 vi.mock('../src/components/AddPageAccessProvider', () => ({ useAddPageAccess: () => ({ approvedPath: null }) }))
 vi.mock('../src/components/IngredientSearchModal', () => ({ IngredientSearchModal: () => null }))

@@ -63,7 +63,8 @@ const COLLECTION = 'recipes'
 // No createdAt: this deleted metadata document is excluded from the ordered
 // recipe list. Reading/writing it serializes name scans across concurrent saves
 // without requiring a new collection or a production security-rule change.
-const NAME_GUARD = '__recipe_name_guard__'
+// Firestore reserves document IDs matching __.*__; use an ordinary ID.
+const NAME_GUARD = 'recipe-name-guard'
 async function writeRecipeWithUniqueNames(id: string, data: Record<string, unknown> & { name: string; nameKo: string }) {
   await runTransaction(db, async transaction => {
     const guardRef = doc(db, COLLECTION, NAME_GUARD)

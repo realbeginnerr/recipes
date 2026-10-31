@@ -6,7 +6,12 @@ vi.mock('../src/firebase', () => ({ db: {} }))
 vi.mock('firebase/firestore', () => {
   const setDoc = vi.fn()
   return {
-    collection: vi.fn(() => 'recipes'), doc: vi.fn((...args: unknown[]) => args.length === 1 ? { id: 'new-recipe' } : args[2] === '__recipe_name_guard__' ? 'guard-ref' : 'recipe-ref'),
+    collection: vi.fn(() => 'recipes'), doc: vi.fn((...args: unknown[]) => {
+      if (typeof args[2] === 'string' && /^__.*__$/.test(args[2])) {
+        throw Object.assign(new Error('Reserved Firestore document ID'), { code: 'invalid-argument' })
+      }
+      return args.length === 1 ? { id: 'new-recipe' } : args[2] === 'recipe-name-guard' ? 'guard-ref' : 'recipe-ref'
+    }),
     getDocs: vi.fn(), getDocsFromServer: vi.fn(), orderBy: vi.fn(), query: vi.fn(), setDoc,
     runTransaction: vi.fn(async (_db, callback) => callback({
       get: vi.fn(async () => ({ data: () => ({ revision: 0 }) })),
