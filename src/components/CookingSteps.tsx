@@ -44,7 +44,7 @@ export function CookingSteps({ recipeId, steps, ko }: { recipeId: string; steps:
         else delete value[step.id]
         save(value)
       }} /><span className="cooking-step-number">{index + 1}.</span><span className="cooking-step-text">{step.text}</span>
-      {next === step.id && <span className="cooking-step-next">{ko ? '다음 단계' : 'Next'}</span>}</label>
+      </label>
     </li>)}</ol>
   </section>
 }

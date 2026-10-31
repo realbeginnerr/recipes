@@ -95,7 +95,6 @@
 .cooking-steps input { flex: 0 0 20px; width: 20px; height: 20px; margin-top: 3px; accent-color: #255A46; }
 .cooking-step-text { flex: 1; min-width: 0; white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.7; }
 .cooking-step-number { padding-top: 2px; font-weight: 600; }
-.cooking-step-next { flex-shrink: 0; padding-top: 4px; color: #255A46; font-size: 12px; }
 .cooking-steps input:focus-visible { outline: 2px solid var(--primary); outline-offset: 3px; }
 .detail-notes p { margin: 0; max-width: 720px; font-size: 15px; color: #122B22; line-height: 1.75; letter-spacing: -.02em; white-space: pre-wrap; overflow-wrap: anywhere; }
 .detail-ingredient-edit-link {
