@@ -3,6 +3,16 @@ import { recipeGalleryImages, reconcileRecipeGallery } from '../src/utils/recipe
 
 const base = { id: 'recipe', nameKo: 'test', imageUrl: 'https://example.com/a.jpg', imageUrls: ['https://example.com/b.jpg'] }
 describe('recipe gallery identity and tag references', () => {
+  it.each(['얼그레이 스콘', '가지볶음', '밤식빵'])('shows a newly saved URL for %s while preserving an empty photo before editing', nameKo => {
+    const scone = { id: 'SIiGeMzqHt4fQYuU9aZ3', nameKo, imageUrl: '', imageUrls: [], images: [] }
+    expect(recipeGalleryImages(scone)).toEqual([])
+    expect(recipeGalleryImages({ ...scone, imageUrl: base.imageUrl })).toEqual([
+      expect.objectContaining({ url: base.imageUrl }),
+    ])
+    expect(recipeGalleryImages({ ...scone, imageUrls: [base.imageUrl] })).toEqual([
+      expect.objectContaining({ url: base.imageUrl }),
+    ])
+  })
   it('gives legacy photos stable IDs without changing old fields', () => {
     expect(recipeGalleryImages(base)).toEqual(recipeGalleryImages({ ...base }))
     expect(recipeGalleryImages(base)).toHaveLength(2)

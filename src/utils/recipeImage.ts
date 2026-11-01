@@ -16,8 +16,8 @@ const localImageMap: Record<string, string> = {
 }
 
 export function resolveRecipeImage(recipe: Recipe): string {
-  if (!recipe.productId && placeholderRecipes.has(recipe.nameKo.replace(/\s+/g, ''))) return ''
   if (recipe.imageUrl) return recipe.imageUrl
   if (recipe.imageUrls !== undefined) return recipe.imageUrls.find(url => url.trim()) ?? ''
+  if (!recipe.productId && placeholderRecipes.has(recipe.nameKo.replace(/\s+/g, ''))) return ''
   return localImageMap[recipe.nameKo] ?? ''
 }
