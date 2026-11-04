@@ -21,7 +21,7 @@ vi.mock('firebase/firestore', () => {
 })
 
 import { setDoc, getDocsFromServer, runTransaction } from 'firebase/firestore'
-import { saveRecipeToFirestore, updateRecipeInFirestore, convertToRecipe, type FirestoreRecipe } from '../src/services/recipeService'
+import { saveRecipeToFirestore, updateRecipeInFirestore, deleteRecipeFromFirestore, convertToRecipe, type FirestoreRecipe } from '../src/services/recipeService'
 
 const recipe = (): Recipe => ({
   id: 'eggplant', name: 'Eggplant Stir-Fry', nameKo: '가지볶음', imageUrl: '',
@@ -63,6 +63,21 @@ describe('saving a recipe with existing invalid quantities', () => {
       { ingredientId: 'replacement-soy-sauce', amount: 80, unit: 'g' },
     ] }))
   })
+})
+
+it('saves the Earl Grey scone after entering the Daum photo URL', async () => {
+  const url = 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FbGICuH%2FdJMcaiZvMyb%2FAAAAAAAAAAAAAAAAAAAAAGkPHTWiuRIJrhCQtvLiptqLJKZRWi65dPNEILRgjbom%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1793458799%26allow_ip%3D%26allow_referer%3D%26signature%3D3gRugXPZ17BEn46tARqh5VU8bAA%253D'
+  const edited = convertToRecipe({ id: 'SIiGeMzqHt4fQYuU9aZ3', name: '얼그레이 스콘', nameKo: '얼그레이 스콘', imageUrl: '', memo: '', tasteRating: 4, createdAt: 1793008261597, items: [] })
+  edited.imageUrl = url
+  edited.imageUrls = []
+  edited.images = [{ id: 'photo-scone', url }]
+  await updateRecipeInFirestore(edited)
+  expect(setDoc).toHaveBeenCalledWith('recipe-ref', expect.objectContaining({ imageUrl: url, images: [{ id: 'photo-scone', url }] }))
+})
+
+it('uses a valid guard ID for soft deletion too', async () => {
+  await deleteRecipeFromFirestore('SIiGeMzqHt4fQYuU9aZ3')
+  expect(setDoc).toHaveBeenCalledWith('recipe-ref', { deleted: true }, { merge: true })
 })
 
 it('persists image IDs and product references without embedding product details', async () => {

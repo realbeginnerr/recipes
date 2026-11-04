@@ -1,3 +1,4 @@
+import { useUiCopy } from '../context/LanguageContext'
 import { recipeGalleryImages } from '../utils/recipeGallery'
 import { useEffect, useState } from 'react'
 import type { Recipe } from '../types'
@@ -29,6 +30,7 @@ export function RecipeImagesEditor({ images, onChange, disabled = false, allowFi
   disabled?: boolean
   allowFiles?: boolean
 }) {
+  const copy = useUiCopy()
   const { language } = useLanguage()
   const ko = language === 'ko'
   const [error, setError] = useState('')
@@ -40,7 +42,7 @@ export function RecipeImagesEditor({ images, onChange, disabled = false, allowFi
     <p className="text-sm">{ko ? '첫 번째 사진이 대표 사진입니다. URL을 입력하거나 기기에서 사진을 선택하세요.' : 'The first photo is the cover. Enter a URL or choose a photo.'}</p>
     {images.map((image, index) => <div key={index} className="space-y-2">
       <label className="text-sm font-medium" htmlFor={`recipe-photo-${index}`}>{ko ? `사진 ${index + 1} URL` : `Photo ${index + 1} URL`}</label>
-      <Input id={`recipe-photo-${index}`} value={image.url} placeholder="https://... 또는 /recipes/images/..." onChange={event => update(index, { url: event.target.value })} />
+      <Input id={`recipe-photo-${index}`} value={image.url} placeholder={copy("https://... 또는 /recipes/images/...")} onChange={event => update(index, { url: event.target.value })} />
       <div className="edit-inline__image-controls">
         {allowFiles && <label className="text-sm">{ko ? '기기에서 사진 선택' : 'Choose photo'}<input type="file" accept="image/*" onChange={event => {
           const file = event.target.files?.[0]

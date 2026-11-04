@@ -1,3 +1,4 @@
+import { translateContent } from '../../i18n/content'
 ﻿import { useEffect, useState } from 'react'
 import { loadTaggedProduct } from '../../services/taggedProductService'
 import type { RecipeProductTag, TaggedProduct } from '../../types/shoppable'
@@ -24,6 +25,6 @@ export function RelatedImageProducts({ imageId, tags, ko, description, purchaseU
       ? <a key={index} href={part} target="_blank" rel="noopener noreferrer">{part}</a>
       : part)}</p>}
     {!shopFeatures.enabled && purchaseUrl?.trim() && safeProductUrl(purchaseUrl.trim()) && <Button variant="outline" role="link" nativeButton={false} render={<a href={purchaseUrl.trim()} target="_blank" rel="noopener noreferrer" />} className="related-image-products-purchase">{ko ? '상품 구매하기' : 'Buy product'}</Button>}
-    {shopFeatures.enabled && <ul>{products.map(product => <li key={product.id}><a href={product.productUrl} target="_blank" rel="noopener noreferrer" aria-label={`${product.productName} (${ko ? '새 탭에서 구매 페이지 열기' : 'open purchase page in new tab'})`}><ProductPhoto product={product} /><span>{product.productName}</span></a></li>)}</ul>}
+    {shopFeatures.enabled && <ul>{products.map(product => <li key={product.id}><a href={product.productUrl} target="_blank" rel="noopener noreferrer" aria-label={`${translateContent(product.productName, ko ? 'ko' : 'en')} (${ko ? '새 탭에서 구매 페이지 열기' : 'open purchase page in new tab'})`}><ProductPhoto product={product} /><span>{translateContent(product.productName, ko ? 'ko' : 'en')}</span></a></li>)}</ul>}
   </section>
 }

@@ -1,10 +1,12 @@
+import { useUiCopy } from '../context/LanguageContext'
 import { IngredientOrderControls, moveIngredient } from './IngredientOrderControls'
 import { Link } from 'react-router-dom'
 import { RecipeImagesEditor, recipeImageDrafts } from './RecipeImagesEditor'
 import { useState } from 'react'
 import { ingredientById, ingredients } from '../data/ingredientCache'
 import { useLanguage } from '../context/LanguageContext'
-import { getIngredientDisplayName } from '../utils/displayNames'
+import { getIngredientDisplayName, getRecipeDisplayName } from '../utils/displayNames'
+import { ingredientMatchesSearch } from '../utils/search'
 import type { Recipe, RecipeItem } from '../types'
 import {
   Dialog,
@@ -25,16 +27,14 @@ type Props = {
 }
 
 export function RecipeEditModal({ recipe, onSave, onClose }: Props) {
+  const copy = useUiCopy()
   const { language, t } = useLanguage()
   const [images, setImages] = useState(() => recipeImageDrafts(recipe))
   const [items, setItems] = useState<RecipeItem[]>(recipe.items)
   const [addSearch, setAddSearch] = useState('')
 
   const filteredIngredients = addSearch.trim()
-    ? ingredients.filter((ing) =>
-        ing.name.toLowerCase().includes(addSearch.toLowerCase()) ||
-        (ing.nameKo ?? '').includes(addSearch),
-      )
+    ? ingredients.filter(ing => ingredientMatchesSearch(ing, addSearch))
     : []
 
   function handleAmountChange(index: number, value: string) {
@@ -80,7 +80,7 @@ export function RecipeEditModal({ recipe, onSave, onClose }: Props) {
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>
-            {language === 'ko' ? recipe.nameKo : recipe.name}
+            {getRecipeDisplayName(recipe, language)}
           </DialogTitle>
         </DialogHeader>
 
@@ -92,9 +92,9 @@ export function RecipeEditModal({ recipe, onSave, onClose }: Props) {
             <Table className="edit-modal__table min-w-[600px]">
               <TableHeader>
                 <TableRow>
-                  <TableHead className="edit-inline__order-cell" aria-label="Reorder" /><TableHead>식재료</TableHead>
-                  <TableHead>양</TableHead>
-                  <TableHead>단위</TableHead>
+                  <TableHead className="edit-inline__order-cell" aria-label="Reorder" /><TableHead>{copy("식재료")}</TableHead>
+                  <TableHead>{copy("양")}</TableHead>
+                  <TableHead>{copy("단위")}</TableHead>
                   <TableHead></TableHead>
                 </TableRow>
               </TableHeader>
@@ -142,7 +142,7 @@ export function RecipeEditModal({ recipe, onSave, onClose }: Props) {
             <div className="relative mt-2">
               <Input
                 type="search"
-                placeholder="식재료 검색해서 추가..."
+                placeholder={copy("식재료 검색해서 추가...")}
                 value={addSearch}
                 onChange={(e) => setAddSearch(e.target.value)}
               />
@@ -168,11 +168,9 @@ export function RecipeEditModal({ recipe, onSave, onClose }: Props) {
 
         <DialogFooter>
           <Button variant="outline" onClick={onClose}>
-            취소
-          </Button>
+            {copy("취소")}</Button>
           <Button onClick={handleSave}>
-            저장
-          </Button>
+            {copy("저장")}</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

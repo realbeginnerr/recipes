@@ -1,0 +1,51 @@
+.resources-page { width: 100%; }
+.resources-page .catalog-container { width: 100%; max-width: 1200px; padding-inline: var(--gutter); margin-inline: auto; }
+.resources-page .catalog-intro { min-height: 200px; padding-block: 0; }
+.resources-page .catalog-intro__inner { min-height: 200px; }
+.resources-page .catalog-intro__inner > div { display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; padding-block: 24px; }
+.resources-content { padding-block: 32px 80px; }
+.resources-toolbar { display: flex; align-items: center; justify-content: flex-end; gap: 12px; }
+.resources-toolbar .catalog-search { min-width: 0; }
+.resources-add { flex-shrink: 0; }
+.resources-categories { display: none; }
+.resources-count { margin: 28px 0 14px; font-size: 13px; color: #596b64; }
+.resources-board { border-top: 2px solid #255a46; border-bottom: 1px solid #e5eae9; }
+.resources-board-heading, .resources-list li { display: grid; grid-template-columns: 64px minmax(0, 1fr) 120px; gap: 16px; align-items: center; padding: 18px 16px; }
+.resources-board-heading { background: #f7f9f7; font-size: 13px; color: #596b64; text-align: center; border-bottom: 1px solid #e5eae9; }
+.resources-board-heading span:nth-child(2) { text-align: left; }
+.resources-list { list-style: none; margin: 0; padding: 0; }
+.resources-list li + li { border-top: 1px solid #e5eae9; }
+.resources-list li:hover { background: #fafbf9; }
+.resource-number, .resources-list time { text-align: center; color: #899591; font-size: 13px; }
+.resource-title { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; min-width: 0; text-align: left; border: 0; background: transparent; color: #122b22; cursor: pointer; padding: 4px 0; font-size: 15px; overflow-wrap: anywhere; }
+.resource-title:hover { color: #255a46; text-decoration: underline; }
+.resource-category { display: inline-block; flex-shrink: 0; border-radius: 4px; background: #edf3ef; color: #255a46; padding: 3px 8px; font-size: 12px; }
+.resources-empty { min-height: 280px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 40px 16px; text-align: center; color: #899591; }
+.resources-empty h2 { font-size: 17px; font-weight: 500; margin: 4px 0 0; color: #596b64; }
+.resources-empty p { font-size: 14px; margin: 0; }
+.resource-form, .resource-detail { width: 100%; margin: 0; }
+.resource-form h2, .resource-detail h2 { font-size: 26px; font-weight: 500; overflow-wrap: anywhere; }
+.resource-form fieldset { border: 0; padding: 0; margin: 0; min-width: 0; display: grid; gap: 20px; }
+.resource-form label { display: grid; gap: 8px; font-size: 14px; }
+.resource-form select { padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; background: white; }
+.resource-form textarea { min-height: 160px; }
+.resource-hint { margin: -8px 0 0; font-size: 13px; color: #596b64; }
+.resource-attachment { overflow-wrap: anywhere; }
+.resource-form-actions { display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px; }
+.resource-detail header { border-bottom: 1px solid #e5eae9; padding: 28px 0; }
+.resource-detail time { color: #899591; font-size: 13px; }
+.resource-body { padding: 32px 0; white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.85; }
+.resource-download { display: flex; align-items: center; gap: 12px; padding: 20px; background: #f4f7f4; border: 1px solid #e5eae9; color: #255a46; overflow-wrap: anywhere; }
+.resource-download svg { flex-shrink: 0; }
+.resources-error { color: #b42318; padding: 14px; background: #fff4f2; }
+@media (max-width: 767px) {
+  .resources-page .catalog-intro, .resources-page .catalog-intro__inner { min-height: 120px; }
+}
+@media (max-width: 600px) {
+  .resources-toolbar .catalog-search { flex: 1; }
+  .resources-board-heading { display: none; }
+  .resources-list li { grid-template-columns: minmax(0, 1fr); gap: 10px; padding: 20px 4px; }
+  .resource-number { display: none; }
+  .resources-list time { text-align: left; }
+  .resources-content { padding-block: 24px 56px; }
+}

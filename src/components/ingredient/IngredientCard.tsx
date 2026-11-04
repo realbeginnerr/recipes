@@ -1,3 +1,4 @@
+import { getIngredientDisplayName } from '../../utils/displayNames'
 import './IngredientCard.css'
 import { useState } from 'react'
 import type { Ingredient, Recipe } from '../../types'
@@ -15,7 +16,7 @@ import { Pencil, Trash2 } from 'lucide-react'
 export function IngredientCard({ ingredient, image, category, storageLocation, related, onEdit, onDelete, deleting = false }: { ingredient: Ingredient; image?: string; category: string; storageLocation?: string; related: Recipe[]; onEdit?: () => void; onDelete?: () => void; deleting?: boolean }) {
   const { language } = useLanguage()
   const ko = language === 'ko'
-  const name = ko ? ingredient.nameKo ?? ingredient.name : ingredient.name
+  const name = getIngredientDisplayName(ingredient, language)
   const validConversion = (unit: string) => Number.isFinite(ingredient.conversions[unit]) && ingredient.conversions[unit] > 0
   const canConvert = validConversion(ingredient.baseUnit)
   const defaultUnit = canConvert && validConversion('g') ? 'g' : ingredient.baseUnit

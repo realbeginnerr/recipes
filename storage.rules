@@ -8,6 +8,13 @@ service firebase.storage {
         && request.auth.token.email_verified == true;
     }
 
+    match /resources/{resourceId}/{fileName} {
+      allow read: if true;
+      allow create, update: if isAdmin()
+        && request.resource.size <= 20 * 1024 * 1024;
+      allow delete: if isAdmin();
+    }
+
     match /recipes/{recipeId}/{fileName} {
       allow read: if true;
       allow create, update: if isAdmin()

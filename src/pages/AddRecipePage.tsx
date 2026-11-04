@@ -1,3 +1,5 @@
+import { useUiCopy } from '../context/LanguageContext'
+import { getRecipeDisplayName } from '../utils/displayNames'
 import { IngredientOrderControls, moveIngredient } from '../components/IngredientOrderControls'
 import { CookingGroupOrderEditor } from '../components/CookingGroupOrderEditor'
 import { cookingGroupOrder } from '../utils/recipeCookingGroups'
@@ -125,6 +127,7 @@ async function translateKoToEn(text: string): Promise<string> {
 }
 
 export function AddRecipePage() {
+  const copy = useUiCopy()
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const blendingTea = searchParams.get('category') === 'blending-tea'
@@ -572,7 +575,7 @@ export function AddRecipePage() {
               value={recipeNameKo}
               aria-invalid={Boolean(nameKoError) || undefined}
               onChange={(e) => { setRecipeNameKo(e.target.value); setNameKoError('') }}
-              placeholder="한글 이름"
+              placeholder={copy("한글 이름")}
             />
             <Input
               value={recipeName}
@@ -618,19 +621,19 @@ export function AddRecipePage() {
             const koTable = (first: boolean) => (
               <div style={first ? undefined : { marginTop: '2rem' }}>
                 <div className="add-recipe__table-label-row">
-                  <p className="add-recipe__table-label">🇰🇷 한국어</p>
+                  <p className="add-recipe__table-label">{copy("🇰🇷 한국어")}</p>
                 </div>
                 <Table className="data-table recipe-table">
                   <TableHeader>
                     <TableRow>
-                      <TableHead className="edit-inline__order-cell" aria-label="Reorder" /><TableHead>식재료</TableHead>
-                      <TableHead>양</TableHead>
-                      <TableHead>단위</TableHead>
-                      <TableHead>탄수화물</TableHead>
-                      <TableHead>단백질</TableHead>
-                      <TableHead>지방</TableHead>
+                      <TableHead className="edit-inline__order-cell" aria-label="Reorder" /><TableHead>{copy("식재료")}</TableHead>
+                      <TableHead>{copy("양")}</TableHead>
+                      <TableHead>{copy("단위")}</TableHead>
+                      <TableHead>{copy("탄수화물")}</TableHead>
+                      <TableHead>{copy("단백질")}</TableHead>
+                      <TableHead>{copy("지방")}</TableHead>
                       <TableHead className="edit-inline__delete-cell">
-                        <Button type="button" variant="ghost" size="icon-sm" title="전체 삭제" className="text-muted-foreground  " onClick={() => { setResolvedRows([]); setEnRows([]); setSideRows([]) }}>✕</Button>
+                        <Button type="button" variant="ghost" size="icon-sm" title={copy("전체 삭제")} className="text-muted-foreground  " onClick={() => { setResolvedRows([]); setEnRows([]); setSideRows([]) }}>✕</Button>
                       </TableHead>
                     </TableRow>
                   </TableHeader>
@@ -639,9 +642,9 @@ export function AddRecipePage() {
                       <TableRow key={i} style={{ background: row.isNew ? '#fffbeb' : undefined }}>
                         <TableCell className="edit-inline__order-cell"><IngredientOrderControls index={i} count={resolvedRows.length} name={row.name} ko={true} disabled={saving} onMove={direction => { setResolvedRows(current => moveIngredient(current, i, direction)); setEnRows(current => moveIngredient(current, i, direction)) }} /></TableCell><TableCell>
                           <Input className="h-7 text-sm" value={row.name} onChange={(e) => handleRowNameChange(i, e.target.value)} />
-                          <Input className="mt-2 cooking-group-input" aria-label={`${row.name} 요리 그룹`} placeholder="요리 그룹 (예: 양념장·반죽)" value={row.cookingGroup ?? ''} onChange={event => setResolvedRows(current => current.map((entry, index) => index === i ? { ...entry, cookingGroup: event.target.value } : entry))} />
+                          <Input className="mt-2 cooking-group-input" aria-label={copy(`${row.name} 요리 그룹`)} placeholder={copy("요리 그룹 (예: 양념장·반죽)")} value={row.cookingGroup ?? ''} onChange={event => setResolvedRows(current => current.map((entry, index) => index === i ? { ...entry, cookingGroup: event.target.value } : entry))} />
                           {unitErrors.has(`${row.ingredientId ?? ''}\u0000${row.unit || 'g'}`) && <p role="alert" className="add-recipe__field-error">{isKo ? `${row.name} (${row.unit || 'g'}): 단위 환산 정보가 없습니다. 환산 정보를 등록하거나 다른 단위를 선택해 주세요.` : `${row.name} (${row.unit || 'g'}): No unit conversion is available. Register a conversion or choose another unit.`}</p>}
-                          {row.isNew && <span style={{ display: 'block', fontSize: '14px', color: '#b45309', fontWeight: 600, marginTop: '2px' }}>새 식재료</span>}
+                          {row.isNew && <span style={{ display: 'block', fontSize: '14px', color: '#b45309', fontWeight: 600, marginTop: '2px' }}>{copy("새 식재료")}</span>}
                         </TableCell>
                         <TableCell><Input type="number" className="h-7 w-20 text-sm" min={0} step={0.1} value={row.amount} onChange={(e) => handleRowAmountChange(i, e.target.value)} /></TableCell>
                         <TableCell>
@@ -658,8 +661,7 @@ export function AddRecipePage() {
                 </Table>
                 {resolvedRows.some((r) => r.isNew) && (
                   <p style={{ fontSize: '14px', color: '#b45309', margin: '0.5rem 0 0' }}>
-                    노란 배경 행은 새로운 식재료입니다. 저장 시 데이터베이스에 추가됩니다.
-                  </p>
+                    {copy("노란 배경 행은 새로운 식재료입니다. 저장 시 데이터베이스에 추가됩니다.")}</p>
                 )}
               </div>
             )
@@ -778,7 +780,7 @@ export function AddRecipePage() {
                   checked={selectedRecipeIds.has(r.id ?? '')}
                   onChange={() => handleToggleRecipe(r.id ?? '')}
                 />
-                {r.nameKo || r.name}
+                {getRecipeDisplayName(r, language)}
               </label>
             </li>
           ))}

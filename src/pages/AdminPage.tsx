@@ -1,3 +1,5 @@
+import { translateContent } from '../i18n/content'
+import { getIngredientDisplayName, getRecipeDisplayName } from '../utils/displayNames'
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAdmin } from '../context/AdminContext'
@@ -48,6 +50,7 @@ export function AdminPage() {
     <div className="admin-actions">
       <Link to="/add-recipe">{ko ? '레시피 추가' : 'Add recipe'}</Link>
       <Link to="/add-ingredient">{ko ? '식재료 추가' : 'Add ingredient'}</Link>
+      <Link to="/resources">{ko ? '자료실 등록 · 관리' : 'Manage resources'}</Link>
       <Link to="/ingredients/manage">{ko ? '식재료 일괄 관리 · 제보 확인' : 'Manage ingredients and reports'}</Link>
       <Link to="/products/new">{ko ? '상품 추가' : 'Add product'}</Link>
       <Link to="/shop-settings">{ko ? '배송·교환·반품 정책 설정' : 'Shop policies'}</Link>
@@ -56,9 +59,9 @@ export function AdminPage() {
     {loading && <p role="status">{ko ? '목록을 불러오는 중입니다…' : 'Loading…'}</p>}
     {error && <div role="alert">{ko ? '일부 목록을 불러오지 못했거나 로그아웃에 실패했습니다.' : 'Some lists or sign-out could not be completed.'}<Button variant="outline" onClick={() => setAttempt(value => value + 1)}>{ko ? '다시 시도' : 'Retry'}</Button></div>}
     {!loading && <>
-      <section><h2>{ko ? '레시피 수정 · 삭제' : 'Edit or delete recipes'}</h2><ul>{recipes.filter(recipe => matches(ko ? recipe.nameKo : recipe.name)).map(recipe => <li key={recipe.id}><Link to={`/recipe/${encodeURIComponent(recipe.id)}/edit`}>{ko ? recipe.nameKo : recipe.name}{recipe.hidden ? (ko ? ' · 비공개' : ' · Hidden') : ''}</Link></li>)}</ul></section>
-      <section><h2>{ko ? '식재료 수정 · 삭제' : 'Edit or delete ingredients'}</h2><ul>{ingredients.filter(ingredient => matches(ko ? ingredient.nameKo ?? ingredient.name : ingredient.name)).map(ingredient => <li key={ingredient.id}><Link to={`/ingredient/${encodeURIComponent(ingredient.id)}/edit`}>{ko ? ingredient.nameKo ?? ingredient.name : ingredient.name}</Link></li>)}</ul></section>
-      <section><h2>{ko ? '상품 수정 · 복제 · 삭제' : 'Manage products'}</h2><ul>{products.filter(product => matches(product.name)).map(product => <li key={product.id}><Link to={`/products/${encodeURIComponent(product.id)}/edit`}>{product.name}{product.draft ? (ko ? ' · 임시 저장' : ' · Draft') : ''}</Link></li>)}</ul></section>
+      <section><h2>{ko ? '레시피 수정 · 삭제' : 'Edit or delete recipes'}</h2><ul>{recipes.filter(recipe => matches(getRecipeDisplayName(recipe, language))).map(recipe => <li key={recipe.id}><Link to={`/recipe/${encodeURIComponent(recipe.id)}/edit`}>{getRecipeDisplayName(recipe, language)}{recipe.hidden ? (ko ? ' · 비공개' : ' · Hidden') : ''}</Link></li>)}</ul></section>
+      <section><h2>{ko ? '식재료 수정 · 삭제' : 'Edit or delete ingredients'}</h2><ul>{ingredients.filter(ingredient => matches(getIngredientDisplayName(ingredient, language))).map(ingredient => <li key={ingredient.id}><Link to={`/ingredient/${encodeURIComponent(ingredient.id)}/edit`}>{getIngredientDisplayName(ingredient, language)}</Link></li>)}</ul></section>
+      <section><h2>{ko ? '상품 수정 · 복제 · 삭제' : 'Manage products'}</h2><ul>{products.filter(product => matches(translateContent(product.name, language))).map(product => <li key={product.id}><Link to={`/products/${encodeURIComponent(product.id)}/edit`}>{translateContent(product.name, language)}{product.draft ? (ko ? ' · 임시 저장' : ' · Draft') : ''}</Link></li>)}</ul></section>
     </>}
   </div>
 }

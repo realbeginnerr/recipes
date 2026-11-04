@@ -1,3 +1,4 @@
+import { getRecipeDisplayName } from '../utils/displayNames'
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { BackLink } from '../components/BackLink'
 import { Button } from '../components/ui/button'
@@ -168,6 +169,6 @@ export function RecipeRoulettePage() {
       </div>}
       <div className="recipe-roulette__actions"><Button type="button" disabled={busy || !recipes.length || error} onClick={spin}>{busy ? (ko ? '돌리는 중…' : 'Spinning…') : (ko ? '돌리기' : 'Spin')}</Button></div>
     </>}
-    <p className="recipe-roulette__status" role="status" aria-live="polite" aria-atomic="true">{busy ? (ko ? '레시피를 고르고 있어요.' : 'Choosing a recipe.') : selected ? (ko ? `${selected.nameKo} 선택! 카드를 누르면 새 탭에서 열립니다.` : `${selected.name} selected! Open the card in a new tab.`) : ''}</p>
+    <p className="recipe-roulette__status" role="status" aria-live="polite" aria-atomic="true">{busy ? (ko ? '레시피를 고르고 있어요.' : 'Choosing a recipe.') : selected ? (ko ? `${selected.nameKo} 선택! 카드를 누르면 새 탭에서 열립니다.` : `${getRecipeDisplayName(selected, language)} selected! Open the card in a new tab.`) : ''}</p>
   </section>
 }

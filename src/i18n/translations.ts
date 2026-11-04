@@ -2,7 +2,7 @@ export type Language = 'en' | 'ko'
 
 export const translations = {
   en: {
-    appTitle: "T's Diet",
+    appTitle: "T's Recipe",
     searchLabel: 'Search',
     searchPlaceholder: 'Recipe or ingredient name…',
     searchButton: 'Search',

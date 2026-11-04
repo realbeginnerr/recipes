@@ -13,13 +13,15 @@ import { recipeMealMacros, recipeProteinPowderGrams } from '../../utils/recipeNu
 import { categoryEnglish, getRecipeCategories } from '../../utils/recipeCategory'
 import { getTeaTags, teaCategoryEnglish } from '../../utils/teaCategory'
 import { discountedPrice, sanitizeProductHtml } from '../../utils/product'
+import { getRecipeDisplayName } from '../../utils/displayNames'
+import { translateContent } from '../../i18n/content'
 
 type CardVariant = 'recipe' | 'product'
 
 export function RecipeCard({ recipe, openInNewTab = false, variant = 'recipe' }: { recipe: Recipe; openInNewTab?: boolean; variant?: CardVariant }) {
   const navigate = useNavigate()
   const { language } = useLanguage()
-  const name = language === 'ko' ? recipe.nameKo : recipe.name
+  const name = getRecipeDisplayName(recipe, language)
   const minutes = recipe.cookingTimeMinutes
   const cookingTime = minutes === undefined
     ? (language === 'ko' ? '확인필요' : 'To be confirmed')
@@ -35,7 +37,7 @@ export function RecipeCard({ recipe, openInNewTab = false, variant = 'recipe' }:
   const powderGrams = variant === 'recipe' ? recipeProteinPowderGrams(recipe) : 0
   const price = recipe.productPricing ? discountedPrice({ pricing: recipe.productPricing }) : null
   const regularPrice = recipe.productPricing?.regular ?? null
-  const description = variant === 'product' ? (new DOMParser().parseFromString(sanitizeProductHtml(recipe.productDescription ?? recipe.memo ?? '').replace(/<\/(?:p|div|li|h[1-6])>|<br\s*\/?>/gi, ' '), 'text/html').body.textContent ?? '').replace(/\s+/g, ' ').trim() : ''
+  const description = variant === 'product' ? (new DOMParser().parseFromString(sanitizeProductHtml(translateContent(recipe.productDescription ?? recipe.memo, language)).replace(/<\/(?:p|div|li|h[1-6])>|<br\s*\/?>/gi, ' '), 'text/html').body.textContent ?? '').replace(/\s+/g, ' ').trim() : ''
 
   function handleClick() {
     if (!recipe.productId) trackRecipeView(recipe.nameKo, recipe.name)

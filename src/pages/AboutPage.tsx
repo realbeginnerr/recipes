@@ -27,7 +27,7 @@ export function AboutPage() {
       <p style={{ whiteSpace: 'pre-line' }}>{copy.meeting}</p>
     </StorySection>
     <StorySplit number="03" titleId="story-meal" title={language === 'ko' ? copy.mealTitle.split('어디에').map((part, index) => <span key={index}>{index > 0 && <strong>어디에</strong>}{part}</span>) : copy.mealTitle} tone="dark" imageSide="right" image={{ src: `${import.meta.env.BASE_URL}images/service/03.png`, alt: copy.bowlsAlt }}>
-      {copy.mealFirst.split('\n\n').map((paragraph, index) => <p key={index}>{paragraph}</p>)}{'mealLast' in copy && <p>{copy.mealLast}</p>}
+      {copy.mealFirst.split('\n\n').map((paragraph, index) => <p key={index}>{paragraph}</p>)}
     </StorySplit>
     <StorySection number="04" titleId="story-continue" title={language === 'ko' ? <><strong>내 입맛</strong>에 맞추기</> : copy.continueTitle} tone="soft">
       <p style={{ whiteSpace: 'pre-line' }}>{copy.continue}</p>

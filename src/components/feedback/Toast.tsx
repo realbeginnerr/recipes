@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { Button } from '@/components/ui/button'
+import { useUiCopy } from '../../context/LanguageContext'
 
 type ToastType = 'success' | 'error' | 'info'
 type ToastAction = { label: string; onClick: () => void }
@@ -14,6 +15,7 @@ type ToastProps = {
 }
 
 export function Toast({ message, type, onClose, action, duration = action ? 8000 : 3000 }: ToastProps) {
+  const copy = useUiCopy()
   const [visible, setVisible] = useState(false)
 
   useEffect(() => {
@@ -33,7 +35,7 @@ export function Toast({ message, type, onClose, action, duration = action ? 8000
 
   return createPortal(
     <div role={type === 'error' ? 'alert' : 'status'} className={`toast toast--${type} ${visible ? 'toast--visible' : ''}`}>
-      <span className="toast__message">{message}</span>
+      <span className="toast__message">{copy(message)}</span>
       {action && <Button type="button" variant="link" size="content" className="text-inherit underline" onClick={() => { onClose(); action.onClick() }}>{action.label}</Button>}
       <Button
         type="button"

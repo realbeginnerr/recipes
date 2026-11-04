@@ -1,6 +1,7 @@
 import type { Ingredient } from '../types'
 import type { Recipe } from '../types'
 import { ingredientById } from '../data/ingredientCache'
+import { getIngredientDisplayName, getRecipeDisplayName } from './displayNames'
 
 export function ingredientMatchesSearch(
   ingredient: Ingredient,
@@ -11,6 +12,7 @@ export function ingredientMatchesSearch(
     ingredient.id,
     ingredient.name,
     ingredient.nameKo ?? '',
+    getIngredientDisplayName(ingredient, 'en'),
   ]
 
   return names.some((name) => name.toLowerCase().includes(normalized))
@@ -23,6 +25,7 @@ export function recipeMatchesSearch(
   const normalized = query.toLowerCase()
   if (recipe.nameKo.toLowerCase().includes(normalized)) return true
   if (recipe.name.toLowerCase().includes(normalized)) return true
+  if (getRecipeDisplayName(recipe, 'en').toLowerCase().includes(normalized)) return true
   return recipe.items.some((item) => {
     const ingredient = ingredientById.get(item.ingredientId)
     return ingredient ? ingredientMatchesSearch(ingredient, query) : false

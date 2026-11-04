@@ -1,3 +1,4 @@
+import { translateContent } from '../../i18n/content'
 import { useEffect, useState } from 'react'
 import { Plus, ExternalLink } from 'lucide-react'
 import { Popover, PopoverTrigger, PopoverContent, PopoverTitle } from '../ui/popover'
@@ -44,11 +45,11 @@ export function ShoppableImage({ image, tags, alt, ko, onImageClick, square = fa
       const position = square ? squareTagPosition(tag.positionX, tag.positionY, ratio) : { x: tag.positionX, y: tag.positionY }
       if (position.x < 0 || position.x > 100 || position.y < 0 || position.y > 100) return null
       return <Popover key={tag.id} open={active === tag.id} onOpenChange={open => setActive(current => open ? tag.id : current === tag.id ? null : current)}>
-        <PopoverTrigger className="shoppable-tag" style={{ left: `${position.x}%`, top: `${position.y}%` }} openOnHover delay={100} closeDelay={250} aria-label={ko ? `${product.productName} 상품 정보` : `Product information: ${product.productName}`}><Plus size={18} aria-hidden="true" /></PopoverTrigger>
+        <PopoverTrigger className="shoppable-tag" style={{ left: `${position.x}%`, top: `${position.y}%` }} openOnHover delay={100} closeDelay={250} aria-label={ko ? `${translateContent(product.productName, ko ? 'ko' : 'en')} 상품 정보` : `Product information: ${translateContent(product.productName, ko ? 'ko' : 'en')}`}><Plus size={18} aria-hidden="true" /></PopoverTrigger>
         <PopoverContent className="shoppable-popover" positionerClassName="shoppable-positioner" sideOffset={6} initialFocus={interaction => interaction === 'keyboard' ? true : false}>
-          <a className="shoppable-product-link" href={product.productUrl} target="_blank" rel="noopener noreferrer" aria-label={`${product.productName} (${ko ? '새 탭에서 구매 페이지 열기' : 'open purchase page in new tab'})`}>
+          <a className="shoppable-product-link" href={product.productUrl} target="_blank" rel="noopener noreferrer" aria-label={`${translateContent(product.productName, ko ? 'ko' : 'en')} (${ko ? '새 탭에서 구매 페이지 열기' : 'open purchase page in new tab'})`}>
             <ProductPhoto key={product.thumbnailUrl} product={product} />
-            <span className="shoppable-product-copy"><PopoverTitle>{product.productName}</PopoverTitle>{product.brandName && <span>{product.brandName}</span>}{typeof product.price === 'number' && Number.isFinite(product.price) && product.price >= 0 && <strong>{product.price.toLocaleString(ko ? 'ko-KR' : 'en-US')}원</strong>}</span>
+            <span className="shoppable-product-copy"><PopoverTitle>{translateContent(product.productName, ko ? 'ko' : 'en')}</PopoverTitle>{product.brandName && <span>{product.brandName}</span>}{typeof product.price === 'number' && Number.isFinite(product.price) && product.price >= 0 && <strong>{product.price.toLocaleString(ko ? 'ko-KR' : 'en-US')}{ko ? '원' : ' KRW'}</strong>}</span>
             <ExternalLink size={16} aria-hidden="true" />
           </a>
         </PopoverContent>

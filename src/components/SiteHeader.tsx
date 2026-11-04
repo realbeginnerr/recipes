@@ -1,3 +1,4 @@
+import { useUiCopy } from '../context/LanguageContext'
 import { useEffect, useRef, useState } from 'react'
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { Button } from './ui/button'
@@ -11,6 +12,7 @@ import { CONTACT_URL } from '../constants/contact'
 import { shopFeatures } from '../constants/shopFeatures'
 
 export function SiteHeader() {
+  const copy = useUiCopy()
   const { pathname } = useLocation()
   const navigate = useNavigate()
   const { language } = useLanguage()
@@ -24,6 +26,7 @@ export function SiteHeader() {
     { to: '/', label: ko ? '홈' : 'Home', end: true },
     { to: '/recipes', label: ko ? '레시피' : 'Recipes', end: false },
     { to: '/ingredients', label: ko ? '식재료' : 'Ingredients', end: false },
+    { to: '/resources', label: ko ? '자료실' : 'Resources', end: false },
     ...(shopFeatures.enabled ? [{ to: '/blending-tea', label: 'Shop', end: false }] : []),
   ]
   useEffect(() => { setMenuOpen(false) }, [pathname])
@@ -41,7 +44,7 @@ export function SiteHeader() {
   }}>{isAdmin ? (ko ? '로그아웃' : 'Sign out') : (ko ? '관리자' : 'Admin')}</Button>
   return <header className="reference-header" onKeyDown={event => { if (event.key === 'Escape') { setMenuOpen(false); menuButton.current?.focus() } }}>
       <div className="reference-container reference-header-inner">
-        <Link className="reference-brand" to="/" aria-label="T's Recipe 홈">
+        <Link className="reference-brand" to="/" aria-label={copy("T's Recipe 홈")}>
           T'S RECIPE
         </Link>
         <nav className="reference-desktop-nav" aria-label={ko ? '주 메뉴' : 'Main navigation'}>{navLinks}{contactLink}</nav>

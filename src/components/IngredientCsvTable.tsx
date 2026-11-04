@@ -1,3 +1,4 @@
+import { getIngredientDisplayName } from '../utils/displayNames'
 import type { FirestoreIngredient } from '../services/ingredientService'
 import { useState } from 'react'
 import { ArrowDown, ArrowUp, ArrowUpDown } from 'lucide-react'
@@ -32,7 +33,7 @@ export function IngredientCsvTable({ ingredients }: { ingredients: FirestoreIngr
     const quantity = (perUnit?: number) => grams !== undefined && perUnit && perUnit > 0 ? grams / perUnit : undefined
     return {
       ingredient,
-      name: ko ? ingredient.nameKo || ingredient.name : ingredient.name,
+      name: getIngredientDisplayName(ingredient, ko ? 'ko' : 'en'),
       values: [grams, quantity(ingredient.gramsPerTbsp), quantity(ingredient.gramsPerTsp), quantity(ingredient.gramsPerCup), quantity(ingredient.gramsPerEach), quantity(ingredient.gramsPerCan ?? ingredient.gramsPerPack), ingredient.carbs, ingredient.protein, ingredient.fat],
     }
   }).sort((a, b) => {

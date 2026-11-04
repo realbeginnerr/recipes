@@ -90,6 +90,7 @@ export function RecipeDetailPage() {
 
   async function handleSaveRecipe(updated: Recipe) {
     await updateRecipeInFirestore(updated)
+    navigate(`/recipe/${encodeURIComponent(updated.id)}`, { replace: true })
     setRecipes((prev) => prev.map((r) => (r.id === updated.id ? updated : r)))
     setRecipeStates((current) => ({
       ...current,

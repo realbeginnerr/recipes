@@ -1,3 +1,5 @@
+import { getIngredientDisplayName, getRecipeDisplayName } from '../utils/displayNames'
+import { useUiCopy } from '../context/LanguageContext'
 import { useAddPageAccess } from '../components/AddPageAccessProvider'
 import { ContentState, LoadingState } from '../components/feedback/ContentState'
 import { RegistrationActions } from '../components/catalog/RegistrationRequestButton'
@@ -22,6 +24,7 @@ import type { Recipe } from '../types'
 import './RecipePage.css'
 
 export function RecipePage({ blendingTea = false }: { blendingTea?: boolean }) {
+  const copy = useUiCopy()
   const { requestAccess } = useAddPageAccess()
   const { homeVersion, resetHome } = useSearch()
   const [searchParams, setSearchParams] = useSearchParams()
@@ -32,7 +35,7 @@ export function RecipePage({ blendingTea = false }: { blendingTea?: boolean }) {
   const ko = language === 'ko'
   const itemLabel = blendingTea ? (ko ? '차' : 'Tea') : (ko ? '레시피' : 'Recipes')
   const selectedIngredient = ingredientById.get(ingredientId)
-  const ingredientName = selectedIngredient ? (ko ? selectedIngredient.nameKo ?? selectedIngredient.name : selectedIngredient.name) : ingredientId
+  const ingredientName = selectedIngredient ? getIngredientDisplayName(selectedIngredient, language) : ingredientId
   const [recipes, setRecipes] = useState<Recipe[]>(staticRecipes)
   const [category, setCategory] = useState<RecipeCategory[]>([])
   const [teaCategory, setTeaCategory] = useState<TeaCategory>('전체')
@@ -73,7 +76,7 @@ export function RecipePage({ blendingTea = false }: { blendingTea?: boolean }) {
     .filter(recipe => !ingredientId || recipeContainsIngredient(recipe, ingredientId))
     .sort((a, b) => {
       if (sortOrder.startsWith('alpha')) {
-        const result = (ko ? a.nameKo : a.name).localeCompare(ko ? b.nameKo : b.name, language)
+        const result = getRecipeDisplayName(a, language).localeCompare(getRecipeDisplayName(b, language), language)
         return sortOrder === 'alpha-asc' ? result : -result
       }
       if (sortOrder === 'cooked-desc') {
@@ -101,7 +104,7 @@ export function RecipePage({ blendingTea = false }: { blendingTea?: boolean }) {
   return <section className="recipe-catalog recipe-list-catalog" lang={language}>
     <PageIntro
       backgroundImage={blendingTea ? `${import.meta.env.BASE_URL}images/service/tea-header.png` : `${import.meta.env.BASE_URL}images/service/04.jpg`}
-      title={blendingTea ? '나중에 사려고 찜해둔 것들' : (ko ? '레시피' : 'Gotta eat something tasty tomorrow too')}
+      title={blendingTea ? copy("나중에 사려고 찜해둔 것들") : (ko ? '레시피' : 'Gotta eat something tasty tomorrow too')}
       description={blendingTea ? '' : (ko ? '' : 'Find the recipe you’re craving with categories and search.')}
     />
     <CatalogToolbar>

@@ -1,9 +1,10 @@
+import { useUiCopy } from '../context/LanguageContext'
 import { useAddPageAccess } from '../components/AddPageAccessProvider'
 import { useEffect, useRef, useState, useCallback } from 'react'
 
 import { useLanguage } from '../context/LanguageContext'
 import { useAdmin } from '../context/AdminContext'
-import { toTitleCase } from '../utils/displayNames'
+import { toTitleCase, getIngredientDisplayName, getRecipeDisplayName, getUnitDisplayName } from '../utils/displayNames'
 import { IngredientCsvTable } from '../components/IngredientCsvTable'
 import {
   loadIngredientsFromFirestore,
@@ -34,7 +35,7 @@ function dedupeIngredients(isKo: boolean, order: 'alpha-asc' | 'alpha-desc' = 'a
     if (!seen.has(ing.id)) { seen.add(ing.id); list.push(ing) }
   }
   list.sort((a, b) => {
-    const cmp = (isKo ? a.nameKo : a.name).localeCompare(isKo ? b.nameKo : b.name, isKo ? 'ko' : 'en')
+    const cmp = getIngredientDisplayName(a, isKo ? 'ko' : 'en').localeCompare(getIngredientDisplayName(b, isKo ? 'ko' : 'en'), isKo ? 'ko' : 'en')
     return order === 'alpha-asc' ? cmp : -cmp
   })
   return list
@@ -62,6 +63,7 @@ type NewRow = {
 const EMPTY_NEW: NewRow = { name: '', nameKo: '', baseAmount: '100', baseUnit: 'g', carbs: '', protein: '', fat: '', gramsPerTbsp: '', gramsPerTsp: '', gramsPerCup: '', gramsPerEach: '', gramsPerCan: '', gramsPerPack: '' }
 
 export function IngredientsPage({ visibleIds }: { visibleIds?: string[] } = {}) {
+  const copy = useUiCopy()
   const embedded = visibleIds !== undefined
   const { language } = useLanguage()
   const { isAdmin } = useAdmin()
@@ -352,10 +354,10 @@ export function IngredientsPage({ visibleIds }: { visibleIds?: string[] } = {}) 
                 <TableHead>{isKo ? '지방' : 'Fat'}</TableHead>
                 <TableHead>1T=?g</TableHead>
                 <TableHead>1t=?g</TableHead>
-                <TableHead>1컵=?g</TableHead>
-                <TableHead>1개=?g</TableHead>
-                <TableHead>1캔=?g</TableHead>
-                <TableHead>1팩=?g</TableHead>
+                <TableHead>{copy("1컵=?g")}</TableHead>
+                <TableHead>{copy("1개=?g")}</TableHead>
+                <TableHead>{copy("1캔=?g")}</TableHead>
+                <TableHead>{copy("1팩=?g")}</TableHead>
                 <TableHead />
               </TableRow>
             </TableHeader>
@@ -367,7 +369,7 @@ export function IngredientsPage({ visibleIds }: { visibleIds?: string[] } = {}) 
                       <Input
                         value={ing.nameKo || ing.name}
                         onChange={(e) => updateEditRow(ing.id, 'nameKo', e.target.value)}
-                        placeholder="한글 이름"
+                        placeholder={copy("한글 이름")}
                       />
                       {isKo && (
                         <Input
@@ -506,13 +508,13 @@ export function IngredientsPage({ visibleIds }: { visibleIds?: string[] } = {}) 
                 ) : (
                   <TableRow key={ing.id}>
                     <TableCell style={{ color: isAddedSugarIngredient(ing.nameKo) ? '#dc2626' : isRefinedCarb(ing.nameKo, ing.name, ing.isRefinedCarb) ? '#ea580c' : undefined }}>
-                      {isKo && ing.nameKo ? ing.nameKo : toTitleCase(ing.name)}
+                      {getIngredientDisplayName(ing, language)}
                       {isKo && ing.name && (
                         <span style={{ display: 'block', fontSize: '14px', opacity: 0.5 }}>{toTitleCase(ing.name)}</span>
                       )}
                     </TableCell>
                     <TableCell>{formatTableNumber(ing.baseAmount)}</TableCell>
-                    <TableCell>{ing.baseUnit}</TableCell>
+                    <TableCell>{getUnitDisplayName(ing.baseUnit, language)}</TableCell>
                     <TableCell>{formatTableNumber(Number(ing.carbs), 1, 1)}</TableCell>
                     <TableCell>{formatTableNumber(Number(ing.protein), 1, 1)}</TableCell>
                     <TableCell>{formatTableNumber(Number(ing.fat), 1, 1)}</TableCell>
@@ -702,7 +704,7 @@ export function IngredientsPage({ visibleIds }: { visibleIds?: string[] } = {}) 
           {deleteWarning?.usedIn.map((r) => (
             <li key={r.id}>
               <a href={`/recipes/#${r.id}`} target="_blank" rel="noopener noreferrer" className="ing-delete-modal__link">
-                {isKo ? (r.nameKo || r.name) : r.name}
+                {getRecipeDisplayName(r, language)}
               </a>
             </li>
           ))}

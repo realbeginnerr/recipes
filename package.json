@@ -4,11 +4,11 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite --port 5173 --strictPort",
+    "dev": "node scripts/dev.mjs",
     "build": "tsc && vite build",
     "prepreview": "npm run build",
     "preview": "vite preview --port 4173 --strictPort",
-    "test:regressions": "vitest run tests/UnitConversionWarning.test.tsx tests/IngredientOrderControls.test.tsx tests/RecipeTableColumns.test.tsx tests/refreshRoute.test.ts tests/recipeGallery.test.ts tests/recipeSave.test.ts tests/AddRecipePage.test.tsx tests/SearchField.test.tsx",
+    "test:regressions": "vitest run tests/UnitConversionWarning.test.tsx tests/IngredientOrderControls.test.tsx tests/RecipeTableColumns.test.tsx tests/refreshRoute.test.ts tests/recipeGallery.test.ts tests/recipeSave.test.ts tests/AddRecipePage.test.tsx tests/SearchField.test.tsx tests/EnglishLocalization.test.tsx tests/RecipeManagementPage.test.tsx tests/ResourcesPage.test.tsx tests/resourceService.test.ts tests/devServer.test.ts",
     "test": "vitest run",
     "test:product-rules": "node scripts/check-product-rules.mjs"
   },

@@ -1,3 +1,4 @@
+import { getIngredientDisplayName } from '../utils/displayNames'
 import { ContentState } from '../components/feedback/ContentState'
 import { RegistrationActions } from '../components/catalog/RegistrationRequestButton'
 import { useAddPageAccess } from '../components/AddPageAccessProvider'
@@ -51,7 +52,7 @@ export function IngredientsPage() {
     if (!isAdmin || deletingIds.current.has(id)) return
     const ingredient = ingredients.find(item => item.id === id)
     if (!ingredient) return
-    const name = ko ? ingredient.nameKo ?? ingredient.name : ingredient.name
+    const name = getIngredientDisplayName(ingredient, language)
     if (!window.confirm(ko ? `'${name}' 식재료를 정말 삭제할까요?` : `Are you sure you want to delete '${name}'?`)) return
     deletingIds.current.add(id)
     setDeleting(new Set(deletingIds.current))
@@ -105,7 +106,7 @@ export function IngredientsPage() {
     return () => { cancelled = true }
   }, [attempt])
   const visible = useMemo(() => ingredients.filter(ingredient => {
-    const match = `${ingredient.name} ${ingredient.nameKo ?? ''}`.toLocaleLowerCase().includes(query.trim().toLocaleLowerCase())
+    const match = `${getIngredientDisplayName(ingredient, language)} ${ingredient.name} ${ingredient.nameKo ?? ''}`.toLocaleLowerCase().includes(query.trim().toLocaleLowerCase())
     const selectedCategories = category.filter(value => value !== '즐겨찾기' && !storageLocations.includes(value))
     const selectedStorage = category.filter(value => storageLocations.includes(value))
     const details = presentation(ingredient)
@@ -113,7 +114,7 @@ export function IngredientsPage() {
       && (selectedCategories.length === 0 || selectedCategories.includes(details.category))
       && (selectedStorage.length === 0 || selectedStorage.includes(details.storageLocation ?? ''))
   }).sort((a, b) => {
-    return (ko ? a.nameKo ?? a.name : a.name).localeCompare(ko ? b.nameKo ?? b.name : b.name, language)
+    return getIngredientDisplayName(a, language).localeCompare(getIngredientDisplayName(b, language), language)
   }), [ingredients, query, category, favorites, ko, language])
 
   return <section className="recipe-catalog ingredient-catalog" lang={language}>

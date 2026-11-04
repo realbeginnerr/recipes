@@ -7,6 +7,7 @@ import {
   type ReactNode,
 } from 'react'
 import { translations, type Language } from '../i18n/translations'
+import { translateUi } from '../i18n/uiCopy'
 
 type LanguageContextValue = {
   language: Language
@@ -46,4 +47,14 @@ export function useLanguage() {
 export function useSetLanguage() {
   const { setLanguage } = useLanguage()
   return setLanguage
+}
+
+// Shared field components also render in standalone previews without a provider.
+export function useUiCopy() {
+  const language = useUiLanguage()
+  return useMemo(() => (text: string) => translateUi(text, language), [language])
+}
+
+export function useUiLanguage() {
+  return useContext(LanguageContext)?.language ?? 'ko'
 }

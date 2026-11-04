@@ -2,5 +2,5 @@
 .cooking-steps-editor h3 { margin: 0; font-size: 16px; font-weight: 500; }
 .cooking-step-editor { display: grid; gap: 8px; }
 .cooking-step-editor label { font-size: 14px; font-weight: 500; }
-.recipe-tab-text-field .cooking-step-editor textarea { min-height: 100px; }
+.cooking-step-editor textarea, .recipe-tab-text-field .cooking-step-editor textarea { field-sizing: fixed; min-height: 0; height: 46px; line-height: 20px; resize: vertical; }
 .cooking-step-editor > button, .cooking-steps-editor > button { justify-self: start; }

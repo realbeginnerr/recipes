@@ -1,3 +1,5 @@
+import { translateContent } from '../i18n/content'
+import { getIngredientDisplayName, getRecipeDisplayName } from '../utils/displayNames'
 import { RelatedImageProducts } from '../components/recipe/RelatedImageProducts'
 import { CookingSteps } from '../components/CookingSteps'
 import { recipeCookingSteps } from '../utils/cookingSteps'
@@ -99,7 +101,7 @@ function RecipeImageGallery({ recipe, name, ko }: { recipe: Recipe; name: string
       </ImageDialog.Portal>
     </ImageDialog.Root>
     {navigation(ko ? '메인' : 'Main')}
-    {galleryImages[activeIndex] && <RelatedImageProducts key={galleryImages[activeIndex].id} imageId={galleryImages[activeIndex].id} tags={recipe.productTags ?? []} ko={ko} description={recipe.photoProductDescription} purchaseUrl={recipe.photoProductUrl} />}
+    {galleryImages[activeIndex] && <RelatedImageProducts key={galleryImages[activeIndex].id} imageId={galleryImages[activeIndex].id} tags={recipe.productTags ?? []} ko={ko} description={translateContent(recipe.photoProductDescription, ko ? 'ko' : 'en')} purchaseUrl={recipe.photoProductUrl} />}
   </div>
 }
 
@@ -109,7 +111,7 @@ function RecipeNutrition({ recipe }: { recipe: Recipe }) {
   const { toast, showToast, closeToast } = useToast()
   const navigate = useNavigate()
   const ko = language === 'ko'
-  const name = ko ? recipe.nameKo : recipe.name
+  const name = getRecipeDisplayName(recipe, language)
   const [rows, setRows] = useState<RecipeRowState[]>(() => initialRows(recipe))
   const [adjustmentMode, setAdjustmentMode] = useState<'all' | 'single'>('all')
   const amountEdit = useRef<RecipeRowState[] | null>(null)
@@ -131,7 +133,7 @@ function RecipeNutrition({ recipe }: { recipe: Recipe }) {
   const storageIcons = { 냉장실: '🗄️', 냉동실: '❄️', 실온보관: '🧂', '': '❓' }
   const tableGroups = tableMode === 'storage'
     ? storageGroups.map(({ location, entries }) => ({ key: location, title: ko ? location || '미지정' : storageLabels[location], icon: storageIcons[location], entries }))
-    : recipeCookingGroups(rows, recipe.items, recipe.cookingGroupOrder).map(({ name, entries }) => ({ key: name, title: name || (ko ? '기본 재료' : 'Basic ingredients'), icon: '', entries }))
+    : recipeCookingGroups(rows, recipe.items, recipe.cookingGroupOrder).map(({ name, entries }) => ({ key: name, title: translateContent(name, language) || (ko ? '기본 재료' : 'Basic ingredients'), icon: '', entries }))
   const platingBlocks = (recipe.platingBlocks ?? [
     ...(recipe.mealImages ?? []).map((value, index) => ({ id: 'legacy-image-' + index, type: 'image' as const, value })),
     { id: 'legacy-text', type: 'text' as const, value: recipe.mealContent ?? '' },
@@ -139,7 +141,7 @@ function RecipeNutrition({ recipe }: { recipe: Recipe }) {
   const total = sum(macros)
   const portion = { carbs: total.carbs / divisions, protein: total.protein / divisions, fat: total.fat / divisions }
   const meal = sum([portion, ...sides.map(macrosFor)])
-  const label = (ingredient: Ingredient | undefined, fallback: string) => ingredient ? (ko ? ingredient.nameKo ?? ingredient.name : ingredient.name) : fallback
+  const label = (ingredient: Ingredient | undefined, fallback: string) => ingredient ? getIngredientDisplayName(ingredient, language) : fallback
   function ingredientNameCell(row: RecipeRowState) {
     const ingredient = ingredientFor(row.ingredientId)
     const displayName = label(ingredient, row.ingredientId)
@@ -242,7 +244,7 @@ function RecipeNutrition({ recipe }: { recipe: Recipe }) {
       {tableMode === 'meal' ? (
         <article className="meal-blog" aria-label={ko ? '플레이팅' : 'Plating'}>
           {platingBlocks.length ? <div className="plating-block-content">{platingBlocks.map((block, index) => block.type === 'text'
-            ? <div key={block.id} className="meal-blog__prose"><p>{block.value}</p></div>
+            ? <div key={block.id} className="meal-blog__prose"><p>{translateContent(block.value, language)}</p></div>
             : <div key={block.id} className="meal-blog__images"><figure><img src={block.value} alt={ko ? `플레이팅 사진 ${index + 1}` : `Plating photo ${index + 1}`} loading="lazy" /></figure></div>)}</div>
             : <p className="meal-blog__empty">{ko ? '작성한 내용 없음' : 'No content yet'}</p>}
         </article>
@@ -271,7 +273,7 @@ function RecipeNutrition({ recipe }: { recipe: Recipe }) {
       </NutritionTable>
       <TableNutritionSummary total={meal} showRatio />
       <div hidden={tableMode !== 'cooking'}><CookingSteps recipeId={recipe.id} steps={recipeCookingSteps(recipe)} ko={ko} /></div>
-      {tableMode === 'storage' && memo.trim() && <section className="detail-notes"><h2>{ko ? '메모' : 'Notes'}</h2><p>{memo}</p></section>}
+      {tableMode === 'storage' && memo.trim() && <section className="detail-notes"><h2>{ko ? '메모' : 'Notes'}</h2><p>{translateContent(memo, language)}</p></section>}
       </section>}
       </div>
     </div>

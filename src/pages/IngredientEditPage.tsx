@@ -1,3 +1,4 @@
+import { useUiCopy } from '../context/LanguageContext'
 import { INGREDIENT_UNITS, CONVERSION_FIELDS, type ConversionField } from '../constants/ingredientUnits'
 import { formatTableNumber } from '../utils/numberFormatting'
 import { useEffect, useState } from 'react'
@@ -57,6 +58,7 @@ export function IngredientEditPage() {
 }
 
 export function IngredientEditor({ mode }: { mode: 'create' | 'edit' }) {
+  const copy = useUiCopy()
   const creating = mode === 'create'
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
@@ -229,7 +231,7 @@ export function IngredientEditor({ mode }: { mode: 'create' | 'edit' }) {
         <legend className="text-sm font-semibold">{isKo ? '보관 장소' : 'Storage location'}</legend>
         <div className="flex flex-wrap gap-2">
           {([
-            ['', '미지정', 'Unspecified'], ['냉장실', '냉장실', 'Fridge'],
+            ['', copy("미지정"), 'Unspecified'], ['냉장실', '냉장실', 'Fridge'],
             ['냉동실', '냉동실', 'Freezer'], ['실온보관', '실온보관', 'Room temperature'],
           ] as const).map(([value, labelKo, labelEn]) => <Button key={value} type="button" size="sm" variant={(draft.storageLocation ?? '') === value ? 'default' : 'outline'} aria-pressed={(draft.storageLocation ?? '') === value} onClick={() => setDraft(current => current ? { ...current, storageLocation: value } : current)}>{isKo ? labelKo : labelEn}</Button>)}
         </div>

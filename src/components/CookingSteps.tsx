@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Button } from './ui/button'
 import { Textarea } from './ui/textarea'
 import type { CookingStep } from '../utils/cookingSteps'
+import { translateContent } from '../i18n/content'
 import './CookingSteps.css'
 
 export function CookingStepsEditor({ steps, onChange, disabled, ko }: { steps: CookingStep[]; onChange: (steps: CookingStep[]) => void; disabled: boolean; ko: boolean }) {
@@ -9,7 +10,7 @@ export function CookingStepsEditor({ steps, onChange, disabled, ko }: { steps: C
     <h3>{ko ? '요리 단계' : 'Cooking steps'}</h3>
     {steps.map((step, index) => <div key={step.id} className="cooking-step-editor">
       <label htmlFor={`cooking-step-${step.id}`}>{ko ? `${index + 1}단계` : `Step ${index + 1}`}</label>
-      <Textarea id={`cooking-step-${step.id}`} value={step.text} rows={3} disabled={disabled} onChange={event => onChange(steps.map(current => current.id === step.id ? { ...current, text: event.target.value } : current))} />
+      <Textarea id={`cooking-step-${step.id}`} value={step.text} rows={1} disabled={disabled} onChange={event => onChange(steps.map(current => current.id === step.id ? { ...current, text: event.target.value } : current))} />
       <Button type="button" variant="ghost" disabled={disabled} onClick={() => onChange(steps.filter(current => current.id !== step.id))}>{ko ? '단계 삭제' : 'Delete step'}</Button>
     </div>)}
     <Button type="button" variant="outline" disabled={disabled} onClick={() => onChange([...steps, { id: crypto.randomUUID(), text: '' }])}>{ko ? '단계 추가' : 'Add step'}</Button>
@@ -43,7 +44,7 @@ export function CookingSteps({ recipeId, steps, ko }: { recipeId: string; steps:
         if (event.target.checked) value[step.id] = step.text
         else delete value[step.id]
         save(value)
-      }} /><span className="cooking-step-number">{index + 1}.</span><span className="cooking-step-text">{step.text}</span>
+      }} /><span className="cooking-step-number">{index + 1}.</span><span className="cooking-step-text">{translateContent(step.text, ko ? 'ko' : 'en')}</span>
       </label>
     </li>)}</ol>
   </section>
