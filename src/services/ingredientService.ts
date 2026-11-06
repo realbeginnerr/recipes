@@ -1,7 +1,7 @@
 import { collection, addDoc, getDocs, setDoc, deleteDoc, doc } from 'firebase/firestore'
 import { db } from '../firebase'
 import { cacheIngredient, removeCachedIngredient } from '../data/ingredientCache'
-import { canonicalIngredientId } from '../data/ingredientCatalogOverrides'
+import { canonicalIngredientId, legacyIngredientIdsFor } from '../data/ingredientCatalogOverrides'
 import type { Ingredient } from '../types'
 import { ingredientPresentation } from '../data/ingredientPresentation'
 import { CONVERSION_FIELDS, INGREDIENT_UNITS } from '../constants/ingredientUnits'
@@ -107,8 +107,9 @@ function registerIngredient(ing: FirestoreIngredient) {
     return
   }
   const normalized = ing
+  const aliases = [...(normalized.legacyIds ?? []), ...legacyIngredientIdsFor(ing.id)]
   ingredientByDocumentId.set(ing.id, normalized)
-  for (const legacyId of normalized.legacyIds ?? []) ingredientByDocumentId.set(legacyId, normalized)
+  for (const legacyId of aliases) ingredientByDocumentId.set(legacyId, normalized)
   for (const [key, val] of ingredientByName.entries()) {
     if (val.id === ing.id) ingredientByName.delete(key)
   }
@@ -130,10 +131,7 @@ function registerIngredient(ing: FirestoreIngredient) {
     conversions: buildConversions(ing),
     allowedUnits: buildAllowedUnits(ing),
   }
-  const legacyAliases = Object.entries({ PXOUpHYxTe4s8zIGKTaD: 'FToK9wdNj0aE6TkYUjRj' })
-    .filter(([, canonicalId]) => canonicalId === ing.id)
-    .map(([legacyId]) => legacyId)
-  cacheIngredient(cached, [...(normalized.legacyIds ?? []), ...legacyAliases], normalized.retired)
+  cacheIngredient(cached, aliases, normalized.retired)
 }
 
 const OZ_TO_G = 28.3495

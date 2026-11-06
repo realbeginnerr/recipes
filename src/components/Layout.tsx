@@ -21,7 +21,7 @@ function LayoutContent() {
         <Outlet />
       </Suspense>
     </main>
-    <SiteFooter />
+    {pathname !== '/' && <SiteFooter />}
   </div>
 }
 

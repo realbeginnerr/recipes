@@ -55,6 +55,35 @@ vi.mock('../src/components/useIngredientColumnWidth', async () => {
 })
 afterEach(() => ingredientById.clear())
 
+it('keeps the two butter quantities distinct after saving and reopening the salt bread editor', async () => {
+  ingredientById.set('butter', { id: 'butter', name: 'Butter', nameKo: '버터', baseAmount: 100, baseUnit: 'g', carbs: 0, protein: 0, fat: 80, allowedUnits: ['g'], conversions: { g: 1 } })
+  const original = { id: 'salt-bread', name: 'Salt bread', nameKo: '소금빵', imageUrl: '', items: [
+    { ingredientId: 'butter', defaultAmount: 100, defaultUnit: 'g', cookingGroup: 'dough' },
+    { ingredientId: 'butter', defaultAmount: 100, defaultUnit: 'g', cookingGroup: 'filling' },
+  ] }
+  const onSaveRecipe = vi.fn(updateRecipeInFirestore)
+  const editor = (recipe: typeof original) => <MemoryRouter><LanguageProvider><RecipeTable defaultEditing
+    recipe={recipe} rows={recipe.items.map(item => ({ ingredientId: item.ingredientId, amount: item.defaultAmount, unit: item.defaultUnit }))}
+    appliedSearch="" divisionCount={4} onDivisionCountChange={vi.fn()} onAmountChange={vi.fn()} onUnitChange={vi.fn()}
+    multigrainRiceAmount={100} multigrainRiceUnit="g" onMultigrainRiceAmountChange={vi.fn()} onMultigrainRiceUnitChange={vi.fn()} onSaveRecipe={onSaveRecipe}
+  /></LanguageProvider></MemoryRouter>
+  const amounts = () => screen.getAllByRole('row').filter(row => within(row).queryByRole('link', { name: '버터' })).map(row => within(row).getByRole('spinbutton') as HTMLInputElement)
+  const first = render(editor(original))
+  fireEvent.change(amounts()[0], { target: { value: '20' } })
+  fireEvent.change(amounts()[1], { target: { value: '72' } })
+  fireEvent.click(screen.getAllByRole('button', { name: '저장', exact: true })[0])
+  await waitFor(() => expect(onSaveRecipe).toHaveBeenCalledTimes(1))
+  await waitFor(() => expect(screen.queryByRole('button', { name: '저장', exact: true })).toBeNull())
+  const saved = onSaveRecipe.mock.calls[0][0] as typeof original
+  expect(saved.items.map(item => item.defaultAmount)).toEqual([20, 72])
+  first.unmount()
+  render(editor(saved))
+  expect(amounts().map(input => input.value)).toEqual(['20', '72'])
+  fireEvent.click(screen.getAllByRole('button', { name: '저장', exact: true })[0])
+  await waitFor(() => expect(onSaveRecipe).toHaveBeenCalledTimes(2))
+  expect(onSaveRecipe.mock.calls[1][0].items.map(item => item.defaultAmount)).toEqual([20, 72])
+})
+
 it.each(['nameKo', 'name'] as const)('shows a duplicate %s error on the edit form without discarding the draft', async field => {
   const onSaveRecipe = vi.fn().mockRejectedValue(Object.assign(new Error('duplicate'), { code: 'recipe/duplicate-name', fields: [field] }))
   render(<MemoryRouter><LanguageProvider><RecipeTable defaultEditing

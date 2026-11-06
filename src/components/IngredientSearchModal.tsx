@@ -192,7 +192,7 @@ export function IngredientSearchModal({
                       type="button"
                       variant="outline"
                       onClick={() => multiSelect && countSelection ? undefined : multiSelect ? handleToggle(ingredient) : handleSingleClick(ingredient)}
-                      className="flex-1 justify-between px-3 h-auto py-[0.65rem] text-sm font-normal"
+                      className="min-w-0 flex-1 justify-between whitespace-normal px-3 h-auto py-[0.65rem] text-left text-sm font-normal"
                       style={{
                         borderColor: isSelected ? 'var(--primary)' : undefined,
                         background: isSelected ? 'var(--accent-soft)' : undefined,
@@ -200,7 +200,7 @@ export function IngredientSearchModal({
                         opacity: isExisting ? 0.4 : 1,
                       }}
                     >
-                      <span>{getIngredientDisplayName(ingredient, language)}</span>
+                      <span className="min-w-0 flex-1 break-words text-left">{getIngredientDisplayName(ingredient, language)}</span>
                       {isExisting
                         ? <span style={{ color: 'var(--muted-foreground)', fontWeight: 700 }}>✓</span>
                         : (multiSelect && isSelected && <span style={{ color: 'var(--primary)', fontWeight: 700 }}>✓</span>)
