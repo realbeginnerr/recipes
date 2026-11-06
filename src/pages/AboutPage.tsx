@@ -1,5 +1,6 @@
 import { StorySection, StorySplit } from '../components/StorySection'
 import { Button } from '../components/ui/button'
+import { HomeAnimation } from '../components/HomeAnimation'
 ﻿import { Link } from 'react-router-dom'
 import { useSearch } from '../context/SearchContext'
 import { useLanguage } from '../context/LanguageContext'
@@ -14,12 +15,7 @@ export function AboutPage() {
   const revealRoot = useScrollReveal()
 
   return <div ref={revealRoot} className="service-page" lang={language}>
-    <section className="home-animation" aria-label={language === 'ko' ? '그리드 다이브 애니메이션' : 'Grid dive animation'}>
-      <video autoPlay muted loop playsInline controls preload="auto">
-        <source src={`${import.meta.env.BASE_URL}animo-grid-dive-720p.webm`} type="video/webm" />
-        {language === 'ko' ? '이 브라우저에서는 영상을 재생할 수 없습니다.' : 'Your browser does not support video playback.'}
-      </video>
-    </section>
+    <HomeAnimation ko={language === 'ko'} />
     <section className="story-hero" aria-labelledby="story-title" style={{ backgroundImage: `url("${import.meta.env.BASE_URL}images/service/01.png")` }}>
       <div className="story-hero-content">
         <h3 id="story-title">{copy.heroFirst && <>{copy.heroFirst}<br /></>}{language === 'ko' ? copy.heroLast.split('냉장고 털기').map((part, index) => <span key={index}>{index > 0 && <strong>냉장고 털기</strong>}{part}</span>) : copy.heroLast}</h3>
