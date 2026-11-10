@@ -55,6 +55,31 @@ vi.mock('../src/components/useIngredientColumnWidth', async () => {
 })
 afterEach(() => ingredientById.clear())
 
+it('adds and removes cooking dates and keeps them when reopening the editor', async () => {
+  const recipe = { id: 'history', name: 'History', nameKo: '기록', imageUrl: '', items: [], lastCookedAt: '2026-11-01' }
+  const onSaveRecipe = vi.fn(async () => {})
+  const editor = (value: typeof recipe) => <MemoryRouter><LanguageProvider><RecipeTable defaultEditing recipe={value} rows={[]}
+    appliedSearch="" divisionCount={4} onDivisionCountChange={vi.fn()} onAmountChange={vi.fn()} onUnitChange={vi.fn()}
+    multigrainRiceAmount={100} multigrainRiceUnit="g" onMultigrainRiceAmountChange={vi.fn()} onMultigrainRiceUnitChange={vi.fn()} onSaveRecipe={onSaveRecipe}
+  /></LanguageProvider></MemoryRouter>
+  const first = render(editor(recipe))
+  expect((screen.getByLabelText('요리한 날짜 1') as HTMLInputElement).value).toBe('2026-11-01')
+  fireEvent.click(screen.getByRole('button', { name: '+ 날짜 추가' }))
+  fireEvent.change(screen.getByLabelText('요리한 날짜 2'), { target: { value: '2026-11-09' } })
+  fireEvent.click(screen.getAllByRole('button', { name: '저장', exact: true })[0])
+  await waitFor(() => expect(screen.queryByRole('button', { name: '저장', exact: true })).toBeNull())
+  const saved = (onSaveRecipe.mock.calls as unknown as [typeof recipe & { cookedDates: string[] }][]) [0][0]
+  expect(saved.cookedDates).toEqual(['2026-11-01', '2026-11-09'])
+  expect(saved.lastCookedAt).toBe('2026-11-09')
+  first.unmount()
+  render(editor(saved))
+  expect((screen.getByLabelText('요리한 날짜 2') as HTMLInputElement).value).toBe('2026-11-09')
+  fireEvent.click(screen.getByRole('button', { name: '요리한 날짜 2 삭제' }))
+  fireEvent.click(screen.getAllByRole('button', { name: '저장', exact: true })[0])
+  await waitFor(() => expect(onSaveRecipe).toHaveBeenCalledTimes(2))
+  expect(onSaveRecipe).toHaveBeenLastCalledWith(expect.objectContaining({ cookedDates: ['2026-11-01'], lastCookedAt: '2026-11-01' }))
+})
+
 it('keeps the two butter quantities distinct after saving and reopening the salt bread editor', async () => {
   ingredientById.set('butter', { id: 'butter', name: 'Butter', nameKo: '버터', baseAmount: 100, baseUnit: 'g', carbs: 0, protein: 0, fat: 80, allowedUnits: ['g'], conversions: { g: 1 } })
   const original = { id: 'salt-bread', name: 'Salt bread', nameKo: '소금빵', imageUrl: '', items: [

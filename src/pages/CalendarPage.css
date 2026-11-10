@@ -1,0 +1,44 @@
+.calendar-page { width: 100%; }
+.calendar-page .catalog-intro { min-height: 200px; padding-block: 0; }
+.calendar-page .catalog-intro__inner { min-height: 200px; }
+.calendar-page .catalog-intro__inner > div { display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; padding-block: 24px; }
+.calendar-container, .calendar-page .catalog-container { width: 100%; max-width: 1200px; padding-inline: var(--gutter); margin-inline: auto; }
+.calendar-content { padding-block: 40px 80px; }
+.calendar-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 24px; }
+.calendar-toolbar h2 { margin: 0; color: #122b22; font-size: 24px; font-weight: 500; }
+.calendar-navigation { display: flex; align-items: center; gap: 8px; }
+.cooking-calendar { width: 100%; table-layout: fixed; border-collapse: collapse; border-top: 2px solid #255a46; font-variant-numeric: tabular-nums; }
+.cooking-calendar th { padding: 14px 4px; font-size: 13px; font-weight: 500; color: #596b64; background: #f6f5f1; }
+.cooking-calendar th.is-sunday { color: #b35e50; }
+.cooking-calendar th.is-saturday { color: #54778c; }
+.cooking-calendar td { padding: 0; height: 112px; border: 1px solid #e5eae9; vertical-align: top; }
+.cooking-calendar td > button { width: 100%; min-height: 44px; display: flex; align-items: flex-start; justify-content: flex-start; padding: 8px; border: 0; background: transparent; color: #122b22; cursor: pointer; text-align: left; }
+.cooking-calendar td > button:hover { background: #f6f8f5; }
+.cooking-calendar td > button:focus-visible { outline: 2px solid #255a46; outline-offset: -2px; }
+.cooking-calendar td.is-selected { background: #eef4ef; box-shadow: inset 0 0 0 1px #9bb5a3; }
+.cooking-calendar td.is-outside { background: #fafbf9; }
+.cooking-calendar td.is-outside > button { color: #aab3ae; }
+.calendar-day-number { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; font-size: 14px; }
+.calendar-day-number.is-today { border-radius: 50%; background: #255a46; color: white; }
+.calendar-records { margin-top: 32px; }
+.calendar-records h3 { margin: 0; font-size: 16px; font-weight: 500; color: #122b22; }
+.calendar-empty { min-height: 120px; display: flex; align-items: center; justify-content: center; gap: 12px; color: #899591; font-size: 14px; }
+.calendar-empty p { margin: 0; }
+.calendar-day-recipes { list-style: none; margin: 0; padding: 0 6px 6px; display: grid; gap: 4px; }
+.calendar-day-recipes a { display: block; padding: 4px 6px; border-radius: 4px; background: #edf3ef; color: #255a46; text-decoration: none; font-size: 12px; overflow-wrap: anywhere; line-height: 1.5; }
+.calendar-day-recipes a:hover, .calendar-selected-recipes a:hover { text-decoration: underline; }
+.cooking-calendar td > .calendar-more { min-height: 32px; padding: 4px 10px 8px; color: #596b64; font-size: 12px; }
+.calendar-selected-recipes { list-style: none; padding: 0; margin: 16px 0 0; display: grid; gap: 8px; }
+.calendar-selected-recipes a { display: block; padding: 14px 16px; color: #255a46; background: #f6f8f5; text-decoration: none; overflow-wrap: anywhere; }
+.calendar-load-error { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 16px; color: #b42318; }
+@media (max-width: 767px) {
+  .calendar-page .catalog-intro, .calendar-page .catalog-intro__inner { min-height: 120px; }
+  .calendar-content { padding-block: 24px 48px; }
+  .calendar-toolbar { gap: 8px; margin-bottom: 16px; }
+  .calendar-toolbar h2 { font-size: 20px; }
+  .calendar-navigation { gap: 2px; }
+  .cooking-calendar td { height: 76px; }
+  .cooking-calendar td > button { padding: 4px; }
+  .calendar-day-recipes { padding-inline: 3px; }
+  .calendar-day-recipes a { padding: 3px; font-size: 11px; }
+}

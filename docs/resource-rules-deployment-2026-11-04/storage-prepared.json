@@ -1,0 +1,32 @@
+{
+  "before": {
+    "name": "projects/recipes-5a663/releases/firebase.storage/recipes-5a663.firebasestorage.app",
+    "rulesetName": "projects/recipes-5a663/rulesets/d200246d-7eb5-4489-ae0c-700d86d2dd49",
+    "createTime": "2026-10-09T08:56:46.920829Z",
+    "updateTime": "2026-10-11T08:30:40.265614Z"
+  },
+  "rules": {
+    "name": "projects/recipes-5a663/rulesets/d200246d-7eb5-4489-ae0c-700d86d2dd49",
+    "source": {
+      "files": [
+        {
+          "content": "rules_version = '2';\r\n\r\nservice firebase.storage {\r\n  match /b/{bucket}/o {\r\n    function isAdmin() {\r\n      return request.auth != null\r\n        && request.auth.token.email == 'hijmjo@gmail.com'\r\n        && request.auth.token.email_verified == true;\r\n    }\r\n\r\n    match /recipes/{recipeId}/{fileName} {\n      allow read: if true;\r\n      allow create, update: if isAdmin()\r\n        && request.resource.size <= 10 * 1024 * 1024\r\n        && request.resource.contentType.matches('image/.*');\r\n      allow delete: if isAdmin();\n    }\n    match /products/{productId}/{fileName} {\n      allow read: if true;\n      allow create, update: if isAdmin()\n        && request.resource.size <= 10 * 1024 * 1024\n        && request.resource.contentType.matches('image/(jpeg|png|webp|avif)');\n      allow delete: if isAdmin();\n    }\n  }\r\n}\n",
+          "name": "storage.rules"
+        }
+      ]
+    },
+    "createTime": "2026-10-11T08:30:37.382383Z",
+    "metadata": {
+      "services": [
+        "firebase.storage"
+      ]
+    }
+  },
+  "files": [
+    {
+      "name": "storage.rules",
+      "content": "rules_version = '2';\n\nservice firebase.storage {\n  match /b/{bucket}/o {\n    function isAdmin() {\n      return request.auth != null\n        && request.auth.token.email == 'hijmjo@gmail.com'\n        && request.auth.token.email_verified == true;\n    }\n\n    match /resources/{resourceId}/{fileName} {\n      allow read: if true;\n      allow create, update: if isAdmin()\n        && request.resource.size <= 20 * 1024 * 1024;\n      allow delete: if isAdmin();\n    }\n\n    match /recipes/{recipeId}/{fileName} {\n      allow read: if true;\n      allow create, update: if isAdmin()\n        && request.resource.size <= 10 * 1024 * 1024\n        && request.resource.contentType.matches('image/.*');\n      allow delete: if isAdmin();\n    }\n    match /products/{productId}/{fileName} {\n      allow read: if true;\n      allow create, update: if isAdmin()\n        && request.resource.size <= 10 * 1024 * 1024\n        && request.resource.contentType.matches('image/(jpeg|png|webp|avif)');\n      allow delete: if isAdmin();\n    }\n  }\n}\n"
+    }
+  ],
+  "validation": {}
+}

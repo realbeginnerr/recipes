@@ -1,0 +1,9 @@
+{
+  "previousRuleset": "projects/recipes-5a663/rulesets/cff61a96-a18b-42de-a18f-b49d6b849418",
+  "release": {
+    "name": "projects/recipes-5a663/releases/cloud.firestore",
+    "rulesetName": "projects/recipes-5a663/rulesets/f2729c15-64e0-4bff-900f-720bed3e218c",
+    "createTime": "2026-07-03T07:11:34.742007Z",
+    "updateTime": "2026-11-04T11:46:59.530455Z"
+  }
+}

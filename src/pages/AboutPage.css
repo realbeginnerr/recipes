@@ -1,12 +1,4 @@
 .service-main { flex: 1; min-width: 0; width: 100%; }
-.home-animation { width: 100%; background: #101014; }
-.service-page > section:not(.home-animation) { display: none; }
-.home-animation { overflow: hidden; }
-.home-animation video { display: block; width: 100%; height: auto; max-height: calc(100svh - var(--site-header-height, 64px)); object-fit: cover; }
-@media (max-width: 767px) {
-  .home-animation { height: calc(100dvh - var(--site-header-height, 64px)); }
-  .home-animation video { height: 100%; max-height: none; }
-}
 .service-page { font-family: 'Pretendard Variable', sans-serif; font-size: 16px; line-height: 1.85; letter-spacing: -0.04em; color: #596B64; background: #FFFFFF; }
 .service-page * { box-sizing: border-box; }
 .service-page h1, .service-page h2 { font-family: var(--font-display); font-weight: 400; font-synthesis: none; letter-spacing: -0.02em; color: #122B22; }

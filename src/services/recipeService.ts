@@ -1,5 +1,6 @@
 import type { RecipeImage, RecipeProductTag } from '../types/shoppable'
 import { reconcileRecipeGallery } from '../utils/recipeGallery'
+import { recipeCookingHistory } from '../utils/recipeCookingDates'
 import {
   collection,
   doc,
@@ -52,6 +53,7 @@ export type FirestoreRecipe = {
   divisionCount?: number
   cookingTimeMinutes?: number
   lastCookedAt?: string
+  cookedDates?: string[]
   createdAt: number
   items: FirestoreRecipeItem[]
   sideItems?: FirestoreRecipeItem[]
@@ -105,6 +107,7 @@ export async function updateRecipeInFirestore(recipe: Recipe): Promise<void> {
   assertRecipeUnits([...items, ...(sideItems ?? [])].map(item => ({ ingredientId: item.ingredientId, unit: item.defaultUnit })))
   const data: Record<string, unknown> = {
     ...rest,
+    ...recipeCookingHistory(recipe),
     ...reconcileRecipeGallery(recipe),
     categories: getRecipeCategories(recipe),
     items: items.map((item) => ({
@@ -173,7 +176,7 @@ export function convertToRecipe(fs: FirestoreRecipe): Recipe {
     tasteRating: fs.tasteRating,
     divisionCount: fs.divisionCount,
     cookingTimeMinutes: fs.cookingTimeMinutes,
-    lastCookedAt: fs.lastCookedAt,
+    ...recipeCookingHistory(fs),
     createdAt: fs.createdAt,
     link: fs.link,
     hidden: fs.hidden,

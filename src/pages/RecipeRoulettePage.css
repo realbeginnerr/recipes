@@ -1,6 +1,6 @@
-.recipe-roulette { padding: 40px var(--gutter) 48px; }
+.recipe-roulette { padding: 40px var(--gutter) 48px; background: var(--surface-soft); min-height: 100%; }
+.reference-main:has(.recipe-roulette) { background: var(--surface-soft); }
 .recipe-roulette > p { color: var(--muted-foreground); }
-.recipe-roulette > .recipe-detail-title { text-align: center; }
 .recipe-roulette__viewport { position: relative; width: calc(100% + 2 * var(--gutter)); margin: 24px calc(-1 * var(--gutter)); overflow: hidden; border-radius: 0; background: var(--surface-soft); }
 .recipe-roulette__reel { position: absolute; top: 24px; left: 0; display: flex; width: max-content; will-change: transform; }
 .recipe-roulette__cell { width: var(--roulette-stride); height: var(--roulette-card-height); flex-shrink: 0; box-sizing: border-box; display: flex; align-items: center; padding-inline: 12px; }

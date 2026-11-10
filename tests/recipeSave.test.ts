@@ -161,6 +161,25 @@ it('persists authored group order when saving a recipe', async () => {
   expect(setDoc).toHaveBeenCalledWith('recipe-ref', expect.objectContaining({ cookingGroupOrder: ['반죽', '양념장'] }))
 })
 
+it('persists cooking history, migrates the old date and clears all dates without restoring it', async () => {
+  const corrected = recipe()
+  corrected.items[0].defaultAmount = 30
+  corrected.lastCookedAt = '2026-11-01'
+  expect(convertToRecipe({ id: corrected.id, name: corrected.name, nameKo: corrected.nameKo, imageUrl: '', createdAt: 1, items: [], lastCookedAt: corrected.lastCookedAt }).cookedDates).toEqual(['2026-11-01'])
+  corrected.cookedDates = ['2026-11-09', '2026-11-01', '2026-11-09', '', '2026-02-30']
+  await updateRecipeInFirestore(corrected)
+  const stored = vi.mocked(setDoc).mock.calls[0][1] as unknown as FirestoreRecipe
+  expect(stored.cookedDates).toEqual(['2026-11-01', '2026-11-09'])
+  expect(stored.lastCookedAt).toBe('2026-11-09')
+  expect(convertToRecipe(stored).cookedDates).toEqual(stored.cookedDates)
+  corrected.cookedDates = []
+  await updateRecipeInFirestore(corrected)
+  expect(setDoc).toHaveBeenLastCalledWith('recipe-ref', expect.objectContaining({ cookedDates: [] }))
+  const cleared = vi.mocked(setDoc).mock.calls.at(-1)![1] as unknown as FirestoreRecipe
+  expect(cleared.lastCookedAt).toBeUndefined()
+  expect(convertToRecipe(cleared).cookedDates).toEqual([])
+})
+
 it('persists, loads and clears temporary photo product information', async () => {
   const corrected = recipe()
   corrected.items[0].defaultAmount = 30

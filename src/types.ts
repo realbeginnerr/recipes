@@ -57,6 +57,7 @@ export type Recipe = {
   divisionCount?: number
   cookingTimeMinutes?: number
   lastCookedAt?: string
+  cookedDates?: string[]
   createdAt?: number
   link?: string
   hidden?: boolean

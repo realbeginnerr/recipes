@@ -70,7 +70,7 @@ export function RecipePage({ blendingTea = false }: { blendingTea?: boolean }) {
   const visibleRecipes = useMemo(() => recipes
     .filter(recipe => isAdmin || !recipe.hidden)
     .filter(recipe => blendingTea ? recipe.catalog === 'tea' || getRecipeCategories(recipe).includes('차') : recipe.catalog !== 'tea')
-    .filter(recipe => category.length === 0 || getRecipeCategories(recipe).some(value => category.includes(value)))
+    .filter(recipe => category.length === 0 || getRecipeCategories(recipe).some(value => category.includes(value) || (value === '차' && category.includes('음료'))))
     .filter(recipe => !blendingTea || teaCategory === '전체' || getTeaTags(recipe).includes(teaCategory))
     .filter(recipe => !appliedSearch || recipeMatchesSearch(recipe, appliedSearch))
     .filter(recipe => !ingredientId || recipeContainsIngredient(recipe, ingredientId))
@@ -110,7 +110,7 @@ export function RecipePage({ blendingTea = false }: { blendingTea?: boolean }) {
     <CatalogToolbar>
       {blendingTea
         ? <CategoryFilter<TeaCategory> label={ko ? '상품 분류' : 'Product categories'} value={teaCategory} options={(['전체', '그릇', '수저', '매트', '기타'] as const).map(value => ({ value, label: ko ? value : teaCategoryEnglish[value] }))} onValueChange={setTeaCategory} />
-        : <CategoryFilter<RecipeCategory> label={ko ? '레시피 분류' : 'Recipe categories'} value={category.length ? category : ['전체']} options={recipeCategories.map(value => ({ value, label: ko ? value : categoryEnglish[value] }))} onValueChange={value => setCategory(value === '전체' ? [] : [value])} />}
+        : <CategoryFilter<RecipeCategory> label={ko ? '레시피 분류' : 'Recipe categories'} value={category.length ? category : ['전체']} options={recipeCategories.filter(value => value !== '차').map(value => ({ value, label: ko ? value : categoryEnglish[value] }))} onValueChange={value => setCategory(value === '전체' ? [] : [value])} />}
       <SearchField label={blendingTea ? (ko ? '검색' : 'Search') : (ko ? `${itemLabel} 검색` : `Search ${itemLabel.toLowerCase()}`)} value={appliedSearch} onValueChange={value => setSearchParams(current => {
         const next = new URLSearchParams(current)
         if (value) next.set('q', value)

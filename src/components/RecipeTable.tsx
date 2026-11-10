@@ -11,6 +11,7 @@ import { reconcileRecipeGallery } from '../utils/recipeGallery'
 import type { RecipeProductTag } from '../types/shoppable'
 import { CookingGroupOrderEditor } from './CookingGroupOrderEditor'
 import { cookingGroupOrder } from '../utils/recipeCookingGroups'
+import { recipeCookingDates, recipeCookingHistory } from '../utils/recipeCookingDates'
 import { MEAL_TARGET as recommended, MEAL_TARGET_KCAL } from '../constants/nutrition'
 import { RecipeImagesEditor, recipeImageDrafts, type ImageDraft } from './RecipeImagesEditor'
 import { useState, useRef } from 'react'
@@ -117,7 +118,7 @@ export function RecipeTable({
   const [editPlatingBlocks, setEditPlatingBlocks] = useState(initialPlatingBlocks)
   const [editMemo, setEditMemo] = useState(activeRecipe.memo ?? '')
   const [editCookingTime, setEditCookingTime] = useState(activeRecipe.cookingTimeMinutes === undefined ? '' : String(activeRecipe.cookingTimeMinutes))
-  const [editLastCookedAt, setEditLastCookedAt] = useState(activeRecipe.lastCookedAt ?? '')
+  const [editCookedDates, setEditCookedDates] = useState<string[]>(() => recipeCookingDates(activeRecipe))
   const [editTasteRating, setEditTasteRating] = useState(activeRecipe.tasteRating ?? 4)
   const [editName, setEditName] = useState(activeRecipe.name)
   const [editNameKo, setEditNameKo] = useState(activeRecipe.nameKo)
@@ -178,7 +179,7 @@ export function RecipeTable({
     setEditPlatingBlocks(initialPlatingBlocks())
     setEditMemo(activeRecipe.memo ?? '')
     setEditCookingTime(activeRecipe.cookingTimeMinutes === undefined ? '' : String(activeRecipe.cookingTimeMinutes))
-    setEditLastCookedAt(activeRecipe.lastCookedAt ?? '')
+    setEditCookedDates(recipeCookingDates(activeRecipe))
     setEditTasteRating(activeRecipe.tasteRating ?? 4)
     setDivisionInput(String(activeRecipe.divisionCount ?? divisionCount))
     setNewlyAddedIds(new Set())
@@ -225,7 +226,7 @@ export function RecipeTable({
     const parsedDivision = Number.parseInt(divisionInput, 10)
     const validDivision = !Number.isNaN(parsedDivision) && parsedDivision > 0 ? parsedDivision : divisionCount
     onDivisionCountChange(validDivision)
-    const updated = { ...activeRecipe, name: editName.trim() || activeRecipe.name, nameKo: editNameKo.trim() || activeRecipe.nameKo, categories: editCategories, imageUrl: editImages.map(image => image.url.trim()).filter(Boolean)[0] ?? '', imageUrls: editImages.map(image => image.url.trim()).filter(Boolean).slice(1), images: activeRecipe.images ?? [], productTags: editProductTags, photoProductDescription: editPhotoProductDescription, photoProductUrl: editPhotoProductUrl.trim(), link: editLink, items: editItems, sideItems: editSideItems, memo: editMemo, cookingGroupOrder: cookingGroupOrder(editItems, editGroupOrder), cookingContent: editCookingSteps.map(step => step.text).join('\n'), cookingSteps: editCookingSteps.filter(step => step.text.trim()), platingBlocks: editPlatingBlocks, tasteRating: editTasteRating, divisionCount: validDivision, cookingTimeMinutes: editCookingTime === '' ? undefined : Math.max(0, Number(editCookingTime)), lastCookedAt: editLastCookedAt || undefined }
+    const updated = { ...activeRecipe, name: editName.trim() || activeRecipe.name, nameKo: editNameKo.trim() || activeRecipe.nameKo, categories: editCategories, imageUrl: editImages.map(image => image.url.trim()).filter(Boolean)[0] ?? '', imageUrls: editImages.map(image => image.url.trim()).filter(Boolean).slice(1), images: activeRecipe.images ?? [], productTags: editProductTags, photoProductDescription: editPhotoProductDescription, photoProductUrl: editPhotoProductUrl.trim(), link: editLink, items: editItems, sideItems: editSideItems, memo: editMemo, cookingGroupOrder: cookingGroupOrder(editItems, editGroupOrder), cookingContent: editCookingSteps.map(step => step.text).join('\n'), cookingSteps: editCookingSteps.filter(step => step.text.trim()), platingBlocks: editPlatingBlocks, tasteRating: editTasteRating, divisionCount: validDivision, cookingTimeMinutes: editCookingTime === '' ? undefined : Math.max(0, Number(editCookingTime)), ...recipeCookingHistory({ cookedDates: editCookedDates }) }
     if (canSave) {
       setIsSaving(true)
       showToast(
@@ -656,8 +657,14 @@ export function RecipeTable({
 
       {!isCollapsed && isEditing && (
         <div className="edit-inline__link-field">
-          <label className="edit-inline__link-label" htmlFor={`last-cooked-${recipe.id}`}>{language === 'ko' ? '요리한 날짜' : 'Date I cooked this recipe'}</label>
-          <Input id={`last-cooked-${recipe.id}`} style={{ maxWidth: 200 }} type="date" value={editLastCookedAt} onChange={event => setEditLastCookedAt(event.target.value)} />
+          <span className="edit-inline__link-label">{language === 'ko' ? '요리한 날짜' : 'Dates I cooked this recipe'}</span>
+          <div className="flex flex-col gap-2">
+            {editCookedDates.map((date, index) => <div key={index} className="flex items-center gap-2">
+              <Input type="date" style={{ maxWidth: 200 }} aria-label={language === 'ko' ? `요리한 날짜 ${index + 1}` : `Cooking date ${index + 1}`} value={date} disabled={isSaving} onChange={event => setEditCookedDates(current => current.map((value, i) => i === index ? event.target.value : value))} />
+              <Button type="button" variant="ghost" disabled={isSaving} aria-label={language === 'ko' ? `요리한 날짜 ${index + 1} 삭제` : `Remove cooking date ${index + 1}`} onClick={() => setEditCookedDates(current => current.filter((_, i) => i !== index))}>{language === 'ko' ? '삭제' : 'Remove'}</Button>
+            </div>)}
+            <Button type="button" variant="outline" className="self-start" disabled={isSaving} onClick={() => setEditCookedDates(current => [...current, ''])}>{language === 'ko' ? '+ 날짜 추가' : '+ Add date'}</Button>
+          </div>
         </div>
       )}
 

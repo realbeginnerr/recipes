@@ -1,6 +1,5 @@
 import { getRecipeDisplayName } from '../utils/displayNames'
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
-import { BackLink } from '../components/BackLink'
 import { Button } from '../components/ui/button'
 import { RecipeCard } from '../components/recipe/RecipeGrid'
 import { ContentState, LoadingState } from '../components/feedback/ContentState'
@@ -13,7 +12,6 @@ import { chooseRecipe, RECENT_RECIPE_EXCLUSION_COUNT, ROULETTE_SPIN_DURATION_MS,
 import type { Recipe } from '../types'
 import './RecipePage.css'
 import './RecipeRoulettePage.css'
-import '../components/RecipeTitle.css'
 
 export function RecipeRoulettePage() {
   const { language } = useLanguage()
@@ -27,7 +25,7 @@ export function RecipeRoulettePage() {
   const [error, setError] = useState(false)
   const [attempt, setAttempt] = useState(0)
   const [spinVersion, setSpinVersion] = useState(0)
-  const [sideCount, setSideCount] = useState(() => Math.ceil(window.innerWidth / (2 * 408)) + 1)
+  const [sideCount, setSideCount] = useState(() => Math.ceil(window.innerWidth / (2 * 324)) + 1)
   const [centeredIndex, setCenteredIndex] = useState(sideCount)
   const reel = useRef<HTMLDivElement>(null)
   const viewport = useRef<HTMLDivElement>(null)
@@ -53,7 +51,7 @@ export function RecipeRoulettePage() {
     return () => { mounted.current = false; cancelAnimationFrame(frame.current) }
   }, [])
   useEffect(() => {
-    const resize = () => setSideCount(Math.ceil(window.innerWidth / (2 * 408)) + 1)
+    const resize = () => setSideCount(Math.ceil(window.innerWidth / (2 * 324)) + 1)
     window.addEventListener('resize', resize)
     return () => window.removeEventListener('resize', resize)
   }, [])
@@ -78,7 +76,7 @@ export function RecipeRoulettePage() {
     const view = viewport.current
     const cards = [...track.querySelectorAll<HTMLElement>('.recipe-card')]
     function measure() {
-      const cardWidth = Math.min(384, Math.max(1, view.clientWidth - 80))
+      const cardWidth = Math.min(300, Math.max(1, view.clientWidth - 80))
       view.style.setProperty('--roulette-card-width', `${cardWidth}px`)
       stride.current = cardWidth + 24
       offset.current = (view.clientWidth - stride.current) / 2
@@ -153,8 +151,6 @@ export function RecipeRoulettePage() {
   }
 
   return <section className="page recipe-catalog recipe-roulette" lang={language}>
-    <BackLink />
-    <h1 className="recipe-detail-title">{ko ? '레시피 랜덤 룰렛' : 'Random recipe roulette'}</h1>
     {loading ? <LoadingState label={ko ? '레시피 불러오는 중' : 'Loading recipes'} /> : <>
       {error && <ContentState error title={ko ? '레시피를 불러오지 못했습니다.' : 'Unable to load recipes.'}><Button onClick={() => setAttempt(value => value + 1)} disabled={busy}>{ko ? '다시 시도' : 'Retry'}</Button></ContentState>}
       {!error && !recipes.length && <ContentState title={ko ? '저장된 레시피가 없어요.' : 'No saved recipes yet.'} />}
@@ -167,7 +163,7 @@ export function RecipeRoulettePage() {
         </div>
         <div className="recipe-roulette__selection" aria-hidden="true" />
       </div>}
-      <div className="recipe-roulette__actions"><Button type="button" disabled={busy || !recipes.length || error} onClick={spin}>{busy ? (ko ? '돌리는 중…' : 'Spinning…') : (ko ? '돌리기' : 'Spin')}</Button></div>
+      <div className="recipe-roulette__actions"><Button type="button" disabled={busy || !recipes.length || error} onClick={spin}>{busy ? (ko ? '돌리는 중…' : 'Spinning…') : (ko ? '룰렛 돌리기' : 'Spin the roulette')}</Button></div>
     </>}
     <p className="recipe-roulette__status" role="status" aria-live="polite" aria-atomic="true">{busy ? (ko ? '레시피를 고르고 있어요.' : 'Choosing a recipe.') : selected ? (ko ? `${selected.nameKo} 선택! 카드를 누르면 새 탭에서 열립니다.` : `${getRecipeDisplayName(selected, language)} selected! Open the card in a new tab.`) : ''}</p>
   </section>
