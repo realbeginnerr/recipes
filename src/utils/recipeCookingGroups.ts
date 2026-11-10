@@ -1,4 +1,11 @@
 import type { RecipeItem, RecipeRowState } from '../types'
+import { ingredientById } from '../data/ingredientCache'
+
+function rowGrams(row: RecipeRowState) {
+  const factor = row.unit === 'g' ? 1 : ingredientById.get(row.ingredientId)?.conversions[row.unit]
+  const grams = row.amount * (factor ?? NaN)
+  return factor !== undefined && factor > 0 && Number.isFinite(grams) && grams >= 0 ? grams : -1
+}
 
 export function cookingGroupOrder(items: { cookingGroup?: string }[], preferred: string[] = []) {
   const names = [...new Set(items.map(item => item.cookingGroup?.trim() ?? ''))]
@@ -14,5 +21,5 @@ export function recipeCookingGroups(rows: RecipeRowState[], items: RecipeItem[],
     groups.get(name)!.push({ row, index })
   })
   return cookingGroupOrder(Array.from(groups.keys(), cookingGroup => ({ cookingGroup })), preferred)
-    .map(name => ({ name, entries: groups.get(name)! }))
+    .map(name => ({ name, entries: groups.get(name)!.sort((a, b) => rowGrams(b.row) - rowGrams(a.row) || a.index - b.index) }))
 }

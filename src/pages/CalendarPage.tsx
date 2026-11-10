@@ -8,10 +8,22 @@ import { loadRecipesFromFirestore, mergeStaticAndFirestoreRecipes } from '../ser
 import { getRecipeDisplayName } from '../utils/displayNames'
 import { recipeCookingDates } from '../utils/recipeCookingDates'
 import type { Recipe } from '../types'
+import { FoodImage } from '../components/FoodImage'
+import { resolveRecipeImage } from '../utils/recipeImage'
 import { PageIntro } from '../components/catalog/CatalogControls'
 import { Button } from '../components/ui/button'
 import { calendarDateKey, calendarMonthDays, calendarToday, shiftCalendarMonth } from '../utils/calendar'
 import './CalendarPage.css'
+
+function CalendarRecipeLink({ recipe }: { recipe: Recipe }) {
+  const { language } = useLanguage()
+  const name = getRecipeDisplayName(recipe, language)
+  const image = resolveRecipeImage(recipe)
+  return <Link to={`/recipe/${encodeURIComponent(recipe.id)}`} title={name}>
+    {image && <span className="calendar-recipe-thumbnail"><FoodImage src={image} alt="" /></span>}
+    <span className="calendar-recipe-name">{name}</span>
+  </Link>
+}
 
 export function CalendarPage() {
   const { language } = useLanguage()
@@ -78,14 +90,14 @@ export function CalendarPage() {
               onClick={() => { setSelected(key); if (!currentMonth) setMonth(shiftCalendarMonth(date, 0)) }}>
               <span className={`calendar-day-number${key === todayKey ? ' is-today' : ''}`}>{date.getUTCDate()}</span>
             </button>
-            {!!entries.length && <ul className="calendar-day-recipes">{entries.slice(0, 3).map(recipe => <li key={recipe.id}><Link to={`/recipe/${encodeURIComponent(recipe.id)}`} title={getRecipeDisplayName(recipe, language)}>{getRecipeDisplayName(recipe, language)}</Link></li>)}</ul>}
+            {!!entries.length && <ul className="calendar-day-recipes">{entries.slice(0, 3).map(recipe => <li key={recipe.id}><CalendarRecipeLink recipe={recipe} /></li>)}</ul>}
             {entries.length > 3 && <button type="button" className="calendar-more" aria-label={ko ? `${fullDate(date)} 요리 ${entries.length}개 모두 보기` : `Show all ${entries.length} recipes for ${fullDate(date)}`} onClick={() => { setSelected(key); if (!currentMonth) setMonth(shiftCalendarMonth(date, 0)) }}>{ko ? `+${entries.length - 3}개 더 보기` : `+${entries.length - 3} more`}</button>}
           </td>
         })}</tr>)}</tbody>
       </table>
       <section className="calendar-records" aria-labelledby="calendar-selected-date">
         <h3 id="calendar-selected-date">{fullDate(new Date(`${selected}T00:00:00Z`))}</h3>
-        {!loading && !error && (selectedRecipes.length ? <ul className="calendar-selected-recipes">{selectedRecipes.map(recipe => <li key={recipe.id}><Link to={`/recipe/${encodeURIComponent(recipe.id)}`}>{getRecipeDisplayName(recipe, language)}</Link></li>)}</ul> : <div className="calendar-empty"><Utensils size={24} strokeWidth={1.4} aria-hidden="true" /><p>{ko ? '아직 요리 기록이 없어요.' : 'No cooking records yet.'}</p></div>)}
+        {!loading && !error && (selectedRecipes.length ? <ul className="calendar-selected-recipes">{selectedRecipes.map(recipe => <li key={recipe.id}><CalendarRecipeLink recipe={recipe} /></li>)}</ul> : <div className="calendar-empty"><Utensils size={24} strokeWidth={1.4} aria-hidden="true" /><p>{ko ? '아직 요리 기록이 없어요.' : 'No cooking records yet.'}</p></div>)}
       </section>
     </div>
   </div>

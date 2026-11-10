@@ -44,7 +44,7 @@ function expectEnglish(main: HTMLElement) {
 
 it('shows the current recipe feature introduction in English and returns to the Korean original', () => {
   const { main } = show(<AboutPage />)
-  expect(screen.getByRole('heading', { name: '인스타그램에서 본 레시피는 돼지고기 600g, 쿠팡에서 파는 돼지고기는 1kg라면?' })).toBeDefined()
+  expect(screen.getByRole('heading', { name: '인스타그램 레시피 보고 요리하다가 계산기 꺼낸 적 있다면?' })).toBeDefined()
   english()
   expect(screen.getByRole('heading', { name: 'What if you have a different amount of an ingredient than the recipe calls for?' })).toBeDefined()
   expect(screen.getByRole('heading', { name: 'Where was I in the recipe?' })).toBeDefined()

@@ -26,6 +26,7 @@ export function SiteHeader() {
     { to: '/recipes', label: ko ? '레시피' : 'Recipes', end: false },
     { to: '/ingredients', label: ko ? '식재료' : 'Ingredients', end: false },
     { to: '/calendar', label: ko ? '캘린더' : 'Calendar', end: false },
+    { to: '/resources', label: ko ? '자료실' : 'Resources', end: false },
     ...(shopFeatures.enabled ? [{ to: '/blending-tea', label: 'Shop', end: false }] : []),
   ]
   useEffect(() => { setMenuOpen(false) }, [pathname])

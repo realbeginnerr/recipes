@@ -3,6 +3,7 @@ import { render, screen, fireEvent } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 import { CookingGroupOrderEditor } from '../src/components/CookingGroupOrderEditor'
 import { cookingGroupOrder, recipeCookingGroups } from '../src/utils/recipeCookingGroups'
+import { ingredientById } from '../src/data/ingredientCache'
 
 const items = [
   { ingredientId: 'a', defaultAmount: 10, defaultUnit: 'g', cookingGroup: '양념장' },
@@ -15,8 +16,9 @@ describe('authored cooking group order', () => {
     expect(recipeCookingGroups(rows, items).map(group => group.name)).toEqual(['양념장', '반죽'])
     const groups = recipeCookingGroups(rows, items, ['반죽', '양념장'])
     expect(groups.map(group => group.name)).toEqual(['반죽', '양념장'])
-    expect(groups[1].entries.map(entry => entry.index)).toEqual([0, 2])
-    expect(groups[1].entries.map(entry => entry.row.amount)).toEqual([10, 30])
+    expect(groups[1].entries.map(entry => entry.index)).toEqual([2, 0])
+    expect(groups[1].entries.map(entry => entry.row.amount)).toEqual([30, 10])
+    expect(rows.map(row => row.amount)).toEqual([10, 20, 30])
   })
   it('drops removed groups, deduplicates, appends new groups and supports unnamed ingredients', () => {
     expect(cookingGroupOrder([...items, {}], ['삭제한 그룹', '반죽', '반죽'])).toEqual(['반죽', '양념장', ''])
@@ -33,4 +35,23 @@ describe('authored cooking group order', () => {
     expect(screen.getAllByRole('listitem')[0].textContent).toContain('양념장')
     expect(items.map(item => item.ingredientId)).toEqual(['a', 'b', 'c'])
   })
+})
+
+it('sorts quantities by grams within each group, preserving ties, duplicate rows and source indices', () => {
+  ingredientById.set('oil-test', { id: 'oil-test', name: 'Oil', baseAmount: 100, baseUnit: 'g', carbs: 0, protein: 0, fat: 100, conversions: { g: 1, T: 14 }, allowedUnits: ['g', 'T'] })
+  try {
+    const rows = [
+      { ingredientId: 'oil-test', amount: 2, unit: 'T' },
+      { ingredientId: 'flour-test', amount: 20, unit: 'g' },
+      { ingredientId: 'oil-test', amount: 28, unit: 'g' },
+      { ingredientId: 'missing-test', amount: 100, unit: '개' },
+      { ingredientId: 'water-test', amount: 300, unit: 'g' },
+    ]
+    const items = rows.map((row, index) => ({ ingredientId: row.ingredientId, defaultAmount: row.amount, defaultUnit: row.unit, cookingGroup: index === 4 ? '반죽' : '양념' }))
+    const groups = recipeCookingGroups(rows, items, ['반죽', '양념'])
+    expect(groups.map(group => group.name)).toEqual(['반죽', '양념'])
+    expect(groups[1].entries.map(entry => entry.index)).toEqual([0, 2, 1, 3])
+    rows[1].amount = 40
+    expect(recipeCookingGroups(rows, items)[0].entries.map(entry => entry.index)).toEqual([1, 0, 2, 3])
+  } finally { ingredientById.delete('oil-test') }
 })

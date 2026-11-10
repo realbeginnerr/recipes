@@ -3,7 +3,7 @@ export const aboutCopy = {
   "ko": {
     "eyebrow": "T's Recipe",
     "heroFirst": "",
-    "heroLast": "인스타그램에서 본 레시피는 돼지고기 600g, 쿠팡에서 파는 돼지고기는 1kg라면?",
+    "heroLast": "인스타그램 레시피 보고 요리하다가 계산기 꺼낸 적 있다면?",
     "introFirst": "이 비율을 자동으로 맞춰 계산해주는 계산기를 만들었다",
     "introLast": "",
     "tableAlt": "밥상",
