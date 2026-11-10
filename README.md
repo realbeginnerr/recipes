@@ -6,7 +6,7 @@
 | --- | --- |
 | [project-checklist.md](project-checklist.md) | 무엇을 지원하고 결정해야 하는지 검토하는 질문과 시나리오 |
 | [PRD.md](PRD.md) (제품 요구사항 정의서) | 제품 목적과 현재 레시피·식재료 기능 및 정책 |
-| [DESIGN-tsrecipe.md](DESIGN-tsrecipe.md) | 결정된 요구사항을 화면으로 표현하는 공통 규칙 |
+| [design-system.md](design-system.md) | 결정된 요구사항을 화면으로 표현하는 공통 규칙 |
 | `content-guidelines.md` (필요 시 생성) | 필요해졌을 때 분리할 상세 UX 라이팅 규칙과 용어집 |
 
 프로젝트 시작 및 PRD 작성 시 체크리스트를 참고한다. 같은 규칙을 여러 파일에 중복 정의하지 않고, 해당 규칙을 관리하는 문서를 참조한다. 상세 UX 라이팅 규칙과 용어집은 분량과 관리 필요성이 커지면 별도 문서로 분리한다.
