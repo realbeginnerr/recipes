@@ -2,10 +2,10 @@
 
 - 작성일: 2026-10-28 (KST)
 - 상태: **진단 완료 / 개선안 사용자 검토 대기 / 구현 변경 없음**
-- 요청 기준: [사용자가 제공한 UX audit 요청 원문](audit-guide.md)
+- 요청 기준: [사용자가 제공한 UX audit 요청 원문](checklist-audit-guide.md)
 - 기준 소스: HEAD `45732d37ef5e9e912961dfc7fbd49dbe26a6661c`와 **작성 시점 작업 트리**. RecipeTable, AddRecipePage, RecipeGrid, recipeImage, recipeNutrition, FoodImage 등 미커밋 변경을 포함한다. 커밋만 체크아웃하면 동일 결과가 아닐 수 있다.
 - 방법: 문서·프런트엔드·Firebase 규칙 정적 검토, 기존 관련 테스트 실행. 운영 사이트 실행, 관리자 로그인, 실제 DB 쓰기, 실기기 테스트, 사용자 테스트는 수행하지 않았다.
-- 정책 기준: [PRD 11장](../requirements.md#11-레시피-메뉴-검토--승인된-정책)의 2026-10-20 승인 정책. [디자인 시스템](../design-system.md)의 오류·공통 UI 규칙과 [사용성 체크리스트](../website-checklist.md#section-16)를 함께 검토했다. 요청에서 말하는 IA.yaml은 실제 [IA As-Is](../navigation/ia-as-is.yaml), docs/design-system.md는 실제 DESIGN-tsrecipe.md로 대응했다. 기존 PRD의 구현 설명을 최신 코드의 검증 결과로 대체하지 않았다.
+- 정책 기준: [PRD 11장](../requirements.md#11-레시피-메뉴-검토--승인된-정책)의 2026-10-20 승인 정책. [디자인 시스템](../design-system.md)의 오류·공통 UI 규칙과 [사용성 체크리스트](checklist-audit-guide.md#section-16)를 함께 검토했다. 요청에서 말하는 IA.yaml은 실제 [IA As-Is](../navigation/ia-as-is.yaml), docs/design-system.md는 실제 DESIGN-tsrecipe.md로 대응했다. 기존 PRD의 구현 설명을 최신 코드의 검증 결과로 대체하지 않았다.
 
 ## A. 분석 범위 요약
 

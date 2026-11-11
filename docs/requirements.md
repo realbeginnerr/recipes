@@ -149,7 +149,7 @@ IA의 To-Be 문서는 제안 자료이며 본 PRD의 현재 기능과 구분한�
 
 관련 문서:
 
-- [프로젝트 체크리스트](website-checklist.md): 요구사항 검토 질문과 예외 범주
+- [프로젝트 체크리스트](checklist-audits/checklist-audit-guide.md#planning): 요구사항 검토 질문과 예외 범주
 - [디자인 시스템](design-system.md): 시각·인터랙션·메시지 공통 규칙
 - [현재 IA와 개선 제안 안내](../README.md#navigation-history): 현재 구조의 근거와 제안·검증 한계
 

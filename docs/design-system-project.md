@@ -95,7 +95,7 @@
 - 새로 등록과 수정은 `RecipeTable`의 공통 폼을 사용한다. 필드 구성·순서·명칭·배치·입력 방식·간격은 수정 화면을 기준으로 함께 변경하며, 한쪽만 별도로 수정하지 않는다. 등록의 빈 초기값·등록 버튼 문구·삭제 버튼 미노출과 수정의 기존 값·저장 버튼·삭제 버튼은 동작상 필요한 차이다.
 - 등록에도 여러 사진·파일 선택·대표 사진 지정, 조리시간, 여러 요리 날짜, 조리 단계, 메모를 제공한다. 저장 실패 시 초안을 유지하고 다시 저장할 수 있도록 처리 중 상태를 해제한다. 등록 성공 후에도 해당 상세 페이지로 이동한다.
 - 입력창의 레이블은 컨트롤과 연결하고 수량 입력에는 재료별 접근성 이름을 제공한다. 조회 실패는 빈 결과와 구분하며 재시도 수단을 제공한다.
-- 목록·등록·수정의 간격은 [2026-11-10 간격 점검 및 적용 기록](audits/2026-11-10-results-design-system-spacing.md)을 따른다. 공통 폼에서는 관련 필드 내부 간격과 독립 영역 사이 간격을 구분하고, 인접 영역의 여백을 중복 적용하지 않는다.
+- 목록·등록·수정의 간격은 [2026-11-10 간격 점검 및 적용 기록](checklist-audits/2026-11-10-results-design-system-spacing.md)을 따른다. 공통 폼에서는 관련 필드 내부 간격과 독립 영역 사이 간격을 구분하고, 인접 영역의 여백을 중복 적용하지 않는다.
 
 **승인된 표시 예외 (2026-11-10)**
 
@@ -223,7 +223,7 @@ not decide whether blank means zero, missing, or the previous valid value.
 | 자료실 | `ResourcesPage.tsx`, `resourceService.ts` |
 | 데이터·권한 | `recipeService.ts`, `ingredientService.ts`, `firestore.rules`, `storage.rules` |
 | Shop 임시 정책 | [docs/shop-status.md](shop-status.md) |
-| 레시피 UX 진단 이력 | [2026-10-28 보고서](audits/2026-10-28-results-nav-recipes.md) |
+| 레시피 UX 진단 이력 | [2026-10-28 보고서](checklist-audits/2026-10-28-results-nav-recipes.md) |
 
 <a id="project-gaps"></a>
 

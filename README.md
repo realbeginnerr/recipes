@@ -7,19 +7,18 @@
 | 문서 | 내용 |
 | --- | --- |
 | [개발 작업 규칙](docs/dev-rules.md) | 개발·수정·테스트·검증·배포 작업 기준 |
-| [웹사이트 체크리스트](docs/website-checklist.md) | 기획·접근성·인증·보안·테스트·운영 검토 항목 |
+| [제작 전 체크리스트·Audit 통합 가이드](docs/checklist-audits/checklist-audit-guide.md) | 제작 전 결정 사항, 설계·구현 상세 점검, 제작 중·후 사용성 진단 절차 |
 | [기능 요구사항](docs/requirements.md) | 사이트 기능과 승인된 정책 |
 | [공통 디자인 시스템](docs/design-system.md) | 재사용할 시각·컴포넌트·인터랙션 규칙 |
 | [프로젝트 디자인 명세](docs/design-system-project.md) | 이 사이트의 설정·예외·구현 연결 |
 | [사진 속 상품 태그](docs/photo-tags.md) | 사진·상품 연결 데이터와 기능 명세 |
 | [Shop 운영 상태](docs/shop-status.md) | Shop 임시 중지와 노출 정책 |
-| [UX audit 가이드](docs/audits/audit-guide.md) | 분석 범위·판정·보고서 작성 방법 |
-| [레시피 UX 결과](docs/audits/2026-10-28-results-nav-recipes.md) | 2026-10-28 진단, 승인·구현 상태는 본문 참조 |
-| [디자인 시스템 간격 결과](docs/audits/2026-11-10-results-design-system-spacing.md) | 간격 점검·수정·검증 기록 |
-| [숫자 입력 결과](docs/audits/2026-10-26-results-input.md) | 2026-10-26 입력 동작 점검 |
-| [영어 표시 결과](docs/audits/2026-11-02-results-english.md) | 2026-11-02 번역·표시 점검 |
-| [메뉴 구조 결과](docs/audits/2026-10-18-results-navigation.md) | 메뉴·페이지 구조 분석과 개선 가설 |
-| [상품 태그 검증 결과](docs/audits/2026-10-25-results-photo-tags.md) | 상품 태그 개발 데모·검증·제한 |
+| [레시피 UX 결과](docs/checklist-audits/2026-10-28-results-nav-recipes.md) | 2026-10-28 진단, 승인·구현 상태는 본문 참조 |
+| [디자인 시스템 간격 결과](docs/checklist-audits/2026-11-10-results-design-system-spacing.md) | 간격 점검·수정·검증 기록 |
+| [숫자 입력 결과](docs/checklist-audits/2026-10-26-results-input.md) | 2026-10-26 입력 동작 점검 |
+| [영어 표시 결과](docs/checklist-audits/2026-11-02-results-english.md) | 2026-11-02 번역·표시 점검 |
+| [메뉴 구조 결과](docs/checklist-audits/2026-10-18-results-navigation.md) | 메뉴·페이지 구조 분석과 개선 가설 |
+| [상품 태그 검증 결과](docs/checklist-audits/2026-10-25-results-photo-tags.md) | 상품 태그 개발 데모·검증·제한 |
 | [메뉴 구조 가이드](docs/navigation/guide.md) | 구조 데이터·권한·ID·검증 기준 |
 
 하나의 정책은 한 문서에서 관리하고 다른 문서에서는 링크로 참조한다. 체크리스트는 질문, 요구사항은 결정, 디자인 시스템은 표현·동작 규칙, audit 결과는 작성 시점의 관찰과 검증 기록이다. 과거 결과를 현재 구현이나 배포 완료로 해석하지 않는다.
@@ -29,7 +28,7 @@
 | 폴더 | 넣을 내용 |
 | --- | --- |
 | `docs` | 현재 요구사항·규칙·설계 명세 |
-| `docs/audits` | Audit 가이드와 점검 결과. 결과 이름에는 `results` 포함 |
+| `docs/checklist-audits` | 제작 전 체크리스트·Audit 통합 가이드와 점검 결과. 결과 이름에는 `results` 포함 |
 | `docs/navigation` | 메뉴 구조 YAML·도식·검증 도구 |
 | `src` / `public` / `tests` | 사이트 소스 / 공개 이미지·아이콘 / 자동 테스트 |
 | `scripts` | 실행 스크립트. 입력 JSON이나 백업은 두지 않음 |
@@ -37,7 +36,7 @@
 | `backups` | 복구 데이터·과거 문서·압축본·보존할 빌드 자료 |
 | `logs` | 로컬 실행 로그. Git에는 포함하지 않음 |
 
-디자인 시스템 관련 명세는 `design-system`으로 시작한다. `docs/audits`의 가이드는 `audit-guide.md`로 유지한다. 날짜가 있는 기록은 `YYYY-MM-DD-문서유형-상세주제.md` 순서로 이름을 짓고, 결과는 `results`, 요약은 `summary`처럼 내용에 맞는 유형을 날짜 바로 뒤에 둔다. 디자인 시스템 점검 결과는 `YYYY-MM-DD-results-design-system-상세주제.md`로 이름을 짓는다. 생성일과 분석 기준일은 구분하며 날짜를 임의로 만들지 않는다. 새 결과는 이 목록에 링크·범위·상태를 추가한다. 자세한 절차는 audit 가이드를 따른다.
+디자인 시스템 관련 명세는 `design-system`으로 시작한다. `docs/checklist-audits`의 가이드는 `checklist-audit-guide.md`로 유지한다. 날짜가 있는 기록은 `YYYY-MM-DD-문서유형-상세주제.md` 순서로 이름을 짓고, 결과는 `results`, 요약은 `summary`처럼 내용에 맞는 유형을 날짜 바로 뒤에 둔다. 디자인 시스템 점검 결과는 `YYYY-MM-DD-results-design-system-상세주제.md`로 이름을 짓는다. 생성일과 분석 기준일은 구분하며 날짜를 임의로 만들지 않는다. 새 결과는 이 목록에 링크·범위·상태를 추가한다. 자세한 절차는 audit 가이드를 따른다.
 
 `AGENTS.md`는 AI 도구가 자동으로 찾는 연결 파일이다. 사람이 읽는 작업 규칙 본문은 `docs/dev-rules.md` 한 곳에서 관리한다. `node_modules`·`dist`는 설치·빌드로 생성되는 폴더다.
 
@@ -125,7 +124,7 @@ npm run test:regressions
 #### 읽는 순서
 
 1. `docs/navigation/diagrams/ia-as-is.png`, `docs/navigation/diagrams/ia-to-be.png`: 현재 구조와 개선안의 전체 계층 이미지.
-2. `docs/audits/2026-10-18-results-navigation.md`: 코드 근거, 발견한 문제, 개선 가설과 검증 한계.
+2. `docs/checklist-audits/2026-10-18-results-navigation.md`: 코드 근거, 발견한 문제, 개선 가설과 검증 한계.
 3. `docs/navigation/ia-as-is.yaml`, `docs/navigation/ia-to-be.yaml`: 구조의 단일 원본과 ID별 변경 이유.
 4. `docs/navigation/guide.md`: 분류·권한·ID·검증 기준.
 5. `docs/navigation/changes.md`: 과거 결정과 변경 이유를 담은 보조 자료.
