@@ -3,7 +3,7 @@ import { CatalogTags } from '../catalog/CatalogTags'
 import { FoodImage } from '../FoodImage'
 import { NutritionSummary } from '../NutritionSummary'
 import { StarRating } from './StarRating'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import type { Recipe } from '../../types'
 
 import { resolveRecipeImage } from '../../utils/recipeImage'
@@ -19,7 +19,6 @@ import { translateContent } from '../../i18n/content'
 type CardVariant = 'recipe' | 'product'
 
 export function RecipeCard({ recipe, openInNewTab = false, variant = 'recipe' }: { recipe: Recipe; openInNewTab?: boolean; variant?: CardVariant }) {
-  const navigate = useNavigate()
   const { language } = useLanguage()
   const name = getRecipeDisplayName(recipe, language)
   const minutes = recipe.cookingTimeMinutes
@@ -38,11 +37,6 @@ export function RecipeCard({ recipe, openInNewTab = false, variant = 'recipe' }:
   const price = recipe.productPricing ? discountedPrice({ pricing: recipe.productPricing }) : null
   const regularPrice = recipe.productPricing?.regular ?? null
   const description = variant === 'product' ? (new DOMParser().parseFromString(sanitizeProductHtml(translateContent(recipe.productDescription ?? recipe.memo, language)).replace(/<\/(?:p|div|li|h[1-6])>|<br\s*\/?>/gi, ' '), 'text/html').body.textContent ?? '').replace(/\s+/g, ' ').trim() : ''
-
-  function handleClick() {
-    if (!recipe.productId) trackRecipeView(recipe.nameKo, recipe.name)
-    navigate(detailPath)
-  }
 
   const content = <>
       <div className="recipe-card__image-wrap card-photo">
@@ -65,9 +59,8 @@ export function RecipeCard({ recipe, openInNewTab = false, variant = 'recipe' }:
       </div>
     </>
   if (openInNewTab) return <Link className="recipe-card" to={detailPath} target="_blank" rel="noopener noreferrer" aria-label={`${name} (${language === 'ko' ? '새 탭에서 열기' : 'opens in a new tab'})`} onClick={() => { if (!recipe.productId) trackRecipeView(recipe.nameKo, recipe.name) }}>{content}</Link>
-  return <article className="recipe-card" onClick={handleClick}
-    onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleClick() } }}
-    role="button" tabIndex={0} aria-label={name}>{content}</article>
+  return <Link className="recipe-card" to={detailPath} aria-label={name}
+    onClick={() => { if (!recipe.productId) trackRecipeView(recipe.nameKo, recipe.name) }}>{content}</Link>
 }
 
 export function RecipeGrid({ recipes, variant = 'recipe' }: { recipes: Recipe[]; variant?: CardVariant }) {

@@ -22,17 +22,17 @@
 .catalog-count strong { color: #122B22; font-weight: 500; }
 .recipe-catalog .recipe-grid, .catalog-skeletons { display: grid; grid-template-columns: minmax(0, 1fr); gap: 24px; margin: 0; }
 .recipe-list-catalog .recipe-grid,
-.recipe-list-catalog .catalog-skeletons { column-gap: 18px; row-gap: 24px; }
+.recipe-list-catalog .catalog-skeletons { column-gap: 16px; row-gap: 24px; }
 .recipe-catalog.recipe-list-catalog .recipe-card { background: #FFFFFF; }
-.recipe-catalog.recipe-list-catalog .recipe-card__footer { padding-inline: 0; }
+.recipe-catalog.recipe-list-catalog .recipe-card__footer { padding: 16px 0; }
 .recipe-catalog.recipe-list-catalog .recipe-card__image-wrap { aspect-ratio: 1 / 1; }
 .recipe-card__macro-grams { margin: 0 0 4px; white-space: nowrap; font-size: 14px; color: #596B64; }
 .recipe-card__macro-grams > span { font-family: var(--font-numeric); font-variant-numeric: tabular-nums; letter-spacing: 0; color: #122B22; }
 .recipe-card__macro-grams .recipe-card__macro-separator { color: #D1D6D4; }
 .recipe-card__macro-grams .recipe-card__powder-grams { color: #ACB5B2; }
-.recipe-card__cooking-time { margin: 6px 0 0; font-size: 14px; color: #596B64; }
+.recipe-card__cooking-time { margin: 8px 0 0; font-size: 14px; color: #596B64; }
 .recipe-card__cooking-time > span { color: #122B22; }
-.recipe-catalog .recipe-card { background: #E9EBE8; border: 0; border-radius: 0; overflow: hidden; box-shadow: none; text-align: left; }
+.recipe-catalog .recipe-card { background: #E9EBE8; border: 0; border-radius: 0; overflow: hidden; box-shadow: none; text-align: left; text-decoration: none; }
 .recipe-catalog .recipe-card__image-wrap { aspect-ratio: 4 / 3; }
 .recipe-catalog .recipe-card__image { width: 100%; height: 100%; object-fit: cover; }
 .recipe-catalog .recipe-card__footer { display: block; padding: 20px; }
@@ -55,7 +55,7 @@
 
 @media (min-width: 1024px) {
   .recipe-list-catalog .recipe-grid,
-  .recipe-list-catalog .catalog-skeletons { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .recipe-list-catalog .catalog-skeletons { grid-template-columns: repeat(4, minmax(0, 1fr)); column-gap: 24px; }
 }
 
 @media (max-width: 767px) {
@@ -67,8 +67,8 @@
   .recipe-list-catalog:lang(ko) .catalog-intro__title-with-image h1 { font-size: clamp(24px, 6vw, 32px); white-space: nowrap; }
   .recipe-list-title-second-line { display: block; }
   .recipe-list-catalog .recipe-grid,
-  .recipe-list-catalog .catalog-skeletons { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 18px; row-gap: 24px; }
-  .recipe-list-catalog .recipe-card__footer { padding: 12px; }
+  .recipe-list-catalog .catalog-skeletons { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 16px; row-gap: 24px; }
+  .recipe-catalog.recipe-list-catalog .recipe-card__footer { padding: 12px 0; }
   .recipe-list-catalog .recipe-card__name { font-size: 14px; margin-bottom: 12px; }
   .recipe-list-catalog .recipe-card .catalog-macros { display: none; }
   .recipe-list-catalog .recipe-card .catalog-card-summary { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; }

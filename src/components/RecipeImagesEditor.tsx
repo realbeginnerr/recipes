@@ -24,11 +24,12 @@ function ImagePreview({ image, alt }: { image: ImageDraft; alt: string }) {
   return preview || image.url ? <img src={preview || image.url} alt={alt} className="edit-inline__image-preview" /> : null
 }
 
-export function RecipeImagesEditor({ images, onChange, disabled = false, allowFiles = true }: {
+export function RecipeImagesEditor({ images, onChange, disabled = false, allowFiles = true, errors = [] }: {
   images: ImageDraft[]
   onChange: (images: ImageDraft[]) => void
   disabled?: boolean
   allowFiles?: boolean
+  errors?: string[]
 }) {
   const copy = useUiCopy()
   const { language } = useLanguage()
@@ -40,9 +41,11 @@ export function RecipeImagesEditor({ images, onChange, disabled = false, allowFi
   return <fieldset className="edit-inline__image-field" disabled={disabled}>
     <legend className="text-sm font-medium">{ko ? '레시피 사진 (최대 5장)' : 'Recipe photos (up to 5)'}</legend>
     <p className="text-sm">{ko ? '첫 번째 사진이 대표 사진입니다. URL을 입력하거나 기기에서 사진을 선택하세요.' : 'The first photo is the cover. Enter a URL or choose a photo.'}</p>
-    {images.map((image, index) => <div key={index} className="space-y-2">
+    <div className="recipe-image-editor__photos">
+    {images.map((image, index) => <div key={index} className="recipe-image-editor__photo">
       <label className="text-sm font-medium" htmlFor={`recipe-photo-${index}`}>{ko ? `사진 ${index + 1} URL` : `Photo ${index + 1} URL`}</label>
-      <Input id={`recipe-photo-${index}`} value={image.url} placeholder={copy("https://... 또는 /recipes/images/...")} onChange={event => update(index, { url: event.target.value })} />
+      <Input id={`recipe-photo-${index}`} value={image.url} aria-invalid={Boolean(errors[index]) || undefined} aria-describedby={errors[index] ? `recipe-photo-error-${index}` : undefined} placeholder={copy("https://... 또는 /recipes/images/...")} onChange={event => update(index, { url: event.target.value })} />
+      {errors[index] && <p id={`recipe-photo-error-${index}`} role="alert" className="add-recipe__field-error">{errors[index]}</p>}
       <div className="edit-inline__image-controls">
         {allowFiles && <label className="text-sm">{ko ? '기기에서 사진 선택' : 'Choose photo'}<input type="file" accept="image/*" onChange={event => {
           const file = event.target.files?.[0]
@@ -61,6 +64,7 @@ export function RecipeImagesEditor({ images, onChange, disabled = false, allowFi
       </div>
       <ImagePreview image={image} alt={ko ? `사진 ${index + 1} 미리보기` : `Photo ${index + 1} preview`} />
     </div>)}
+    </div>
     {error && <p role="alert">{error}</p>}
     <Button type="button" variant="outline" size="sm" className="w-fit self-start" disabled={images.length >= 5} onClick={() => onChange([...images, { id: crypto.randomUUID(), url: '' }])}>{ko ? '사진 추가' : 'Add photo'}</Button>
   </fieldset>

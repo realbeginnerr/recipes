@@ -13,7 +13,7 @@ function LayoutContent() {
   const { pathname } = useLocation()
   const { language } = useLanguage()
   useEffect(() => { window.scrollTo(0, 0) }, [pathname])
-  const fullWidth = pathname === '/' || pathname === '/recipes' || pathname === '/blending-tea' || pathname.startsWith('/products/') || pathname.startsWith('/product/') || pathname === '/shop-settings' || pathname === '/recipe-roulette' || pathname === '/ingredients' || pathname === '/resources' || pathname === '/calendar' || pathname.startsWith('/recipe/')
+  const fullWidth = pathname === '/' || pathname === '/recipes' || pathname === '/add-recipe' || pathname === '/blending-tea' || pathname.startsWith('/products/') || pathname.startsWith('/product/') || pathname === '/shop-settings' || pathname === '/recipe-roulette' || pathname === '/ingredients' || pathname === '/resources' || pathname === '/calendar' || pathname.startsWith('/recipe/')
   return <div className="site-shell" lang={language}>
     <SiteHeader />
     <main className={fullWidth ? 'reference-main' : 'site-main'}>

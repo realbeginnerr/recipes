@@ -73,8 +73,9 @@
 .detail-table-tabs [role="tab"]:focus-visible { outline: 2px solid var(--primary); outline-offset: -2px; }
 @media (max-width: 400px) {
   .detail-table-tabs [role="tab"] { padding-inline: 10px; }
+  .recipe-edit-tablist [role="tab"] { padding-inline: 12px; }
 }
-.recipe-edit-tablist { padding-block: 30px; border-bottom: 0; }
+.recipe-edit-tablist { padding-block: 32px; border-bottom: 0; }
 .meal-blog { width: 100%; max-width: none; margin: 0; padding: 0; background: transparent; border: 0; }
 .meal-blog__prose { color: #263b33; font-size: 15px; line-height: 1.75; letter-spacing: -.02em; }
 .meal-blog__prose p { margin: 0 0 1.5em; white-space: pre-wrap; overflow-wrap: anywhere; }

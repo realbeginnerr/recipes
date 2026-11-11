@@ -5,7 +5,7 @@ import { ContentState, LoadingState } from '../components/feedback/ContentState'
 import { RegistrationActions } from '../components/catalog/RegistrationRequestButton'
 import { PageIntro, CatalogToolbar, CategoryFilter, SearchField, SortSelect } from '../components/catalog/CatalogControls'
 import { Button } from '@/components/ui/button'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { useLanguage } from '../context/LanguageContext'
 import { useSearch } from '../context/SearchContext'
@@ -22,6 +22,10 @@ import { recipeCategories, categoryEnglish, getRecipeCategories, type RecipeCate
 import { teaCategoryEnglish, getTeaTags, type TeaCategory } from '../utils/teaCategory'
 import type { Recipe } from '../types'
 import './RecipePage.css'
+
+function recipePageSize() {
+  return window.matchMedia('(min-width: 1024px)').matches ? 12 : 6
+}
 
 export function RecipePage({ blendingTea = false }: { blendingTea?: boolean }) {
   const copy = useUiCopy()
@@ -43,8 +47,19 @@ export function RecipePage({ blendingTea = false }: { blendingTea?: boolean }) {
   const [loading, setLoading] = useState(true)
   const [loadFailed, setLoadFailed] = useState(false)
   const [loadAttempt, setLoadAttempt] = useState(0)
-  const [limit, setLimit] = useState(8)
-  const sentinel = useRef<HTMLDivElement>(null)
+  const [pageSize, setPageSize] = useState(() => blendingTea ? 8 : recipePageSize())
+  const [limit, setLimit] = useState(() => blendingTea ? 8 : recipePageSize())
+  useEffect(() => {
+    if (blendingTea) return
+    const media = window.matchMedia('(min-width: 1024px)')
+    const update = () => {
+      const next = media.matches ? 12 : 6
+      setPageSize(next)
+      setLimit(current => Math.max(current, next))
+    }
+    media.addEventListener('change', update)
+    return () => media.removeEventListener('change', update)
+  }, [blendingTea])
 
   useEffect(() => {
     let cancelled = false
@@ -89,17 +104,9 @@ export function RecipePage({ blendingTea = false }: { blendingTea?: boolean }) {
       return sortOrder === 'date-asc' ? result : -result
     }), [recipes, category, teaCategory, appliedSearch, ingredientId, isAdmin, sortOrder, ko, language, blendingTea])
 
-  useEffect(() => { setLimit(8) }, [category, teaCategory, appliedSearch, ingredientId, sortOrder, homeVersion])
+  useEffect(() => { setLimit(blendingTea ? 8 : recipePageSize()) }, [category, teaCategory, appliedSearch, ingredientId, sortOrder, homeVersion, blendingTea])
   useEffect(() => { setCategory([]); setTeaCategory('전체') }, [homeVersion])
   const hasMore = limit < visibleRecipes.length
-  useEffect(() => {
-    if (!hasMore || loading || !sentinel.current || !('IntersectionObserver' in window)) return
-    const observer = new IntersectionObserver(entries => {
-      if (entries[0].isIntersecting) setLimit(current => current + 8)
-    }, { rootMargin: '160px' })
-    observer.observe(sentinel.current)
-    return () => observer.disconnect()
-  }, [hasMore, limit, loading])
 
   return <section className="recipe-catalog recipe-list-catalog" lang={language}>
     <PageIntro
@@ -129,7 +136,7 @@ export function RecipePage({ blendingTea = false }: { blendingTea?: boolean }) {
       {loadFailed ? <ContentState error title={ko ? `${itemLabel}를 불러오지 못했습니다` : `Unable to load ${itemLabel.toLowerCase()}`}><Button className="catalog-primary" onClick={() => setLoadAttempt(n => n + 1)}>{ko ? '다시 시도' : 'Try again'}</Button></ContentState>
         : loading ? <LoadingState skeleton label={ko ? `${itemLabel} 불러오는 중` : `Loading ${itemLabel.toLowerCase()}`} />
         : visibleRecipes.length === 0 ? <ContentState icon={blendingTea ? '🍵' : '🥗'} title={ko ? `조건에 맞는 ${blendingTea ? '차' : itemLabel}가 없어요` : `No ${itemLabel.toLowerCase()} match your selection`} description={ko ? '필터를 조정하거나 새로운 항목을 등록해보세요.' : 'Try adjusting your filters or adding a new item.'}><div className="catalog-empty-actions"><Button className="catalog-primary" onClick={() => { setCategory([]); setSearchParams({}); resetHome() }}>{ko ? '필터 초기화' : 'Reset filters'}</Button>{!blendingTea && <RegistrationActions kind="recipe" />}</div></ContentState>
-        : <><RecipeGrid recipes={visibleRecipes.slice(0, limit)} variant={blendingTea ? 'product' : 'recipe'} /><div className="catalog-end" ref={sentinel}>{hasMore ? <Button variant="ghost" size="content" type="button" onClick={() => setLimit(n => n + 8)}>{ko ? `${itemLabel} 더 보기` : `Load more ${itemLabel.toLowerCase()}`}</Button> : <span>🎉 {ko ? blendingTea ? '차를 모두 둘러봤어요!' : '내가 만들어본 레시피 끝!' : `You’ve seen all the ${itemLabel.toLowerCase()}!`}</span>}</div></>}
+        : <><RecipeGrid recipes={visibleRecipes.slice(0, limit)} variant={blendingTea ? 'product' : 'recipe'} /><div className="catalog-end">{hasMore ? <Button variant="ghost" size="content" type="button" onClick={() => setLimit(n => n + pageSize)}>{ko ? `${itemLabel} 더 보기` : `Load more ${itemLabel.toLowerCase()}`}</Button> : <span>🎉 {ko ? blendingTea ? '차를 모두 둘러봤어요!' : '내가 만들어본 레시피 끝!' : `You’ve seen all the ${itemLabel.toLowerCase()}!`}</span>}</div></>}
     </div>
   </section>
 }

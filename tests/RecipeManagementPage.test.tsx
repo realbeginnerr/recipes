@@ -2,9 +2,9 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { MemoryRouter, Route, Routes } from 'react-router-dom'
 import { expect, it, vi } from 'vitest'
 import { RecipeDetailPage as RecipeManagementPage } from '../src/pages/RecipeManagementPage'
-import { updateRecipeInFirestore } from '../src/services/recipeService'
+import { loadRecipesFromFirestore, updateRecipeInFirestore } from '../src/services/recipeService'
 
-vi.mock('../src/context/LanguageContext', () => ({ useLanguage: () => ({ language: 'en' }) }))
+vi.mock('../src/context/LanguageContext', () => ({ useLanguage: () => ({ language: 'en' }), useUiCopy: () => (text: string) => text }))
 vi.mock('../src/context/AdminContext', () => ({ useAdmin: () => ({ isAdmin: true }) }))
 vi.mock('../src/services/ingredientService', () => ({ loadIngredientsFromFirestore: vi.fn() }))
 vi.mock('../src/services/recipeService', () => ({
@@ -37,4 +37,15 @@ it('returns directly to the detail route only after the edit is saved successful
   expect(await screen.findByText('Recipe detail')).toBeTruthy()
   expect(screen.queryByText('Edit form')).toBeNull()
   expect(updateRecipeInFirestore).toHaveBeenLastCalledWith(expect.objectContaining({ name: 'Updated' }))
+})
+
+it('distinguishes a load failure from a missing recipe and retries', async () => {
+  vi.mocked(loadRecipesFromFirestore).mockRejectedValueOnce(new Error('offline'))
+  render(<MemoryRouter initialEntries={['/recipe/test/edit']}><Routes>
+    <Route path="/recipe/:id/edit" element={<RecipeManagementPage />} />
+  </Routes></MemoryRouter>)
+  expect(await screen.findByText('Could not load the recipe.')).toBeTruthy()
+  expect(screen.queryByText('Recipe not found')).toBeNull()
+  fireEvent.click(screen.getByRole('button', { name: 'Try again' }))
+  expect(await screen.findByText('Edit form')).toBeTruthy()
 })

@@ -88,14 +88,18 @@ export async function saveRecipeToFirestore(
 ): Promise<string> {
   assertRecipeUnits([...recipe.items, ...(recipe.sideItems ?? [])])
   const docRef = doc(collection(db, COLLECTION))
-  await writeRecipeWithUniqueNames(docRef.id, {
+  const data = {
     ...recipe,
     ...reconcileRecipeGallery({ ...recipe, id: '' }),
     items: recipe.items.map(item => ({ ...item, ingredientId: canonicalIngredientId(item.ingredientId) })),
     ...(recipe.sideItems ? { sideItems: recipe.sideItems.map(item => ({ ...item, ingredientId: canonicalIngredientId(item.ingredientId) })) } : {}),
     categories: getRecipeCategories(recipe),
     createdAt: Date.now(),
-  })
+  }
+  for (const key of Object.keys(data)) {
+    if ((data as Record<string, unknown>)[key] === undefined) delete (data as Record<string, unknown>)[key]
+  }
+  await writeRecipeWithUniqueNames(docRef.id, data)
   return docRef.id
 }
 

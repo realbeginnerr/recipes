@@ -51,6 +51,7 @@ import { loadRecipesFromFirestore, mergeStaticAndFirestoreRecipes } from '../ser
 
 type RecipeTableProps = {
   defaultEditing?: boolean
+  creating?: boolean
   recipe: Recipe
   rows: RecipeRowState[]
   appliedSearch: string
@@ -69,6 +70,7 @@ type RecipeTableProps = {
 
 export function RecipeTable({
   defaultEditing = false,
+  creating = false,
   recipe,
   rows,
   appliedSearch,
@@ -90,7 +92,7 @@ export function RecipeTable({
   const navigate = useNavigate()
   const { isAdmin } = useAdmin()
   const { approvedPath } = useAddPageAccess()
-  const canSave = isAdmin || approvedPath === `/recipe/${recipe.id}/edit`
+  const canSave = isAdmin || approvedPath === (creating ? '/add-recipe' : `/recipe/${recipe.id}/edit`)
   const [isSaving, setIsSaving] = useState(false)
   const { toast, showToast, closeToast } = useToast()
   const [localRecipe, setLocalRecipe] = useState(recipe)
@@ -123,7 +125,9 @@ export function RecipeTable({
   const [editName, setEditName] = useState(activeRecipe.name)
   const [editNameKo, setEditNameKo] = useState(activeRecipe.nameKo)
   const [nameErrors, setNameErrors] = useState<RecipeNameField[]>([])
-  const [editCategories, setEditCategories] = useState<RecipeCategory[]>(() => getRecipeCategories(activeRecipe))
+  const [emptyNameErrors, setEmptyNameErrors] = useState<RecipeNameField[]>([])
+  const [imageErrors, setImageErrors] = useState<string[]>([])
+  const [editCategories, setEditCategories] = useState<RecipeCategory[]>(() => creating ? activeRecipe.categories ?? [] : getRecipeCategories(activeRecipe))
   const [isCollapsed, setIsCollapsed] = useState(defaultEditing ? false : recipe.hidden ?? false)
   const [divisionInput, setDivisionInput] = useState(String(activeRecipe.divisionCount ?? divisionCount))
   const parsedDivisionInput = Number.parseInt(divisionInput, 10)
@@ -187,6 +191,10 @@ export function RecipeTable({
   }
 
   function handleCancel() {
+    if (defaultEditing) {
+      navigate(creating ? '/recipes' : `/recipe/${encodeURIComponent(recipe.id)}`)
+      return
+    }
     setDivisionInput(String(activeRecipe.divisionCount ?? divisionCount))
     setEditImages(recipeImageDrafts(activeRecipe))
     setEditProductTags(activeRecipe.productTags ?? [])
@@ -198,6 +206,22 @@ export function RecipeTable({
 
   async function handleSave() {
     if (isSaving || tagBusy) return
+    const emptyNames: RecipeNameField[] = []
+    if (!editNameKo.trim()) emptyNames.push('nameKo')
+    if (!editName.trim()) emptyNames.push('name')
+    setEmptyNameErrors(emptyNames)
+    const invalidImages = editImages.map(image => {
+      if (!image.url.trim() || image.file) return ''
+      try {
+        const url = new URL(image.url.trim(), window.location.origin)
+        if (!['http:', 'https:'].includes(url.protocol) || (!image.url.trim().startsWith('/') && !/^https?:\/\//i.test(image.url.trim()))) throw new Error('Invalid URL')
+        return ''
+      } catch {
+        return language === 'ko' ? '이미지 링크는 http·https 주소 또는 /로 시작하는 경로를 입력해 주세요.' : 'Enter an http/https image URL or a path starting with /.'
+      }
+    })
+    setImageErrors(invalidImages)
+    if (emptyNames.length || invalidImages.some(Boolean)) return
     if (!shopFeatures.enabled && editPhotoProductUrl.trim() && !safeProductUrl(editPhotoProductUrl.trim())) {
       showToast(language === 'ko' ? '상품 구매 링크는 http 또는 https 주소로 입력해 주세요.' : 'Enter an http or https product purchase URL.', 'error')
       document.getElementById(`photo-product-url-${recipe.id}`)?.focus()
@@ -510,7 +534,7 @@ export function RecipeTable({
                 {language === 'ko' ? '취소' : 'Cancel'}
               </Button>
               <Button type="button" size="sm" onClick={handleSave} disabled={isSaving || tagBusy}>
-                {isSaving ? (language === 'ko' ? '저장 중...' : 'Saving...') : (language === 'ko' ? '저장' : 'Save')}
+                {isSaving ? (language === 'ko' ? '저장 중...' : 'Saving...') : (creating ? (language === 'ko' ? '레시피 추가' : 'Add recipe') : (language === 'ko' ? '저장' : 'Save'))}
               </Button>
             </>
           )}
@@ -523,7 +547,7 @@ export function RecipeTable({
       </div>
       <div className={`recipe-block__heading-row${isEditing ? ' recipe-block__heading-row--editing' : ''}`}>
         <div className="recipe-block__title-group">
-          {isAdmin && <Button
+          {isAdmin && !creating && <Button
             type="button"
             variant="ghost"
             size="icon"
@@ -555,9 +579,11 @@ export function RecipeTable({
                 <Input
                   id={`recipe-name-ko-${recipe.id}`}
                   value={editNameKo}
-                  aria-invalid={nameErrors.includes('nameKo') || undefined}
-                  onChange={(e) => { setEditNameKo(e.target.value); setNameErrors(current => current.filter(field => field !== 'nameKo')) }}
+                  placeholder={copy('한글 이름')}
+                  aria-invalid={nameErrors.includes('nameKo') || emptyNameErrors.includes('nameKo') || undefined}
+                  onChange={(e) => { setEditNameKo(e.target.value); setNameErrors(current => current.filter(field => field !== 'nameKo')); setEmptyNameErrors(current => current.filter(field => field !== 'nameKo')) }}
                 />
+                {emptyNameErrors.includes('nameKo') && <p role="alert" className="add-recipe__field-error">{language === 'ko' ? '한글 이름을 입력해 주세요.' : 'Enter a Korean name.'}</p>}
                 {nameErrors.includes('nameKo') && <p role="alert" className="add-recipe__field-error">{language === 'ko' ? duplicateRecipeNameMessage : 'This name already exists. Please choose another name.'}</p>}
               </div>
               <div className="recipe-block__title-edit-field">
@@ -565,9 +591,11 @@ export function RecipeTable({
                 <Input
                   id={`recipe-name-en-${recipe.id}`}
                   value={editName}
-                  aria-invalid={nameErrors.includes('name') || undefined}
-                  onChange={(e) => { setEditName(e.target.value); setNameErrors(current => current.filter(field => field !== 'name')) }}
+                  placeholder="English name"
+                  aria-invalid={nameErrors.includes('name') || emptyNameErrors.includes('name') || undefined}
+                  onChange={(e) => { setEditName(e.target.value); setNameErrors(current => current.filter(field => field !== 'name')); setEmptyNameErrors(current => current.filter(field => field !== 'name')) }}
                 />
+                {emptyNameErrors.includes('name') && <p role="alert" className="add-recipe__field-error">{language === 'ko' ? '영문 이름을 입력해 주세요.' : 'Enter an English name.'}</p>}
                 {nameErrors.includes('name') && <p role="alert" className="add-recipe__field-error">{language === 'ko' ? duplicateRecipeNameMessage : 'This name already exists. Please choose another name.'}</p>}
               </div>
             </div>
@@ -621,10 +649,11 @@ export function RecipeTable({
 
       {!isCollapsed && isEditing && (
         <div className="edit-inline__link-field">
-          <label className="edit-inline__link-label">
+          <label className="edit-inline__link-label" htmlFor={`recipe-link-${recipe.id}`}>
             {language === 'ko' ? '링크' : 'Link'}
           </label>
           <Input
+            id={`recipe-link-${recipe.id}`}
             type="url"
             value={editLink}
             onChange={(e) => setEditLink(e.target.value)}
@@ -634,7 +663,7 @@ export function RecipeTable({
       )}
 
       {!isCollapsed && isEditing && (
-        <fieldset className="edit-inline__link-field" disabled={isSaving || tagBusy}>
+        <fieldset className="edit-inline__link-field recipe-tag-field" disabled={isSaving || tagBusy}>
           <legend className="edit-inline__link-label">{language === 'ko' ? '레시피 태그' : 'Recipe tags'}</legend>
           <div className="flex flex-wrap gap-2">
             {recipeCategories.filter(category => category !== '전체').map(category => (
@@ -669,20 +698,25 @@ export function RecipeTable({
       )}
 
       {!isCollapsed && isEditing && (
-        <RecipeImagesEditor images={editImages} onChange={images => {
+        <RecipeImagesEditor images={editImages} errors={imageErrors} onChange={images => {
+          setImageErrors([])
           setEditImages(images)
           const ids = new Set(images.map(image => image.id))
           setEditProductTags(tags => tags.filter(tag => ids.has(tag.imageId)))
         }} disabled={isSaving || tagBusy} />
       )}
 
-      {!isCollapsed && isEditing && isAdmin && !shopFeatures.enabled && <fieldset className="product-tag-editor" disabled={isSaving || tagBusy}>
+      {!isCollapsed && isEditing && isAdmin && !shopFeatures.enabled && <fieldset className="product-tag-editor recipe-photo-product-fields" disabled={isSaving || tagBusy}>
         <legend>{language === 'ko' ? '사진 속 상품' : 'Products in this photo'}</legend>
+        <div className="recipe-photo-product-field">
         <label htmlFor={`photo-product-description-${recipe.id}`}>{language === 'ko' ? '상품 설명' : 'Product information'}</label>
         <Textarea id={`photo-product-description-${recipe.id}`} value={editPhotoProductDescription} onChange={event => setEditPhotoProductDescription(event.target.value)} rows={5} aria-describedby={`photo-product-description-hint-${recipe.id}`} />
         <p id={`photo-product-description-hint-${recipe.id}`}>{language === 'ko' ? '제품명과 설명을 자유롭게 적어주세요. 레시피를 저장하면 상세 페이지에 표시됩니다.' : 'Enter product names and details. Save the recipe to display this information on the detail page.'}</p>
+        </div>
+        <div className="recipe-photo-product-field">
         <label htmlFor={`photo-product-url-${recipe.id}`}>{language === 'ko' ? '상품 구매 링크' : 'Product purchase URL'}</label>
         <Input id={`photo-product-url-${recipe.id}`} type="url" value={editPhotoProductUrl} onChange={event => setEditPhotoProductUrl(event.target.value)} placeholder="https://..." aria-invalid={!!editPhotoProductUrl.trim() && !safeProductUrl(editPhotoProductUrl.trim())} />
+        </div>
       </fieldset>}
       {!isCollapsed && isEditing && isAdmin && shopFeatures.enabled && <ProductTagEditor images={editImages} tags={editProductTags} onChange={setEditProductTags} disabled={isSaving} onBusyChange={setTagBusy} />}
       {!isCollapsed && isEditing && <section className="recipe-edit-tabs">
@@ -750,7 +784,7 @@ export function RecipeTable({
                     <span>{ingredientNameForId(item.ingredientId)}</span>
                     {unitErrorIds.has(item.ingredientId) && ingredientNameForId(item.ingredientId) !== '알 수 없는 식재료' && <p role="alert" className="add-recipe__field-error">{language === 'ko' ? `${ingredientNameForId(item.ingredientId)} (${item.defaultUnit}): 단위 환산 정보가 없습니다. 식재료 환산 정보를 등록하거나 다른 단위를 선택해 주세요.` : `${ingredientNameForId(item.ingredientId)} (${item.defaultUnit}): No conversion is available. Register a conversion or choose another unit.`}</p>}
                   </TableCell>
-<TableCell><Input aria-label={copy("요리 그룹")} value={item.cookingGroup ?? ''} disabled={isSaving || tagBusy} onChange={event => setEditItems(current => current.map((entry, i) => i === index ? { ...entry, cookingGroup: event.target.value } : entry))} /></TableCell>
+<TableCell><Input aria-label={language === 'ko' ? `${ingredientNameForId(item.ingredientId)} 요리 그룹` : `${ingredientNameForId(item.ingredientId)} cooking group`} value={item.cookingGroup ?? ''} disabled={isSaving || tagBusy} onChange={event => setEditItems(current => current.map((entry, i) => i === index ? { ...entry, cookingGroup: event.target.value } : entry))} /></TableCell>
 
                   <TableCell><Input type="number" className="h-7 w-20 text-sm" value={item.defaultAmount} readOnly /></TableCell>
                   <TableCell><UnitSelect ingredientId={item.ingredientId} value={item.defaultUnit} onValueChange={(v) => handleEditUnitChange(index, v)} language={language} /></TableCell>
@@ -802,11 +836,12 @@ export function RecipeTable({
                       </Button></div>
                       {unitErrorIds.has(item.ingredientId) && <p role="alert" className="add-recipe__field-error">{language === 'ko' ? `${getIngredientDisplayName(ingredient, language)} (${item.defaultUnit}): 단위 환산 정보가 없습니다. 식재료 환산 정보를 등록하거나 다른 단위를 선택해 주세요.` : `${getIngredientDisplayName(ingredient, language)} (${item.defaultUnit}): No unit conversion is available. Register a conversion or choose another unit.`}</p>}
                     </TableCell>
-<TableCell><Input className="cooking-group-input" aria-label={copy("요리 그룹")} placeholder={copy("예: 양념장·반죽")} value={item.cookingGroup ?? ''} disabled={isSaving || tagBusy} onChange={event => setEditItems(current => current.map((entry, i) => i === index ? { ...entry, cookingGroup: event.target.value } : entry))} /></TableCell>
+<TableCell><Input className="cooking-group-input" aria-label={language === 'ko' ? `${ingredientNameForId(item.ingredientId)} 요리 그룹` : `${ingredientNameForId(item.ingredientId)} cooking group`} placeholder={copy("예: 양념장·반죽")} value={item.cookingGroup ?? ''} disabled={isSaving || tagBusy} onChange={event => setEditItems(current => current.map((entry, i) => i === index ? { ...entry, cookingGroup: event.target.value } : entry))} /></TableCell>
 
                     <TableCell>
                       <Input
                         type="number"
+                        aria-label={language === 'ko' ? `${ingredientNameForId(item.ingredientId)} 수량` : `${ingredientNameForId(item.ingredientId)} quantity`}
                         className="h-7 w-20 text-sm"
                         min={0}
                         step="0.1"
@@ -913,6 +948,7 @@ export function RecipeTable({
                       className="h-7 w-16 text-sm inline-block"
                       min={1}
                       step="1"
+                      aria-label="Portions"
                       value={divisionInput}
                       onFocus={startEditing}
                       onChange={(event) => {
@@ -940,6 +976,7 @@ export function RecipeTable({
                       className="h-7 w-16 text-sm inline-block"
                       min={1}
                       step="1"
+                      aria-label={language === 'ko' ? '인분 수' : 'Portions'}
                       value={divisionInput}
                       onFocus={startEditing}
                       onChange={(event) => {
@@ -973,7 +1010,7 @@ export function RecipeTable({
               if (!isRice && !ing) return (
                 <TableRow key={`${item.ingredientId}-${index}`} className="recipe-table__multigrain-row">{isEditing && <TableCell className="edit-inline__order-cell"><IngredientOrderControls index={index} count={editSideItems.length} name={ingredientNameForId(item.ingredientId)} ko={language === 'ko'} disabled={isSaving || tagBusy} onMove={direction => { setEditSideItems(current => moveIngredient(current, index, direction)); setAmountDrafts({}) }} /></TableCell>}
                   <TableCell>{ingredientNameForId(item.ingredientId)}{unitErrorIds.has(item.ingredientId) && ingredientNameForId(item.ingredientId) !== '알 수 없는 식재료' && <p role="alert" className="add-recipe__field-error">{language === 'ko' ? `${ingredientNameForId(item.ingredientId)} (${item.defaultUnit}): 단위 환산 정보가 없습니다. 식재료 환산 정보를 등록하거나 다른 단위를 선택해 주세요.` : `${ingredientNameForId(item.ingredientId)} (${item.defaultUnit}): No conversion is available. Register a conversion or choose another unit.`}</p>}</TableCell>
-{isEditing && <TableCell><Input aria-label={copy("요리 그룹")} value={item.cookingGroup ?? ''} disabled={isSaving || tagBusy} onChange={event => setEditSideItems(current => current.map((entry, i) => i === index ? { ...entry, cookingGroup: event.target.value } : entry))} /></TableCell>}
+{isEditing && <TableCell><Input aria-label={language === 'ko' ? `${ingredientNameForId(item.ingredientId)} 요리 그룹` : `${ingredientNameForId(item.ingredientId)} cooking group`} value={item.cookingGroup ?? ''} disabled={isSaving || tagBusy} onChange={event => setEditSideItems(current => current.map((entry, i) => i === index ? { ...entry, cookingGroup: event.target.value } : entry))} /></TableCell>}
 
                   <TableCell>{item.defaultAmount}</TableCell>
                   <TableCell>{getUnitDisplayName(item.defaultUnit, language)}</TableCell><TableCell colSpan={3} />
@@ -1022,13 +1059,14 @@ export function RecipeTable({
                         <ArrowLeftRight size={14} aria-hidden="true" />
                       </Button></div>{unitErrorIds.has(item.ingredientId) && <p role="alert" className="add-recipe__field-error">{language === 'ko' ? `${getIngredientDisplayName(ing!, language)} (${item.defaultUnit}): 단위 환산 정보가 없습니다. 식재료 환산 정보를 등록하거나 다른 단위를 선택해 주세요.` : `${getIngredientDisplayName(ing!, language)} (${item.defaultUnit}): No unit conversion is available. Register a conversion or choose another unit.`}</p>}</> : getIngredientDisplayName(ing!, language)}
                   </TableCell>
-{isEditing && <TableCell><Input aria-label={copy("요리 그룹")} value={item.cookingGroup ?? ''} disabled={isSaving || tagBusy} onChange={event => setEditSideItems(current => current.map((entry, i) => i === index ? { ...entry, cookingGroup: event.target.value } : entry))} /></TableCell>}
+{isEditing && <TableCell><Input aria-label={language === 'ko' ? `${ingredientNameForId(item.ingredientId)} 요리 그룹` : `${ingredientNameForId(item.ingredientId)} cooking group`} value={item.cookingGroup ?? ''} disabled={isSaving || tagBusy} onChange={event => setEditSideItems(current => current.map((entry, i) => i === index ? { ...entry, cookingGroup: event.target.value } : entry))} /></TableCell>}
                   
 
                   <TableCell>
                     {isEditing ? (
                       <Input
                         type="number"
+                        aria-label={language === 'ko' ? `${ingredientNameForId(item.ingredientId)} 부재료 수량` : `${ingredientNameForId(item.ingredientId)} side quantity`}
                         className="h-7 w-20 text-sm"
                         min={0}
                         step="0.1"
@@ -1302,7 +1340,7 @@ export function RecipeTable({
               {language === 'ko' ? '취소' : 'Cancel'}
             </Button>
             <Button type="button" size="sm" onClick={handleSave} disabled={isSaving || tagBusy}>
-              {isSaving ? (language === 'ko' ? '저장 중...' : 'Saving...') : (language === 'ko' ? '저장' : 'Save')}
+              {isSaving ? (language === 'ko' ? '저장 중...' : 'Saving...') : (creating ? (language === 'ko' ? '레시피 추가' : 'Add recipe') : (language === 'ko' ? '저장' : 'Save'))}
             </Button>
           </div>
         </div>

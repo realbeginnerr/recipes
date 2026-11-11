@@ -41,6 +41,14 @@ beforeEach(() => {
 })
 
 describe('saving a recipe with existing invalid quantities', () => {
+  it('omits optional undefined fields from a new recipe before writing to Firestore', async () => {
+    await saveRecipeToFirestore({ name: 'New dish', nameKo: '새 요리', imageUrl: '', imageUrls: [],
+      items: [], memo: '', tasteRating: 4, cookedDates: [], lastCookedAt: undefined, cookingTimeMinutes: undefined })
+    const data = vi.mocked(setDoc).mock.calls[0][1] as Record<string, unknown>
+    expect(data.cookedDates).toEqual([])
+    expect(Object.hasOwn(data, 'lastCookedAt')).toBe(false)
+    expect(Object.hasOwn(data, 'cookingTimeMinutes')).toBe(false)
+  })
   it('blocks a unit without a conversion before writing', async () => {
     const missing = recipe()
     missing.items[0].defaultAmount = 100

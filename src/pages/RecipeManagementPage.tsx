@@ -15,6 +15,7 @@ import { loadRecipesFromFirestore, mergeStaticAndFirestoreRecipes, deleteRecipeF
 import { loadIngredientsFromFirestore } from '../services/ingredientService'
 import type { Recipe } from '../types'
 import { Button } from '@/components/ui/button'
+import { ContentState } from '../components/feedback/ContentState'
 import './RecipeDetailPage.css'
 
 export function RecipeDetailPage() {
@@ -32,21 +33,31 @@ export function RecipeDetailPage() {
     language === 'en' ? 'oz' : 'g',
   )
   const [loading, setLoading] = useState(true)
+  const [loadFailed, setLoadFailed] = useState(false)
+  const [loadAttempt, setLoadAttempt] = useState(0)
 
   useEffect(() => {
+    let cancelled = false
     async function load() {
+      setLoading(true)
+      setLoadFailed(false)
       try {
         await loadIngredientsFromFirestore()
         const fsDocs = await loadRecipesFromFirestore()
         const merged = mergeStaticAndFirestoreRecipes(staticRecipes, fsDocs)
-        setRecipes(merged)
-        setRecipeStates(buildInitialRecipeStates(language, merged))
+        if (!cancelled) {
+          setRecipes(merged)
+          setRecipeStates(buildInitialRecipeStates(language, merged))
+        }
+      } catch {
+        if (!cancelled) setLoadFailed(true)
       } finally {
-        setLoading(false)
+        if (!cancelled) setLoading(false)
       }
     }
-    load().catch(console.error)
-  }, [])
+    void load()
+    return () => { cancelled = true }
+  }, [loadAttempt])
 
   useEffect(() => {
     setRecipeStates((current) => applyLanguageToRecipeStates(current, language))
@@ -114,6 +125,12 @@ export function RecipeDetailPage() {
       </section>
     )
   }
+
+  if (loadFailed) return <section className="page recipe-body-container" lang={language}>
+    <ContentState error title={language === 'ko' ? '레시피를 불러오지 못했습니다.' : 'Could not load the recipe.'}>
+      <Button onClick={() => setLoadAttempt(n => n + 1)}>{language === 'ko' ? '다시 시도' : 'Try again'}</Button>
+    </ContentState>
+  </section>
 
   if (!recipe) {
     return (

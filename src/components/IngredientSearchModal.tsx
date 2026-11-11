@@ -42,18 +42,21 @@ export function IngredientSearchModal({
   const [tab, setTab] = useState<'all' | 'favorites'>('all')
   const [favorites, setFavorites] = useState<Set<string>>(loadFavoriteIngredientIds)
   const [loadingIngredients, setLoadingIngredients] = useState(false)
+  const [loadFailed, setLoadFailed] = useState(false)
+  const [loadAttempt, setLoadAttempt] = useState(0)
 
   useEffect(() => {
     if (!isOpen) return
     let cancelled = false
     setLoadingIngredients(true)
+    setLoadFailed(false)
     loadIngredientsFromFirestore()
-      .catch(console.error)
+      .catch(() => { if (!cancelled) setLoadFailed(true) })
       .finally(() => {
         if (!cancelled) setLoadingIngredients(false)
       })
     return () => { cancelled = true }
-  }, [isOpen])
+  }, [isOpen, loadAttempt])
 
   const allIngredients = ingredients
 
@@ -147,6 +150,7 @@ export function IngredientSearchModal({
 
           <Input
             type="search"
+            aria-label={language === 'ko' ? '식재료 검색' : 'Search ingredients'}
             value={searchQuery}
             onChange={(e) => { setSearchQuery(e.target.value); setDuplicateError('') }}
             placeholder={language === 'ko' ? '식재료 검색...' : 'Search ingredients...'}
@@ -161,6 +165,11 @@ export function IngredientSearchModal({
         <ScrollArea className="flex-1 px-6 min-h-0">
           {loadingIngredients ? (
             <p className="py-4 text-center text-sm text-muted-foreground">{language === 'ko' ? '식재료 불러오는 중...' : 'Loading ingredients...'}</p>
+          ) : loadFailed ? (
+            <div className="py-4" role="alert">
+              <p>{language === 'ko' ? '식재료를 불러오지 못했습니다.' : 'Could not load ingredients.'}</p>
+              <Button type="button" variant="outline" onClick={() => setLoadAttempt(n => n + 1)}>{language === 'ko' ? '다시 시도' : 'Try again'}</Button>
+            </div>
           ) : visibleIngredients.length === 0 ? (
             <div className="text-center py-4">
               <p style={{ color: 'var(--muted-foreground)', marginBottom: '0.75rem', fontSize: '0.9rem' }}>

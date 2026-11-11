@@ -6,7 +6,7 @@ export function CookingGroupOrderEditor({ items, order, onChange, ko, disabled =
 }) {
   const names = cookingGroupOrder(items, order)
   if (names.length < 2) return null
-  return <fieldset className="my-5 min-w-0" disabled={disabled}>
+  return <fieldset className="my-6 min-w-0" disabled={disabled}>
     <legend className="mb-3 text-sm font-medium">{ko ? '요리 그룹 표시 순서' : 'Cooking group order'}</legend>
     <ol className="flex flex-col gap-2">
       {names.map((name, index) => <li key={name} className="flex items-center gap-3">
