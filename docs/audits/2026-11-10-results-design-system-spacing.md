@@ -1,6 +1,6 @@
 # 레시피 목록·등록·수정 간격 점검
 
-- 기준: `design-system.md` 2장, `design-system-reference.md`의 프로젝트 설정과 승인된 예외.
+- 기준: `docs/design-system.md` 2장, `docs/design-system-project.md`의 프로젝트 설정과 승인된 예외.
 - 공식 참조: [Carbon Spacing](https://carbondesignsystem.com/elements/spacing/overview/).
 - 검증 범위: 현재 작업 트리의 JSX, CSS 선언, 선택자 우선순위, 조건부 렌더링. 실제 Chrome의 계산된 스타일·스크린샷·모바일 실측은 미확인이다. 브라우저 연결 호스트가 사용 불가로 반환되었다.
 - 최초 점검에서는 UI 코드를 수정하지 않았다. 이후 사용자가 아래 수정 계획을 승인하여 소스에 반영했다. 기존 작업 트리 변경은 유지했다.

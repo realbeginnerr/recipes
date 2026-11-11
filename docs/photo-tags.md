@@ -1,4 +1,4 @@
-﻿# Shoppable images — stage 1
+# Shoppable images — stage 1
 
 ## Storage
 

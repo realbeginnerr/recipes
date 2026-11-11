@@ -91,14 +91,14 @@ As-Is는 현재 구현의 증거, To-Be는 개선 구조의 제안이다. 기존
 프로젝트 루트 PowerShell에서 실행한다.
 
 ```powershell
-node docs/ia/scripts/validate-ia.mjs
-node docs/ia/scripts/generate-ia.mjs --check
-node docs/ia/scripts/test-ia.mjs
+node docs/navigation/scripts/validate-ia.mjs
+node docs/navigation/scripts/generate-ia.mjs --check
+node docs/navigation/scripts/test-ia.mjs
 ```
 
 Error는 종료 코드 1, Warning/Info만 있으면 0이다. 구조·경로 누락은 Error, 정적 진입 경로 미확인·데이터 권한 의심은 Warning, 동적 진입 후보·변경 내역은 Info로 출력한다. Warning은 자동 실패로 처리하지 않지만 검토/해결 근거를 기록한다.
 
-검증 범위: 중복 ID/부모/순환/depth/필수 필드/타입/순서/URL/상태/근거 파일, 페이지와 redirect 목록, 라우트 가드와 access 대조, 변경 이력, 생성물 동기화. 단일 구조 파일 검사는 `node docs/ia/scripts/validate-ia.mjs --file docs/ia/ia-as-is.yaml`이다.
+검증 범위: 중복 ID/부모/순환/depth/필수 필드/타입/순서/URL/상태/근거 파일, 페이지와 redirect 목록, 라우트 가드와 access 대조, 변경 이력, 생성물 동기화. 단일 구조 파일 검사는 `node docs/navigation/scripts/validate-ia.mjs --file docs/navigation/ia-as-is.yaml`이다.
 
 진입 분석은 JSX Link·href·navigate·requestAccess·GNB 객체와 동적 URL 템플릿을 수집한다. 후보는 컴포넌트 마운트/조건부 버튼 노출/실제 데이터의 존재까지 증명하지 않는다. 고립 경고를 곧바로 접근 불가능이라고 해석하지 않는다. 로그인·권한·운영 규칙·배포 서버의 새로고침 처리는 사람이 확인한다.
 
@@ -107,8 +107,8 @@ Error는 종료 코드 1, Warning/Info만 있으면 0이다. 구조·경로 누�
 ## 14. Mermaid 생성
 
 ```powershell
-node docs/ia/scripts/generate-ia.mjs
-node docs/ia/scripts/generate-ia.mjs --branch=recipes
+node docs/navigation/scripts/generate-ia.mjs
+node docs/navigation/scripts/generate-ia.mjs --branch=recipes
 ```
 
 기본 명령은 두 `.mmd`를 갱신한다. `--branch`는 지정 노드와 하위 정보만 별도 `.노드ID.mmd`로 출력하며 원본 YAML을 수정하지 않는다. `--check`는 기존 생성물이 같은지 검사한다.

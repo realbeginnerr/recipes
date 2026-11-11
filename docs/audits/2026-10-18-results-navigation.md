@@ -1,5 +1,9 @@
 # IA 리뷰 — 2026-10-19
 
+파일 생성일은 2026-10-18이며, 본문의 분석 기준일은 2026-10-19다. 파일명에는 생성일을 사용한다.
+
+> 2026-11-11 문서 위치 정리 후 재검증: 도구 실행 경로와 YAML·Mermaid 동기화는 정상이다. 현재 소스에는 이 기록 작성 뒤 추가된 `/resources`·`/calendar`가 있어 구조 대조는 2개 누락, 페이지 수 검사는 19 대 17로 실패한다. 아래는 2026-10-19의 분석 기록이며 이번 정리에서는 원본 구조·수치를 변경하지 않았다.
+
 ## 1. 분석 개요
 
 현재 작업 디렉터리의 `src/App.tsx`, `main.tsx`, 헤더/푸터/Layout, pages, 공유 UI, 인증 context와 접근 provider, 서비스 및 Firestore/Storage 규칙을 정적으로 분석했다. 라우트 19개 중 페이지 17개, redirect 2개다. As-Is 44개 노드, To-Be 45개 노드이며 최대 depth는 모두 4다.
@@ -144,9 +148,9 @@
 
 | 명령 | 결과 |
 | --- | --- |
-| `node docs/ia/scripts/test-ia.mjs` | 통과. 12종 구조 오류 주입, 특수문자/제한 문법, 하위 범위 생성, 변경 비교, 실제 라우트·동적 URL 추출 |
-| `node docs/ia/scripts/generate-ia.mjs` | As-Is / To-Be 두 Mermaid 파일 생성 |
-| `node docs/ia/scripts/validate-ia.mjs` | 종료 코드 0, Error 0 / Warning 4 / Info 13 |
-| `node docs/ia/scripts/generate-ia.mjs --check` | 두 생성물과 YAML 일치 |
+| `node docs/navigation/scripts/test-ia.mjs` | 통과. 12종 구조 오류 주입, 특수문자/제한 문법, 하위 범위 생성, 변경 비교, 실제 라우트·동적 URL 추출 |
+| `node docs/navigation/scripts/generate-ia.mjs` | As-Is / To-Be 두 Mermaid 파일 생성 |
+| `node docs/navigation/scripts/validate-ia.mjs` | 종료 코드 0, Error 0 / Warning 4 / Info 13 |
+| `node docs/navigation/scripts/generate-ia.mjs --check` | 두 생성물과 YAML 일치 |
 
 실제 Mermaid 파서/렌더러는 미설치 상태다. 구문 검사는 공식 Flowchart 문법에 따른 제한된 생성 템플릿 검사이며 전체 Mermaid 파서 검증으로 보고하지 않는다. 제품 코드나 의존성을 바꾸지 않기 위해 패키지를 추가 설치하지 않았다.

@@ -2,19 +2,9 @@
 
 Audit date: 2026-10-26
 
-## Shared contract
+## 적용 기준
 
-Use `src/components/ui/input.tsx` for numeric HTML inputs. While a controlled
-number input is focused, it owns the raw editing string, including an empty
-string. Parent handlers still receive every change for calculations and
-validation, but parsing, clamping and formatting must not replace the text
-being edited. On blur, the field displays the parent's committed value using
-the existing display precision. Focusing restores its full stored precision.
-
-Do not replace this with a native number input bound directly to a numeric
-state value. For forms that require a number before saving, keep raw strings
-in the form draft and explicitly reject blank values; the shared Input does
-not decide whether blank means zero, missing, or the previous valid value.
+숫자 입력의 현재 편집 규칙은 [프로젝트 디자인 명세](../design-system-project.md#number-editing)에서 관리한다. 아래 결과는 2026-10-26 점검 당시 기록이다.
 
 ## Audit results
 

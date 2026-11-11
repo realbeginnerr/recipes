@@ -18,6 +18,7 @@
   - [랜덤 메뉴와 Shop](#랜덤-메뉴와-shop)
 - [4. 레시피·식재료와 영양 계산](#project-recipes)
   - [계산 기준](#계산-기준)
+  - [숫자 입력 편집 규칙](#number-editing)
   - [요리 날짜 이력](#요리-날짜-이력)
   - [테이블의 사이트 전용 설정](#테이블의-사이트-전용-설정)
 - [5. 사진과 저장 데이터](#project-images)
@@ -32,7 +33,7 @@
 - 이 문서는 tsrecipe에서만 사용하는 디자인 선택과 기능별 결정 사항을 관리한다. 다른 사이트에 공통 규칙으로 복사하지 않는다.
 - 공통 컴포넌트·접근성·오류 복구·스크롤·모션 원칙은 [범용 디자인 시스템](design-system.md)을 참조한다. 같은 내용을 이곳에 반복하지 않는다.
 - 범용 문서의 토큰은 재사용용 프리셋이다. 토큰 변경만으로 tsrecipe의 글꼴·색상·레이아웃을 바꾸지 않는다. 사이트의 실제 값은 아래 설정과 연결된 소스에서 확인한다.
-- 최근 사용자가 명시한 변경과 기존 승인 정책을 구분해 반영한다. 레시피 기능의 기존 승인 정책 원본은 [PRD 11장](PRD.md#11-레시피-메뉴-검토--승인된-정책)이다.
+- 최근 사용자가 명시한 변경과 기존 승인 정책을 구분해 반영한다. 레시피 기능의 기존 승인 정책 원본은 [PRD 11장](requirements.md#11-레시피-메뉴-검토--승인된-정책)이다.
 - 아래 현재 구현 설명은 정리일의 로컬 작업 트리를 정적으로 확인한 결과다. 운영 배포·실제 브라우저·모바일 검증이 끝났다는 뜻은 아니다.
 - 소스와 승인 정책이 다르면 8장에 차이를 기록한다. 차이를 발견했다는 이유로 정책을 임의로 폐기하거나 제품 코드를 자동으로 변경하지 않는다.
 - 현재 디자인 정비의 우선 목표는 디자인 시스템과 실제 UI의 차이를 찾아 맞추는 것이다. 기존 화면의 스타일을 복사하거나 등록·수정 폼을 통합한 것만으로 준수 검증을 완료하지 않는다. 간격은 Carbon 기준의 수치뿐 아니라 요소 간 관계·정보 계층·중복 여백까지 확인하고, 승인된 프로젝트 예외와 구분해 보고한다.
@@ -94,7 +95,7 @@
 - 새로 등록과 수정은 `RecipeTable`의 공통 폼을 사용한다. 필드 구성·순서·명칭·배치·입력 방식·간격은 수정 화면을 기준으로 함께 변경하며, 한쪽만 별도로 수정하지 않는다. 등록의 빈 초기값·등록 버튼 문구·삭제 버튼 미노출과 수정의 기존 값·저장 버튼·삭제 버튼은 동작상 필요한 차이다.
 - 등록에도 여러 사진·파일 선택·대표 사진 지정, 조리시간, 여러 요리 날짜, 조리 단계, 메모를 제공한다. 저장 실패 시 초안을 유지하고 다시 저장할 수 있도록 처리 중 상태를 해제한다. 등록 성공 후에도 해당 상세 페이지로 이동한다.
 - 입력창의 레이블은 컨트롤과 연결하고 수량 입력에는 재료별 접근성 이름을 제공한다. 조회 실패는 빈 결과와 구분하며 재시도 수단을 제공한다.
-- 목록·등록·수정의 간격은 [2026-11-10 간격 점검 및 적용 기록](docs/audits/recipes/2026-11-10-spacing.md)을 따른다. 공통 폼에서는 관련 필드 내부 간격과 독립 영역 사이 간격을 구분하고, 인접 영역의 여백을 중복 적용하지 않는다.
+- 목록·등록·수정의 간격은 [2026-11-10 간격 점검 및 적용 기록](audits/2026-11-10-results-design-system-spacing.md)을 따른다. 공통 폼에서는 관련 필드 내부 간격과 독립 영역 사이 간격을 구분하고, 인접 영역의 여백을 중복 적용하지 않는다.
 
 **승인된 표시 예외 (2026-11-10)**
 
@@ -134,7 +135,7 @@
 - 현재 룰렛은 가로 카드 띠를 4.2초 동안 감속해 선택한다. 최근 당첨 5개를 가능한 범위에서 제외하고 최소 한 후보는 남긴다. 회전 중 중복 실행을 막고 결과는 상세를 새 탭으로 연다.
 - 카드 최대 너비는 300px, 사진은 4:3, 카드 간격은 24px다. 카드 영역과 페이지 배경은 `#F6F5F1`이며 제목·뒤로가기 행은 표시하지 않는다. 실행 버튼은 ‘룰렛 돌리기’다.
 - 3D 공간형 추천 기능은 계획 검토 단계이며 현재 구현으로 간주하지 않는다.
-- Shop 노출과 사진 상품의 임시 운영 정책은 [Shop 중지 기록](docs/shop-pause.md)에서 관리한다. 현재 `shopFeatures.enabled`는 `false`다.
+- Shop 노출과 사진 상품의 임시 운영 정책은 [Shop 중지 기록](shop-status.md)에서 관리한다. 현재 `shopFeatures.enabled`는 `false`다.
 
 <a id="project-recipes"></a>
 
@@ -148,6 +149,23 @@
 - 기준 단위 자체의 설정과 레시피에서의 유효 단위 선택을 구분한다. 계산 불가와 실제 영양 0의 구분은 PRD의 승인 정책과 미해결 항목을 함께 확인한다.
 - 단위 환산 입력은 동일한 양의 여러 단위 수량을 나타낸다. 예를 들어 g=100, 컵=1이면 1컵은 100g이다.
 - 단위 목록은 `src/constants/ingredientUnits.ts`에서 관리한다. oz·lbs의 g 기반 계산과 ‘선택안함’의 처리도 해당 구현을 따른다.
+
+<a id="number-editing"></a>
+
+### 숫자 입력 편집 규칙
+
+Use `src/components/ui/input.tsx` for numeric HTML inputs. While a controlled
+number input is focused, it owns the raw editing string, including an empty
+string. Parent handlers still receive every change for calculations and
+validation, but parsing, clamping and formatting must not replace the text
+being edited. On blur, the field displays the parent's committed value using
+the existing display precision. Focusing restores its full stored precision.
+
+Do not replace this with a native number input bound directly to a numeric
+state value. For forms that require a number before saving, keep raw strings
+in the form draft and explicitly reject blank values; the shared Input does
+not decide whether blank means zero, missing, or the previous valid value.
+
 
 ### 요리 날짜 이력
 
@@ -194,8 +212,8 @@
 
 | 범위 | 기준 파일·문서 |
 | --- | --- |
-| 공통 디자인 원칙 | [design-system.md](design-system.md) |
-| 제품 요구·승인 정책 | [PRD.md](PRD.md) |
+| 공통 디자인 원칙 | [docs/design-system.md](design-system.md) |
+| 제품 요구·승인 정책 | [docs/requirements.md](requirements.md) |
 | 헤더·사이트 배치 | `src/components/SiteHeader.tsx`, `Layout.tsx`, `SiteHeader.css`, `SiteLayout.css` |
 | 홈 콘텐츠 | `src/pages/AboutPage.tsx`, `src/components/StorySection.tsx`, `src/i18n/about.ts` |
 | 목록 공용 도구 | `src/components/catalog/CatalogControls.tsx` 및 같은 위치의 CSS |
@@ -204,8 +222,8 @@
 | 요리 날짜·달력 | `recipeCookingDates.ts`, `calendar.ts`, `CalendarPage.tsx` |
 | 자료실 | `ResourcesPage.tsx`, `resourceService.ts` |
 | 데이터·권한 | `recipeService.ts`, `ingredientService.ts`, `firestore.rules`, `storage.rules` |
-| Shop 임시 정책 | [docs/shop-pause.md](docs/shop-pause.md) |
-| 레시피 UX 진단 이력 | [2026-10-28 보고서](docs/audits/recipes/2026-10-28.md) |
+| Shop 임시 정책 | [docs/shop-status.md](shop-status.md) |
+| 레시피 UX 진단 이력 | [2026-10-28 보고서](audits/2026-10-28-results-nav-recipes.md) |
 
 <a id="project-gaps"></a>
 
