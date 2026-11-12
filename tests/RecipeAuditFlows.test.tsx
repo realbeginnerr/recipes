@@ -37,6 +37,28 @@ function show(save = vi.fn(async () => {}), remove?: (id: string) => Promise<voi
   render(<MemoryRouter><LanguageProvider>{editor(save, remove)}</LanguageProvider></MemoryRouter>)
 }
 const saveClick = () => fireEvent.click(screen.getAllByRole('button', { name: '저장', exact: true })[0])
+it('shows an empty date input immediately and after deleting the last date, without saving a blank date', async () => {
+  const save = vi.fn(async () => {})
+  show(save)
+  const date = screen.getByLabelText('요리한 날짜 1') as HTMLInputElement
+  expect(date.type).toBe('date')
+  expect(date.value).toBe('')
+  fireEvent.change(date, { target: { value: '2026-11-12' } })
+  fireEvent.click(screen.getByRole('button', { name: '요리한 날짜 1 삭제' }))
+  expect((screen.getByLabelText('요리한 날짜 1') as HTMLInputElement).value).toBe('')
+  fireEvent.click(screen.getByRole('button', { name: '+ 날짜 추가' }))
+  expect(screen.getByLabelText('요리한 날짜 2')).toBeTruthy()
+  saveClick()
+  await waitFor(() => expect(save).toHaveBeenCalledWith(expect.objectContaining({ cookedDates: [] }), expect.any(Function)))
+})
+it('loads the finished batch weight in edit mode and persists changes', async () => {
+  const save = vi.fn(async () => {})
+  render(<MemoryRouter><LanguageProvider>{editor(save, undefined, { ...original(), finishedWeightGrams: 500 })}</LanguageProvider></MemoryRouter>)
+  expect((screen.getByLabelText('완성 중량 (g)') as HTMLInputElement).value).toBe('500')
+  fireEvent.change(screen.getByLabelText('완성 중량 (g)'), { target: { value: '600' } })
+  saveClick()
+  await waitFor(() => expect(save).toHaveBeenCalledWith(expect.objectContaining({ finishedWeightGrams: 600 }), expect.any(Function)))
+})
 it('keeps the edit draft and exposes recovery actions when a stale save conflicts', async () => {
   const save = vi.fn().mockRejectedValue(Object.assign(new Error('conflict'), { code: 'recipe/conflict' }))
   show(save)

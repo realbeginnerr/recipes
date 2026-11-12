@@ -17,6 +17,8 @@ import type { Recipe } from '../types'
 import { getRecipeCategories, type RecipeCategory } from '../utils/recipeCategory'
 import type { TeaTag } from '../utils/teaCategory'
 import { recipes as staticRecipes } from '../data/recipe'
+import { ingredientById } from '../data/ingredientCache'
+import { assertNoRecipeIngredientCycle } from '../utils/recipeAsIngredient'
 import { assertUniqueRecipeNames } from '../utils/recipeNameValidation'
 
 export type FirestoreRecipeItem = {
@@ -27,6 +29,7 @@ export type FirestoreRecipeItem = {
 }
 
 export type FirestoreRecipe = {
+  finishedWeightGrams?: number
   revision?: number
   catalog?: 'tea'
   sourceRecipeId?: string
@@ -69,6 +72,7 @@ const COLLECTION = 'recipes'
 // Firestore reserves document IDs matching __.*__; use an ordinary ID.
 const NAME_GUARD = 'recipe-name-guard'
 async function writeRecipeWithUniqueNames(id: string, data: Record<string, unknown> & { name: string; nameKo: string }, expectedRevision?: number, requireExisting = false) {
+  if (data.finishedWeightGrams !== undefined && (typeof data.finishedWeightGrams !== 'number' || !Number.isFinite(data.finishedWeightGrams) || data.finishedWeightGrams <= 0)) throw new Error('완성 중량은 0보다 커야 합니다.')
   await runTransaction(db, async transaction => {
     const guardRef = doc(db, COLLECTION, NAME_GUARD)
     const guard = await transaction.get(guardRef)
@@ -88,6 +92,11 @@ async function writeRecipeWithUniqueNames(id: string, data: Record<string, unkno
     assertUniqueRecipeNames({ id, name: data.name, nameKo: data.nameKo }, [
       ...staticRecipes.filter(item => !stored.some(saved => saved.id === item.id || (saved.name === item.name && saved.nameKo === item.nameKo))), ...stored,
     ])
+    if ([...ingredientById.values()].some(ingredient => ingredient.sourceRecipeId)) {
+      const graph = new Map(mergeStaticAndFirestoreRecipes(staticRecipes, stored).map(recipe => [recipe.id, recipe]))
+      graph.set(id, convertToRecipe({ ...data, id } as FirestoreRecipe))
+      assertNoRecipeIngredientCycle(id, graph, ingredientById)
+    }
     transaction.set(guardRef, { deleted: true, items: [], revision: (guard.data()?.revision ?? 0) + 1 })
     transaction.set(doc(db, COLLECTION, id), data)
   })
@@ -203,6 +212,7 @@ export function convertToRecipe(fs: FirestoreRecipe): Recipe {
     tasteRating: fs.tasteRating,
     divisionCount: fs.divisionCount,
     cookingTimeMinutes: fs.cookingTimeMinutes,
+    finishedWeightGrams: fs.finishedWeightGrams,
     ...recipeCookingHistory(fs),
     createdAt: fs.createdAt,
     link: fs.link,

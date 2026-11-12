@@ -13,7 +13,7 @@
 | [프로젝트 디자인 명세](docs/design-system-project.md) | 이 사이트의 설정·예외·구현 연결 |
 | [사진 속 상품 태그](docs/photo-tags.md) | 사진·상품 연결 데이터와 기능 명세 |
 | [Shop 운영 상태](docs/shop-status.md) | Shop 임시 중지와 노출 정책 |
-| [레시피 UX 결과](docs/checklist-audits/2026-10-28-results-nav-recipes.md) | 2026-10-28 진단, 승인·구현 상태는 본문 참조 |
+| [레시피 UX 결과 done](docs/checklist-audits/2026-10-28-results-nav-recipes-done.md) | 2026-10-28 진단, 승인·구현 상태는 본문 참조 |
 | [디자인 시스템 간격 결과](docs/checklist-audits/2026-11-10-results-design-system-spacing.md) | 간격 점검·수정·검증 기록 |
 | [숫자 입력 결과](docs/checklist-audits/2026-10-26-results-input.md) | 2026-10-26 입력 동작 점검 |
 | [영어 표시 결과](docs/checklist-audits/2026-11-02-results-english.md) | 2026-11-02 번역·표시 점검 |

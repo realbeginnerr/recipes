@@ -1,3 +1,4 @@
+import { backupFile } from './work-paths.mjs'
 import { execFileSync } from 'node:child_process'
 import { writeFile } from 'node:fs/promises'
 
@@ -29,7 +30,7 @@ async function scan() {
 const updates = await scan()
 console.log(JSON.stringify(updates.map(({ document, fields, changed }) => ({ id: document.name.split('/').at(-1), name: fields.nameKo?.stringValue ?? fields.name?.stringValue, changed })), null, 2))
 if (process.argv.includes('--apply') && updates.length) {
-  await writeFile(new URL(`tea-terminology-backup-${Date.now()}.json`, import.meta.url), JSON.stringify(updates.map(row => row.document), null, 2))
+  await writeFile(backupFile('tea-terminology'), JSON.stringify(updates.map(row => row.document), null, 2))
   await request(':commit', { method: 'POST', body: JSON.stringify({ writes: updates.map(({ document, fields, changed }) => ({ update: { name: document.name, fields: Object.fromEntries(changed.map(key => [key, fields[key]])) }, updateMask: { fieldPaths: changed }, currentDocument: { updateTime: document.updateTime } })) }) })
   if ((await scan()).length) throw new Error('Terminology verification failed')
   console.log(`Updated and verified ${updates.length} documents.`)

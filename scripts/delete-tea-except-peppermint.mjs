@@ -1,3 +1,4 @@
+import { backupFile } from './work-paths.mjs'
 import { execFileSync } from 'node:child_process'
 import { writeFile } from 'node:fs/promises'
 const token = execFileSync('powershell.exe', ['-NoProfile', '-NonInteractive', '-Command', 'gcloud auth print-access-token'], { encoding: 'utf8' }).trim()
@@ -28,7 +29,7 @@ if (!tea.some(keep)) throw new Error('Peppermint not found; no items deleted')
 const targets = tea.filter(document => !keep(document))
 console.log(JSON.stringify({ keep: tea.filter(keep).map(name), delete: targets.map(name) }))
 if (process.argv.includes('--apply') && targets.length) {
-  await writeFile(new URL(`tea-deletion-backup-${Date.now()}.json`, import.meta.url), JSON.stringify(targets, null, 2))
+  await writeFile(backupFile('tea-deletion'), JSON.stringify(targets, null, 2))
   const writes = targets.flatMap(document => {
     const fields = { deleted: { booleanValue: true }, updatedAt: { integerValue: String(Date.now()) } }
     const product = document.name.includes('/products/')

@@ -1,3 +1,4 @@
+import { backupFile } from './work-paths.mjs'
 import { execFileSync } from 'node:child_process'
 import { writeFileSync } from 'node:fs'
 import assert from 'node:assert/strict'
@@ -22,7 +23,7 @@ if (process.argv.includes('--apply')) {
   const image = await fetch(imageUrl, { signal: AbortSignal.timeout(30000) })
   assert.ok(image.ok && image.headers.get('content-type')?.startsWith('image/'), 'Replacement must be accessible image')
   await image.arrayBuffer()
-  writeFileSync(`scripts/jjajang-thumbnail-backup-${Date.now()}.json`, JSON.stringify(document, null, 2))
+  writeFileSync(backupFile('jjajang-thumbnail'), JSON.stringify(document, null, 2))
   const oldSecond = images[1]
   const values = document.fields.imageUrls.arrayValue.values.map(value => value.stringValue === oldSecond ? { stringValue: imageUrl } : value)
   const updated = await request(`${base}/recipes/${document.name.split('/').pop()}?updateMask.fieldPaths=imageUrls&currentDocument.updateTime=${encodeURIComponent(document.updateTime)}`, { method: 'PATCH', body: JSON.stringify({ fields: { imageUrls: { arrayValue: { values } } } }) })

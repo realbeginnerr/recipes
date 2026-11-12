@@ -2,7 +2,7 @@
 import path from 'node:path'
 import crypto from 'node:crypto'
 import ts from 'typescript'
-const helperDir=path.resolve('.product-qa/import-utils')
+const helperDir=path.resolve('scripts/.cache/import-utils')
 await fs.mkdir(helperDir,{recursive:true})
 for(const name of ['product','shopPolicy','teaCategory']){
  const source=await fs.readFile(`src/utils/${name}.ts`,'utf8')
@@ -12,8 +12,8 @@ for(const name of ['product','shopPolicy','teaCategory']){
 const { emptyProduct, validateProduct, validWebUrl, productSlug } = await import('file:///'+path.join(helperDir,'product.mjs').replaceAll('\\','/'))
 const { getTeaTags } = await import('file:///'+path.join(helperDir,'teaCategory.mjs').replaceAll('\\','/'))
 const option = name => { const index = process.argv.indexOf(name); return index < 0 ? undefined : process.argv[index + 1] }
-const inputFile = option('--input') ?? 'scripts/single-tea-import-input.json'
-const outputFile = option('--output') ?? 'scripts/single-tea-import-prepared.json'
+const inputFile = option('--input') ?? 'data/single-tea-import-input.json'
+const outputFile = option('--output') ?? 'data/single-tea-import-prepared.json'
 const addedTag = option('--tag')
 const rows=JSON.parse((await fs.readFile(inputFile,'utf8')).replace(/^\uFEFF/,''))
 const field={name:'\uC0C1\uD488\uBA85',image:'\uB300\uD45C \uC774\uBBF8\uC9C0 url',price:'\uD310\uB9E4\uAC00',tags:'\uD0DC\uADF8',url:'\uAD6C\uB9E4 \uB9C1\uD06C',brand:'\uBE0C\uB79C\uB4DC',description:'\uC0C1\uC138\uC124\uBA85',visibility:'\uB4F1\uB85D\uC0C1\uD0DC'}

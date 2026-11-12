@@ -1,12 +1,16 @@
 import { collection, addDoc, getDocs, setDoc, deleteDoc, doc } from 'firebase/firestore'
 import { db } from '../firebase'
-import { cacheIngredient, removeCachedIngredient } from '../data/ingredientCache'
+import { cacheIngredient, removeCachedIngredient, ingredientById } from '../data/ingredientCache'
+import { recipes as staticRecipes } from '../data/recipe'
+import { loadRecipesFromFirestore, mergeStaticAndFirestoreRecipes } from './recipeService'
+import { recipeAsIngredient, scaleRecipeIngredientNutrition } from '../utils/recipeAsIngredient'
 import { canonicalIngredientId, legacyIngredientIdsFor } from '../data/ingredientCatalogOverrides'
 import type { Ingredient } from '../types'
 import { ingredientPresentation } from '../data/ingredientPresentation'
 import { CONVERSION_FIELDS, INGREDIENT_UNITS } from '../constants/ingredientUnits'
 
 export type FirestoreIngredient = {
+  sourceRecipeId?: string
   gramsPerMl?: number
   gramsPerPinch?: number
   id: string
@@ -44,7 +48,7 @@ const ingredientByDocumentId = new Map<string, FirestoreIngredient>()
 let loaded = false
 
 export async function loadIngredientsFromFirestore(): Promise<void> {
-  if (loaded) return
+  if (loaded) { await refreshRecipeIngredients(); return }
   const snapshot = await getDocs(collection(db, COLLECTION))
   const firestoreIngredients = snapshot.docs.map((document) => ({
     id: document.id,
@@ -55,12 +59,38 @@ export async function loadIngredientsFromFirestore(): Promise<void> {
     if (legacyIds.has(ingredient.id) || canonicalIngredientId(ingredient.id) !== ingredient.id) continue
     registerIngredient(ingredient)
   }
+  await refreshRecipeIngredients()
   loaded = true
+}
+
+async function refreshRecipeIngredients() {
+  const linked = [...ingredientByDocumentId.values()].filter((item, index, all) => item.sourceRecipeId && all.findIndex(other => other.id === item.id) === index)
+  if (!linked.length) return
+  const recipes = new Map(mergeStaticAndFirestoreRecipes(staticRecipes, await loadRecipesFromFirestore()).map(recipe => [recipe.id, recipe]))
+  for (const item of linked) {
+    let error: string | undefined
+    let macros = { carbs: NaN, protein: NaN, fat: NaN }
+    try { macros = scaleRecipeIngredientNutrition(recipeAsIngredient(item.sourceRecipeId!, recipes, ingredientById), item.baseAmount) }
+    catch (cause) { error = cause instanceof Error ? cause.message : '연결된 레시피의 영양 정보를 계산할 수 없습니다.' }
+    registerIngredient({ ...item, baseUnit: 'g', ...macros })
+    const cached = ingredientById.get(item.id)
+    if (cached) cached.recipeNutritionError = error
+  }
+}
+
+async function resolveLinkedDraft(ing: Omit<FirestoreIngredient, 'id'>, id = '__new_ingredient__') {
+  if (!ing.sourceRecipeId) return ing
+  await loadIngredientsFromFirestore()
+  const recipes = new Map(mergeStaticAndFirestoreRecipes(staticRecipes, await loadRecipesFromFirestore()).map(recipe => [recipe.id, recipe]))
+  const ingredients = new Map(ingredientById)
+  ingredients.set(id, { ...ing, id, baseAmount: 100, baseUnit: 'g', conversions: buildConversions({ ...ing, baseUnit: 'g' }), allowedUnits: ['g'] })
+  return { ...ing, baseUnit: 'g', ...scaleRecipeIngredientNutrition(recipeAsIngredient(ing.sourceRecipeId, recipes, ingredients), ing.baseAmount) }
 }
 
 export async function saveIngredientToFirestore(
   ing: Omit<FirestoreIngredient, 'id'>
 ): Promise<string> {
+  ing = await resolveLinkedDraft(ing)
   ing = { ...ing, imageUrl: ing.imageUrl ?? defaultIngredientImage(ing.nameKo || ing.name) }
   const clean = Object.fromEntries(Object.entries(ing).filter(([, v]) => v !== undefined))
   const docRef = await addDoc(collection(db, COLLECTION), clean)
@@ -77,6 +107,7 @@ export async function updateIngredientInFirestore(
   id: string,
   data: Omit<FirestoreIngredient, 'id'>,
 ): Promise<void> {
+  data = await resolveLinkedDraft(data, id)
   const { id: _id, ...ingredientData } = data as Omit<FirestoreIngredient, 'id'> & { id?: string }
   const clean = Object.fromEntries(Object.entries(ingredientData).filter(([, value]) => value !== undefined))
   await setDoc(doc(db, COLLECTION, id), clean)
@@ -118,6 +149,7 @@ function registerIngredient(ing: FirestoreIngredient) {
     if (normalized.nameKo) ingredientByName.set(normalized.nameKo, normalized)
   }
   const cached: Ingredient = {
+    sourceRecipeId: ing.sourceRecipeId,
     id: ing.id,
     name: normalized.name,
     nameKo: normalized.nameKo || normalized.name,

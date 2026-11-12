@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react'
+import { useLocation } from 'react-router-dom'
 import { Paperclip, ArrowUpRight, FolderOpen, Plus } from 'lucide-react'
 import { useLanguage } from '../context/LanguageContext'
 import { useAdmin } from '../context/AdminContext'
@@ -10,6 +11,7 @@ import { deleteResource, loadResources, resourceCategories, safeResourceUrl, sav
 import './ResourcesPage.css'
 
 export function ResourcesPage() {
+  const { key: navigationKey } = useLocation()
   const { language } = useLanguage()
   const { isAdmin } = useAdmin()
   const ko = language === 'ko'
@@ -26,6 +28,12 @@ export function ResourcesPage() {
   const fileInput = useRef<HTMLInputElement>(null)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
+  useEffect(() => {
+    // Selecting the navigation menu again must open the resource list,
+    // even when the detail view uses the same pathname.
+    setSelected(null); setDraft(null); setFile(undefined); setError('')
+    setQuery(''); setCategory('all')
+  }, [navigationKey])
   useEffect(() => {
     let active = true
     setLoading(true); setLoadError(false)
@@ -88,8 +96,8 @@ export function ResourcesPage() {
         {safeResourceUrl(selected.url) && <a className="resource-download" href={safeResourceUrl(selected.url)} target="_blank" rel="noopener noreferrer"><Paperclip size={18} aria-hidden="true" />{selected.fileName || (ko ? '자료 링크 열기' : 'Open resource link')}<ArrowUpRight size={16} aria-hidden="true" /></a>}
         {isAdmin && <div className="resource-form-actions"><Button variant="outline" disabled={busy} onClick={() => edit(selected)}>{ko ? '수정' : 'Edit'}</Button><Button variant="destructive" disabled={busy} onClick={() => void remove(selected)}>{ko ? '삭제' : 'Delete'}</Button></div>}
       </article> : <>
-        <div className="resources-toolbar"><div className="resources-categories" role="group" aria-label={ko ? '자료 분류' : 'Resource categories'}>{(['all', ...resourceCategories] as const).map(item => <Button key={item} variant="filter" size="compact" aria-pressed={category === item} onClick={() => setCategory(item)}>{labels[item]}</Button>)}</div><SearchField label={ko ? '자료 검색' : 'Search resources'} value={query} onValueChange={setQuery} />{isAdmin && <Button className="resources-add" onClick={() => edit()}><Plus aria-hidden="true" />{ko ? '자료 등록' : 'Add resource'}</Button>}</div>
-        <p className="resources-count" role="status">{ko ? `전체 ${filtered.length}개의 자료` : `${filtered.length} resources`}</p>
+        <div className="resources-toolbar"><p className="resources-count" role="status">{ko ? `전체 ${filtered.length}개의 자료` : `${filtered.length} resources`}</p><div className="resources-categories" role="group" aria-label={ko ? '자료 분류' : 'Resource categories'}>{(['all', ...resourceCategories] as const).map(item => <Button key={item} variant="filter" size="compact" aria-pressed={category === item} onClick={() => setCategory(item)}>{labels[item]}</Button>)}</div><SearchField label={ko ? '자료 검색' : 'Search resources'} value={query} onValueChange={setQuery} />{isAdmin && <Button className="resources-add" onClick={() => edit()}><Plus aria-hidden="true" />{ko ? '자료 등록' : 'Add resource'}</Button>}</div>
+
         <div className="resources-board">
           <div className="resources-board-heading" aria-hidden="true"><span>{ko ? '번호' : 'No.'}</span><span>{ko ? '제목' : 'Title'}</span><span>{ko ? '등록일' : 'Date'}</span></div>
           {loading ? <p className="resources-empty" role="status">{ko ? '자료를 불러오는 중입니다…' : 'Loading resources…'}</p> : loadError ? <div className="resources-empty" role="alert"><p>{ko ? '자료를 불러오지 못했습니다.' : 'Unable to load resources.'}</p><Button variant="outline" onClick={() => setAttempt(value => value + 1)}>{ko ? '다시 시도' : 'Retry'}</Button></div> : !filtered.length ? <div className="resources-empty"><FolderOpen size={36} strokeWidth={1.3} aria-hidden="true" /><h2>{query || category !== 'all' ? (ko ? '검색 결과가 없습니다.' : 'No matching resources.') : (ko ? '아직 등록된 자료가 없습니다.' : 'No resources yet.')}</h2><p>{query || category !== 'all' ? (ko ? '다른 검색어나 분류를 선택해주세요.' : 'Try another search or category.') : (ko ? '공유할 자료가 등록되면 이곳에서 확인할 수 있어요.' : 'Shared resources will appear here.')}</p>{(query || category !== 'all') && <Button variant="outline" onClick={() => { setQuery(''); setCategory('all') }}>{ko ? '전체 자료 보기' : 'Show all resources'}</Button>}</div> : <ol className="resources-list">{filtered.map((post, index) => <li key={post.id}><span className="resource-number">{filtered.length - index}</span><button className="resource-title" onClick={() => setSelected(post)}><span className="resource-category">{labels[post.category]}</span><span>{post.title}</span>{post.url && <Paperclip size={15} aria-label={ko ? '첨부 자료 있음' : 'Attachment available'} />}</button><time dateTime={new Date(post.createdAt).toISOString()}>{date(post.createdAt)}</time></li>)}</ol>}

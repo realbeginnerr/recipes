@@ -1,7 +1,8 @@
+import { backupFile } from './work-paths.mjs'
 import { readFile, writeFile } from 'node:fs/promises'
 import { execFileSync } from 'node:child_process'
 
-const groups = JSON.parse(await readFile(new URL('./ingredient-storage-tags.json', import.meta.url), 'utf8'))
+const groups = JSON.parse(await readFile(new URL('../data/ingredient-storage-tags.json', import.meta.url), 'utf8'))
 const tags = new Map()
 for (const [location, names] of Object.entries(groups)) {
   for (const name of names.split('|')) {
@@ -34,7 +35,7 @@ const missing = [...tags.keys()].filter(name => !matched.has(name))
 console.log(JSON.stringify({ mappedNames: tags.size, matchedNames: matched.size, updates: writes.length, counts, missing }, null, 2))
 if (missing.length) throw new Error('Some requested ingredients were not found; no changes applied.')
 if (process.argv.includes('--apply') && writes.length) {
-  await writeFile(new URL(`ingredient-storage-backup-${Date.now()}.json`, import.meta.url), JSON.stringify(snapshot, null, 2))
+  await writeFile(backupFile('ingredient-storage'), JSON.stringify(snapshot, null, 2))
   await request(':commit', { writes })
   const verified = await request(':runQuery', { structuredQuery: { from: [{ collectionId: 'ingredients' }] } })
   const actual = new Map(verified.flatMap(row => row.document ? [[row.document.name, row.document.fields.storageLocation?.stringValue]] : []))

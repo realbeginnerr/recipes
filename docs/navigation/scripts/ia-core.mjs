@@ -5,7 +5,7 @@ import { load } from 'js-yaml'
 import ts from 'typescript'
 
 export const projectRoot = fileURLToPath(new URL('../../../', import.meta.url))
-export const iaRoot = path.join(projectRoot, 'docs/ia')
+export const iaRoot = path.join(projectRoot, 'docs/navigation')
 export const required = ['id', 'name', 'parent', 'depth', 'order', 'type', 'path', 'access', 'description', 'implementation', 'verification', 'source_files', 'notes']
 export const types = ['category', 'page', 'modal', 'drawer', 'tab', 'section']
 export const implementations = ['implemented', 'planned', 'unreachable']

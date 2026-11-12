@@ -1,3 +1,4 @@
+import { backupFile } from './work-paths.mjs'
 import { execFileSync } from 'node:child_process'
 import { readFile, writeFile } from 'node:fs/promises'
 
@@ -24,7 +25,7 @@ const sameIndex = (index) => index.queryScope === desired.queryScope && JSON.str
 const index = currentIndexes.indexes?.find(sameIndex)
 console.log(JSON.stringify({ project, releases: targets.map(target => target.release), productIndex: index?.state ?? 'not-created', existingIndexesPreserved: true }))
 if (!process.argv.includes('--apply')) process.exit(0)
-await writeFile(new URL(`product-config-backup-${Date.now()}.json`, import.meta.url), JSON.stringify({ previous, currentIndexes }, null, 2))
+await writeFile(backupFile('product-config'), JSON.stringify({ previous, currentIndexes }, null, 2))
 // Compile both rule files successfully before changing either active release.
 const rulesets = []
 for (const target of targets) {

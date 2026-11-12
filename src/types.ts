@@ -4,6 +4,8 @@ import type { TeaTag } from './utils/teaCategory'
 import type { Product } from './types/product'
 
 export type Ingredient = {
+  sourceRecipeId?: string
+  recipeNutritionError?: string
   id: string
   name: string
   nameKo?: string
@@ -26,6 +28,7 @@ export type RecipeItem = {
 }
 
 export type Recipe = {
+  finishedWeightGrams?: number
   revision?: number
   catalog?: 'tea'
   productId?: string

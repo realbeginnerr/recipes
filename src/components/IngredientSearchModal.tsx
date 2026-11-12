@@ -253,7 +253,7 @@ export function IngredientSearchModal({
         {!multiSelect && (
           <div className="px-6 py-4 border-t flex justify-end flex-shrink-0">
             <Button variant="outline" onClick={handleClose}>
-              {language === 'ko' ? '닫기' : 'Close'}
+              {language === 'ko' ? '취소' : 'Cancel'}
             </Button>
           </div>
         )}

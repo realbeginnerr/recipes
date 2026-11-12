@@ -4,7 +4,7 @@ export const aboutCopy = {
     "eyebrow": "T's Recipe",
     "heroFirst": "",
     "heroLast": "인스타그램 레시피 보고 요리하다가 계산기 꺼낸 적 있다면?",
-    "introFirst": "이 비율을 자동으로 맞춰 계산해주는 계산기를 만들었다",
+    "introFirst": "메인재료의 양을 바꿔도, 나머지 재료들의 비율을 맞춰 자동계산해주는 계산기",
     "introLast": "",
     "tableAlt": "밥상",
     "storyLabel": "나를 아낀다는 것",

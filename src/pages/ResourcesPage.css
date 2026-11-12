@@ -4,11 +4,11 @@
 .resources-page .catalog-intro__inner { min-height: 200px; }
 .resources-page .catalog-intro__inner > div { display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; padding-block: 24px; }
 .resources-content { padding-block: 32px 80px; }
-.resources-toolbar { display: flex; align-items: center; justify-content: flex-end; gap: 12px; }
+.resources-toolbar { display: flex; align-items: center; justify-content: flex-end; gap: 12px; margin-bottom: 14px; }
 .resources-toolbar .catalog-search { min-width: 0; }
 .resources-add { flex-shrink: 0; }
 .resources-categories { display: none; }
-.resources-count { margin: 28px 0 14px; font-size: 13px; color: #596b64; }
+.resources-count { margin: 0 auto 0 0; flex-shrink: 0; font-size: 13px; color: #596b64; }
 .resources-board { border-top: 2px solid #255a46; border-bottom: 1px solid #e5eae9; }
 .resources-board-heading, .resources-list li { display: grid; grid-template-columns: 64px minmax(0, 1fr) 120px; gap: 16px; align-items: center; padding: 18px 16px; }
 .resources-board-heading { background: #f7f9f7; font-size: 13px; color: #596b64; text-align: center; border-bottom: 1px solid #e5eae9; }

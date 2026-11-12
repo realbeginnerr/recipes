@@ -13,7 +13,7 @@ title = ImageFont.truetype(font_path, 34)
 colors = ['#E2E8F0', '#DBEAFE', '#DCFCE7', '#FEF3C7', '#FCE7F3', '#EDE9FE']
 
 for version in ['as-is', 'to-be']:
-    code = "import {readIA,validateStructure} from './docs/ia/scripts/ia-core.mjs'; const d=await readIA('docs/ia/ia-%s.yaml'); if(validateStructure(d).some(x=>x.level==='Error')) throw Error('Invalid IA'); console.log(JSON.stringify(d));" % version
+    code = "import {readIA,validateStructure} from './docs/navigation/scripts/ia-core.mjs'; const d=await readIA('docs/navigation/ia-%s.yaml'); if(validateStructure(d).some(x=>x.level==='Error')) throw Error('Invalid IA'); console.log(JSON.stringify(d));" % version
     doc = json.loads(subprocess.check_output(['node', '--input-type=module', '-e', code], cwd=ROOT).decode('utf-8'))
     children = {}
     for n in doc['nodes']:
@@ -45,6 +45,6 @@ for version in ['as-is', 'to-be']:
         detail = ' | '.join(filter(None, [n['id'], n['type'], n['implementation'], n.get('path')]))
         assert draw.textbbox((0, 0), detail, font=small)[2] < 1352 - x - 30, detail
         draw.text((x + 15, y + 44), detail, font=small, fill='#334155')
-    target = ROOT / 'docs/ia/diagrams' / ('ia-' + version + '.png')
+    target = ROOT / 'docs/navigation/diagrams' / ('ia-' + version + '.png')
     image.save(target)
     print('Rendered %s (%d nodes)' % (target.name, len(ordered)))

@@ -1,3 +1,4 @@
+import { backupFile } from './work-paths.mjs'
 import { execFileSync } from 'node:child_process'
 import { writeFile } from 'node:fs/promises'
 
@@ -27,7 +28,7 @@ async function scan() {
 const targets = await scan()
 console.log(JSON.stringify(targets.map(document => ({ id: document.name.split('/').at(-1), name: document.fields.nameKo?.stringValue ?? document.fields.name?.stringValue }))))
 if (process.argv.includes('--apply') && targets.length) {
-  await writeFile(new URL(`tea-tags-backup-${Date.now()}.json`, import.meta.url), JSON.stringify(targets, null, 2))
+  await writeFile(backupFile('tea-tags'), JSON.stringify(targets, null, 2))
   const now = Date.now()
   const writes = targets.map(document => {
     const fields = { teaTags: { arrayValue: { values: [{ stringValue: '기타' }] } }, updatedAt: { integerValue: String(now) } }

@@ -45,9 +45,10 @@ export function AddRecipePage() {
       ...fields, memo: updated.memo ?? '', tasteRating: updated.tasteRating ?? 4,
       items: items.map(toStoredItem), sideItems: (sideItems ?? []).map(toStoredItem),
     })
-    trackAddRecipeCompleted('manual', updated.nameKo)
     allowNavigation?.()
     navigate(`/recipe/${encodeURIComponent(id)}`, { replace: true })
+    try { trackAddRecipeCompleted('manual', updated.nameKo) }
+    catch { /* Optional analytics must not interrupt a successful save or navigation. */ }
   }
 
   return <section className="page recipe-body-container" lang={language}>

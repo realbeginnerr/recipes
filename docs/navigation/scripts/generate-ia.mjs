@@ -6,7 +6,7 @@ const args = process.argv.slice(2)
 const check = args.includes('--check')
 const branchArg = args.find(a => a.startsWith('--branch='))
 const branch = branchArg?.slice('--branch='.length)
-if (args.some(a => a !== '--check' && a !== branchArg)) throw new Error('사용법: node docs/ia/scripts/generate-ia.mjs [--check] [--branch=NODE_ID]')
+if (args.some(a => a !== '--check' && a !== branchArg)) throw new Error('사용법: node docs/navigation/scripts/generate-ia.mjs [--check] [--branch=NODE_ID]')
 for (const version of ['as-is', 'to-be']) {
   const doc = await readIA(path.join(iaRoot, `ia-${version}.yaml`))
   const output = renderMermaid(doc, branch)

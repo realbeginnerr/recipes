@@ -1,12 +1,13 @@
 ﻿import { ingredientById } from '../src/data/ingredientCache'
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
-import { MemoryRouter, Route, Routes } from 'react-router-dom'
+import { createMemoryRouter, MemoryRouter, Route, Routes, RouterProvider } from 'react-router-dom'
 import { beforeEach, expect, it, vi } from 'vitest'
 import { LanguageProvider } from '../src/context/LanguageContext'
 import { AddRecipePage } from '../src/pages/AddRecipePage'
 import { saveRecipeToFirestore } from '../src/services/recipeService'
 import { loadIngredientsFromFirestore } from '../src/services/ingredientService'
 import { uploadBytes } from 'firebase/storage'
+import { trackAddRecipeCompleted } from '../src/utils/analytics'
 import type { Ingredient } from '../src/types'
 
 vi.mock('../src/firebase', () => ({ storage: {} }))
@@ -46,12 +47,30 @@ function names() {
 }
 function save() { fireEvent.click(screen.getAllByRole('button', { name: '레시피 추가', exact: true })[0]) }
 
+it('opens the newly saved detail route automatically, bypassing the dirty guard even if analytics fails', async () => {
+  vi.mocked(saveRecipeToFirestore).mockResolvedValueOnce('actual-saved-id')
+  vi.mocked(trackAddRecipeCompleted).mockImplementationOnce(() => { throw new Error('Analytics unavailable') })
+  const router = createMemoryRouter([
+    { path: '/add-recipe', element: <AddRecipePage /> },
+    { path: '/recipe/:id', element: <p>Automatically opened detail</p> },
+  ], { initialEntries: ['/add-recipe'] })
+  render(<LanguageProvider><RouterProvider router={router} /></LanguageProvider>)
+  await screen.findByLabelText('한글 이름')
+  names()
+  save()
+  await screen.findByText('Automatically opened detail')
+  expect(router.state.location.pathname).toBe('/recipe/actual-saved-id')
+  expect(router.state.historyAction).toBe('REPLACE')
+  expect(screen.queryByText('변경 사항을 저장하지 않았어요')).toBeNull()
+  expect(saveRecipeToFirestore).toHaveBeenCalledTimes(1)
+})
+
 it('uses the edit form fields and saves ingredients, photos, dates, steps and notes to the detail route', async () => {
   await show()
   names()
   expect(screen.getByLabelText('링크')).toBeDefined()
   fireEvent.change(screen.getByLabelText('조리시간 (분)'), { target: { value: '25' } })
-  fireEvent.click(screen.getByRole('button', { name: '+ 날짜 추가' }))
+  fireEvent.change(screen.getByLabelText('완성 중량 (g)'), { target: { value: '500' } })
   fireEvent.change(screen.getByLabelText('요리한 날짜 1'), { target: { value: '2026-11-10' } })
   fireEvent.click(screen.getByRole('button', { name: '+ 날짜 추가' }))
   fireEvent.change(screen.getByLabelText('요리한 날짜 2'), { target: { value: '2026-11-01' } })
@@ -71,7 +90,7 @@ it('uses the edit form fields and saves ingredients, photos, dates, steps and no
   save()
   await screen.findByText('Saved recipe detail')
   expect(saveRecipeToFirestore).toHaveBeenCalledWith(expect.objectContaining({
-    nameKo: '가지볶음', name: 'Eggplant Stir-Fry', divisionCount: 2, cookingGroupOrder: ['반죽'],
+    nameKo: '가지볶음', name: 'Eggplant Stir-Fry', divisionCount: 2, cookingGroupOrder: ['반죽'], finishedWeightGrams: 500,
     items: [{ ingredientId: 'eggplant', amount: 72, unit: 'g', cookingGroup: '반죽' }],
     imageUrl: 'https://example.com/two.jpg', imageUrls: ['https://example.com/one.jpg'],
     cookedDates: ['2026-11-01', '2026-11-10'], lastCookedAt: '2026-11-10',

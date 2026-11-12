@@ -1,10 +1,15 @@
 import { useUiCopy } from '../context/LanguageContext'
 import { INGREDIENT_UNITS, CONVERSION_FIELDS, type ConversionField } from '../constants/ingredientUnits'
 import { formatTableNumber } from '../utils/numberFormatting'
-import { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useEffect, useRef, useState } from 'react'
+import { Link, useNavigate, useParams } from 'react-router-dom'
+import type { Recipe } from '../types'
+import { ingredientById } from '../data/ingredientCache'
+import { recipeAsIngredient, scaleRecipeIngredientNutrition } from '../utils/recipeAsIngredient'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import { ScrollArea } from '@/components/ui/scroll-area'
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table'
 import { FoodImage } from '../components/FoodImage'
 import { LoadingState } from '../components/feedback/ContentState'
@@ -21,7 +26,7 @@ import {
   saveIngredientToFirestore,
   type FirestoreIngredient,
 } from '../services/ingredientService'
-import { convertToRecipe, loadRecipesFromFirestore } from '../services/recipeService'
+import { convertToRecipe, loadRecipesFromFirestore, mergeStaticAndFirestoreRecipes } from '../services/recipeService'
 
 type IngredientDraft = Omit<FirestoreIngredient, 'id'>
 type NumericField = 'baseAmount' | 'carbs' | 'protein' | 'fat'
@@ -29,6 +34,7 @@ function initialDraft(ingredient: FirestoreIngredient): IngredientDraft {
   return {
     ...Object.fromEntries(CONVERSION_FIELDS.map(({ key }) => [key, ingredient[key]])),
     name: ingredient.name,
+    sourceRecipeId: ingredient.sourceRecipeId,
     nameKo: ingredient.nameKo,
     baseAmount: ingredient.baseAmount,
     baseUnit: ingredient.baseUnit,
@@ -74,6 +80,70 @@ export function IngredientEditor({ mode }: { mode: 'create' | 'edit' }) {
   const [error, setError] = useState('')
   const [conversionGrams, setConversionGrams] = useState('100')
   const [conversionAmounts, setConversionAmounts] = useState<Partial<Record<ConversionField, string>>>({})
+  const [sourceRecipes, setSourceRecipes] = useState<Recipe[]>([])
+  const [recipeSearch, setRecipeSearch] = useState('')
+  const [recipesLoading, setRecipesLoading] = useState(false)
+  const [recipesError, setRecipesError] = useState('')
+  const [recipePickerOpen, setRecipePickerOpen] = useState(false)
+  const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null)
+  const [usageWeight, setUsageWeight] = useState('')
+  const [usageError, setUsageError] = useState('')
+  const usageInput = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    if (!selectedRecipe) return
+    usageInput.current?.focus()
+    usageInput.current?.scrollIntoView({ block: 'nearest' })
+  }, [selectedRecipe])
+
+  async function openRecipePicker() {
+    setRecipePickerOpen(true)
+    setRecipesLoading(true)
+    setRecipesError('')
+    setSourceRecipes([])
+    setSelectedRecipe(null)
+    setUsageWeight('')
+    setUsageError('')
+    try {
+      await loadIngredientsFromFirestore()
+      setSourceRecipes(mergeStaticAndFirestoreRecipes(staticRecipes, await loadRecipesFromFirestore()).filter(recipe => recipe.catalog !== 'tea'))
+    } catch { setRecipesError(isKo ? '레시피를 불러오지 못했습니다.' : 'Could not load recipes.') }
+    finally { setRecipesLoading(false) }
+  }
+
+  function chooseRecipe(recipe: Recipe) {
+    setSelectedRecipe(recipe)
+    setUsageWeight('')
+    setUsageError('')
+    setRecipesError('')
+  }
+
+  function confirmRecipe() {
+    if (!selectedRecipe) return
+    const weight = Number(usageWeight)
+    if (usageWeight.trim() === '') {
+      setUsageError(isKo ? '사용중량을 입력해 주세요.' : 'Enter the amount to use.')
+      usageInput.current?.focus()
+      return
+    }
+    if (!Number.isFinite(weight) || weight <= 0) {
+      setUsageError(isKo ? '사용중량은 0보다 큰 g 값으로 입력해 주세요.' : 'Amount to use must be above zero in grams.')
+      usageInput.current?.focus()
+      return
+    }
+    const recipe = selectedRecipe
+    try {
+      const recipes = new Map(sourceRecipes.map(item => [item.id, item]))
+      const macros = scaleRecipeIngredientNutrition(recipeAsIngredient(recipe.id, recipes, ingredientById), weight)
+      setDraft(current => current ? { ...current, sourceRecipeId: recipe.id, name: recipe.name, nameKo: recipe.nameKo, baseAmount: weight, baseUnit: 'g', ...macros, imageUrl: recipe.imageUrl, addedSugar: undefined } : current)
+      setNumericInputs({})
+      setError('')
+      setRecipePickerOpen(false)
+      setSelectedRecipe(null)
+      setUsageError('')
+      setRecipesError('')
+    } catch (cause) { setUsageError(isKo && cause instanceof Error ? cause.message : 'Could not calculate nutrition. Check the original recipe.') }
+  }
 
   useEffect(() => {
     if (creating) return
@@ -208,6 +278,48 @@ export function IngredientEditor({ mode }: { mode: 'create' | 'edit' }) {
     <Button type="button" variant="ghost" size="sm" onClick={() => navigate('/ingredients')}>← {isKo ? '식재료 목록' : 'Ingredients'}</Button>
     <h1 className="page__heading" style={{ marginTop: 20 }}>{creating ? (isKo ? '식재료 추가' : 'Add ingredient') : (isKo ? '식재료 수정' : 'Edit ingredient')}</h1>
     <form className="flex flex-col gap-6" onSubmit={handleSave}>
+      <div className="flex flex-col gap-3">
+        <Button type="button" variant="outline" disabled={saving} onClick={openRecipePicker}>{isKo ? '등록된 레시피에서 선택' : 'Choose an existing recipe'}</Button>
+        {draft.sourceRecipeId && <div className="flex flex-col gap-2">
+          <p>{isKo ? '사용중량에 맞춰 영양을 계산합니다. 원본 수정 후 다시 조회하면 갱신되며, 여기서 사용중량을 바꿔도 원본은 수정되지 않습니다.' : 'Nutrition is calculated for the amount to use. Changing this amount does not modify the original recipe.'}</p>
+          <p className="text-sm">{isKo ? '원본에 전체 중량이 없으면 주재료 합산 무게로 추정하며, 조리 중 수분 변화는 반영되지 않습니다.' : 'Without a recorded batch weight, nutrition is estimated from ingredient weights without cooking moisture changes.'}</p>
+          <Link to={`/recipe/${encodeURIComponent(draft.sourceRecipeId)}/edit`} target="_blank" rel="noopener noreferrer">{isKo ? '원본 레시피 수정 (새 탭)' : 'Edit original recipe (new tab)'}</Link>
+          {ingredientById.get(id ?? '')?.recipeNutritionError && <p role="alert" className="text-sm text-destructive">{ingredientById.get(id ?? '')!.recipeNutritionError}</p>}
+          <Button type="button" variant="outline" disabled={saving} onClick={() => setDraft(current => current ? { ...current, sourceRecipeId: undefined } : current)}>{isKo ? '레시피 연결 해제' : 'Unlink recipe'}</Button>
+        </div>}
+        <Dialog open={recipePickerOpen} onOpenChange={setRecipePickerOpen}>
+          <DialogContent showCloseButton={false} className="flex flex-col gap-0 p-0 max-w-[500px] h-[540px]">
+            <DialogHeader className="px-6 pt-6 pb-4 flex-shrink-0">
+              <DialogTitle>{isKo ? '레시피 선택' : 'Choose recipe'}</DialogTitle>
+            </DialogHeader>
+            <div className="px-6 flex-shrink-0">
+              <Input id="source-recipe-search" type="search" aria-label={isKo ? '레시피 검색' : 'Search recipes'} placeholder={isKo ? '레시피 검색...' : 'Search recipes...'} className="mb-2" autoFocus value={recipeSearch} onChange={event => setRecipeSearch(event.target.value)} />
+            </div>
+            <ScrollArea className="flex-1 px-6 min-h-0">
+          {recipesLoading ? <p role="status">{isKo ? '불러오는 중...' : 'Loading...'}</p> : <>
+            {recipesError && <div className="flex flex-col gap-2 mb-3"><p role="alert" className="text-sm text-destructive">{recipesError}</p><Button type="button" variant="outline" onClick={openRecipePicker}>{isKo ? '다시 불러오기' : 'Reload'}</Button></div>}
+            {selectedRecipe && <div className="flex flex-col gap-3 mb-4">
+              <div className="flex flex-col gap-2">
+                <label htmlFor="source-recipe-usage-weight">{isKo ? '사용중량 (g)' : 'Amount to use (g)'}</label>
+                <Input ref={usageInput} id="source-recipe-usage-weight" type="number" min="0.01" step="any" value={usageWeight} aria-invalid={Boolean(usageError)} aria-describedby={usageError ? 'source-recipe-usage-error' : undefined} onChange={event => { setUsageWeight(event.target.value); setUsageError('') }} />
+                {usageError && <p id="source-recipe-usage-error" role="alert" className="text-sm text-destructive">{usageError}</p>}
+              </div>
+              <p className="text-sm">{isKo ? '이번에 사용할 양을 입력하세요. 원본 레시피는 수정되지 않습니다.' : 'Enter the amount to use. The original recipe is not changed.'}</p>
+              {!selectedRecipe.finishedWeightGrams && <p className="text-sm">{isKo ? '영양은 원본 주재료의 합산 무게 기준 추정값입니다. 조리 중 수분 변화는 반영되지 않습니다.' : 'Nutrition is estimated from the main ingredient weights; cooking moisture changes are not included.'}</p>}
+            </div>}
+            {sourceRecipes.filter(recipe => `${recipe.nameKo} ${recipe.name}`.toLowerCase().includes(recipeSearch.toLowerCase())).map(recipe => <div key={recipe.id} className="flex flex-col gap-2 mb-2">
+              <Button type="button" variant={selectedRecipe?.id === recipe.id ? 'default' : 'outline'} aria-pressed={selectedRecipe?.id === recipe.id} className="min-w-0 w-full justify-between whitespace-normal px-3 h-auto py-[0.65rem] text-left text-sm font-normal" onClick={() => chooseRecipe(recipe)}><span className="min-w-0 flex-1 break-words text-left">{recipe.nameKo || recipe.name}</span></Button>
+            </div>)}
+            {!sourceRecipes.some(recipe => `${recipe.nameKo} ${recipe.name}`.toLowerCase().includes(recipeSearch.toLowerCase())) && !recipesError && <p>{isKo ? '검색 결과가 없습니다.' : 'No results.'}</p>}
+          </>}
+            </ScrollArea>
+            <div className="px-6 py-4 border-t flex justify-end gap-2 flex-shrink-0">
+              <Button type="button" variant="outline" onClick={() => setRecipePickerOpen(false)}>{isKo ? '취소' : 'Cancel'}</Button>
+              <Button type="button" disabled={!selectedRecipe || recipesLoading} onClick={confirmRecipe}>{isKo ? '확인' : 'Confirm'}</Button>
+            </div>
+          </DialogContent>
+        </Dialog>
+      </div>
       <div className="flex flex-col gap-2">
         <label htmlFor="ingredient-name-ko" className="text-sm font-medium">{isKo ? '한글 이름' : 'Korean name'}</label>
         <Input id="ingredient-name-ko" value={draft.nameKo} onChange={(event) => updateText('nameKo', event.target.value)} required />
@@ -237,7 +349,7 @@ export function IngredientEditor({ mode }: { mode: 'create' | 'edit' }) {
         </div>
       </fieldset>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <fieldset disabled={Boolean(draft.sourceRecipeId)} className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div className="flex flex-col gap-2">
           <label htmlFor="ingredient-base-amount" className="text-sm font-medium">{isKo ? '기준량' : 'Base amount'}</label>
           <Input id="ingredient-base-amount" type="number" min="0.01" step="any" value={numericInputs.baseAmount ?? draft.baseAmount} onChange={(event) => updateNumber('baseAmount', event.target.value)} />
@@ -246,9 +358,8 @@ export function IngredientEditor({ mode }: { mode: 'create' | 'edit' }) {
           <label htmlFor="ingredient-base-unit" className="text-sm font-medium">{isKo ? '기준 단위' : 'Base unit'}</label>
           <UnitSelect value={draft.baseUnit} onValueChange={(value) => setDraft((current) => current ? { ...current, baseUnit: value } : current)} language={language} />
         </div>
-      </div>
-
-      <fieldset className="flex flex-col gap-3">
+      </fieldset>
+      <fieldset disabled={Boolean(draft.sourceRecipeId)} className="flex flex-col gap-3">
         <legend className="text-sm font-semibold">{isKo ? `탄단지 (기준 ${formatTableNumber(draft.baseAmount)}${draft.baseUnit})` : `Macros (per ${formatTableNumber(draft.baseAmount)} ${draft.baseUnit})`}</legend>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
           {([
@@ -257,7 +368,7 @@ export function IngredientEditor({ mode }: { mode: 'create' | 'edit' }) {
             ['fat', isKo ? '지방 (g)' : 'Fat (g)'],
           ] as const).map(([field, label]) => <div key={field} className="flex flex-col gap-2">
             <label htmlFor={`ingredient-${field}`} className="text-sm font-medium">{label}</label>
-            <Input id={`ingredient-${field}`} type="number" min="0" step="any" value={numericInputs[field] ?? draft[field]} onChange={(event) => updateNumber(field, event.target.value)} />
+            <Input id={`ingredient-${field}`} type="number" min="0" step="any" value={numericInputs[field] ?? (Number.isFinite(draft[field]) ? draft[field] : '')} onChange={(event) => updateNumber(field, event.target.value)} />
           </div>)}
         </div>
       </fieldset>

@@ -1,3 +1,4 @@
+import { backupFile } from './work-paths.mjs'
 import { readFile, writeFile } from 'node:fs/promises'
 import { createHash } from 'node:crypto'
 import { execFileSync } from 'node:child_process'
@@ -123,7 +124,7 @@ if (reportPath) await writeFile(reportPath, JSON.stringify(report, null, 2))
 if (apply) {
   if (pending.length && !args.includes('--skip-pending')) throw new Error('Unresolved package weight; no changes applied')
   if (writes.length > 500) throw new Error('Too many writes for one atomic commit')
-  await writeFile(new URL(`ingredients-backup-${Date.now()}.json`, import.meta.url), JSON.stringify(snapshot, null, 2))
+  await writeFile(backupFile('ingredients'), JSON.stringify(snapshot, null, 2))
   const result = await request(`${base}:commit`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ writes }) })
   console.log(`Committed ${result.writeResults.length} ingredient changes atomically.`)
 }

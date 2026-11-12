@@ -1,10 +1,11 @@
+import { backupFile } from './work-paths.mjs'
 import { execFileSync } from 'node:child_process'
 import { readFile, writeFile } from 'node:fs/promises'
 const project='recipes-5a663'
 const token=execFileSync('powershell.exe',['-NoProfile','-NonInteractive','-Command','gcloud auth print-access-token'],{encoding:'utf8'}).trim()
 const base=`https://firestore.googleapis.com/v1/projects/${project}/databases/(default)/documents`
 const inputIndex = process.argv.indexOf('--input')
-const inputFile = inputIndex < 0 ? new URL('single-tea-import-prepared.json',import.meta.url) : process.argv[inputIndex + 1]
+const inputFile = inputIndex < 0 ? new URL('../data/single-tea-import-prepared.json',import.meta.url) : process.argv[inputIndex + 1]
 const prepared=JSON.parse(await readFile(inputFile,'utf8'))
 async function request(suffix, options={}, anonymous=false){
  const response=await fetch(base+suffix,{...options,headers:{'Content-Type':'application/json',...(anonymous?{}:{Authorization:`Bearer ${token}`,'x-goog-user-project':project})},signal:AbortSignal.timeout(30000)})
@@ -34,7 +35,7 @@ for(const product of prepared){
   writes.push({update:{name:base.replace('https://firestore.googleapis.com/v1/','')+suffix,fields:encode(data).mapValue.fields},currentDocument:{exists:false}})
  }
 }
-await writeFile(new URL(`single-tea-import-backup-${Date.now()}.json`,import.meta.url),JSON.stringify({existing,writes},null,2))
+await writeFile(backupFile('single-tea-import'),JSON.stringify({existing,writes},null,2))
 console.log(JSON.stringify({prepared:prepared.length,newProducts:writes.length/4,names:prepared.map(p=>p.name)}))
 if(process.argv.includes('--apply')&&writes.length){
  await request(':commit',{method:'POST',body:JSON.stringify({writes})})

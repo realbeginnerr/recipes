@@ -1,4 +1,5 @@
-﻿import { createRequire } from 'node:module'
+﻿import { backupFile } from './work-paths.mjs'
+import { createRequire } from 'node:module'
 import { writeFile } from 'node:fs/promises'
 const require = createRequire(import.meta.url)
 const auth = require('C:/Users/ME/AppData/Roaming/npm/node_modules/firebase-tools/lib/auth.js')
@@ -22,7 +23,7 @@ for (const collection of ['taggedProducts', 'products', 'recipes']) {
   } while (pageToken)
 }
 const matches = documents.filter(({ document }) => ['name', 'nameKo', 'productName'].some(key => /에코\s*백|eco\s*bag|tote\s*bag/i.test(document.fields?.[key]?.stringValue ?? '')))
-await writeFile(new URL('ecobag-inspection.json', import.meta.url), JSON.stringify(matches, null, 2))
+await writeFile(new URL('../data/ecobag-inspection.json', import.meta.url), JSON.stringify(matches, null, 2))
 console.log(JSON.stringify(matches.map(({ collection, document }) => ({ collection, id: document.name.split('/').at(-1), name: document.fields.productName?.stringValue ?? document.fields.nameKo?.stringValue ?? document.fields.name?.stringValue, deleted: document.fields.deleted?.booleanValue ?? false })), null, 2))
 if (process.argv.includes('--apply')) {
   if (matches.length !== 1 || matches[0].collection !== 'products' || !matches[0].document.name.endsWith('/shop-eco-bag')) throw new Error('삭제 대상이 예상과 다릅니다. 다시 확인하세요.')
@@ -39,7 +40,7 @@ if (process.argv.includes('--apply')) {
     } while (pageToken)
   }
   const targets = [target, ...related]
-  await writeFile(new URL(`ecobag-deletion-backup-${Date.now()}.json`, import.meta.url), JSON.stringify(targets, null, 2))
+  await writeFile(backupFile('ecobag-deletion'), JSON.stringify(targets, null, 2))
   await request(':commit', { method: 'POST', body: JSON.stringify({ writes: targets.map(document => ({ delete: document.name, currentDocument: { updateTime: document.updateTime } })) }) })
   for (const document of targets) {
     const response = await fetch(`https://firestore.googleapis.com/v1/${document.name}`, { headers: { Authorization: `Bearer ${credentials.access_token}` }, signal: AbortSignal.timeout(30000) })

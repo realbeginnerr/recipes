@@ -126,6 +126,7 @@ export function RecipeTable({
   const [editPlatingBlocks, setEditPlatingBlocks] = useState(initialPlatingBlocks)
   const [editMemo, setEditMemo] = useState(activeRecipe.memo ?? '')
   const [editCookingTime, setEditCookingTime] = useState(activeRecipe.cookingTimeMinutes === undefined ? '' : String(activeRecipe.cookingTimeMinutes))
+  const [editFinishedWeight, setEditFinishedWeight] = useState(activeRecipe.finishedWeightGrams === undefined ? '' : String(activeRecipe.finishedWeightGrams))
   const [editCookedDates, setEditCookedDates] = useState<string[]>(() => recipeCookingDates(activeRecipe))
   const [editTasteRating, setEditTasteRating] = useState(activeRecipe.tasteRating ?? 4)
   const [editName, setEditName] = useState(activeRecipe.name)
@@ -159,7 +160,7 @@ export function RecipeTable({
   const [recipeSearch, setRecipeSearch] = useState('')
   const [amountDrafts, setAmountDrafts] = useState<Record<string, string>>({})
   const leaveAllowed = useRef(false)
-  const draftSignature = JSON.stringify([editImages.map(image => [image.id, image.url, image.file?.name, image.file?.size, image.file?.lastModified]), editName, editNameKo, editItems, editSideItems, amountDrafts, editMemo, editCookingTime, editCookedDates, editTasteRating, editCategories, divisionInput, editLink, editGroupOrder, editCookingSteps, editPlatingBlocks, editPhotoProductDescription, editPhotoProductUrl, editProductTags])
+  const draftSignature = JSON.stringify([editImages.map(image => [image.id, image.url, image.file?.name, image.file?.size, image.file?.lastModified]), editName, editNameKo, editItems, editSideItems, amountDrafts, editMemo, editFinishedWeight, editCookingTime, editCookedDates, editTasteRating, editCategories, divisionInput, editLink, editGroupOrder, editCookingSteps, editPlatingBlocks, editPhotoProductDescription, editPhotoProductUrl, editProductTags])
   const initialDraft = useRef(draftSignature)
   const dirty = isEditing && draftSignature !== initialDraft.current
   function ingredientNameForId(ingredientId: string): string {
@@ -197,6 +198,7 @@ export function RecipeTable({
     setEditPlatingBlocks(initialPlatingBlocks())
     setEditMemo(activeRecipe.memo ?? '')
     setEditCookingTime(activeRecipe.cookingTimeMinutes === undefined ? '' : String(activeRecipe.cookingTimeMinutes))
+    setEditFinishedWeight(activeRecipe.finishedWeightGrams === undefined ? '' : String(activeRecipe.finishedWeightGrams))
     setEditCookedDates(recipeCookingDates(activeRecipe))
     setEditTasteRating(activeRecipe.tasteRating ?? 4)
     setDivisionInput(String(activeRecipe.divisionCount ?? divisionCount))
@@ -263,6 +265,10 @@ export function RecipeTable({
       return
     }
     const riceItem = editSideItems.find((i) => i.ingredientId === MULTIGRAIN_ID)
+    if (editFinishedWeight !== '' && (!Number.isFinite(Number(editFinishedWeight)) || Number(editFinishedWeight) <= 0)) {
+      showToast(language === 'ko' ? '완성 중량은 0보다 큰 g 값으로 입력해 주세요.' : 'Finished weight must be above zero in grams.', 'error')
+      return
+    }
     if (riceItem) {
       onMultigrainRiceAmountChange(riceItem.defaultAmount)
       onMultigrainRiceUnitChange(riceItem.defaultUnit)
@@ -270,7 +276,7 @@ export function RecipeTable({
     const parsedDivision = Number.parseInt(divisionInput, 10)
     const validDivision = !Number.isNaN(parsedDivision) && parsedDivision > 0 ? parsedDivision : divisionCount
     onDivisionCountChange(validDivision)
-    const updated = { ...activeRecipe, name: editName.trim() || activeRecipe.name, nameKo: editNameKo.trim() || activeRecipe.nameKo, categories: editCategories, imageUrl: editImages.map(image => image.url.trim()).filter(Boolean)[0] ?? '', imageUrls: editImages.map(image => image.url.trim()).filter(Boolean).slice(1), images: activeRecipe.images ?? [], productTags: editProductTags, photoProductDescription: editPhotoProductDescription, photoProductUrl: editPhotoProductUrl.trim(), link: editLink, items: editItems, sideItems: editSideItems, memo: editMemo, cookingGroupOrder: cookingGroupOrder(editItems, editGroupOrder), cookingContent: editCookingSteps.map(step => step.text).join('\n'), cookingSteps: editCookingSteps.filter(step => step.text.trim()), platingBlocks: editPlatingBlocks, tasteRating: editTasteRating, divisionCount: validDivision, cookingTimeMinutes: editCookingTime === '' ? undefined : Math.max(0, Number(editCookingTime)), ...recipeCookingHistory({ cookedDates: editCookedDates }) }
+    const updated = { ...activeRecipe, name: editName.trim() || activeRecipe.name, nameKo: editNameKo.trim() || activeRecipe.nameKo, categories: editCategories, imageUrl: editImages.map(image => image.url.trim()).filter(Boolean)[0] ?? '', imageUrls: editImages.map(image => image.url.trim()).filter(Boolean).slice(1), images: activeRecipe.images ?? [], productTags: editProductTags, photoProductDescription: editPhotoProductDescription, photoProductUrl: editPhotoProductUrl.trim(), link: editLink, items: editItems, sideItems: editSideItems, memo: editMemo, cookingGroupOrder: cookingGroupOrder(editItems, editGroupOrder), cookingContent: editCookingSteps.map(step => step.text).join('\n'), cookingSteps: editCookingSteps.filter(step => step.text.trim()), platingBlocks: editPlatingBlocks, tasteRating: editTasteRating, divisionCount: validDivision, finishedWeightGrams: editFinishedWeight === '' ? undefined : Number(editFinishedWeight), cookingTimeMinutes: editCookingTime === '' ? undefined : Math.max(0, Number(editCookingTime)), ...recipeCookingHistory({ cookedDates: editCookedDates }) }
     if (canSave) {
       mutationBusy.current = true
       setIsSaving(true)
@@ -581,7 +587,7 @@ export function RecipeTable({
         <div className="flex flex-wrap gap-2">
           <Button type="button" variant="outline" onClick={async () => {
             try {
-              await navigator.clipboard.writeText(JSON.stringify({ nameKo: editNameKo, name: editName, items: editItems, sideItems: editSideItems, memo: editMemo, cookingSteps: editCookingSteps, cookedDates: editCookedDates, images: editImages.map(({ file, ...image }) => ({ ...image, fileName: file?.name })), cookingTimeMinutes: editCookingTime, divisionCount: divisionInput, categories: editCategories, link: editLink, platingBlocks: editPlatingBlocks, cookingGroupOrder: editGroupOrder, tasteRating: editTasteRating, photoProductDescription: editPhotoProductDescription, photoProductUrl: editPhotoProductUrl, productTags: editProductTags }, null, 2))
+              await navigator.clipboard.writeText(JSON.stringify({ nameKo: editNameKo, name: editName, items: editItems, sideItems: editSideItems, memo: editMemo, cookingSteps: editCookingSteps, cookedDates: editCookedDates, images: editImages.map(({ file, ...image }) => ({ ...image, fileName: file?.name })), finishedWeightGrams: editFinishedWeight === '' ? undefined : Number(editFinishedWeight), cookingTimeMinutes: editCookingTime, divisionCount: divisionInput, categories: editCategories, link: editLink, platingBlocks: editPlatingBlocks, cookingGroupOrder: editGroupOrder, tasteRating: editTasteRating, photoProductDescription: editPhotoProductDescription, photoProductUrl: editPhotoProductUrl, productTags: editProductTags }, null, 2))
               showToast(language === 'ko' ? '초안을 복사했습니다.' : 'Draft copied.', 'success')
             } catch { showToast(language === 'ko' ? '초안을 복사하지 못했습니다. 입력 내용을 직접 복사해 주세요.' : 'Could not copy the draft. Please copy your input manually.', 'error') }
           }}>{language === 'ko' ? '초안 복사' : 'Copy draft'}</Button>
@@ -751,16 +757,23 @@ export function RecipeTable({
           <Input id={`cooking-time-${recipe.id}`} style={{ maxWidth: 200 }} type="number" min="0" step="1" value={editCookingTime} onChange={event => setEditCookingTime(event.target.value)} placeholder={language === 'ko' ? '확인필요' : 'To be confirmed'} />
         </div>
       )}
+      {!isCollapsed && isEditing && (
+        <div className="edit-inline__link-field">
+          <label className="edit-inline__link-label" htmlFor={`finished-weight-${recipe.id}`}>{language === 'ko' ? '완성 중량 (g)' : 'Finished weight (g)'}</label>
+          <Input id={`finished-weight-${recipe.id}`} style={{ maxWidth: 200 }} type="number" min="0.01" step="any" value={editFinishedWeight} disabled={isSaving || isDeleting} onChange={event => setEditFinishedWeight(event.target.value)} />
+          <p className="text-sm">{language === 'ko' ? '다른 요리의 식재료로 사용할 때 입력하세요. 주재료 전체를 조리한 후의 무게이며, 한 끼 보기의 곁들임 재료는 제외합니다.' : 'For use as an ingredient: enter the finished weight of the main batch, excluding serving accompaniments.'}</p>
+        </div>
+      )}
 
       {!isCollapsed && isEditing && (
         <div className="edit-inline__link-field">
           <span className="edit-inline__link-label">{language === 'ko' ? '요리한 날짜' : 'Dates I cooked this recipe'}</span>
           <div className="flex flex-col gap-2">
-            {editCookedDates.map((date, index) => <div key={index} className="flex items-center gap-2">
-              <Input type="date" style={{ maxWidth: 200 }} aria-label={language === 'ko' ? `요리한 날짜 ${index + 1}` : `Cooking date ${index + 1}`} value={date} disabled={isSaving} onChange={event => setEditCookedDates(current => current.map((value, i) => i === index ? event.target.value : value))} />
+            {(editCookedDates.length ? editCookedDates : ['']).map((date, index) => <div key={index} className="flex items-center gap-2">
+              <Input type="date" style={{ maxWidth: 200 }} aria-label={language === 'ko' ? `요리한 날짜 ${index + 1}` : `Cooking date ${index + 1}`} value={date} disabled={isSaving} onChange={event => setEditCookedDates(current => (current.length ? current : ['']).map((value, i) => i === index ? event.target.value : value))} />
               <Button type="button" variant="ghost" disabled={isSaving} aria-label={language === 'ko' ? `요리한 날짜 ${index + 1} 삭제` : `Remove cooking date ${index + 1}`} onClick={() => setEditCookedDates(current => current.filter((_, i) => i !== index))}>{language === 'ko' ? '삭제' : 'Remove'}</Button>
             </div>)}
-            <Button type="button" variant="outline" className="self-start" disabled={isSaving} onClick={() => setEditCookedDates(current => [...current, ''])}>{language === 'ko' ? '+ 날짜 추가' : '+ Add date'}</Button>
+            <Button type="button" variant="outline" className="self-start" disabled={isSaving} onClick={() => setEditCookedDates(current => [...(current.length ? current : ['']), ''])}>{language === 'ko' ? '+ 날짜 추가' : '+ Add date'}</Button>
           </div>
         </div>
       )}
@@ -818,7 +831,7 @@ export function RecipeTable({
       </section>}
       {!isCollapsed && isEditing && editTab === 'cooking' && <CookingGroupOrderEditor items={editItems} order={editGroupOrder} onChange={setEditGroupOrder} ko={language === 'ko'} disabled={isSaving || isDeleting || tagBusy} />}
       {!isCollapsed && nutritionIncomplete && <p role="status" className="my-4">{language === 'ko' ? '일부 재료 제외: 식재료·수량·영양·환산 정보를 확인할 수 없어 영양 합계가 불완전합니다. 해당 식재료의 정보·단위를 확인해 주세요.' : 'Some ingredients excluded: nutrition totals are incomplete. Check the affected ingredient and unit conversion.'}</p>}
-      {!isCollapsed && (!isEditing || editTab !== 'meal') && <Table className="data-table recipe-table">
+      {!isCollapsed && (!isEditing || editTab !== 'meal') && <Table lang={language} aria-label={language === 'ko' ? '주재료 표' : 'Main ingredients'} className="data-table recipe-table">
         <TableHeader>
           <TableRow>
             {isEditing && <TableHead className="edit-inline__order-cell" aria-label={language === 'ko' ? '순서 변경' : 'Reorder'} />}

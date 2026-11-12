@@ -1,7 +1,13 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { fireEvent, render as renderUI, screen, waitFor } from '@testing-library/react'
+import { Link, MemoryRouter } from 'react-router-dom'
+import type { ReactElement } from 'react'
 import { beforeEach, expect, it, vi } from 'vitest'
 import { ResourcesPage } from '../src/pages/ResourcesPage'
 import { deleteResource, loadResources, saveResource, type ResourcePost } from '../src/services/resourceService'
+
+function render(ui: ReactElement) {
+  return renderUI(<MemoryRouter initialEntries={['/resources']}>{ui}</MemoryRouter>)
+}
 
 const admin = vi.hoisted(() => ({ isAdmin: false }))
 vi.mock('../src/context/AdminContext', () => ({ useAdmin: () => admin }))
@@ -16,6 +22,20 @@ beforeEach(() => {
   vi.clearAllMocks(); admin.isAdmin = false
   vi.mocked(loadResources).mockResolvedValue([post])
 })
+it('returns from resource details to the main list when its navigation menu is clicked again', async () => {
+  render(<><nav><Link to="/resources">자료실</Link></nav><ResourcesPage /></>)
+  fireEvent.click(await screen.findByRole('button', { name: /조리 가이드/ }))
+  expect(screen.getByText('안내 내용')).toBeTruthy()
+  expect(screen.queryByRole('searchbox')).toBeNull()
+  fireEvent.click(screen.getByRole('link', { name: '자료실', exact: true }))
+  expect(await screen.findByRole('button', { name: /조리 가이드/ })).toBeTruthy()
+  expect(screen.getByRole('searchbox')).toBeTruthy()
+  expect(screen.queryByText('안내 내용')).toBeNull()
+  fireEvent.click(screen.getByRole('button', { name: /조리 가이드/ }))
+  fireEvent.click(screen.getByRole('link', { name: '자료실', exact: true }))
+  expect(await screen.findByRole('searchbox')).toBeTruthy()
+})
+
 it('lets visitors search, read attachments, and return to the board without admin controls', async () => {
   render(<ResourcesPage />)
   expect(screen.queryByRole('button', { name: '자료 등록' })).toBeNull()

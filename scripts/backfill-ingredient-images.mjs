@@ -1,3 +1,4 @@
+import { backupFile } from './work-paths.mjs'
 import { readFile, writeFile, access } from 'node:fs/promises'
 import { execFileSync } from 'node:child_process'
 import ts from 'typescript'
@@ -35,11 +36,11 @@ for (const document of documents) {
   writes.push({ update: { name: document.name, fields: { imageUrl: { stringValue: imageUrl } } },
     updateMask: { fieldPaths: ['imageUrl'] }, currentDocument: { updateTime: document.updateTime } })
 }
-await writeFile(new URL('ingredient-images-report.json', import.meta.url), JSON.stringify({ total: documents.length, preserved: documents.length - changes.length, changes }, null, 2))
+await writeFile(new URL('../data/ingredient-images-report.json', import.meta.url), JSON.stringify({ total: documents.length, preserved: documents.length - changes.length, changes }, null, 2))
 console.log(JSON.stringify({ total: documents.length, preserved: documents.length - changes.length, addImage: changes.filter(c => c.imageUrl).length, emptyImage: changes.filter(c => !c.imageUrl).map(c => c.name) }, null, 2))
 if (process.argv.includes('--apply') && writes.length) {
   if (writes.length > 500) throw new Error('Too many writes for an atomic commit')
-  await writeFile(new URL(`ingredient-images-backup-${Date.now()}.json`, import.meta.url), JSON.stringify(snapshot, null, 2))
+  await writeFile(backupFile('ingredient-images'), JSON.stringify(snapshot, null, 2))
   const result = await request(':commit', { writes })
   console.log(`Updated ${result.writeResults.length} imageUrl fields.`)
   const verified = await request(':runQuery', { structuredQuery: { from: [{ collectionId: 'ingredients' }] } })

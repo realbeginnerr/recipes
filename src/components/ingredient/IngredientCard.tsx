@@ -54,11 +54,11 @@ export function IngredientCard({ ingredient, image, category, storageLocation, r
         {changed && <Button type="button" variant="ghost" size="content" aria-label={`${name} ${ko ? '용량 초기화' : 'reset amount'}`} onClick={() => { setQuantity(String(defaultAmount)); setUnit(defaultUnit) }}>{ko ? '초기화' : 'Reset'}</Button>}
       </div>
       <dl className="ingredient-macro-values">
-        <div><dt>{ko ? '탄수화물' : 'Carbs'}</dt><dd>{formatTableNumber(macros.carbs)}g</dd></div>
-        <div><dt>{ko ? '단백질' : 'Protein'}</dt><dd>{formatTableNumber(macros.protein)}g</dd></div>
-        <div><dt>{ko ? '지방' : 'Fat'}</dt><dd>{formatTableNumber(macros.fat)}g</dd></div>
+        <div><dt>{ko ? '탄수화물' : 'Carbs'}</dt><dd>{Number.isFinite(macros.carbs) ? `${formatTableNumber(macros.carbs)}g` : '—'}</dd></div>
+        <div><dt>{ko ? '단백질' : 'Protein'}</dt><dd>{Number.isFinite(macros.protein) ? `${formatTableNumber(macros.protein)}g` : '—'}</dd></div>
+        <div><dt>{ko ? '지방' : 'Fat'}</dt><dd>{Number.isFinite(macros.fat) ? `${formatTableNumber(macros.fat)}g` : '—'}</dd></div>
       </dl>
-      <NutritionSummary carbs={macros.carbs} protein={macros.protein} fat={macros.fat} showRatio={false} />
+      {ingredient.recipeNutritionError ? <p className="text-sm">{ko ? ingredient.recipeNutritionError : 'Linked recipe nutrition is unavailable. Check the original recipe.'}</p> : <NutritionSummary carbs={macros.carbs} protein={macros.protein} fat={macros.fat} showRatio={false} />}
       <RelatedRecipes recipes={related} ingredientId={ingredient.id} />
     </div>
   </article>

@@ -13,5 +13,5 @@ function decode(v){if('stringValue' in v)return v.stringValue;if('integerValue'i
 const products=[];let pageToken=''
 do{const page=await request('/products?pageSize=100'+(pageToken?'&pageToken='+encodeURIComponent(pageToken):''));products.push(...(page?.documents??[]));pageToken=page?.nextPageToken??''}while(pageToken)
 const settings=await request('/shopSettings/default')
-await writeFile(new URL('single-tea-import-existing.json',import.meta.url),JSON.stringify({products,settings},null,2))
+await writeFile(new URL('../data/single-tea-import-existing.json',import.meta.url),JSON.stringify({products,settings},null,2))
 console.log(JSON.stringify({products:products.map(doc=>({id:doc.name.split('/').at(-1),name:decode(doc.fields.name),sku:decode(doc.fields.sku)})),settings:settings?decode({mapValue:{fields:settings.fields}}):null},null,2))
