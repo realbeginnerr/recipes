@@ -5,8 +5,8 @@ import { ContentState, LoadingState } from '../components/feedback/ContentState'
 import { RegistrationActions } from '../components/catalog/RegistrationRequestButton'
 import { PageIntro, CatalogToolbar, CategoryFilter, SearchField, SortSelect } from '../components/catalog/CatalogControls'
 import { Button } from '@/components/ui/button'
-import { useEffect, useMemo, useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { useLocation, useNavigationType, useSearchParams } from 'react-router-dom'
 import { useLanguage } from '../context/LanguageContext'
 import { useSearch } from '../context/SearchContext'
 import { useAdmin } from '../context/AdminContext'
@@ -27,10 +27,24 @@ function recipePageSize() {
   return window.matchMedia('(min-width: 1024px)').matches ? 12 : 6
 }
 
+type ListView = { category: RecipeCategory[]; teaCategory: TeaCategory; sortOrder: string; limit: number; scrollY: number }
+function cachedListView(key: string): ListView | null {
+  try {
+    const value = JSON.parse(sessionStorage.getItem(key) ?? 'null')
+    return value && Array.isArray(value.category) && value.category.every((item: RecipeCategory) => recipeCategories.includes(item))
+      && typeof value.teaCategory === 'string' && typeof value.sortOrder === 'string' && Number.isSafeInteger(value.limit) && value.limit > 0
+      && Number.isFinite(value.scrollY) && value.scrollY >= 0 ? value : null
+  } catch { return null }
+}
+
 export function RecipePage({ blendingTea = false }: { blendingTea?: boolean }) {
   const copy = useUiCopy()
   const { requestAccess } = useAddPageAccess()
   const { homeVersion, resetHome } = useSearch()
+  const location = useLocation()
+  const navigationType = useNavigationType()
+  const cacheKey = `recipe-list:${blendingTea ? 'shop' : 'recipes'}:${location.key}`
+  const [restoredView] = useState(() => navigationType === 'POP' ? cachedListView(cacheKey) : null)
   const [searchParams, setSearchParams] = useSearchParams()
   const appliedSearch = searchParams.get('q') ?? ''
   const ingredientId = searchParams.get('ingredient') ?? ''
@@ -41,14 +55,29 @@ export function RecipePage({ blendingTea = false }: { blendingTea?: boolean }) {
   const selectedIngredient = ingredientById.get(ingredientId)
   const ingredientName = selectedIngredient ? getIngredientDisplayName(selectedIngredient, language) : ingredientId
   const [recipes, setRecipes] = useState<Recipe[]>(staticRecipes)
-  const [category, setCategory] = useState<RecipeCategory[]>([])
-  const [teaCategory, setTeaCategory] = useState<TeaCategory>('전체')
-  const [sortOrder, setSortOrder] = useState('cooked-desc')
+  const [category, setCategory] = useState<RecipeCategory[]>(restoredView?.category ?? [])
+  const [teaCategory, setTeaCategory] = useState<TeaCategory>(restoredView?.teaCategory ?? '전체')
+  const [sortOrder, setSortOrder] = useState(restoredView?.sortOrder ?? 'cooked-desc')
   const [loading, setLoading] = useState(true)
   const [loadFailed, setLoadFailed] = useState(false)
   const [loadAttempt, setLoadAttempt] = useState(0)
   const [pageSize, setPageSize] = useState(() => blendingTea ? 8 : recipePageSize())
-  const [limit, setLimit] = useState(() => blendingTea ? 8 : recipePageSize())
+  const [limit, setLimit] = useState(() => restoredView?.limit ?? (blendingTea ? 8 : recipePageSize()))
+  const view = useRef<ListView>({ category, teaCategory, sortOrder, limit, scrollY: restoredView?.scrollY ?? 0 })
+  view.current = { category, teaCategory, sortOrder, limit, scrollY: view.current.scrollY }
+  useEffect(() => {
+    const store = () => {
+      view.current.scrollY = window.scrollY
+      try { sessionStorage.setItem(cacheKey, JSON.stringify(view.current)) } catch { /* Browsing still works without storage. */ }
+    }
+    window.addEventListener('scroll', store, { passive: true })
+    return () => { store(); window.removeEventListener('scroll', store) }
+  }, [cacheKey])
+  useEffect(() => {
+    if (loading || loadFailed || !restoredView) return
+    const frame = requestAnimationFrame(() => window.scrollTo(0, restoredView.scrollY))
+    return () => cancelAnimationFrame(frame)
+  }, [loading, loadFailed, restoredView])
   useEffect(() => {
     if (blendingTea) return
     const media = window.matchMedia('(min-width: 1024px)')
@@ -104,8 +133,20 @@ export function RecipePage({ blendingTea = false }: { blendingTea?: boolean }) {
       return sortOrder === 'date-asc' ? result : -result
     }), [recipes, category, teaCategory, appliedSearch, ingredientId, isAdmin, sortOrder, ko, language, blendingTea])
 
-  useEffect(() => { setLimit(blendingTea ? 8 : recipePageSize()) }, [category, teaCategory, appliedSearch, ingredientId, sortOrder, homeVersion, blendingTea])
-  useEffect(() => { setCategory([]); setTeaCategory('전체') }, [homeVersion])
+  const criteria = JSON.stringify([category, teaCategory, appliedSearch, ingredientId, sortOrder, homeVersion, blendingTea])
+  const previousCriteria = useRef(criteria)
+  useEffect(() => {
+    if (previousCriteria.current === criteria) return
+    previousCriteria.current = criteria
+    setLimit(blendingTea ? 8 : recipePageSize())
+  }, [criteria, blendingTea])
+  const previousHome = useRef(homeVersion)
+  useEffect(() => {
+    if (previousHome.current === homeVersion) return
+    previousHome.current = homeVersion
+    setCategory([]); setTeaCategory('전체'); setSortOrder('cooked-desc'); setSearchParams({})
+    window.scrollTo(0, 0)
+  }, [homeVersion, setSearchParams])
   const hasMore = limit < visibleRecipes.length
 
   return <section className="recipe-catalog recipe-list-catalog" lang={language}>

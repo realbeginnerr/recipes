@@ -23,7 +23,6 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { BackLink } from '../components/BackLink'
 import { useLanguage } from '../context/LanguageContext'
 import { useAdmin } from '../context/AdminContext'
-import { ingredientById } from '../data/ingredientCache'
 import { recipes as staticRecipes } from '../data/recipe'
 import { getIngredientById, loadIngredientsFromFirestore } from '../services/ingredientService'
 import { loadRecipesFromFirestore, mergeStaticAndFirestoreRecipes } from '../services/recipeService'
@@ -33,12 +32,15 @@ import type { Ingredient, Recipe, RecipeRowState } from '../types'
 import '../components/catalog/CatalogControls.css'
 import './RecipeDetailPage.css'
 import { recipeCookingGroups } from '../utils/recipeCookingGroups'
+import { canCalculateRecipeRow } from '../utils/recipeNutritionStatus'
+import { recipeIngredient } from '../utils/recipeUnitValidation'
 import '../components/RecipeTitle.css'
 
 type Macros = { carbs: number; protein: number; fat: number }
 const zero = (): Macros => ({ carbs: 0, protein: 0, fat: 0 })
-function ingredientFor(id: string) { return ingredientById.get(id === '__multigrain_rice__' ? 'multigrain-rice' : id) }
+function ingredientFor(id: string) { return recipeIngredient(id) }
 function macrosFor(row: RecipeRowState): Macros {
+  if (!canCalculateRecipeRow(row)) return zero()
   const ingredient = ingredientFor(row.ingredientId)
   return ingredient ? calculateMacros(amountToGrams(row.amount, row.unit, ingredient.conversions), ingredient) : zero()
 }
@@ -119,7 +121,10 @@ function RecipeNutrition({ recipe }: { recipe: Recipe }) {
   const [divisions, setDivisions] = useState(Math.max(1, recipe.divisionCount ?? 4))
   const [divisionsInput, setDivisionsInput] = useState(() => String(divisions))
   const [sides, setSides] = useState<RecipeRowState[]>(() => (recipe.sideItems ?? []).map(item => ({ ingredientId: item.ingredientId, amount: item.defaultAmount, unit: item.defaultUnit })))
-  const [memo] = useState(() => { try { return localStorage.getItem(`recipe-note:${recipe.id}`) ?? recipe.memo ?? '' } catch { return recipe.memo ?? '' } })
+  const memo = recipe.memo ?? ''
+  const [legacyMemo] = useState(() => { try { return localStorage.getItem(`recipe-note:${recipe.id}`) ?? '' } catch { return '' } })
+  const incomplete = rows.some(row => !canCalculateRecipeRow(row))
+  const mealIncomplete = incomplete || sides.some(row => !canCalculateRecipeRow(row))
   const macros = rows.map(macrosFor)
   const storageGroups = (['냉장실', '냉동실', '실온보관', ''] as const).map(location => ({
     location,
@@ -145,9 +150,10 @@ function RecipeNutrition({ recipe }: { recipe: Recipe }) {
   function ingredientNameCell(row: RecipeRowState) {
     const ingredient = ingredientFor(row.ingredientId)
     const displayName = label(ingredient, row.ingredientId)
-    return isAdmin && ingredient
+    const nameContent = isAdmin && ingredient
       ? <a className="detail-ingredient-edit-link" href={`${import.meta.env.BASE_URL}ingredient/${ingredient.id}/edit`} target="_blank" rel="noopener noreferrer">{displayName}</a>
       : displayName
+    return <>{nameContent}{!canCalculateRecipeRow(row) && <p className="text-sm">{ko ? '계산 불가: 식재료·수량·단위 환산 정보를 확인해 주세요.' : 'Cannot calculate: check ingredient, quantity and unit conversion.'}</p>}</>
   }
   function updateRow(index: number, field: 'amount' | 'unit', value: string, side = false) {
     if (!side && field === 'amount' && adjustmentMode === 'all') {
@@ -175,6 +181,7 @@ function RecipeNutrition({ recipe }: { recipe: Recipe }) {
       return `${label(ingredientFor(row.ingredientId), row.ingredientId)}: ${row.amount}${displayUnit}`
     }
     const text = [
+      ...(mealIncomplete ? [ko ? '영양 정보: 일부 재료를 계산할 수 없습니다.' : 'Nutrition is incomplete: some ingredients cannot be calculated.'] : []),
       ...tableGroups.map(group => [`[${group.title}]`, ...group.entries.map(({ row }) => rowText(row))].join('\n')),
       [ko ? `[${divisions}등분해서 소분하기]` : `[Divide into ${divisions} portions]`,
         ko ? `전체 재료 합계: 1/${divisions}분량` : `All ingredients total: 1/${divisions} batch`,
@@ -248,9 +255,9 @@ function RecipeNutrition({ recipe }: { recipe: Recipe }) {
             : <div key={block.id} className="meal-blog__images"><figure><img src={block.value} alt={ko ? `플레이팅 사진 ${index + 1}` : `Plating photo ${index + 1}`} loading="lazy" /></figure></div>)}</div>
             : <p className="meal-blog__empty">{ko ? '작성한 내용 없음' : 'No content yet'}</p>}
         </article>
-      ) : <NutritionTable total={total} labelledBy="whole-recipe-title">{tableGroups.flatMap(({ key, title, icon, entries }) => [
+      ) : <NutritionTable total={total} incomplete={incomplete} labelledBy="whole-recipe-title">{tableGroups.flatMap(({ key, title, icon, entries }) => [
         <tr key={`${tableMode}-${key}`} className="detail-storage-group"><th colSpan={6}>{icon && <span className="detail-storage-icon" aria-hidden="true">{icon}</span>}{title}</th></tr>,
-        ...entries.map(({ row, index }, groupIndex) => <tr key={`${row.ingredientId}-${index}`} className={groupIndex % 2 === 0 ? 'table-row--white' : 'table-row--alternate'}><td>{ingredientNameCell(row)}</td>{quantityCells(row, index)}<MacroCells values={macros[index]} /></tr>),
+        ...entries.map(({ row, index }, groupIndex) => <tr key={`${row.ingredientId}-${index}`} className={groupIndex % 2 === 0 ? 'table-row--white' : 'table-row--alternate'}><td>{ingredientNameCell(row)}</td>{quantityCells(row, index)}<MacroCells values={macros[index]} unavailable={!canCalculateRecipeRow(row)} /></tr>),
       ])}</NutritionTable>}
       </div>
       {(tableMode === 'storage' || tableMode === 'cooking') && <TableNutritionSummary total={total} />}
@@ -265,15 +272,20 @@ function RecipeNutrition({ recipe }: { recipe: Recipe }) {
           if (Number.isFinite(parsed) && parsed >= 1) setDivisions(Math.floor(parsed))
         }} onBlur={() => setDivisionsInput(String(divisions))} /><span>{ko ? '등분' : 'portions'}</span></div>
       </div>
-      <NutritionTable total={meal} labelledBy="meal-title">
+      {mealIncomplete && <p role="status">{ko ? '일부 재료 제외: 열량과 탄단지 비율은 계산 가능한 재료만의 참고값입니다.' : 'Some ingredients excluded: calories and ratios include only calculable ingredients.'}</p>}
+      <NutritionTable total={meal} incomplete={mealIncomplete} labelledBy="meal-title">
         <tr><td>{ko ? '전체 재료 합계' : 'All ingredients total'}</td><td className="numeric">1/{divisions}</td><td className="muted">{ko ? '분량' : 'batch'}</td><MacroCells values={portion} /></tr>
         {sides.map((row, index) => {
-          return <tr key={index}><td>{ingredientNameCell(row)}</td>{quantityCells(row, index, true)}<MacroCells values={macrosFor(row)} /></tr>
+          return <tr key={index}><td>{ingredientNameCell(row)}</td>{quantityCells(row, index, true)}<MacroCells values={macrosFor(row)} unavailable={!canCalculateRecipeRow(row)} /></tr>
         })}
       </NutritionTable>
       <TableNutritionSummary total={meal} showRatio />
       <div hidden={tableMode !== 'cooking'}><CookingSteps recipeId={recipe.id} steps={recipeCookingSteps(recipe)} ko={ko} /></div>
       {tableMode === 'storage' && memo.trim() && <section className="detail-notes"><h2>{ko ? '메모' : 'Notes'}</h2><p>{translateContent(memo, language)}</p></section>}
+      {tableMode === 'storage' && legacyMemo.trim() && legacyMemo !== memo && <section className="detail-notes"><details><summary>{ko ? '이 브라우저에 남아 있는 이전 메모' : 'Previous note saved in this browser'}</summary><p>{legacyMemo}</p><Button type="button" variant="outline" onClick={async () => {
+        try { await navigator.clipboard.writeText(legacyMemo); showToast(ko ? '이전 메모를 복사했습니다.' : 'Previous note copied.', 'success') }
+        catch { showToast(ko ? '복사하지 못했습니다. 메모를 직접 선택해 복사해 주세요.' : 'Could not copy. Select and copy the note manually.', 'error') }
+      }}>{ko ? '이전 메모 복사' : 'Copy previous note'}</Button></details></section>}
       </section>}
       </div>
     </div>

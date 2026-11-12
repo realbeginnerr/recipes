@@ -26,6 +26,7 @@ export type RecipeItem = {
 }
 
 export type Recipe = {
+  revision?: number
   catalog?: 'tea'
   productId?: string
   productDescription?: string

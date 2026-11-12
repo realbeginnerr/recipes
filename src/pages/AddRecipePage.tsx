@@ -35,7 +35,7 @@ export function AddRecipePage() {
     return () => { cancelled = true }
   }, [attempt])
 
-  async function save(updated: Recipe) {
+  async function save(updated: Recipe, allowNavigation?: () => void) {
     const { id: _id, createdAt: _createdAt, items, sideItems, ...fields } = updated
     const toStoredItem = (item: Recipe['items'][number]) => ({
       ingredientId: item.ingredientId, amount: item.defaultAmount, unit: item.defaultUnit,
@@ -46,6 +46,7 @@ export function AddRecipePage() {
       items: items.map(toStoredItem), sideItems: (sideItems ?? []).map(toStoredItem),
     })
     trackAddRecipeCompleted('manual', updated.nameKo)
+    allowNavigation?.()
     navigate(`/recipe/${encodeURIComponent(id)}`, { replace: true })
   }
 

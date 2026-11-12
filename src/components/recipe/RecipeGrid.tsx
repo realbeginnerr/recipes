@@ -9,7 +9,7 @@ import type { Recipe } from '../../types'
 import { resolveRecipeImage } from '../../utils/recipeImage'
 import { useLanguage } from '../../context/LanguageContext'
 import { trackRecipeView } from '../../utils/analytics'
-import { recipeMealMacros, recipeProteinPowderGrams } from '../../utils/recipeNutrition'
+import { recipeMealMacros, recipeProteinPowderGrams, recipeNutritionIncomplete } from '../../utils/recipeNutrition'
 import { categoryEnglish, getRecipeCategories } from '../../utils/recipeCategory'
 import { getTeaTags, teaCategoryEnglish } from '../../utils/teaCategory'
 import { discountedPrice, sanitizeProductHtml } from '../../utils/product'
@@ -33,6 +33,7 @@ export function RecipeCard({ recipe, openInNewTab = false, variant = 'recipe' }:
     : getRecipeCategories(recipe).map(category => ({ key: category, label: language === 'ko' ? category : categoryEnglish[category] }))
   const detailPath = recipe.productId ? `/product/${encodeURIComponent(recipe.productId)}` : `/recipe/${encodeURIComponent(recipe.id)}`
   const macros = variant === 'recipe' ? recipeMealMacros(recipe) : null
+  const incomplete = variant === 'recipe' && recipeNutritionIncomplete(recipe)
   const powderGrams = variant === 'recipe' ? recipeProteinPowderGrams(recipe) : 0
   const price = recipe.productPricing ? discountedPrice({ pricing: recipe.productPricing }) : null
   const regularPrice = recipe.productPricing?.regular ?? null
@@ -51,6 +52,7 @@ export function RecipeCard({ recipe, openInNewTab = false, variant = 'recipe' }:
           {price !== null && regularPrice !== null && price < regularPrice && <del aria-label={language === 'ko' ? '정상 판매가' : 'Regular price'}>{regularPrice.toLocaleString('en-US', { maximumFractionDigits: 1 })}{language === 'ko' ? '원' : ' KRW'}</del>}
         </div>}
         {variant === 'recipe' && macros && <>
+          {incomplete && <p className="text-sm">{language === 'ko' ? '일부 재료 제외 · 영양 정보 불완전' : 'Some ingredients excluded · Incomplete nutrition'}</p>}
           <div className="recipe-card__rating"><StarRating label={language === 'ko' ? '맛' : 'Taste'} value={recipe.tasteRating ?? 4} showLabel={false} /></div>
           <p className="recipe-card__macro-grams">{language === 'ko' ? '탄단지(g)' : 'C/P/F(g)'} <span>{formatTableNumber(macros.carbs)} <span className="recipe-card__macro-separator">•</span> {formatTableNumber(macros.protein)}{powderGrams > 0 && <span className="recipe-card__powder-grams" title={language === 'ko' ? `단백질 파우더 섭취량: ${formatTableNumber(powderGrams)}g` : `Protein powder serving: ${formatTableNumber(powderGrams)}g`}> ({formatTableNumber(powderGrams)})</span>} <span className="recipe-card__macro-separator">•</span> {formatTableNumber(macros.fat)}</span></p>
           <NutritionSummary {...macros} perMeal showRatio={false} />

@@ -85,7 +85,7 @@ it('saves the Earl Grey scone after entering the Daum photo URL', async () => {
 
 it('uses a valid guard ID for soft deletion too', async () => {
   await deleteRecipeFromFirestore('SIiGeMzqHt4fQYuU9aZ3')
-  expect(setDoc).toHaveBeenCalledWith('recipe-ref', { deleted: true }, { merge: true })
+  expect(setDoc).toHaveBeenCalledWith('recipe-ref', { deleted: true, revision: 1 }, { merge: true })
 })
 
 it('persists image IDs and product references without embedding product details', async () => {
@@ -100,6 +100,26 @@ it('persists image IDs and product references without embedding product details'
   expect(setDoc).toHaveBeenCalledWith('recipe-ref', expect.objectContaining({
     images: corrected.images, productTags: corrected.productTags,
   }))
+})
+
+it('preserves explicitly saved photos and tags for a former placeholder recipe and respects explicit removal', async () => {
+  const corrected = recipe()
+  corrected.items[0].defaultAmount = 30
+  corrected.imageUrl = 'https://example.com/eggplant.jpg'
+  corrected.imageUrls = []
+  corrected.images = [{ id: 'photo-1', url: corrected.imageUrl }]
+  corrected.productTags = [{ id: 'tag-1', imageId: 'photo-1', productId: 'product-1', positionX: 20, positionY: 80 }]
+  await updateRecipeInFirestore(corrected)
+  expect(setDoc).toHaveBeenLastCalledWith('recipe-ref', expect.objectContaining({ images: corrected.images, productTags: corrected.productTags }))
+  corrected.imageUrl = ''; corrected.imageUrls = []; corrected.images = []; corrected.productTags = []
+  await updateRecipeInFirestore(corrected)
+  expect(setDoc).toHaveBeenLastCalledWith('recipe-ref', expect.objectContaining({ imageUrl: '', images: [], productTags: [] }))
+})
+
+it.each([NaN, Infinity, -1])('blocks invalid quantities when creating a recipe (%s)', async amount => {
+  await expect(saveRecipeToFirestore({ name: 'Bad amount', nameKo: '잘못된 수량', imageUrl: '', memo: '', tasteRating: 4,
+    items: [{ ingredientId: 'green-onion', amount, unit: 'g' }] })).rejects.toMatchObject({ code: 'recipe/invalid-amount' })
+  expect(setDoc).not.toHaveBeenCalled()
 })
 
 describe('recipe name uniqueness at the write boundary', () => {

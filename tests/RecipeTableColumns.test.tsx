@@ -77,7 +77,7 @@ it('adds and removes cooking dates and keeps them when reopening the editor', as
   fireEvent.click(screen.getByRole('button', { name: '요리한 날짜 2 삭제' }))
   fireEvent.click(screen.getAllByRole('button', { name: '저장', exact: true })[0])
   await waitFor(() => expect(onSaveRecipe).toHaveBeenCalledTimes(2))
-  expect(onSaveRecipe).toHaveBeenLastCalledWith(expect.objectContaining({ cookedDates: ['2026-11-01'], lastCookedAt: '2026-11-01' }))
+  expect(onSaveRecipe).toHaveBeenLastCalledWith(expect.objectContaining({ cookedDates: ['2026-11-01'], lastCookedAt: '2026-11-01' }), expect.any(Function))
 })
 
 it('keeps the two butter quantities distinct after saving and reopening the salt bread editor', async () => {
@@ -162,7 +162,7 @@ it('edits and saves temporary photo product information with the recipe', async 
   fireEvent.change(screen.getByLabelText('상품 구매 링크'), { target: { value: 'https://example.com/buy' } })
   fireEvent.change(input, { target: { value: '컵 설명\nhttps://example.com/cup' } })
   fireEvent.click(screen.getAllByRole('button', { name: '저장', exact: true })[0])
-  await waitFor(() => expect(onSaveRecipe).toHaveBeenCalledWith(expect.objectContaining({ photoProductDescription: '컵 설명\nhttps://example.com/cup', photoProductUrl: 'https://example.com/buy' })))
+  await waitFor(() => expect(onSaveRecipe).toHaveBeenCalledWith(expect.objectContaining({ photoProductDescription: '컵 설명\nhttps://example.com/cup', photoProductUrl: 'https://example.com/buy' }), expect.any(Function)))
 })
 
 it.each([true, false])('aligns headers, ingredients, sides and footer columns (editing=%s)', editing => {

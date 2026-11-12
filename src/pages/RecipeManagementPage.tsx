@@ -94,13 +94,15 @@ export function RecipeDetailPage() {
     }))
   }
 
-  async function handleDeleteRecipe(recipeId: string) {
-    await deleteRecipeFromFirestore(recipeId)
+  async function handleDeleteRecipe(recipeId: string, allowNavigation?: () => void) {
+    await deleteRecipeFromFirestore(recipeId, recipes.find(item => item.id === recipeId)?.revision)
+    allowNavigation?.()
     navigate('/recipes', { replace: true })
   }
 
-  async function handleSaveRecipe(updated: Recipe) {
+  async function handleSaveRecipe(updated: Recipe, allowNavigation?: () => void) {
     await updateRecipeInFirestore(updated)
+    allowNavigation?.()
     navigate(`/recipe/${encodeURIComponent(updated.id)}`, { replace: true })
     setRecipes((prev) => prev.map((r) => (r.id === updated.id ? updated : r)))
     setRecipeStates((current) => ({

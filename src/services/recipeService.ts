@@ -27,6 +27,7 @@ export type FirestoreRecipeItem = {
 }
 
 export type FirestoreRecipe = {
+  revision?: number
   catalog?: 'tea'
   sourceRecipeId?: string
   teaTags?: TeaTag[]
@@ -67,10 +68,19 @@ const COLLECTION = 'recipes'
 // without requiring a new collection or a production security-rule change.
 // Firestore reserves document IDs matching __.*__; use an ordinary ID.
 const NAME_GUARD = 'recipe-name-guard'
-async function writeRecipeWithUniqueNames(id: string, data: Record<string, unknown> & { name: string; nameKo: string }) {
+async function writeRecipeWithUniqueNames(id: string, data: Record<string, unknown> & { name: string; nameKo: string }, expectedRevision?: number, requireExisting = false) {
   await runTransaction(db, async transaction => {
     const guardRef = doc(db, COLLECTION, NAME_GUARD)
     const guard = await transaction.get(guardRef)
+    if (expectedRevision !== undefined) {
+      const current = (await transaction.get(doc(db, COLLECTION, id))).data()
+      if (current?.deleted || (!current && requireExisting)) {
+        throw Object.assign(new Error('This recipe was deleted.'), { code: 'recipe/deleted' })
+      }
+      if ((current?.revision ?? 0) !== expectedRevision) {
+        throw Object.assign(new Error('This recipe changed in another session.'), { code: 'recipe/conflict' })
+      }
+    }
     // Use the server, never an offline cache, for the duplicate check. All app
     // recipe writes update the guard so a concurrent commit retries this scan.
     const snapshot = await getDocsFromServer(collection(db, COLLECTION))
@@ -86,10 +96,14 @@ async function writeRecipeWithUniqueNames(id: string, data: Record<string, unkno
 export async function saveRecipeToFirestore(
   recipe: Omit<FirestoreRecipe, 'id' | 'createdAt'>
 ): Promise<string> {
+  if ([...recipe.items, ...(recipe.sideItems ?? [])].some(item => !Number.isFinite(item.amount) || item.amount < 0)) {
+    throw Object.assign(new Error('Invalid ingredient quantity.'), { code: 'recipe/invalid-amount' })
+  }
   assertRecipeUnits([...recipe.items, ...(recipe.sideItems ?? [])])
   const docRef = doc(collection(db, COLLECTION))
   const data = {
     ...recipe,
+    revision: 1,
     ...reconcileRecipeGallery({ ...recipe, id: '' }),
     items: recipe.items.map(item => ({ ...item, ingredientId: canonicalIngredientId(item.ingredientId) })),
     ...(recipe.sideItems ? { sideItems: recipe.sideItems.map(item => ({ ...item, ingredientId: canonicalIngredientId(item.ingredientId) })) } : {}),
@@ -111,6 +125,7 @@ export async function updateRecipeInFirestore(recipe: Recipe): Promise<void> {
   assertRecipeUnits([...items, ...(sideItems ?? [])].map(item => ({ ingredientId: item.ingredientId, unit: item.defaultUnit })))
   const data: Record<string, unknown> = {
     ...rest,
+    revision: (recipe.revision ?? 0) + 1,
     ...recipeCookingHistory(recipe),
     ...reconcileRecipeGallery(recipe),
     categories: getRecipeCategories(recipe),
@@ -130,15 +145,22 @@ export async function updateRecipeInFirestore(recipe: Recipe): Promise<void> {
   for (const key of Object.keys(data)) {
     if (data[key] === undefined) delete data[key]
   }
-  await writeRecipeWithUniqueNames(id, { ...data, name: recipe.name.trim(), nameKo: recipe.nameKo.trim() })
+  await writeRecipeWithUniqueNames(id, { ...data, name: recipe.name.trim(), nameKo: recipe.nameKo.trim() }, recipe.revision ?? 0, recipe.revision !== undefined)
 }
 
-export async function deleteRecipeFromFirestore(id: string): Promise<void> {
+export async function deleteRecipeFromFirestore(id: string, expectedRevision?: number): Promise<void> {
   await runTransaction(db, async transaction => {
     const guardRef = doc(db, COLLECTION, NAME_GUARD)
     const guard = await transaction.get(guardRef)
+    const current = (await transaction.get(doc(db, COLLECTION, id))).data()
+    if (expectedRevision !== undefined && !current) {
+      throw Object.assign(new Error('This recipe was deleted.'), { code: 'recipe/deleted' })
+    }
+    if (expectedRevision !== undefined && (current?.revision ?? 0) !== expectedRevision) {
+      throw Object.assign(new Error('This recipe changed in another session.'), { code: 'recipe/conflict' })
+    }
     transaction.set(guardRef, { deleted: true, items: [], revision: (guard.data()?.revision ?? 0) + 1 })
-    transaction.set(doc(db, COLLECTION, id), { deleted: true }, { merge: true })
+    transaction.set(doc(db, COLLECTION, id), { deleted: true, revision: (current?.revision ?? 0) + 1 }, { merge: true })
   })
 }
 
@@ -158,6 +180,7 @@ export async function loadRecipesFromFirestore(): Promise<FirestoreRecipe[]> {
 
 export function convertToRecipe(fs: FirestoreRecipe): Recipe {
   return {
+    revision: fs.revision ?? 0,
     id: fs.id ?? '',
     catalog: fs.catalog,
     sourceRecipeId: fs.sourceRecipeId,

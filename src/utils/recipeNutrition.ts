@@ -1,6 +1,7 @@
 import { ingredientById } from '../data/ingredientCache'
 import type { Recipe, RecipeItem } from '../types'
 import { amountToGrams, calculateMacros } from './nutrition'
+import { canCalculateRecipeRow } from './recipeNutritionStatus'
 
 export function recipeProteinPowderGrams(recipe: Recipe): number {
   return (recipe.sideItems ?? []).reduce((total, item) => {
@@ -19,6 +20,7 @@ export function recipeMealMacros(recipe: Recipe) {
   const sides: RecipeItem[] = recipe.sideItems ?? []
   for (const [items, divisor] of [[recipe.items, divisions], [sides, 1]] as const) {
     for (const item of items) {
+      if (!canCalculateRecipeRow({ ingredientId: item.ingredientId, amount: item.defaultAmount, unit: item.defaultUnit })) continue
       const ingredient = ingredientById.get(item.ingredientId === '__multigrain_rice__' ? 'multigrain-rice' : item.ingredientId)
       if (!ingredient) continue
       const values = calculateMacros(amountToGrams(item.defaultAmount, item.defaultUnit, ingredient.conversions), ingredient)
@@ -26,6 +28,10 @@ export function recipeMealMacros(recipe: Recipe) {
     }
   }
   return totals
+}
+
+export function recipeNutritionIncomplete(recipe: Recipe) {
+  return [...recipe.items, ...(recipe.sideItems ?? [])].some(item => !canCalculateRecipeRow({ ingredientId: item.ingredientId, amount: item.defaultAmount, unit: item.defaultUnit }))
 }
 
 export function macroRatio(carbs: number, protein: number, fat: number) {
