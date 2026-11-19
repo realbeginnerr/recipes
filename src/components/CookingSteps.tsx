@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
+import { GripVertical } from 'lucide-react'
 import { Button } from './ui/button'
 import { Textarea } from './ui/textarea'
 import type { CookingStep } from '../utils/cookingSteps'
@@ -6,11 +7,74 @@ import { translateContent } from '../i18n/content'
 import './CookingSteps.css'
 
 export function CookingStepsEditor({ steps, onChange, disabled, ko }: { steps: CookingStep[]; onChange: (steps: CookingStep[]) => void; disabled: boolean; ko: boolean }) {
-  return <div className="cooking-steps-editor">
+  const editorRef = useRef<HTMLDivElement>(null)
+  const dragging = useRef<string | null>(null)
+  const [dropTarget, setDropTarget] = useState<string | null>(null)
+  function updateText(step: CookingStep, value: string, caret: number | null) {
+    if (disabled) return
+    const lines = value.split(/\r\n|\r|\n/)
+    const replacements = lines.map((text, index) => ({ id: index === 0 ? step.id : crypto.randomUUID(), text }))
+    onChange(steps.flatMap(current => current.id === step.id ? replacements : [current]))
+    if (lines.length > 1 && caret !== null) {
+      const prefix = value.slice(0, caret).split(/\r\n|\r|\n/)
+      const destination = replacements[prefix.length - 1]
+      requestAnimationFrame(() => {
+        const field = document.getElementById(`cooking-step-${destination.id}`) as HTMLTextAreaElement | null
+        field?.focus()
+        const position = prefix[prefix.length - 1].length
+        field?.setSelectionRange(position, position)
+      })
+    }
+  }
+  function moveStep(id: string, targetId: string) {
+    if (disabled || id === targetId) return
+    const from = steps.findIndex(step => step.id === id)
+    const to = steps.findIndex(step => step.id === targetId)
+    if (from < 0 || to < 0) return
+    const next = [...steps]
+    const [moved] = next.splice(from, 1)
+    next.splice(to, 0, moved)
+    onChange(next)
+  }
+  function targetAt(x: number, y: number) {
+    const row = document.elementFromPoint(x, y)?.closest<HTMLElement>('[data-cooking-step-id]')
+    return row && editorRef.current?.contains(row) ? row.dataset.cookingStepId ?? null : null
+  }
+  function endDrag() { dragging.current = null; setDropTarget(null) }
+  return <div ref={editorRef} className="cooking-steps-editor">
     <h3>{ko ? '요리 단계' : 'Cooking steps'}</h3>
-    {steps.map((step, index) => <div key={step.id} className="cooking-step-editor">
+    <p className="cooking-steps-help">{ko ? '줄바꿈하면 다음 단계로 나뉩니다. 손잡이를 드래그하거나 손잡이에서 위·아래 방향키로 순서를 바꿀 수 있습니다.' : 'New lines create separate steps. Drag a handle or use its Up/Down arrow keys to reorder.'}</p>
+    {steps.map((step, index) => <div key={step.id} data-cooking-step-id={step.id} className={`cooking-step-editor${dropTarget === step.id ? ' is-drop-target' : ''}`}>
+      <div className="cooking-step-editor-heading">
+      <Button type="button" variant="ghost" size="icon-sm" className="cooking-step-drag-handle" disabled={disabled}
+        aria-label={ko ? `${index + 1}단계 순서 변경` : `Reorder step ${index + 1}`}
+        onPointerDown={event => {
+          if (disabled || event.button !== 0) return
+          dragging.current = step.id
+          event.currentTarget.setPointerCapture(event.pointerId)
+        }}
+        onPointerMove={event => { if (dragging.current) setDropTarget(targetAt(event.clientX, event.clientY)) }}
+        onPointerUp={event => {
+          const target = targetAt(event.clientX, event.clientY)
+          if (dragging.current && target) moveStep(dragging.current, target)
+          endDrag()
+        }}
+        onPointerCancel={endDrag} onLostPointerCapture={endDrag}
+        onKeyDown={event => {
+          if (event.key !== 'ArrowUp' && event.key !== 'ArrowDown') return
+          event.preventDefault()
+          const target = steps[index + (event.key === 'ArrowUp' ? -1 : 1)]
+          if (target) moveStep(step.id, target.id)
+        }}><GripVertical aria-hidden="true" /></Button>
       <label htmlFor={`cooking-step-${step.id}`}>{ko ? `${index + 1}단계` : `Step ${index + 1}`}</label>
-      <Textarea id={`cooking-step-${step.id}`} value={step.text} rows={1} disabled={disabled} onChange={event => onChange(steps.map(current => current.id === step.id ? { ...current, text: event.target.value } : current))} />
+      </div>
+      <Textarea id={`cooking-step-${step.id}`} value={step.text} rows={1} disabled={disabled}
+        onChange={event => {
+          if ((event.nativeEvent as InputEvent).isComposing) {
+            onChange(steps.map(current => current.id === step.id ? { ...current, text: event.target.value } : current))
+          } else updateText(step, event.target.value, event.target.selectionStart)
+        }}
+        onCompositionEnd={event => updateText(step, event.currentTarget.value, event.currentTarget.selectionStart)} />
       <Button type="button" variant="ghost" disabled={disabled} onClick={() => onChange(steps.filter(current => current.id !== step.id))}>{ko ? '단계 삭제' : 'Delete step'}</Button>
     </div>)}
     <Button type="button" variant="outline" disabled={disabled} onClick={() => onChange([...steps, { id: crypto.randomUUID(), text: '' }])}>{ko ? '단계 추가' : 'Add step'}</Button>

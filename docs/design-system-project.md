@@ -166,17 +166,7 @@
 
 ### 숫자 입력 편집 규칙
 
-Use `src/components/ui/input.tsx` for numeric HTML inputs. While a controlled
-number input is focused, it owns the raw editing string, including an empty
-string. Parent handlers still receive every change for calculations and
-validation, but parsing, clamping and formatting must not replace the text
-being edited. On blur, the field displays the parent's committed value using
-the existing display precision. Focusing restores its full stored precision.
-
-Do not replace this with a native number input bound directly to a numeric
-state value. For forms that require a number before saving, keep raw strings
-in the form draft and explicitly reject blank values; the shared Input does
-not decide whether blank means zero, missing, or the previous valid value.
+공통 정책은 [숫자 입력과 검증](../../.claude/skills/website-design/references/interactions.md#숫자-입력과-검증)에서 관리한다. 이 사이트는 `src/components/ui/input.tsx`를 숫자 입력에도 사용한다. 네이티브 입력을 숫자 상태에 직접 묶어 공통 편집 보호를 우회하지 않는다. 필수 숫자의 원시 문자열·빈칸 저장 검증은 각 폼에서 유지한다.
 
 
 ### 요리 날짜 이력
