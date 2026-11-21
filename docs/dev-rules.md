@@ -1,5 +1,7 @@
 # 웹사이트 개발·수정·검증·배포 작업 규칙
 
+공통 원칙은 [공통 작업 규칙](../../.claude/common/work-rules.md)을 따른다. 이 문서는 T's Recipe에만 적용되는 실행 환경과 검증 명령을 보완한다.
+
 - The user tests this project locally. Assume localhost when investigating UI bugs; do not routinely ask whether the issue is on the deployed site. Inspect local source, configuration, and logs first. Ask for the exact local URL only when it is necessary to distinguish running servers.
 - Use `npm run dev` at `http://localhost:5173/recipes/` for normal local testing. `npm run preview` rebuilds before serving at `http://localhost:4173/recipes/`. Do not serve an old `dist` folder as if it reflected current source. Do not silently switch to another port when a port is occupied.
 - Start by reviewing `git status` and preserve existing user changes. Do not reset, restore, checkout, or replace files to resolve a bug unless the user has authorized that specific rollback. Do not restore intentionally deleted photos or introduce fallback images for them.
